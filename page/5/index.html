@@ -131,7 +131,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/04/08/Mockjs/">Mock.js</a>
+            <a href="/2018/04/08/Nginx的负载均衡策略(粗略)/">Nginx的负载均衡策略</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -145,7 +145,7 @@
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Web/">Web</a>
+    <a class="article-tag-link" href="/tags/Nginx/">Nginx</a>
 </div>
 
 
@@ -154,26 +154,11 @@
     
     <section class="article-body markdown-body">
         
-        <p>目前的大部分公司的项目都是采用的前后端分离, 后端接口的开发和前端人员是同时进行的. 那么这个时候就会存在一个问题, 在页面需要使用大量数据进行渲染生成前, 后端开发人员的接口也许并没有写完, 作为前端的我们也就没有办法获取数据. 所以 前端工程师就需要自己按照接口文档模拟后端人员提供的数据, 以此进行页面的开发.<br>这个时候, Mock.js的作用就体现出来了, 在数据量较大的情况下, 我们不用一个一个的编写数据, 只需要根据接口文档将数据的格式填入,Mock.js就能够自动的按需生成大量的模拟数据. 且Mock.js提供了大量的数据类型, 包括文本, 数字, 布尔值, 日期, 邮箱, 链接, 图片, 颜色等.</p>
-<h1 id="Mock-js"><a href="#Mock-js" class="headerlink" title="Mock.js"></a>Mock.js</h1><h2 id="Mockjs是什么"><a href="#Mockjs是什么" class="headerlink" title="Mockjs是什么?"></a>Mockjs是什么?</h2><p>目前的大部分公司的项目都是采用的前后端分离, 后端接口的开发和前端人员是同时进行的. 那么这个时候就会存在一个问题, 在页面需要使用大量数据进行渲染生成前, 后端开发人员的接口也许并没有写完, 作为前端的我们也就没有办法获取数据. 所以 前端工程师就需要自己按照接口文档模拟后端人员提供的数据, 以此进行页面的开发.<br>这个时候, Mock.js的作用就体现出来了, 在数据量较大的情况下, 我们不用一个一个的编写数据, 只需要根据接口文档将数据的格式填入,Mock.js就能够自动的按需生成大量的模拟数据. 且Mock.js提供了大量的数据类型, 包括文本, 数字, 布尔值, 日期, 邮箱, 链接, 图片, 颜色等.</p>
-<h2 id="安装Mockjs"><a href="#安装Mockjs" class="headerlink" title="安装Mockjs"></a>安装Mockjs</h2><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm <span class="keyword">install</span> mockjs -S </span><br><span class="line"><span class="keyword">or</span> </span><br><span class="line">npm <span class="keyword">install</span> mockjs -D</span><br></pre></td></tr></table></figure>
-<h2 id="引用Mockjs"><a href="#引用Mockjs" class="headerlink" title="引用Mockjs"></a>引用Mockjs</h2><p>Mock.js暴露了一个全局的Mock对象, 我们只需要将Mock对象引入到文件中, 调用Mock对象的方法即可</p>
-<ul>
-<li>CommonJS的引入方式</li>
-</ul>
-<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//CommonJS引入</span></span><br><span class="line"><span class="keyword">let</span> Mock = require(<span class="symbol">'mockjs</span>)</span><br><span class="line"> </span><br><span class="line"><span class="comment">//调用Mock.mock()方法模拟数据</span></span><br><span class="line"><span class="keyword">let</span> data = Mock.mock(&#123;</span><br><span class="line"><span class="symbol">'list</span>|<span class="number">1</span>-<span class="number">10</span>': [&#123;</span><br><span class="line">  <span class="symbol">'id</span>|+<span class="number">1</span>': <span class="number">1</span></span><br><span class="line">&#125;]</span><br><span class="line">&#125;);</span><br><span class="line">console.log(data);</span><br></pre></td></tr></table></figure>
-<ul>
-<li>ES6的引入方式</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//ES6的引入方式</span></span><br><span class="line"><span class="keyword">import</span> Mock <span class="keyword">from</span> <span class="string">'mockjs'</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">let</span> data = Mock.mock(&#123;</span><br><span class="line"><span class="string">'list|1-10'</span>: [&#123;</span><br><span class="line">  <span class="string">'id|+1'</span>: <span class="number">1</span></span><br><span class="line">&#125;]</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(data);</span><br></pre></td></tr></table></figure>
-<h2 id="简单用法"><a href="#简单用法" class="headerlink" title="简单用法"></a>简单用法</h2><p>Mock对象提供了4个方法, 分别是</p>
-<ul>
-<li>Mock.mock()</li>
-<li>Mock.setup()</li>
-<li>Mock.valid</li>
-<li>Mock.toJSONSchema()</li>
-</ul>
-<p>以及一个工具库 Mock.Random. 其中我们经常使用到的就是Mock.mock()和Mock.Random.</p>
+        <h1 id="附上Nginx的负载均衡策略"><a href="#附上Nginx的负载均衡策略" class="headerlink" title="附上Nginx的负载均衡策略"></a>附上Nginx的负载均衡策略</h1><h2 id="轮询（默认）"><a href="#轮询（默认）" class="headerlink" title="轮询（默认）:"></a>轮询（默认）:</h2><p>每个请求按时间顺序逐一分配到不同的后端服务器，如果后端服务器down掉，能自动剔除。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="指定权重"><a href="#指定权重" class="headerlink" title="指定权重"></a>指定权重</h2><p>指定轮询几率，weight和访问比率成正比，用于后端服务器性能不均的情况。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14 <span class="attribute">weight</span>=10; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15 <span class="attribute">weight</span>=10; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="IP绑定-ip-hash"><a href="#IP绑定-ip-hash" class="headerlink" title="IP绑定 ip_hash"></a>IP绑定 ip_hash</h2><p>每个请求按访问ip的hash结果分配，这样每个访客固定访问一个后端服务器，可以解决session的问题。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"> ip_hash; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14:88; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15:80; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="fair（第三方）"><a href="#fair（第三方）" class="headerlink" title="fair（第三方）"></a>fair（第三方）</h2><p>按后端服务器的响应时间来分配请求，响应时间短的优先分配。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14:88; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15:80;</span><br><span class="line"> fair; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="url-hash（第三方）"><a href="#url-hash（第三方）" class="headerlink" title="url_hash（第三方）"></a>url_hash（第三方）</h2><p>按访问url的hash结果来分配请求，使每个url定向到同一个后端服务器，后端服务器为缓存时比较有效。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123;</span><br><span class="line"><span class="built_in"> server </span>squid1:3128; </span><br><span class="line"><span class="built_in"> server </span>squid2:3128;</span><br><span class="line"> </span><br><span class="line"> hash <span class="variable">$request_uri</span>; </span><br><span class="line"> hash_method crc32; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
         
     </section>
@@ -308,6 +293,49 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/04/07/Dubbo/">Dubbo</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/5/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-04-07T02:10:00.000Z" itemprop="datePublished">2018-04-07</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Dubbo-分布式/">Dubbo 分布式</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Dubbo"><a href="#Dubbo" class="headerlink" title="Dubbo"></a>Dubbo</h1><p>高性能Java RPC框架.Apache Dubbo |ˈdʌbəʊ| 是一款高性能、轻量级的开源Java RPC框架，它提供了三大核心能力：面向接口的远程方法调用，智能容错和负载均衡，以及服务自动注册和发现。</p>
+<p>远程过程调用（英语：Remote Procedure Call，缩写为 RPC）是一个计算机通信协议。该协议允许运行于一台计算机的程序调用另一台计算机的子程序，而程序员无需额外地为这个交互作用编程。RPC协议假定某些传输协议的存在，如TCP或UDP，为通信程序之间携带信息数据。在OSI网络通信模型中，RPC跨越了传输层和应用层。RPC使得开发包括网络分布式多程序在内的应用程序更加容易。</p>
+<p>HTTP/TCP 都属于RPC</p>
+<h2 id="特性一览"><a href="#特性一览" class="headerlink" title="特性一览"></a>特性一览</h2><h3 id="面向接口代理的高性能RPC调用"><a href="#面向接口代理的高性能RPC调用" class="headerlink" title="面向接口代理的高性能RPC调用"></a>面向接口代理的高性能RPC调用</h3><p>提供高性能的基于代理的远程调用能力，服务以接口为粒度，为开发者屏蔽远程调用底层细节。</p>
+<h3 id="智能负载均衡"><a href="#智能负载均衡" class="headerlink" title="智能负载均衡"></a>智能负载均衡</h3><p>内置多种负载均衡策略，智能感知下游节点健康状况，显著减少调用延迟，提高系统吞吐量。</p>
+<h3 id="服务自动注册与发现"><a href="#服务自动注册与发现" class="headerlink" title="服务自动注册与发现"></a>服务自动注册与发现</h3><p>支持多种注册中心服务，服务实例上下线实时感知。</p>
+<h3 id="高度可扩展能力"><a href="#高度可扩展能力" class="headerlink" title="高度可扩展能力"></a>高度可扩展能力</h3><p>遵循微内核+插件的设计原则，所有核心能力如Protocol、Transport、Serialization被设计为扩展点，平等对待内置实现和第三方实现。</p>
+<h3 id="运行期流量调度"><a href="#运行期流量调度" class="headerlink" title="运行期流量调度"></a>运行期流量调度</h3><p>内置条件、脚本等路由策略，通过配置不同的路由规则，轻松实现灰度发布，同机房优先等功能。</p>
+<h3 id="可视化的服务治理与运维"><a href="#可视化的服务治理与运维" class="headerlink" title="可视化的服务治理与运维"></a>可视化的服务治理与运维</h3><p>提供丰富服务治理、运维工具：随时查询服务元数据、服务健康状态及调用统计，实时下发路由策略、调整配置参数。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/04/07/Dubbo深入/">Dubbo核心角色</a>
         </h1>
         
@@ -356,49 +384,6 @@
 <li>根据负载均衡策略选出一个服务地址进行服务调用。</li>
 </ol>
 <p>监控中心：<br>统计服务的调用次数和调用时间的监控中心</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/04/07/Dubbo/">Dubbo</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/5/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-04-07T02:10:00.000Z" itemprop="datePublished">2018-04-07</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Dubbo-分布式/">Dubbo 分布式</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Dubbo"><a href="#Dubbo" class="headerlink" title="Dubbo"></a>Dubbo</h1><p>高性能Java RPC框架.Apache Dubbo |ˈdʌbəʊ| 是一款高性能、轻量级的开源Java RPC框架，它提供了三大核心能力：面向接口的远程方法调用，智能容错和负载均衡，以及服务自动注册和发现。</p>
-<p>远程过程调用（英语：Remote Procedure Call，缩写为 RPC）是一个计算机通信协议。该协议允许运行于一台计算机的程序调用另一台计算机的子程序，而程序员无需额外地为这个交互作用编程。RPC协议假定某些传输协议的存在，如TCP或UDP，为通信程序之间携带信息数据。在OSI网络通信模型中，RPC跨越了传输层和应用层。RPC使得开发包括网络分布式多程序在内的应用程序更加容易。</p>
-<p>HTTP/TCP 都属于RPC</p>
-<h2 id="特性一览"><a href="#特性一览" class="headerlink" title="特性一览"></a>特性一览</h2><h3 id="面向接口代理的高性能RPC调用"><a href="#面向接口代理的高性能RPC调用" class="headerlink" title="面向接口代理的高性能RPC调用"></a>面向接口代理的高性能RPC调用</h3><p>提供高性能的基于代理的远程调用能力，服务以接口为粒度，为开发者屏蔽远程调用底层细节。</p>
-<h3 id="智能负载均衡"><a href="#智能负载均衡" class="headerlink" title="智能负载均衡"></a>智能负载均衡</h3><p>内置多种负载均衡策略，智能感知下游节点健康状况，显著减少调用延迟，提高系统吞吐量。</p>
-<h3 id="服务自动注册与发现"><a href="#服务自动注册与发现" class="headerlink" title="服务自动注册与发现"></a>服务自动注册与发现</h3><p>支持多种注册中心服务，服务实例上下线实时感知。</p>
-<h3 id="高度可扩展能力"><a href="#高度可扩展能力" class="headerlink" title="高度可扩展能力"></a>高度可扩展能力</h3><p>遵循微内核+插件的设计原则，所有核心能力如Protocol、Transport、Serialization被设计为扩展点，平等对待内置实现和第三方实现。</p>
-<h3 id="运行期流量调度"><a href="#运行期流量调度" class="headerlink" title="运行期流量调度"></a>运行期流量调度</h3><p>内置条件、脚本等路由策略，通过配置不同的路由规则，轻松实现灰度发布，同机房优先等功能。</p>
-<h3 id="可视化的服务治理与运维"><a href="#可视化的服务治理与运维" class="headerlink" title="可视化的服务治理与运维"></a>可视化的服务治理与运维</h3><p>提供丰富服务治理、运维工具：随时查询服务元数据、服务健康状态及调用统计，实时下发路由策略、调整配置参数。</p>
 
         
     </section>
@@ -587,7 +572,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/04/01/多线程/">多线程</a>
+            <a href="/2018/04/01/多线程上下文切换/">Java 多线程上下文切换</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -610,12 +595,11 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h1><p>一般来说，线程包括以下这几个状态：创建(new)、就绪(runnable)、运行(running)、阻塞(blocked)、time waiting、waiting、消亡（dead）。</p>
-<p>当需要新起一个线程来执行某个子任务时，就创建了一个线程。但是线程创建之后，不会立即进入就绪状态，因为线程的运行需要一些条件，只有线程运行需要的所有条件满足了，才进入就绪状态。</p>
-<p>当线程进入就绪状态后，不代表立刻就能获取CPU执行时间，也许此时CPU正在执行其他的事情，因此它要等待。当得到CPU执行时间之后，线程便真正进入运行状态。</p>
-<p>线程在运行状态过程中，可能有多个原因导致当前线程不继续运行下去，比如用户主动让线程睡眠（睡眠一定的时间之后再重新执行）、用户主动让线程等待，或者被同步块给阻塞，此时就对应着多个状态：time  waiting（睡眠或等待一定的事件）、waiting（等待被唤醒）、blocked（阻塞）。</p>
-<p>当由于突然中断或者子任务执行完毕，线程就会被消亡。</p>
-<p><img src="https://images2015.cnblogs.com/blog/682616/201611/682616-20161115183635779-1231872003.jpg" alt="image"></p>
+        <h1 id="多线程上下文切换"><a href="#多线程上下文切换" class="headerlink" title="多线程上下文切换"></a>多线程上下文切换</h1><p>对于单核CPU来说（对于多核CPU，此处就理解为一个核），CPU在一个时刻只能运行一个线程，当在运行一个线程的过程中转去运行另外一个线程，这个叫做线程上下文切换（对于进程也是类似）。</p>
+<p>由于可能当前线程的任务并没有执行完毕，所以在切换时需要保存线程的运行状态，以便下次重新切换回来时能够继续切换之前的状态运行。举个简单的例子：比如一个线程A正在读取一个文件的内容，正读到文件的一半，此时需要暂停线程A，转去执行线程B，当再次切换回来执行线程A的时候，我们不希望线程A又从文件的开头来读取。</p>
+<p>因此需要记录线程A的运行状态，那么会记录哪些数据呢？因为下次恢复时需要知道在这之前当前线程已经执行到哪条指令了，所以需要记录程序计数器的值，另外比如说线程正在进行某个计算的时候被挂起了，那么下次继续执行的时候需要知道之前挂起时变量的值时多少，因此需要记录CPU寄存器的状态。所以一般来说，线程上下文切换过程中会记录程序计数器、CPU寄存器状态等数据。</p>
+<p>说简单点的：对于线程的上下文切换实际上就是 存储和恢复CPU状态的过程，它使得线程执行能够从中断点恢复执行。</p>
+<p>虽然多线程可以使得任务执行的效率得到提升，但是由于在线程切换时同样会带来一定的开销代价，并且多个线程会导致系统资源占用的增加，所以在进行多线程编程时要注意这些因素。</p>
 
         
     </section>
