@@ -437,45 +437,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/04/05/引用类型/">引用类型</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/5/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-04-05T04:10:22.000Z" itemprop="datePublished">2018-04-05</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="引用类型"><a href="#引用类型" class="headerlink" title="引用类型"></a>引用类型</h1><pre><code>对象引用类型分为强引用、软引用、弱引用和虚引用。
-</code></pre><p>强引用: 就是我们一般声明对象是时虚拟机生成的引用，强引用环境下，垃圾回收时需要严格判断当前对象是否被强引用，如果被强引用，则不会被垃圾回收</p>
-<p>软引用: 软引用一般被做为缓存来使用。与强引用的区别是，软引用在垃圾回收时，虚拟机会根据当前系统的剩余内存来决定是否对软引用进行回收。如果剩余内存比较紧张，则虚拟机会回收软引用所引用的空间；如果剩余内存相对富裕，则不会进行回收。换句话说，虚拟机在发生OutOfMemory时，肯定是没有软引用存在的。</p>
-<p>弱引用: 弱引用与软引用类似，都是作为缓存来使用。但与软引用不同，弱引用在进行垃圾回收时，是一定会被回收掉的，因此其生命周期只存在于一个垃圾回收周期内。</p>
-<p>强引用不用说，我们系统一般在使用时都是用的强引用。而“软引用”和“弱引用”比较少见。他们一般被作为缓存使用，而且一般是在内存大小比较受限的情况下做为缓存。因为如果内存足够大的话，可以直接使用强引用作为缓存即可，同时可控性更高。因而，他们常见的是被使用在桌面应用系统的缓存。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2018/04/05/并发编程/">并发编程</a>
         </h1>
         
@@ -506,6 +467,45 @@
 <p>Lock和并发常用工具类<br>1.Java当中的Lock、ReenrantLock、ReentrantReadWriteLock、Condition<br>2.Java当中的并发工具类CyclicBarrier、CountdownLatch、Semphore<br>3.Java当中的并发集合类ConcurrentHashMap、ConcurrentLinkedQueue…</p>
 <p>原子操作常用知识讲解<br>1.基本类型的原子操作比如经典的AtomicBoolean、AtomicIngter、AtomicLong<br>2.数组类型的原子操作代表的几个类AtomicIntegerArray、AtomicLongArray、AtomicReferenceArray<br>3.引用类型的原子操作的典型AtomicReference、AtomicReferenceFieldUpdater…<br>4.CAS概念知识、COmpare And Swap以及缺陷</p>
 <p>线程池和并发并行<br>1.Excutor、ThreadPoolExcutor、Callable &amp; Future、ScheduledExcutorService<br>2.ThreadLocal、Fork &amp; Join？什么是并行？线程池如何保证核心线程不被销毁？</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/04/05/引用类型/">引用类型</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/5/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-04-05T04:10:22.000Z" itemprop="datePublished">2018-04-05</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="引用类型"><a href="#引用类型" class="headerlink" title="引用类型"></a>引用类型</h1><pre><code>对象引用类型分为强引用、软引用、弱引用和虚引用。
+</code></pre><p>强引用: 就是我们一般声明对象是时虚拟机生成的引用，强引用环境下，垃圾回收时需要严格判断当前对象是否被强引用，如果被强引用，则不会被垃圾回收</p>
+<p>软引用: 软引用一般被做为缓存来使用。与强引用的区别是，软引用在垃圾回收时，虚拟机会根据当前系统的剩余内存来决定是否对软引用进行回收。如果剩余内存比较紧张，则虚拟机会回收软引用所引用的空间；如果剩余内存相对富裕，则不会进行回收。换句话说，虚拟机在发生OutOfMemory时，肯定是没有软引用存在的。</p>
+<p>弱引用: 弱引用与软引用类似，都是作为缓存来使用。但与软引用不同，弱引用在进行垃圾回收时，是一定会被回收掉的，因此其生命周期只存在于一个垃圾回收周期内。</p>
+<p>强引用不用说，我们系统一般在使用时都是用的强引用。而“软引用”和“弱引用”比较少见。他们一般被作为缓存使用，而且一般是在内存大小比较受限的情况下做为缓存。因为如果内存足够大的话，可以直接使用强引用作为缓存即可，同时可控性更高。因而，他们常见的是被使用在桌面应用系统的缓存。</p>
 
         
     </section>

@@ -131,7 +131,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/04/01/多线程/">多线程</a>
+            <a href="/2018/04/01/Thread实现多线程二/">Thread实现多线程二</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -154,12 +154,16 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h1><p>一般来说，线程包括以下这几个状态：创建(new)、就绪(runnable)、运行(running)、阻塞(blocked)、time waiting、waiting、消亡（dead）。</p>
-<p>当需要新起一个线程来执行某个子任务时，就创建了一个线程。但是线程创建之后，不会立即进入就绪状态，因为线程的运行需要一些条件，只有线程运行需要的所有条件满足了，才进入就绪状态。</p>
-<p>当线程进入就绪状态后，不代表立刻就能获取CPU执行时间，也许此时CPU正在执行其他的事情，因此它要等待。当得到CPU执行时间之后，线程便真正进入运行状态。</p>
-<p>线程在运行状态过程中，可能有多个原因导致当前线程不继续运行下去，比如用户主动让线程睡眠（睡眠一定的时间之后再重新执行）、用户主动让线程等待，或者被同步块给阻塞，此时就对应着多个状态：time  waiting（睡眠或等待一定的事件）、waiting（等待被唤醒）、blocked（阻塞）。</p>
-<p>当由于突然中断或者子任务执行完毕，线程就会被消亡。</p>
-<p><img src="https://images2015.cnblogs.com/blog/682616/201611/682616-20161115183635779-1231872003.jpg" alt="image"></p>
+        <h1 id="Thread实现多线程二"><a href="#Thread实现多线程二" class="headerlink" title="Thread实现多线程二"></a>Thread实现多线程二</h1><p>接上文，关系到线程运行状态的几个方法：</p>
+<p>4）yield方法</p>
+<p>调用yield方法会让当前线程交出CPU权限，让CPU去执行其他的线程。它跟sleep方法类似，同样不会释放锁。但是yield不能控制具体的交出CPU的时间，另外，yield方法只能让拥有相同优先级的线程有获取CPU执行时间的机会。</p>
+<p>注意，调用yield方法并不会让线程进入阻塞状态，而是让线程重回就绪状态，它只需要等待重新获取CPU执行时间，这一点是和sleep方法不一样的。</p>
+<p>5）join方法</p>
+<p>join方法有三个重载版本：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">join</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">join</span><span class="params">(long millis)</span></span>     <span class="comment">//参数为毫秒</span></span><br><span class="line"><span class="function"><span class="title">join</span><span class="params">(long millis,int nanoseconds)</span></span>    <span class="comment">//第一参数为毫秒，第二个参数为纳秒</span></span><br></pre></td></tr></table></figure></p>
+<p>假如在main线程中，调用thread.join方法，则main方法会等待thread线程执行完毕或者等待一定的时间。如果调用的是无参join方法，则等待thread执行完毕，如果调用的是指定了时间参数的join方法，则等待一定的事件。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.<span class="type">IOException</span>;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">ThreadJoin</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	 public static void main(<span class="type">String</span>[] args) <span class="keyword">throws</span> <span class="type">IOException</span>  &#123;</span><br><span class="line">	        <span class="type">System</span>.out.println(<span class="string">"进入线程"</span> + <span class="type">Thread</span>.currentThread().getName());</span><br><span class="line">	        <span class="type">ThreadJoin</span> test = <span class="keyword">new</span> <span class="type">ThreadJoin</span>();</span><br><span class="line">	        <span class="type">MyThread</span> thread1 = test.<span class="keyword">new</span> <span class="type">MyThread</span>();</span><br><span class="line">	        <span class="comment">//线程开始</span></span><br><span class="line">	        thread1.start();</span><br><span class="line">	        <span class="keyword">try</span> &#123;</span><br><span class="line">	            <span class="type">System</span>.out.println(<span class="string">"线程 "</span> + <span class="type">Thread</span>.currentThread().getName() + <span class="string">"等待"</span>);</span><br><span class="line">	            thread1.join();<span class="comment">//使主线程进入等待，其他线程执行完毕</span></span><br><span class="line">	            <span class="type">System</span>.out.println(<span class="string">"线程"</span> + <span class="type">Thread</span>.currentThread().getName() + <span class="string">"继续执行"</span>);</span><br><span class="line">	        &#125; <span class="keyword">catch</span> (<span class="type">InterruptedException</span> e) &#123;</span><br><span class="line">	            <span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">	            e.printStackTrace();</span><br><span class="line">	        &#125;</span><br><span class="line">    &#125; </span><br><span class="line">	     </span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        public void run() &#123;</span><br><span class="line">            <span class="type">System</span>.out.println(<span class="string">"进入线程"</span> + <span class="type">Thread</span>.currentThread().getName());</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="type">Thread</span>.currentThread().sleep(<span class="number">5000</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (<span class="type">InterruptedException</span> e) &#123;</span><br><span class="line">                <span class="comment">// <span class="doctag">TODO:</span> handle exception</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="type">System</span>.out.println(<span class="string">"线程"</span> + <span class="type">Thread</span>.currentThread().getName()+<span class="string">"执行完毕"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>执行结果 ：<br><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">进入线程main</span><br><span class="line">线程 main等待</span><br><span class="line">进入线程<span class="keyword">Thread</span>-<span class="number">0</span></span><br><span class="line">线程<span class="keyword">Thread</span>-<span class="number">0</span>执行完毕</span><br><span class="line">线程main继续执行</span><br></pre></td></tr></table></figure></p>
+<p>可以看出，当调用thread1.join()方法后，main线程会进入等待，然后等待thread1执行完之后再继续执行。</p>
+<p>实际上调用join方法是调用了Object的wait方法 。</p>
 
         
     </section>
@@ -218,7 +222,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/04/01/Thread实现多线程二/">Thread实现多线程二</a>
+            <a href="/2018/04/01/Thread start() 和  run().md/">Thread start() 和 run()</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -241,17 +245,93 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="Thread实现多线程二"><a href="#Thread实现多线程二" class="headerlink" title="Thread实现多线程二"></a>Thread实现多线程二</h1><p>接上文，关系到线程运行状态的几个方法：</p>
-<p>4）yield方法</p>
-<p>调用yield方法会让当前线程交出CPU权限，让CPU去执行其他的线程。它跟sleep方法类似，同样不会释放锁。但是yield不能控制具体的交出CPU的时间，另外，yield方法只能让拥有相同优先级的线程有获取CPU执行时间的机会。</p>
-<p>注意，调用yield方法并不会让线程进入阻塞状态，而是让线程重回就绪状态，它只需要等待重新获取CPU执行时间，这一点是和sleep方法不一样的。</p>
-<p>5）join方法</p>
-<p>join方法有三个重载版本：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">join</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">join</span><span class="params">(long millis)</span></span>     <span class="comment">//参数为毫秒</span></span><br><span class="line"><span class="function"><span class="title">join</span><span class="params">(long millis,int nanoseconds)</span></span>    <span class="comment">//第一参数为毫秒，第二个参数为纳秒</span></span><br></pre></td></tr></table></figure></p>
-<p>假如在main线程中，调用thread.join方法，则main方法会等待thread线程执行完毕或者等待一定的时间。如果调用的是无参join方法，则等待thread执行完毕，如果调用的是指定了时间参数的join方法，则等待一定的事件。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.<span class="type">IOException</span>;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">ThreadJoin</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	 public static void main(<span class="type">String</span>[] args) <span class="keyword">throws</span> <span class="type">IOException</span>  &#123;</span><br><span class="line">	        <span class="type">System</span>.out.println(<span class="string">"进入线程"</span> + <span class="type">Thread</span>.currentThread().getName());</span><br><span class="line">	        <span class="type">ThreadJoin</span> test = <span class="keyword">new</span> <span class="type">ThreadJoin</span>();</span><br><span class="line">	        <span class="type">MyThread</span> thread1 = test.<span class="keyword">new</span> <span class="type">MyThread</span>();</span><br><span class="line">	        <span class="comment">//线程开始</span></span><br><span class="line">	        thread1.start();</span><br><span class="line">	        <span class="keyword">try</span> &#123;</span><br><span class="line">	            <span class="type">System</span>.out.println(<span class="string">"线程 "</span> + <span class="type">Thread</span>.currentThread().getName() + <span class="string">"等待"</span>);</span><br><span class="line">	            thread1.join();<span class="comment">//使主线程进入等待，其他线程执行完毕</span></span><br><span class="line">	            <span class="type">System</span>.out.println(<span class="string">"线程"</span> + <span class="type">Thread</span>.currentThread().getName() + <span class="string">"继续执行"</span>);</span><br><span class="line">	        &#125; <span class="keyword">catch</span> (<span class="type">InterruptedException</span> e) &#123;</span><br><span class="line">	            <span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">	            e.printStackTrace();</span><br><span class="line">	        &#125;</span><br><span class="line">    &#125; </span><br><span class="line">	     </span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        public void run() &#123;</span><br><span class="line">            <span class="type">System</span>.out.println(<span class="string">"进入线程"</span> + <span class="type">Thread</span>.currentThread().getName());</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="type">Thread</span>.currentThread().sleep(<span class="number">5000</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (<span class="type">InterruptedException</span> e) &#123;</span><br><span class="line">                <span class="comment">// <span class="doctag">TODO:</span> handle exception</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="type">System</span>.out.println(<span class="string">"线程"</span> + <span class="type">Thread</span>.currentThread().getName()+<span class="string">"执行完毕"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>执行结果 ：<br><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">进入线程main</span><br><span class="line">线程 main等待</span><br><span class="line">进入线程<span class="keyword">Thread</span>-<span class="number">0</span></span><br><span class="line">线程<span class="keyword">Thread</span>-<span class="number">0</span>执行完毕</span><br><span class="line">线程main继续执行</span><br></pre></td></tr></table></figure></p>
-<p>可以看出，当调用thread1.join()方法后，main线程会进入等待，然后等待thread1执行完之后再继续执行。</p>
-<p>实际上调用join方法是调用了Object的wait方法 。</p>
+        <h1 id="Thread-start-和-run"><a href="#Thread-start-和-run" class="headerlink" title="Thread start() 和  run()"></a>Thread start() 和  run()</h1><ol>
+<li>start 和 run 方法解释：</li>
+</ol>
+<p>1） start：<br>用start方法来启动线程，真正实现了多线程运行，这时无需等待run方法体代码执行完毕而直接继续执行下面的代码。通过调用Thread类的start()方法来启动一个线程，这时此线程处于就绪（可运行）状态，并没有运行，一旦得到cpu时间片，就开始执行run()方法，这里方法 run()称为线程体，它包含了要执行的这个线程的内容，Run方法运行结束，此线程随即终止。</p>
+<p>2） run：<br>run()方法只是类的一个普通方法而已，如果直接调用Run方法，程序中依然只有主线程这一个线程，其程序执行路径还是只有一条，还是要顺序执行，还是要等待run方法体执行完毕后才可继续执行下面的代码，这样就没有达到写线程的目的。总结：调用start方法方可启动线程，而run方法只是thread的一个普通方法调用，还是在主线程里执行。这两个方法应该都比较熟悉，把需要并行处理的代码放在run()方法中，start()方法启动线程将自动调用 run()方法，这是由jvm的内存机制规定的。并且run()方法必须是public访问权限，返回值类型为void。</p>
+<p>Java 的线程是通过java.lang.Thread类来实现的。VM启动时会有一个由主方法所定义的线程。可以通过创建Thread的实例来创建新的线程。每个线程都是通过某个特定Thread对象所对应的方法run（）来完成其操作的，方法run()称为线程体。通过调用Thread类的start()方法来启动一个线程。</p>
+<p>在Java 当中，线程通常都有五种状态，创建、就绪、运行、阻塞和死亡。<br>第一是创建状态。在生成线程对象，并没有调用该对象的start方法，这是线程处于创建状态。<br>第二是就绪状态。当调用了线程对象的start方法之后，该线程就进入了就绪状态，但是此时线程调度程序还没有把该线程设置为当前线程，此时处于就绪状态。在线程运行之后，从等待或者睡眠中回来之后，也会处于就绪状态。<br>第三是运行状态。线程调度程序将处于就绪状态的线程设置为当前线程，此时线程就进入了运行状态，开始运行run函数当中的代码。<br>第四是阻塞状态。线程正在运行的时候，被暂停，通常是为了等待某个时间的发生(比如说某项资源就绪)之后再继续运行。sleep,suspend，wait等方法都可以导致线程阻塞。<br>第五是死亡状态。如果一个线程的run方法执行结束或者调用stop方法后，该线程就会死亡。对于已经死亡的线程，无法再使用start方法令其进入就绪。</p>
+<blockquote>
+<p>调用start（）后，线程会被放到等待队列，等待CPU调度，并不一定要马上开始执行，只是将这个线程置于可动行状态。然后通过JVM，线程Thread会调用run（）方法，执行本线程的线程体。先调用start后调用run，这么麻烦，为了不直接调用run？就是为了实现多线程的优点，没这个start不行。</p>
+</blockquote>
+<p>1.start（）方法来启动线程，真正实现了多线程运行。这时无需等待run方法体代码执行完毕，可以直接继续执行下面的代码；通过调用Thread类的start()方法来启动一个线程， 这时此线程是处于就绪状态， 并没有运行。 然后通过此Thread类调用方法run()来完成其运行操作的， 这里方法run()称为线程体，它包含了要执行的这个线程的内容， Run方法运行结束， 此线程终止。然后CPU再调度其它线程。<br>2.run（）方法当作普通方法的方式调用。程序还是要顺序执行，要等待run方法体执行完毕后，才可继续执行下面的代码；程序中只有主线程——这一个线程，其程序执行路径还是只有一条， 这样就没有达到写线程的目的。<br>记住：多线程就是分时利用CPU，宏观上让所有线程一起执行 ，也叫并发。</p>
 
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/04/01/多线程/">多线程</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-04-01T02:10:00.000Z" itemprop="datePublished">2018-04-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java-多线程/">Java 多线程</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h1><p>一般来说，线程包括以下这几个状态：创建(new)、就绪(runnable)、运行(running)、阻塞(blocked)、time waiting、waiting、消亡（dead）。</p>
+<p>当需要新起一个线程来执行某个子任务时，就创建了一个线程。但是线程创建之后，不会立即进入就绪状态，因为线程的运行需要一些条件，只有线程运行需要的所有条件满足了，才进入就绪状态。</p>
+<p>当线程进入就绪状态后，不代表立刻就能获取CPU执行时间，也许此时CPU正在执行其他的事情，因此它要等待。当得到CPU执行时间之后，线程便真正进入运行状态。</p>
+<p>线程在运行状态过程中，可能有多个原因导致当前线程不继续运行下去，比如用户主动让线程睡眠（睡眠一定的时间之后再重新执行）、用户主动让线程等待，或者被同步块给阻塞，此时就对应着多个状态：time  waiting（睡眠或等待一定的事件）、waiting（等待被唤醒）、blocked（阻塞）。</p>
+<p>当由于突然中断或者子任务执行完毕，线程就会被消亡。</p>
+<p><img src="https://images2015.cnblogs.com/blog/682616/201611/682616-20161115183635779-1231872003.jpg" alt="image"></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/04/01/Runnable实现多线程/">Runnable接口程实现多线程</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-04-01T02:10:00.000Z" itemprop="datePublished">2018-04-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java-多线程/">Java 多线程</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Runnable接口程实现多线程"><a href="#Runnable接口程实现多线程" class="headerlink" title="Runnable接口程实现多线程"></a>Runnable接口程实现多线程</h1><p>写一个类实现Runnable接口，实现run方法。用new Thread(Runnableclass).start()方法来启动</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RunnableTask</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> void main(<span class="keyword">String</span>[] args) &#123;  </span><br><span class="line">    	RunnableTask rt = <span class="keyword">new</span> <span class="type">RunnableTask</span>();</span><br><span class="line">        Runner1 runner1 = rt.<span class="keyword">new</span> <span class="type">Runner1</span>();  </span><br><span class="line">        Runner2 runner2 = rt.<span class="keyword">new</span> <span class="type">Runner2</span>();  </span><br><span class="line">          </span><br><span class="line">        Thread thread1 = <span class="keyword">new</span> <span class="type">Thread</span>(runner1);  </span><br><span class="line">        Thread thread2 = <span class="keyword">new</span> <span class="type">Thread</span>(runner2);  </span><br><span class="line">	    thread1.start();  </span><br><span class="line">	    thread2.start();  </span><br><span class="line">        <span class="comment">//thread1.run();  </span></span><br><span class="line">        <span class="comment">//thread2.run();  </span></span><br><span class="line">    &#125;  </span><br><span class="line">	 </span><br><span class="line">	  </span><br><span class="line">	<span class="class"><span class="keyword">class</span> <span class="title">Runner1</span> <span class="keyword"><span class="keyword">implements</span> <span class="type">Runnable</span></span> </span>&#123; </span><br><span class="line">		<span class="comment">// 实现了Runnable接口，jdk就知道这个类是一个线程  </span></span><br><span class="line">	    <span class="keyword">public</span> void run() &#123;  </span><br><span class="line">	        <span class="keyword">for</span> (int i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;  </span><br><span class="line">	            System.out.println(<span class="string">"进入Runner1运行状态——————————"</span> + i);  </span><br><span class="line">	        &#125;  </span><br><span class="line">	    &#125;  </span><br><span class="line">	&#125;  </span><br><span class="line">	  </span><br><span class="line">	<span class="class"><span class="keyword">class</span> <span class="title">Runner2</span> <span class="keyword"><span class="keyword">implements</span> <span class="type">Runnable</span></span> </span>&#123; </span><br><span class="line">		<span class="comment">// 实现了Runnable接口，jdk就知道这个类是一个线程  </span></span><br><span class="line">	    <span class="keyword">public</span> void run() &#123;  </span><br><span class="line">	        <span class="keyword">for</span> (int i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;  </span><br><span class="line">	            System.out.println(<span class="string">"进入Runner2运行状态=========="</span> + i);  </span><br><span class="line">	        &#125;  </span><br><span class="line">	    &#125;  </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
         
     </section>
 </article>
@@ -312,51 +392,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/04/01/Thread start() 和  run().md/">Thread start() 和 run()</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/6/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-04-01T02:10:00.000Z" itemprop="datePublished">2018-04-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java-多线程/">Java 多线程</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Thread-start-和-run"><a href="#Thread-start-和-run" class="headerlink" title="Thread start() 和  run()"></a>Thread start() 和  run()</h1><ol>
-<li>start 和 run 方法解释：</li>
-</ol>
-<p>1） start：<br>用start方法来启动线程，真正实现了多线程运行，这时无需等待run方法体代码执行完毕而直接继续执行下面的代码。通过调用Thread类的start()方法来启动一个线程，这时此线程处于就绪（可运行）状态，并没有运行，一旦得到cpu时间片，就开始执行run()方法，这里方法 run()称为线程体，它包含了要执行的这个线程的内容，Run方法运行结束，此线程随即终止。</p>
-<p>2） run：<br>run()方法只是类的一个普通方法而已，如果直接调用Run方法，程序中依然只有主线程这一个线程，其程序执行路径还是只有一条，还是要顺序执行，还是要等待run方法体执行完毕后才可继续执行下面的代码，这样就没有达到写线程的目的。总结：调用start方法方可启动线程，而run方法只是thread的一个普通方法调用，还是在主线程里执行。这两个方法应该都比较熟悉，把需要并行处理的代码放在run()方法中，start()方法启动线程将自动调用 run()方法，这是由jvm的内存机制规定的。并且run()方法必须是public访问权限，返回值类型为void。</p>
-<p>Java 的线程是通过java.lang.Thread类来实现的。VM启动时会有一个由主方法所定义的线程。可以通过创建Thread的实例来创建新的线程。每个线程都是通过某个特定Thread对象所对应的方法run（）来完成其操作的，方法run()称为线程体。通过调用Thread类的start()方法来启动一个线程。</p>
-<p>在Java 当中，线程通常都有五种状态，创建、就绪、运行、阻塞和死亡。<br>第一是创建状态。在生成线程对象，并没有调用该对象的start方法，这是线程处于创建状态。<br>第二是就绪状态。当调用了线程对象的start方法之后，该线程就进入了就绪状态，但是此时线程调度程序还没有把该线程设置为当前线程，此时处于就绪状态。在线程运行之后，从等待或者睡眠中回来之后，也会处于就绪状态。<br>第三是运行状态。线程调度程序将处于就绪状态的线程设置为当前线程，此时线程就进入了运行状态，开始运行run函数当中的代码。<br>第四是阻塞状态。线程正在运行的时候，被暂停，通常是为了等待某个时间的发生(比如说某项资源就绪)之后再继续运行。sleep,suspend，wait等方法都可以导致线程阻塞。<br>第五是死亡状态。如果一个线程的run方法执行结束或者调用stop方法后，该线程就会死亡。对于已经死亡的线程，无法再使用start方法令其进入就绪。</p>
-<blockquote>
-<p>调用start（）后，线程会被放到等待队列，等待CPU调度，并不一定要马上开始执行，只是将这个线程置于可动行状态。然后通过JVM，线程Thread会调用run（）方法，执行本线程的线程体。先调用start后调用run，这么麻烦，为了不直接调用run？就是为了实现多线程的优点，没这个start不行。</p>
-</blockquote>
-<p>1.start（）方法来启动线程，真正实现了多线程运行。这时无需等待run方法体代码执行完毕，可以直接继续执行下面的代码；通过调用Thread类的start()方法来启动一个线程， 这时此线程是处于就绪状态， 并没有运行。 然后通过此Thread类调用方法run()来完成其运行操作的， 这里方法run()称为线程体，它包含了要执行的这个线程的内容， Run方法运行结束， 此线程终止。然后CPU再调度其它线程。<br>2.run（）方法当作普通方法的方式调用。程序还是要顺序执行，要等待run方法体执行完毕后，才可继续执行下面的代码；程序中只有主线程——这一个线程，其程序执行路径还是只有一条， 这样就没有达到写线程的目的。<br>记住：多线程就是分时利用CPU，宏观上让所有线程一起执行 ，也叫并发。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2018/04/01/Thread sleep() 和  wait()/">Thread sleep() 和 wait()</a>
         </h1>
         
@@ -397,42 +432,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/04/01/Runnable实现多线程/">Runnable接口程实现多线程</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/6/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-04-01T02:10:00.000Z" itemprop="datePublished">2018-04-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java-多线程/">Java 多线程</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Runnable接口程实现多线程"><a href="#Runnable接口程实现多线程" class="headerlink" title="Runnable接口程实现多线程"></a>Runnable接口程实现多线程</h1><p>写一个类实现Runnable接口，实现run方法。用new Thread(Runnableclass).start()方法来启动</p>
-<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RunnableTask</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> void main(<span class="keyword">String</span>[] args) &#123;  </span><br><span class="line">    	RunnableTask rt = <span class="keyword">new</span> <span class="type">RunnableTask</span>();</span><br><span class="line">        Runner1 runner1 = rt.<span class="keyword">new</span> <span class="type">Runner1</span>();  </span><br><span class="line">        Runner2 runner2 = rt.<span class="keyword">new</span> <span class="type">Runner2</span>();  </span><br><span class="line">          </span><br><span class="line">        Thread thread1 = <span class="keyword">new</span> <span class="type">Thread</span>(runner1);  </span><br><span class="line">        Thread thread2 = <span class="keyword">new</span> <span class="type">Thread</span>(runner2);  </span><br><span class="line">	    thread1.start();  </span><br><span class="line">	    thread2.start();  </span><br><span class="line">        <span class="comment">//thread1.run();  </span></span><br><span class="line">        <span class="comment">//thread2.run();  </span></span><br><span class="line">    &#125;  </span><br><span class="line">	 </span><br><span class="line">	  </span><br><span class="line">	<span class="class"><span class="keyword">class</span> <span class="title">Runner1</span> <span class="keyword"><span class="keyword">implements</span> <span class="type">Runnable</span></span> </span>&#123; </span><br><span class="line">		<span class="comment">// 实现了Runnable接口，jdk就知道这个类是一个线程  </span></span><br><span class="line">	    <span class="keyword">public</span> void run() &#123;  </span><br><span class="line">	        <span class="keyword">for</span> (int i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;  </span><br><span class="line">	            System.out.println(<span class="string">"进入Runner1运行状态——————————"</span> + i);  </span><br><span class="line">	        &#125;  </span><br><span class="line">	    &#125;  </span><br><span class="line">	&#125;  </span><br><span class="line">	  </span><br><span class="line">	<span class="class"><span class="keyword">class</span> <span class="title">Runner2</span> <span class="keyword"><span class="keyword">implements</span> <span class="type">Runnable</span></span> </span>&#123; </span><br><span class="line">		<span class="comment">// 实现了Runnable接口，jdk就知道这个类是一个线程  </span></span><br><span class="line">	    <span class="keyword">public</span> void run() &#123;  </span><br><span class="line">	        <span class="keyword">for</span> (int i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;  </span><br><span class="line">	            System.out.println(<span class="string">"进入Runner2运行状态=========="</span> + i);  </span><br><span class="line">	        &#125;  </span><br><span class="line">	    &#125;  </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/03/06/Linux文件属性/">Linux 文件属性</a>
+            <a href="/2018/03/06/Linux 常用命令/">Linux常用命令</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -455,27 +455,50 @@
     
     <section class="article-body markdown-body">
         
-        <h2 id="Linux-文件属性"><a href="#Linux-文件属性" class="headerlink" title="Linux 文件属性"></a>Linux 文件属性</h2><p>在Linux中我们可以使用命令来显示一个文件的属性以及文件所属的用户和组，如：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@www /]# ls -l</span><br><span class="line">total <span class="number">64</span></span><br><span class="line">dr-xr-xr-x   <span class="number">2</span> root root <span class="number">4096</span> Dec <span class="number">14</span>  <span class="number">2012</span> bin</span><br><span class="line">dr-xr-xr-x   <span class="number">4</span> root root <span class="number">4096</span> Apr <span class="number">19</span>  <span class="number">2012</span> boot</span><br><span class="line">……</span><br></pre></td></tr></table></figure></p>
-<p>note: “ll” 也可以。</p>
-<p>在Linux中第一个字符代表这个文件是目录、文件或链接文件等等。”d”在Linux中代表该文件是一个目录文件。</p>
-<ul>
-<li>当为[ d ]则是目录</li>
-<li>当为[ - ]则是文件；</li>
-<li>若是[ l ]则表示为链接文档(link file)；</li>
-<li>若是[ b ]则表示为装置文件里面的可供储存的接口设备(可随机存取装置)；</li>
-<li>若是[ c ]则表示为装置文件里面的串行端口设备，例如键盘、鼠标(一次性读取装置)。</li>
+        <p>Linux常用命令</p>
+<p>#Linux 常用命令</p>
+<h2 id="cd"><a href="#cd" class="headerlink" title="cd"></a>cd</h2><ul>
+<li>==cd /== 进入主目录</li>
+<li>==cd ~== 进入Home目录</li>
+<li>==cd -== 进入上一次工作中路径</li>
 </ul>
-<p>接下来的字符中，以三个为一组，且均为『rwx』 的三个参数的组合。</p>
-<ul>
-<li>[ r ]代表可读(read)</li>
-<li>[ w ]代表可写(write)</li>
-<li>[ x ]代表可执行(execute)</li>
+<h2 id="ls"><a href="#ls" class="headerlink" title="ls"></a>ls</h2><ul>
+<li>==ls -a== 列出所有</li>
+<li>==ls -r== 反序排列</li>
+<li>==ls -t== 以文件修改时间排列</li>
+<li>==ls -l== 将文件名,文件所有者，文件大小信息详细信息列出来</li>
 </ul>
-<p>要注意的是，这三个权限的位置不会改变，如果没有权限，就会出现减号[ - ]而已。</p>
-<blockquote>
-<p>对于文件来说，它都有一个特定的所有者，也就是对该文件具有所有权的用户。同时，在Linux系统中，用户是按组分类的，一个用户属于一个或多个组。文件所有者以外的用户又可以分为文件所有者的同组用户和其他用户。因此，Linux系统按文件所有者、文件所有者同组用户和其他用户来规定了不同的文件访问权限。</p>
-</blockquote>
-<p>对于 root 用户来说，一般情况下，文件的权限对其不起作用。</p>
+<h2 id="pwd"><a href="#pwd" class="headerlink" title="pwd"></a>pwd</h2><ul>
+<li>==pwd== 展示当前工作目录路径</li>
+</ul>
+<h2 id="mkdir"><a href="#mkdir" class="headerlink" title="mkdir"></a>mkdir</h2><p>创建文件夹<br>可用选项：</p>
+<ul>
+<li>==mkdir -m==: 对新建目录设置存取权限,也可以用chmod命令设置;</li>
+<li>==mkdir -p==: 可以是一个路径名称。此时若路径中的某些目录尚不存在,加上此选项后,系统将自动建立那 些尚不在的目录,即一次可以建立多个目录;</li>
+</ul>
+<h2 id="rm"><a href="#rm" class="headerlink" title="rm"></a>rm</h2><p>删除文件，删除一个目录中的一个或多个文件或目录，如果没有使用- r选项，则rm不会删除目录</p>
+<h2 id="rmdir"><a href="#rmdir" class="headerlink" title="rmdir"></a>rmdir</h2><p>从一个目录中删除一个或多个子目录项，删除某目录时也必须具有对其父目录的写权限。</p>
+<h2 id="mv"><a href="#mv" class="headerlink" title="mv"></a>mv</h2><p>移动文件或修改文件名，根据第二参数类型（如目录，则移动文件；如为文件则重命令该文件）。</p>
+<h2 id="cp"><a href="#cp" class="headerlink" title="cp"></a>cp</h2><p>将源文件复制至目标文件，或将多个源文件复制至目标目录。</p>
+<h2 id="free"><a href="#free" class="headerlink" title="free"></a>free</h2><p>显示系统内存使用情况，包括物理内存、交互区内存(swap)和内核缓冲区内存</p>
+<ul>
+<li>-b 以Byte显示内存使用情况</li>
+<li>-k 以kb为单位显示内存使用情况</li>
+<li>-m 以mb为单位显示内存使用情况</li>
+<li>-g 以gb为单位显示内存使用情况</li>
+<li>-s &lt;间隔秒数&gt; 持续显示内存</li>
+<li>-t 显示内存使用总合</li>
+</ul>
+<h2 id="cat"><a href="#cat" class="headerlink" title="cat"></a>cat</h2><p>  cat主要有三大功能：</p>
+<ul>
+<li>一次显示整个文件:cat filename</li>
+<li>从键盘创建一个文件:cat &gt; filename 只能创建新文件,不能编辑已有文件.</li>
+<li>将几个文件合并为一个文件:cat file1 file2 &gt; file</li>
+</ul>
+<ol>
+<li>-b对非空输出行号</li>
+<li>-n输出所有行号</li>
+</ol>
 
         
     </section>
