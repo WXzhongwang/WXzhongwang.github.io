@@ -166,36 +166,6 @@
   </entry>
   
   <entry>
-    <title>Java基础面试题五</title>
-    <link href="https://wxzhongwang.github.io/2019/08/07/Java%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95%E9%A2%98%E4%BA%94/"/>
-    <id>https://wxzhongwang.github.io/2019/08/07/Java基础面试题五/</id>
-    <published>2019-08-07T14:37:25.985Z</published>
-    <updated>2019-06-27T11:05:02.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>Java基础面试题五</p><blockquote><p>Q1: &amp; 和 &amp;&amp; 的区别</p></blockquote><p>&amp;是位运算符，表示按位与运算，&amp;&amp;是逻辑运算符，表示逻辑与（and）。</p><blockquote><p>Q2: final, finally, finalize的区别</p></blockquote><ul><li>final 用于声明属性，方法和类，分别表示属性不可变，方法不可覆盖，类不可继承。 </li><li>finally,异常处理语句结构的一部分，表示总是执行。 </li><li>finalize是Object类的一个方法，垃圾收集器执行的时候会调用被回收对象的此方法，可以覆盖此方法提供垃圾收集时的其他资源回收，例如关闭文件等。</li></ul><blockquote><p>Q3: sleep() 和 wait() 有什么区别? </p></blockquote><p>sleep是线程类（Thread）的方法，导致此线程暂停执行指定时间，给执行机会给其他线程，但是监控状态依然保持，到时后会自动恢复。调用sleep不会释放对象锁。 </p><p>wait是Object类的方法，对此对象调用wait方法导致本线程放弃对象锁，进入等待此对象的等待锁定池，只有针对此对象发出notify方法（或not ifyAll）后本线程才进入对象锁定池准备获得对象锁进入运行状态。</p><blockquote><p>Q4: error和exception有什么区别? </p></blockquote><ul><li>error:<br>表示恢复不是不可能但很困难的情况下的一种严重问题。比如说内存溢出。不可能指望程序能处理这样的情况。 </li><li>exception: 表示一种设计或实现问题。也就是说，它表示如果程序运行正常，从不会发生的情况。</li></ul><blockquote><p>Q5: GC是什么? 为什么要有GC? </p></blockquote><p>GC是垃圾收集的意思（Gabage Collection）,内存处理是编程人员容易出现问题的地方，忘记或者错误的内存回收会导致程序或系统的不稳定甚至崩溃，Java提供的GC功能可以自动监测对象是否超过作用域从而达到自动回收内存的目的，Java语言没有提供释放已分配内存的显示操作方法。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">要请求垃圾收集，可以调用下面的方法之一：  </span><br><span class="line"><span class="selector-tag">System</span><span class="selector-class">.gc</span>() </span><br><span class="line"><span class="selector-tag">Runtime</span><span class="selector-class">.getRuntime</span>()<span class="selector-class">.gc</span>()</span><br></pre></td></tr></table></figure></p><p>当然，如果需要，程序员可以在Java程序中显式地使用System.gc()来强制进行一次立即的内存清理。<br>因为显式声明是做堆内存全扫描，也就是FullGC，是需要停止所有的活动的（Stop The World Collection），你的应用能承受这个吗？而其显示调用System.gc()只是给虚拟机一个建议，不一定会执行，因为System.gc()在一个优先级很低的线程中执行。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;Java基础面试题五&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Q1: &amp;amp; 和 &amp;amp;&amp;amp; 的区别&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&amp;amp;是位运算符，表示按位与运算，&amp;amp;&amp;amp;是逻辑运算符，表示逻辑与（and）。&lt;/p&gt;
-&lt;block
-      
-    
-    </summary>
-    
-      <category term="Java" scheme="https://wxzhongwang.github.io/categories/Java/"/>
-    
-    
-      <category term="Java" scheme="https://wxzhongwang.github.io/tags/Java/"/>
-    
-  </entry>
-  
-  <entry>
     <title>Java基础面试题四</title>
     <link href="https://wxzhongwang.github.io/2019/08/07/Java%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95%E9%A2%98%E5%9B%9B/"/>
     <id>https://wxzhongwang.github.io/2019/08/07/Java基础面试题四/</id>
@@ -227,23 +197,24 @@
   </entry>
   
   <entry>
-    <title>Java基础面试题三</title>
-    <link href="https://wxzhongwang.github.io/2019/08/07/Java%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95%E9%A2%98%E4%B8%89/"/>
-    <id>https://wxzhongwang.github.io/2019/08/07/Java基础面试题三/</id>
-    <published>2019-08-07T14:37:25.984Z</published>
+    <title>Java基础面试题五</title>
+    <link href="https://wxzhongwang.github.io/2019/08/07/Java%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95%E9%A2%98%E4%BA%94/"/>
+    <id>https://wxzhongwang.github.io/2019/08/07/Java基础面试题五/</id>
+    <published>2019-08-07T14:37:25.985Z</published>
     <updated>2019-06-27T11:05:02.000Z</updated>
     
-    <content type="html"><![CDATA[<p>Java基础面试题三</p><blockquote><p>Q1: 如何确保N个线程可以访问N个资源同时又不导致死锁？ </p></blockquote><p>使用多线程的时候，一种非常简单的避免死锁的方式就是：指定获取锁的顺序，并强制线程按照指定的顺序获取锁。因此，如果所有的线程都是以同样的顺序加锁和释放锁，就不会出现死锁了。</p><blockquote><p>Q2: Java集合类框架的基本接口有哪些？</p></blockquote><p>Java集合类提供了一套设计良好的支持对一组对象进行操作的接口和类。<br>Java集合类里面最基本的接口有： </p><ul><li>Collection：代表一组对象，每一个对象都是它的子元素。 </li><li>Set：不包含重复元素的Collection。 </li><li>List：有顺序的collection，并且可以包含重复元素。 </li><li>Map：可以把键(key)映射到值(value)的对象，键不能重复。</li></ul><blockquote><p>Q3: 什么是迭代器(Iterator)？ </p></blockquote><p>Iterator接口提供了很多对集合元素进行迭代的方法。每一个集合类都包含了可以返回迭代器实例的迭代方法。迭代器可以在迭代的过程中删除底层集合的元素。</p><blockquote><p>Q4: Iterator和ListIterator的区别是什么？</p></blockquote><p>下面列出了他们的区别： </p><ul><li>Iterator可用来遍历Set和List集合，但是ListIterator只能用来遍历List。 </li><li>Iterator对集合只能是前向遍历，ListIterator既可以前向也可以后向。 </li><li>ListIterator实现了Iterator接口，并包含其他的功能，比如：增加元素，替换元素，获取前一个和后一个元素的索引，等等。</li></ul><blockquote><p>Q5: Java中的HashMap的工作原理是什么？ </p></blockquote><p>Java中的HashMap是以键值对(key-value)的形式存储元素的。HashMap需要一个hash函数，它使用hashCode()和equals()方法来向集合/从集合添加和检索元素。当调用put()方法的时候，HashMap会计算key的hash值，然后把键值对存储在集合中合适的索引上。如果key已经存在了，value会被更新成新值。</p><p>HashMap的一些重要的特性是它的容量(capacity)，负载因子(load factor)和扩容极限(threshold resizing)。</p><blockquote><p>Q6: HashMap和Hashtable有什么区别？ </p></blockquote><ul><li>HashMap和Hashtable都实现了Map接口，因此很多特性非常相似。但是，他们有以下不同点： </li><li>HashMap允许键和值是null，而Hashtable不允许键或者值是null。 </li><li>Hashtable是同步的，而HashMap不是。因此，HashMap更适合于单线程环境，而Hashtable适合于多线程环境。 </li><li>HashMap提供了可供应用迭代的键的集合，因此，HashMap是快速失败的。另一方面，Hashtable提供了对键的列举(Enumeration)。 </li></ul><blockquote><p>Q7: 数组(Array)和列表(ArrayList)有什么区别？什么时候应该使用Array而不是ArrayList？ </p></blockquote><p>下面列出了Array和ArrayList的不同点： </p><ul><li>Array可以包含基本类型和对象类型，ArrayList只能包含对象类型。 </li><li>Array大小是固定的，ArrayList的大小是动态变化的。 </li><li>ArrayList提供了更多的方法和特性，比如：addAll()，removeAll()，iterator()等等。 </li><li>对于基本类型数据，集合使用自动装箱来减少编码工作量。但是，当处理固定大小的基本数据类型的时候，这种方式相对比较慢。</li></ul><blockquote><p>Q8: ArrayList和LinkedList有什么区别？ </p></blockquote><p>ArrayList和LinkedList都实现了List接口，他们有以下的不同点： </p><ul><li>ArrayList是基于索引的数据接口，它的底层是数组。它可以以O(1)时间复杂度对元素进行随机访问。与此对应，LinkedList是以元素链表的形式存储它的数据，每一个元素都和它的前一个和后一个元素链接在一起，在这种情况下，查找某个元素的时间复杂度是O(n)。 </li><li>相对于ArrayList，LinkedList的插入，添加，删除操作速度更快，因为当元素被添加到集合任意位置的时候，不需要像数组那样重新计算大小或者是更新索引。 </li><li>LinkedList比ArrayList更占内存，因为LinkedList为每一个节点存储了两个引用，一个指向前一个元素，一个指向下一个元素。也可以参考ArrayList vs. LinkedList。</li></ul><blockquote><p>Q9: 如何权衡是使用无序的数组还是有序的数组？ </p></blockquote><p>有序数组最大的好处在于查找的时间复杂度是O(log n)，而无序数组是O(n)。有序数组的缺点是插入操作的时间复杂度是O(n)，因为值大的元素需要往后移动来给新元素腾位置。相反，无序数组的插入时间复杂度是常量O(1)。</p><blockquote><p>Q10: HashSet和TreeSet有什么区别？ </p></blockquote><p>HashSet是由一个hash表来实现的，因此，它的元素是无序的。add()，remove()，contains()方法的时间复杂度是O(1)。 </p><p>TreeSet是由一个树形的结构来实现的，它里面的元素是有序的。因此，add()，remove()，contains()方法的时间复杂度是O(logn)。</p>]]></content>
+    <content type="html"><![CDATA[<p>Java基础面试题五</p><blockquote><p>Q1: &amp; 和 &amp;&amp; 的区别</p></blockquote><p>&amp;是位运算符，表示按位与运算，&amp;&amp;是逻辑运算符，表示逻辑与（and）。</p><blockquote><p>Q2: final, finally, finalize的区别</p></blockquote><ul><li>final 用于声明属性，方法和类，分别表示属性不可变，方法不可覆盖，类不可继承。 </li><li>finally,异常处理语句结构的一部分，表示总是执行。 </li><li>finalize是Object类的一个方法，垃圾收集器执行的时候会调用被回收对象的此方法，可以覆盖此方法提供垃圾收集时的其他资源回收，例如关闭文件等。</li></ul><blockquote><p>Q3: sleep() 和 wait() 有什么区别? </p></blockquote><p>sleep是线程类（Thread）的方法，导致此线程暂停执行指定时间，给执行机会给其他线程，但是监控状态依然保持，到时后会自动恢复。调用sleep不会释放对象锁。 </p><p>wait是Object类的方法，对此对象调用wait方法导致本线程放弃对象锁，进入等待此对象的等待锁定池，只有针对此对象发出notify方法（或not ifyAll）后本线程才进入对象锁定池准备获得对象锁进入运行状态。</p><blockquote><p>Q4: error和exception有什么区别? </p></blockquote><ul><li>error:<br>表示恢复不是不可能但很困难的情况下的一种严重问题。比如说内存溢出。不可能指望程序能处理这样的情况。 </li><li>exception: 表示一种设计或实现问题。也就是说，它表示如果程序运行正常，从不会发生的情况。</li></ul><blockquote><p>Q5: GC是什么? 为什么要有GC? </p></blockquote><p>GC是垃圾收集的意思（Gabage Collection）,内存处理是编程人员容易出现问题的地方，忘记或者错误的内存回收会导致程序或系统的不稳定甚至崩溃，Java提供的GC功能可以自动监测对象是否超过作用域从而达到自动回收内存的目的，Java语言没有提供释放已分配内存的显示操作方法。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">要请求垃圾收集，可以调用下面的方法之一：  </span><br><span class="line"><span class="selector-tag">System</span><span class="selector-class">.gc</span>() </span><br><span class="line"><span class="selector-tag">Runtime</span><span class="selector-class">.getRuntime</span>()<span class="selector-class">.gc</span>()</span><br></pre></td></tr></table></figure></p><p>当然，如果需要，程序员可以在Java程序中显式地使用System.gc()来强制进行一次立即的内存清理。<br>因为显式声明是做堆内存全扫描，也就是FullGC，是需要停止所有的活动的（Stop The World Collection），你的应用能承受这个吗？而其显示调用System.gc()只是给虚拟机一个建议，不一定会执行，因为System.gc()在一个优先级很低的线程中执行。</p>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;p&gt;Java基础面试题三&lt;/p&gt;
+        &lt;p&gt;Java基础面试题五&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;Q1: 如何确保N个线程可以访问N个资源同时又不导致死锁？ &lt;/p&gt;
+&lt;p&gt;Q1: &amp;amp; 和 &amp;amp;&amp;amp; 的区别&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;使用多线程的时候，一种非常简单的避免死锁的方式就是：指定获取锁的顺序，并强制线程按照指定的顺序获取锁。因此，
+&lt;p&gt;&amp;amp;是位运算符，表示按位与运算，&amp;amp;&amp;amp;是逻辑运算符，表示逻辑与（and）。&lt;/p&gt;
+&lt;block
       
     
     </summary>
@@ -273,6 +244,35 @@
 &lt;p&gt;Q1: 什么是死锁(deadlock)？ &lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;两个进程都在等待对方执行完毕才能继续往下执行的时候就发生了死锁。结果就是两个进程都陷入了无限的等待中。&lt;br&gt;代码表示：&lt;br
+      
+    
+    </summary>
+    
+      <category term="Java" scheme="https://wxzhongwang.github.io/categories/Java/"/>
+    
+    
+      <category term="Java" scheme="https://wxzhongwang.github.io/tags/Java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java基础面试题三</title>
+    <link href="https://wxzhongwang.github.io/2019/08/07/Java%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95%E9%A2%98%E4%B8%89/"/>
+    <id>https://wxzhongwang.github.io/2019/08/07/Java基础面试题三/</id>
+    <published>2019-08-07T14:37:25.984Z</published>
+    <updated>2019-06-27T11:05:02.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>Java基础面试题三</p><blockquote><p>Q1: 如何确保N个线程可以访问N个资源同时又不导致死锁？ </p></blockquote><p>使用多线程的时候，一种非常简单的避免死锁的方式就是：指定获取锁的顺序，并强制线程按照指定的顺序获取锁。因此，如果所有的线程都是以同样的顺序加锁和释放锁，就不会出现死锁了。</p><blockquote><p>Q2: Java集合类框架的基本接口有哪些？</p></blockquote><p>Java集合类提供了一套设计良好的支持对一组对象进行操作的接口和类。<br>Java集合类里面最基本的接口有： </p><ul><li>Collection：代表一组对象，每一个对象都是它的子元素。 </li><li>Set：不包含重复元素的Collection。 </li><li>List：有顺序的collection，并且可以包含重复元素。 </li><li>Map：可以把键(key)映射到值(value)的对象，键不能重复。</li></ul><blockquote><p>Q3: 什么是迭代器(Iterator)？ </p></blockquote><p>Iterator接口提供了很多对集合元素进行迭代的方法。每一个集合类都包含了可以返回迭代器实例的迭代方法。迭代器可以在迭代的过程中删除底层集合的元素。</p><blockquote><p>Q4: Iterator和ListIterator的区别是什么？</p></blockquote><p>下面列出了他们的区别： </p><ul><li>Iterator可用来遍历Set和List集合，但是ListIterator只能用来遍历List。 </li><li>Iterator对集合只能是前向遍历，ListIterator既可以前向也可以后向。 </li><li>ListIterator实现了Iterator接口，并包含其他的功能，比如：增加元素，替换元素，获取前一个和后一个元素的索引，等等。</li></ul><blockquote><p>Q5: Java中的HashMap的工作原理是什么？ </p></blockquote><p>Java中的HashMap是以键值对(key-value)的形式存储元素的。HashMap需要一个hash函数，它使用hashCode()和equals()方法来向集合/从集合添加和检索元素。当调用put()方法的时候，HashMap会计算key的hash值，然后把键值对存储在集合中合适的索引上。如果key已经存在了，value会被更新成新值。</p><p>HashMap的一些重要的特性是它的容量(capacity)，负载因子(load factor)和扩容极限(threshold resizing)。</p><blockquote><p>Q6: HashMap和Hashtable有什么区别？ </p></blockquote><ul><li>HashMap和Hashtable都实现了Map接口，因此很多特性非常相似。但是，他们有以下不同点： </li><li>HashMap允许键和值是null，而Hashtable不允许键或者值是null。 </li><li>Hashtable是同步的，而HashMap不是。因此，HashMap更适合于单线程环境，而Hashtable适合于多线程环境。 </li><li>HashMap提供了可供应用迭代的键的集合，因此，HashMap是快速失败的。另一方面，Hashtable提供了对键的列举(Enumeration)。 </li></ul><blockquote><p>Q7: 数组(Array)和列表(ArrayList)有什么区别？什么时候应该使用Array而不是ArrayList？ </p></blockquote><p>下面列出了Array和ArrayList的不同点： </p><ul><li>Array可以包含基本类型和对象类型，ArrayList只能包含对象类型。 </li><li>Array大小是固定的，ArrayList的大小是动态变化的。 </li><li>ArrayList提供了更多的方法和特性，比如：addAll()，removeAll()，iterator()等等。 </li><li>对于基本类型数据，集合使用自动装箱来减少编码工作量。但是，当处理固定大小的基本数据类型的时候，这种方式相对比较慢。</li></ul><blockquote><p>Q8: ArrayList和LinkedList有什么区别？ </p></blockquote><p>ArrayList和LinkedList都实现了List接口，他们有以下的不同点： </p><ul><li>ArrayList是基于索引的数据接口，它的底层是数组。它可以以O(1)时间复杂度对元素进行随机访问。与此对应，LinkedList是以元素链表的形式存储它的数据，每一个元素都和它的前一个和后一个元素链接在一起，在这种情况下，查找某个元素的时间复杂度是O(n)。 </li><li>相对于ArrayList，LinkedList的插入，添加，删除操作速度更快，因为当元素被添加到集合任意位置的时候，不需要像数组那样重新计算大小或者是更新索引。 </li><li>LinkedList比ArrayList更占内存，因为LinkedList为每一个节点存储了两个引用，一个指向前一个元素，一个指向下一个元素。也可以参考ArrayList vs. LinkedList。</li></ul><blockquote><p>Q9: 如何权衡是使用无序的数组还是有序的数组？ </p></blockquote><p>有序数组最大的好处在于查找的时间复杂度是O(log n)，而无序数组是O(n)。有序数组的缺点是插入操作的时间复杂度是O(n)，因为值大的元素需要往后移动来给新元素腾位置。相反，无序数组的插入时间复杂度是常量O(1)。</p><blockquote><p>Q10: HashSet和TreeSet有什么区别？ </p></blockquote><p>HashSet是由一个hash表来实现的，因此，它的元素是无序的。add()，remove()，contains()方法的时间复杂度是O(1)。 </p><p>TreeSet是由一个树形的结构来实现的，它里面的元素是有序的。因此，add()，remove()，contains()方法的时间复杂度是O(logn)。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;Java基础面试题三&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Q1: 如何确保N个线程可以访问N个资源同时又不导致死锁？ &lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;使用多线程的时候，一种非常简单的避免死锁的方式就是：指定获取锁的顺序，并强制线程按照指定的顺序获取锁。因此，
       
     
     </summary>

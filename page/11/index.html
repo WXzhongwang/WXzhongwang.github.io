@@ -227,6 +227,136 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2017/06/01/Linux目录结构简易理解/">Linux目录结构简易理解</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/11/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-06-01T08:18:02.000Z" itemprop="datePublished">2017-06-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h2 id="Linux目录结构"><a href="#Linux目录结构" class="headerlink" title="Linux目录结构"></a>Linux目录结构</h2><p>/bin：<br>bin是Binary的缩写, 这个目录存放着最经常使用的命令。</p>
+<p>/boot：<br>这里存放的是启动Linux时使用的一些核心文件，包括一些连接文件以及镜像文件。</p>
+<p>/dev ：<br>dev是Device(设备)的缩写, 该目录下存放的是Linux的外部设备，在Linux中访问设备的方式和访问文件的方式是相同的。</p>
+<p>/etc：<br>这个目录用来存放所有的系统管理所需要的配置文件和子目录。</p>
+<p>/home：<br>用户的主目录，在Linux中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的。</p>
+<p>/lib：<br>这个目录里存放着系统最基本的动态连接共享库，其作用类似于Windows里的DLL文件。几乎所有的应用程序都需要用到这些共享库。</p>
+<p>/lost+found：<br>这个目录一般情况下是空的，当系统非法关机后，这里就存放了一些文件。</p>
+<p>/media：<br>linux系统会自动识别一些设备，例如U盘、光驱等等，当识别后，linux会把识别的设备挂载到这个目录下。</p>
+<p>/mnt：<br>系统提供该目录是为了让用户临时挂载别的文件系统的，我们可以将光驱挂载在/mnt/上，然后进入该目录就可以查看光驱里的内容了。</p>
+<p>/opt：<br> 这是给主机额外安装软件所摆放的目录。比如你安装一个ORACLE数据库则就可以放到这个目录下。默认是空的。</p>
+<p>/proc：<br>这个目录是一个虚拟的目录，它是系统内存的映射，我们可以通过直接访问这个目录来获取系统信息。<br>这个目录的内容不在硬盘上而是在内存里，我们也可以直接修改里面的某些文件，比如可以通过下面的命令来屏蔽主机的ping命令，使别人无法ping你的机器：</p>
+<p>echo 1 &gt; /proc/sys/net/ipv4/icmp_echo_ignore_all<br>/root：<br>该目录为系统管理员，也称作超级权限者的用户主目录。</p>
+<p>/sbin：<br>s就是Super User的意思，这里存放的是系统管理员使用的系统管理程序。</p>
+<p>/selinux：<br> 这个目录是Redhat/CentOS所特有的目录，Selinux是一个安全机制，类似于windows的防火墙，但是这套机制比较复杂，这个目录就是存放selinux相关的文件的。</p>
+<p>/srv：<br> 该目录存放一些服务启动之后需要提取的数据。</p>
+<p>/sys：</p>
+<p> 这是linux2.6内核的一个很大的变化。该目录下安装了2.6内核中新出现的一个文件系统 sysfs 。</p>
+<p>sysfs文件系统集成了下面3种文件系统的信息：针对进程信息的proc文件系统、针对设备的devfs文件系统以及针对伪终端的devpts文件系统。<br>该文件系统是内核设备树的一个直观反映。</p>
+<p>当一个内核对象被创建的时候，对应的文件和目录也在内核对象子系统中被创建。</p>
+<p>/tmp：<br>这个目录是用来存放一些临时文件的。</p>
+<p>/usr：<br> 这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似于windows下的program files目录。</p>
+<p>/usr/bin：<br>系统用户使用的应用程序。</p>
+<p>/usr/sbin：<br>超级用户使用的比较高级的管理程序和系统守护程序。</p>
+<p>/usr/src：<br>内核源代码默认的放置目录。</p>
+<p>/var：<br>这个目录中存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。包括各种日志文件。</p>
+<p>/run：<br>是一个临时文件系统，存储系统启动以来的信息。当系统重启时，这个目录下的文件应该被删掉或清除。如果你的系统上有 /var/run 目录，应该让它指向 run。</p>
+<h2 id="note"><a href="#note" class="headerlink" title="note"></a>note</h2><p>在 Linux 系统中，有几个目录是比较重要的，平时需要注意不要误删除或者随意更改内部文件。</p>
+<p>/etc： 上边也提到了，这个是系统中的配置文件，如果你更改了该目录下的某个文件可能会导致系统不能启动。</p>
+<p>/bin, /sbin, /usr/bin, /usr/sbin: 这是系统预设的执行文件的放置目录，比如 ls 就是在/bin/ls 目录下的。</p>
+<p>值得提出的是，/bin, /usr/bin 是给系统用户使用的指令（除root外的通用户），而/sbin, /usr/sbin 则是给root使用的指令。</p>
+<p>/var： 这是一个非常重要的目录，系统上跑了很多程序，那么每个程序都会有相应的日志产生，而这些日志就被记录到这个目录下，具体在/var/log 目录下，另外mail的预设放置也是在这里。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2017/06/01/Linux目录结构/">Linux 目录结构</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/11/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-06-01T08:18:02.000Z" itemprop="datePublished">2017-06-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h2 id="Linux目录结构"><a href="#Linux目录结构" class="headerlink" title="Linux目录结构"></a>Linux目录结构</h2><p>/bin：<br>bin是Binary的缩写, 这个目录存放着最经常使用的命令。</p>
+<p>/boot：<br>这里存放的是启动Linux时使用的一些核心文件，包括一些连接文件以及镜像文件。</p>
+<p>/dev ：<br>dev是Device(设备)的缩写, 该目录下存放的是Linux的外部设备，在Linux中访问设备的方式和访问文件的方式是相同的。</p>
+<p>/etc：<br>这个目录用来存放所有的系统管理所需要的配置文件和子目录。</p>
+<p>/home：<br>用户的主目录，在Linux中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的。</p>
+<p>/lib：<br>这个目录里存放着系统最基本的动态连接共享库，其作用类似于Windows里的DLL文件。几乎所有的应用程序都需要用到这些共享库。</p>
+<p>/lost+found：<br>这个目录一般情况下是空的，当系统非法关机后，这里就存放了一些文件。</p>
+<p>/media：<br>linux系统会自动识别一些设备，例如U盘、光驱等等，当识别后，linux会把识别的设备挂载到这个目录下。</p>
+<p>/mnt：<br>系统提供该目录是为了让用户临时挂载别的文件系统的，我们可以将光驱挂载在/mnt/上，然后进入该目录就可以查看光驱里的内容了。</p>
+<p>/opt：<br> 这是给主机额外安装软件所摆放的目录。比如你安装一个ORACLE数据库则就可以放到这个目录下。默认是空的。</p>
+<p>/proc：<br>这个目录是一个虚拟的目录，它是系统内存的映射，我们可以通过直接访问这个目录来获取系统信息。<br>这个目录的内容不在硬盘上而是在内存里，我们也可以直接修改里面的某些文件，比如可以通过下面的命令来屏蔽主机的ping命令，使别人无法ping你的机器：</p>
+<p>echo 1 &gt; /proc/sys/net/ipv4/icmp_echo_ignore_all<br>/root：<br>该目录为系统管理员，也称作超级权限者的用户主目录。</p>
+<p>/sbin：<br>s就是Super User的意思，这里存放的是系统管理员使用的系统管理程序。</p>
+<p>/selinux：<br> 这个目录是Redhat/CentOS所特有的目录，Selinux是一个安全机制，类似于windows的防火墙，但是这套机制比较复杂，这个目录就是存放selinux相关的文件的。</p>
+<p>/srv：<br> 该目录存放一些服务启动之后需要提取的数据。</p>
+<p>/sys：</p>
+<p> 这是linux2.6内核的一个很大的变化。该目录下安装了2.6内核中新出现的一个文件系统 sysfs 。</p>
+<p>sysfs文件系统集成了下面3种文件系统的信息：针对进程信息的proc文件系统、针对设备的devfs文件系统以及针对伪终端的devpts文件系统。<br>该文件系统是内核设备树的一个直观反映。</p>
+<p>当一个内核对象被创建的时候，对应的文件和目录也在内核对象子系统中被创建。</p>
+<p>/tmp：<br>这个目录是用来存放一些临时文件的。</p>
+<p>/usr：<br> 这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似于windows下的program files目录。</p>
+<p>/usr/bin：<br>系统用户使用的应用程序。</p>
+<p>/usr/sbin：<br>超级用户使用的比较高级的管理程序和系统守护程序。</p>
+<p>/usr/src：<br>内核源代码默认的放置目录。</p>
+<p>/var：<br>这个目录中存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。包括各种日志文件。</p>
+<p>/run：<br>是一个临时文件系统，存储系统启动以来的信息。当系统重启时，这个目录下的文件应该被删掉或清除。如果你的系统上有 /var/run 目录，应该让它指向 run。</p>
+<h2 id="note"><a href="#note" class="headerlink" title="note"></a>note</h2><p>在 Linux 系统中，有几个目录是比较重要的，平时需要注意不要误删除或者随意更改内部文件。</p>
+<p>/etc： 上边也提到了，这个是系统中的配置文件，如果你更改了该目录下的某个文件可能会导致系统不能启动。</p>
+<p>/bin, /sbin, /usr/bin, /usr/sbin: 这是系统预设的执行文件的放置目录，比如 ls 就是在/bin/ls 目录下的。</p>
+<p>值得提出的是，/bin, /usr/bin 是给系统用户使用的指令（除root外的通用户），而/sbin, /usr/sbin 则是给root使用的指令。</p>
+<p>/var： 这是一个非常重要的目录，系统上跑了很多程序，那么每个程序都会有相应的日志产生，而这些日志就被记录到这个目录下，具体在/var/log 目录下，另外mail的预设放置也是在这里。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2017/04/01/判断字符串是否为空字符串/">判断字符串是否为空字符串</a>
         </h1>
         
@@ -251,51 +381,6 @@
     <section class="article-body markdown-body">
         
         <h1 id="判断字符串是否为空字符串"><a href="#判断字符串是否为空字符串" class="headerlink" title="判断字符串是否为空字符串"></a>判断字符串是否为空字符串</h1><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> class StringUtil &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 判断是否为空字符串最优代码</span></span><br><span class="line"><span class="comment">     * @param str</span></span><br><span class="line"><span class="comment">     * @return 如果为空，则返回true</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">boolean</span> isEmpty(<span class="keyword">String</span> <span class="built_in">str</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">str</span> == <span class="keyword">null</span> || <span class="built_in">str</span>.<span class="built_in">trim</span>().length() == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 判断字符串是否非空</span></span><br><span class="line"><span class="comment">     * @param str </span></span><br><span class="line"><span class="comment">     * @return 如果不为空，则返回true</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">boolean</span> isNotEmpty(<span class="keyword">String</span> <span class="built_in">str</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> !isEmpty(<span class="built_in">str</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/03/06/mybatis/">对maven中setting.xml配置文件进行解释</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/11/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-03-06T08:22:30.000Z" itemprop="datePublished">2017-03-06</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Maven/">Maven</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="mybatis相关问题"><a href="#mybatis相关问题" class="headerlink" title="mybatis相关问题"></a>mybatis相关问题</h1><h2 id="mybatis应用"><a href="#mybatis应用" class="headerlink" title="mybatis应用"></a>mybatis应用</h2><p>1.mybatis优缺点，spring与mybatis集成</p>
-<p>2.Config、Sql配置、Mapper配置、有几种注册Mapper的方式，优先级如何？</p>
-<p>3.mybatis的一级缓存、二级缓存、mybatis的二级缓存为何是鸡肋？</p>
-<p>4.通用mapper的实现，mybatis编写sql语句的三种方式。</p>
-<h2 id="mybatis源码分析"><a href="#mybatis源码分析" class="headerlink" title="mybatis源码分析"></a>mybatis源码分析</h2><p>1.@MapperScan的源码分析？mapperScan如何生效</p>
-<p>2.mybatis如何扩展spring的扫描器的，mybatis扫描完之后如何利用FactoryBean？</p>
-<p>3.mybatis底层如何会把一个代理对象放在spring容器中？用到了spring的哪些知识？</p>
-<p>4.mybatis和spring的核心接口ImportBeanDefinitionRegistrar之间的关系。</p>
-<p>5.mybatis如何实现一级缓存，spring集成后如何失效的？为何将其失效，有没有办法解决。</p>
-<p>6.mybatis分析mybatis的执行流程、mybatis的sql什么时候缓存的？缓存在哪里？</p>
-<p>7.mybatis当中的方法名为何要与mapper当中的id一致？从源码分析？</p>
-
         
     </section>
 </article>
@@ -388,6 +473,51 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2017/03/06/mybatis/">对maven中setting.xml配置文件进行解释</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/11/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-03-06T08:22:30.000Z" itemprop="datePublished">2017-03-06</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Maven/">Maven</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="mybatis相关问题"><a href="#mybatis相关问题" class="headerlink" title="mybatis相关问题"></a>mybatis相关问题</h1><h2 id="mybatis应用"><a href="#mybatis应用" class="headerlink" title="mybatis应用"></a>mybatis应用</h2><p>1.mybatis优缺点，spring与mybatis集成</p>
+<p>2.Config、Sql配置、Mapper配置、有几种注册Mapper的方式，优先级如何？</p>
+<p>3.mybatis的一级缓存、二级缓存、mybatis的二级缓存为何是鸡肋？</p>
+<p>4.通用mapper的实现，mybatis编写sql语句的三种方式。</p>
+<h2 id="mybatis源码分析"><a href="#mybatis源码分析" class="headerlink" title="mybatis源码分析"></a>mybatis源码分析</h2><p>1.@MapperScan的源码分析？mapperScan如何生效</p>
+<p>2.mybatis如何扩展spring的扫描器的，mybatis扫描完之后如何利用FactoryBean？</p>
+<p>3.mybatis底层如何会把一个代理对象放在spring容器中？用到了spring的哪些知识？</p>
+<p>4.mybatis和spring的核心接口ImportBeanDefinitionRegistrar之间的关系。</p>
+<p>5.mybatis如何实现一级缓存，spring集成后如何失效的？为何将其失效，有没有办法解决。</p>
+<p>6.mybatis分析mybatis的执行流程、mybatis的sql什么时候缓存的？缓存在哪里？</p>
+<p>7.mybatis当中的方法名为何要与mapper当中的id一致？从源码分析？</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2017/02/12/动态属性ExpandoObject/">动态属性ExpandoObject</a>
         </h1>
         
@@ -415,45 +545,6 @@
 <p>动态对象 ExpandoObject中添加动态属性？</p>
 <figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dynamic</span> obj = <span class="keyword">new</span> ExpandoObject();</span><br><span class="line">IDictionary&lt;<span class="keyword">string</span>, <span class="keyword">object</span>&gt; temp = <span class="keyword">new</span> Dictionary&lt;<span class="keyword">string</span>, <span class="keyword">object</span>&gt;();</span><br><span class="line">temp.Add(Key, Value);</span><br><span class="line"></span><br><span class="line"><span class="keyword">foreach</span> (KeyValuePair&lt;<span class="keyword">string</span>, <span class="keyword">object</span>&gt; item <span class="keyword">in</span> temp)</span><br><span class="line">&#123;</span><br><span class="line">    ((IDictionary&lt;<span class="keyword">string</span>, <span class="keyword">object</span>&gt;)obj).Add(item.Key, item.Value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>因为不难发现ExpandObject继承自以下接口：<br>IDictionary&lt;string, object&gt;, ICollection&lt;KeyValuePair&lt;string, object&gt;&gt;, IEnumerable&lt;KeyValuePair&lt;string, object&gt;&gt;, IEnumerable</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/01/24/Centos7安装nginx后仍然无法访问/">Nginx无法访问的问题</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/11/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-01-24T02:10:00.000Z" itemprop="datePublished">2017-01-24</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Nginx/">Nginx</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Centos7安装nginx后，无法访问的问题"><a href="#Centos7安装nginx后，无法访问的问题" class="headerlink" title="Centos7安装nginx后，无法访问的问题"></a>Centos7安装nginx后，无法访问的问题</h1><p><a href="https://www.runoob.com/linux/nginx-install-setup.html" target="_blank" rel="noopener">安装步骤</a></p>
-<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">curl localhost</span></span><br></pre></td></tr></table></figure>
-<p>发现是通的 （Welcome to nginx）</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd <span class="attribute">--zone</span>=public <span class="attribute">--add-port</span>=80/tcp --permanent</span><br></pre></td></tr></table></figure>
-<p>重启防火墙：<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="literal">stop</span> firewalld.service</span><br><span class="line">systemctl <span class="literal">start</span> firewalld.service</span><br></pre></td></tr></table></figure></p>
 
         
     </section>
@@ -543,6 +634,45 @@
 <h1 id="变量声明及命名规范"><a href="#变量声明及命名规范" class="headerlink" title="变量声明及命名规范"></a>变量声明及命名规范</h1><h3 id="变量："><a href="#变量：" class="headerlink" title="变量："></a>变量：</h3><p>Camel：变量名首单词的首字母小写，其余每个单词首字母单词大写,多用于给变量或字段或方法参数命名。　　<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">var str</span> = <span class="string">"123"</span>;</span><br><span class="line"><span class="attribute">var highSchoolStudent</span> = <span class="string">"123"</span>;</span><br><span class="line"><span class="attribute">int num</span> = 5;</span><br></pre></td></tr></table></figure></p>
 <h3 id="常量："><a href="#常量：" class="headerlink" title="常量："></a>常量：</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">string</span> BaseIpAddress = <span class="string">""</span>;</span><br></pre></td></tr></table></figure>
 <h3 id="方法名："><a href="#方法名：" class="headerlink" title="方法名："></a>方法名：</h3><p>Pascal：每个单词的首字母都要大些其余小写，多用于类或方法。尽量用一般名词或动名词。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">GetHighSchoolStudent</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2017/01/24/Centos7安装nginx后仍然无法访问/">Nginx无法访问的问题</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/11/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-01-24T02:10:00.000Z" itemprop="datePublished">2017-01-24</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Nginx/">Nginx</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Centos7安装nginx后，无法访问的问题"><a href="#Centos7安装nginx后，无法访问的问题" class="headerlink" title="Centos7安装nginx后，无法访问的问题"></a>Centos7安装nginx后，无法访问的问题</h1><p><a href="https://www.runoob.com/linux/nginx-install-setup.html" target="_blank" rel="noopener">安装步骤</a></p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">curl localhost</span></span><br></pre></td></tr></table></figure>
+<p>发现是通的 （Welcome to nginx）</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd <span class="attribute">--zone</span>=public <span class="attribute">--add-port</span>=80/tcp --permanent</span><br></pre></td></tr></table></figure>
+<p>重启防火墙：<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="literal">stop</span> firewalld.service</span><br><span class="line">systemctl <span class="literal">start</span> firewalld.service</span><br></pre></td></tr></table></figure></p>
 
         
     </section>

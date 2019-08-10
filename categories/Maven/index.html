@@ -166,51 +166,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2017/03/06/mybatis/">对maven中setting.xml配置文件进行解释</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Maven/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-03-06T08:22:30.000Z" itemprop="datePublished">2017-03-06</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Maven/">Maven</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="mybatis相关问题"><a href="#mybatis相关问题" class="headerlink" title="mybatis相关问题"></a>mybatis相关问题</h1><h2 id="mybatis应用"><a href="#mybatis应用" class="headerlink" title="mybatis应用"></a>mybatis应用</h2><p>1.mybatis优缺点，spring与mybatis集成</p>
-<p>2.Config、Sql配置、Mapper配置、有几种注册Mapper的方式，优先级如何？</p>
-<p>3.mybatis的一级缓存、二级缓存、mybatis的二级缓存为何是鸡肋？</p>
-<p>4.通用mapper的实现，mybatis编写sql语句的三种方式。</p>
-<h2 id="mybatis源码分析"><a href="#mybatis源码分析" class="headerlink" title="mybatis源码分析"></a>mybatis源码分析</h2><p>1.@MapperScan的源码分析？mapperScan如何生效</p>
-<p>2.mybatis如何扩展spring的扫描器的，mybatis扫描完之后如何利用FactoryBean？</p>
-<p>3.mybatis底层如何会把一个代理对象放在spring容器中？用到了spring的哪些知识？</p>
-<p>4.mybatis和spring的核心接口ImportBeanDefinitionRegistrar之间的关系。</p>
-<p>5.mybatis如何实现一级缓存，spring集成后如何失效的？为何将其失效，有没有办法解决。</p>
-<p>6.mybatis分析mybatis的执行流程、mybatis的sql什么时候缓存的？缓存在哪里？</p>
-<p>7.mybatis当中的方法名为何要与mapper当中的id一致？从源码分析？</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2017/03/06/MAVEN/">对maven中setting.xml配置文件进行解释</a>
         </h1>
         
@@ -248,6 +203,51 @@
 <h2 id="11-activation"><a href="#11-activation" class="headerlink" title="11.activation"></a>11.activation</h2><figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml"><span class="comment">&lt;!--自动触发profile的条件逻辑。Activation是profile的开启钥匙。如POM中的profile一样，profile的力量来自于它能够在某些特定的环境中自动使用某些特定的值；这些环境通过activation元素指定。activation元素并不是激活profile的唯一方式。settings.xml文件中的activeProfile元素可以包含profile的id。profile也可以通过在命令行，使用-P标记和逗号分隔的列表来显式的激活（如，-P test）。--&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;<span class="name">activation</span>&gt;</span></span></span><br><span class="line"><span class="xml">   <span class="comment">&lt;!--profile默认是否激活的标识--&gt;</span></span></span><br><span class="line"><span class="xml">       <span class="tag">&lt;<span class="name">activeByDefault</span>&gt;</span>false<span class="tag">&lt;/<span class="name">activeByDefault</span>&gt;</span></span></span><br><span class="line"><span class="xml">   <span class="comment">&lt;!--当匹配的jdk被检测到，profile被激活。例如，1.4激活JDK1.4，1.4.0_2，而!1.4激活所有版本不是以1.4开头的JDK。--&gt;</span></span></span><br><span class="line"><span class="xml">       <span class="tag">&lt;<span class="name">jdk</span>&gt;</span>1.5<span class="tag">&lt;/<span class="name">jdk</span>&gt;</span></span></span><br><span class="line"><span class="xml">   <span class="comment">&lt;!--当匹配的操作系统属性被检测到，profile被激活。os元素可以定义一些操作系统相关的属性。--&gt;</span></span></span><br><span class="line"><span class="xml">       <span class="tag">&lt;<span class="name">os</span>&gt;</span></span></span><br><span class="line"><span class="xml">   <span class="comment">&lt;!--激活profile的操作系统的名字 --&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>Windows XP<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span></span><br><span class="line"><span class="xml">   <span class="comment">&lt;!--激活profile的操作系统所属家族(如 'windows')  --&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">family</span>&gt;</span>Windows<span class="tag">&lt;/<span class="name">family</span>&gt;</span></span></span><br><span class="line"><span class="xml">   <span class="comment">&lt;!--激活profile的操作系统体系结构  --&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">arch</span>&gt;</span>x86<span class="tag">&lt;/<span class="name">arch</span>&gt;</span></span></span><br><span class="line"><span class="xml">   <span class="comment">&lt;!--激活profile的操作系统版本--&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.1.2600<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span></span><br><span class="line"><span class="xml">       <span class="tag">&lt;/<span class="name">os</span>&gt;</span></span></span><br><span class="line"><span class="xml">   <span class="comment">&lt;!--如果Maven检测到某一个属性（其值可以在POM中通过$</span></span><span class="template-variable">&#123;name&#125;</span><span class="xml"><span class="comment">引用），其拥有对应的name = 值，Profile就会被激活。如果值字段是空的，那么存在属性名称字段就会激活profile，否则按区分大小写方式匹配属性值字段--&gt;</span></span></span><br><span class="line"><span class="xml">       <span class="tag">&lt;<span class="name">property</span>&gt;</span></span></span><br><span class="line"><span class="xml">   <span class="comment">&lt;!--激活profile的属性的名称--&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>mavenVersion<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span></span><br><span class="line"><span class="xml">   <span class="comment">&lt;!--激活profile的属性的值 --&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>2.0.3<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span></span><br><span class="line"><span class="xml">       <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span></span><br><span class="line"><span class="xml">   <span class="comment">&lt;!--提供一个文件名，通过检测该文件的存在或不存在来激活profile。missing检查文件是否存在，如果不存在则激活profile。另一方面，exists则会检查文件是否存在，如果存在则激活profile。--&gt;</span></span></span><br><span class="line"><span class="xml">       <span class="tag">&lt;<span class="name">file</span>&gt;</span></span></span><br><span class="line"><span class="xml">   <span class="comment">&lt;!--如果指定的文件存在，则激活profile。 --&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">exists</span>&gt;</span>$</span><span class="template-variable">&#123;basedir&#125;</span><span class="xml">/file2.properties<span class="tag">&lt;/<span class="name">exists</span>&gt;</span></span></span><br><span class="line"><span class="xml">   <span class="comment">&lt;!--如果指定的文件不存在，则激活profile。--&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">missing</span>&gt;</span>$</span><span class="template-variable">&#123;basedir&#125;</span><span class="xml">/file1.properties<span class="tag">&lt;/<span class="name">missing</span>&gt;</span></span></span><br><span class="line"><span class="xml">       <span class="tag">&lt;/<span class="name">file</span>&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;/<span class="name">activation</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
 <h2 id="12-Repositories"><a href="#12-Repositories" class="headerlink" title="12.Repositories"></a>12.Repositories</h2><p>远程仓库列表，它是Maven用来填充构建系统本地仓库所使用的一组远程项目。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="name">repositories</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">repository</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">id</span>&gt;</span>codehausSnapshots<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">name</span>&gt;</span>Codehaus Snapshots<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://snapshots.maven.codehaus.org/maven2<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">       <span class="comment">&lt;!--用于定位和排序构件的仓库布局类型-可以是default（默认）或者legacy（遗留）。Maven 2为其仓库提供了一个默认的布局；然而，Maven 1.x有一种不同的布局。我们可以使用该元素指定布局是default（默认）还是legacy（遗留）。 --&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">layout</span>&gt;</span>default<span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">releases</span>&gt;</span></span><br><span class="line">          <span class="comment">&lt;!--true或者false表示该仓库是否为下载某种类型构件（发布版，快照版）开启。  --&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">enabled</span>&gt;</span>false<span class="tag">&lt;/<span class="name">enabled</span>&gt;</span></span><br><span class="line">         <span class="comment">&lt;!--该元素指定更新发生的频率。Maven会比较本地POM和远程POM的时间戳。</span></span><br><span class="line"><span class="comment">         这里的选项是：always（一直），daily（默认，每日），interval：X（这里X是以分钟为单位的时间间隔），或者never（从不）。 --&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">updatePolicy</span>&gt;</span>always<span class="tag">&lt;/<span class="name">updatePolicy</span>&gt;</span></span><br><span class="line">         <span class="comment">&lt;!--当Maven验证构件校验文件失败时该怎么做 -ignore（忽略），fail（失败），或者warn（警告）。--&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">checksumPolicy</span>&gt;</span>warn<span class="tag">&lt;/<span class="name">checksumPolicy</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">releases</span>&gt;</span></span><br><span class="line">       <span class="comment">&lt;!--如何处理远程仓库里快照版本的下载。有了releases和snapshots这两组配置，POM就可以在每个单独的仓库中，为每种类型的构件采取不同的策略。例如，可能有人会决定只为开发目的开启对快照版本下载的支持。参见repositories/repository/releases元素--&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">snapshots</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">enabled</span>/&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">updatePolicy</span>/&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">checksumPolicy</span>/&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">snapshots</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;/<span class="name">repository</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">repositories</span>&gt;</span></span><br><span class="line">    </span><br><span class="line"> <span class="comment">&lt;!--发现插件的远程仓库列表。仓库是两种主要构件的家。第一种构件被用作其它构件的依赖。这是中央仓库中存储的大部分构件类型。另外一种构件类型是插件。Maven插件是一种特殊类型的构件。由于这个原因，插件仓库独立于其它仓库。pluginRepositories元素的结构和repositories元素的结构类似。每个pluginRepository元素指定一个Maven可以用来寻找新插件的远程地址。--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">pluginRepositories</span>&gt;</span></span><br><span class="line"> <span class="comment">&lt;!--包含需要连接到远程插件仓库的信息.参见profiles/profile/repositories/repository元素的说明--&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">pluginRepository</span>&gt;</span>   </span><br><span class="line">          <span class="tag">&lt;<span class="name">id</span>/&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">name</span>/&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">url</span>/&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">layout</span>/&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">releases</span>&gt;</span>      </span><br><span class="line">            <span class="tag">&lt;<span class="name">enabled</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">updatePolicy</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">checksumPolicy</span>/&gt;</span></span><br><span class="line">          <span class="tag">&lt;/<span class="name">releases</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">snapshots</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">enabled</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">updatePolicy</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">checksumPolicy</span>/&gt;</span></span><br><span class="line">          <span class="tag">&lt;/<span class="name">snapshots</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;/<span class="name">pluginRepository</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">pluginRepositories</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
 <h2 id="13-activeProfiles"><a href="#13-activeProfiles" class="headerlink" title="13.activeProfiles"></a>13.activeProfiles</h2><p> 配置解释：<br>手动激活profiles的列表，按照profile被应用的顺序定义activeProfile。 该元素包含了一组activeProfile元素，每个activeProfile都含有一个profile id。任何在activeProfile中定义的profile id，不论环境设置如何，其对应的profile都会被激活。如果没有匹配的profile，则什么都不会发生。例如，alwaysActiveProfile是一个activeProfile，则在pom.xml（或者profile.xml）中对应id的profile会被激活。如果运行过程中找不到这样一个profile，Maven则会像往常一样运行<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">activeProfiles</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">activeProfile</span>&gt;</span>alwaysActiveProfile<span class="tag">&lt;/<span class="name">activeProfile</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">activeProfile</span>&gt;</span>anotherAlwaysActiveProfile<span class="tag">&lt;/<span class="name">activeProfile</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">activeProfiles</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2017/03/06/mybatis/">对maven中setting.xml配置文件进行解释</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Maven/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-03-06T08:22:30.000Z" itemprop="datePublished">2017-03-06</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Maven/">Maven</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="mybatis相关问题"><a href="#mybatis相关问题" class="headerlink" title="mybatis相关问题"></a>mybatis相关问题</h1><h2 id="mybatis应用"><a href="#mybatis应用" class="headerlink" title="mybatis应用"></a>mybatis应用</h2><p>1.mybatis优缺点，spring与mybatis集成</p>
+<p>2.Config、Sql配置、Mapper配置、有几种注册Mapper的方式，优先级如何？</p>
+<p>3.mybatis的一级缓存、二级缓存、mybatis的二级缓存为何是鸡肋？</p>
+<p>4.通用mapper的实现，mybatis编写sql语句的三种方式。</p>
+<h2 id="mybatis源码分析"><a href="#mybatis源码分析" class="headerlink" title="mybatis源码分析"></a>mybatis源码分析</h2><p>1.@MapperScan的源码分析？mapperScan如何生效</p>
+<p>2.mybatis如何扩展spring的扫描器的，mybatis扫描完之后如何利用FactoryBean？</p>
+<p>3.mybatis底层如何会把一个代理对象放在spring容器中？用到了spring的哪些知识？</p>
+<p>4.mybatis和spring的核心接口ImportBeanDefinitionRegistrar之间的关系。</p>
+<p>5.mybatis如何实现一级缓存，spring集成后如何失效的？为何将其失效，有没有办法解决。</p>
+<p>6.mybatis分析mybatis的执行流程、mybatis的sql什么时候缓存的？缓存在哪里？</p>
+<p>7.mybatis当中的方法名为何要与mapper当中的id一致？从源码分析？</p>
 
         
     </section>

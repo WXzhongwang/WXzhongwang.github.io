@@ -131,6 +131,95 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/02/03/Git Diff/">Git Diff</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/9/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-03T02:10:00.000Z" itemprop="datePublished">2018-02-03</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Git/">Git</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>#Git Diff</p>
+<p>如果 git status 命令的输出对于你来说过于模糊，你想知道具体修改了什么地方，可以用 git diff 命令。 尽管 git status 已经通过在相应栏下列出文件名的方式回答了这个问题，git diff 将通过文件补丁的格式显示具体哪些行发生了改变。</p>
+<p>作用<br>此命令比较的是工作目录中当前文件和暂存区域快照之间的差异，也就是修改之后还没有暂存起来的变。化内容。</p>
+<p>若要查看已暂存的将要添加到下次提交里的内容，可以用 git diff –cached 命令。（Git 1.6.1 及更高版本还允许使用 git diff –staged，效果是相同的，但更好记些。）</p>
+<p>请注意，git diff 本身只显示尚未暂存的改动，而不是自上次提交以来所做的所有改动。 所以有时候你一下子暂存了所有更新过的文件后，运行 git diff 后却什么也没有，就是这个原因。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/02/02/Git gitignore/">Git .gitignore</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/9/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-02T02:10:00.000Z" itemprop="datePublished">2018-02-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Git/">Git</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="gitignore-忽略文件"><a href="#gitignore-忽略文件" class="headerlink" title=".gitignore 忽略文件"></a>.gitignore 忽略文件</h1><p>一般我们总会有些文件无需纳入 Git 的管理，也不希望它们总出现在未跟踪文件列表。 通常都是些自动生成的文件，比如日志文件，或者编译过程中创建的临时文件等。 在这种情况下，我们可以创建一个名为 .gitignore 的文件，列出要忽略的文件模式。 来看一个实际的例子：</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">$</span> cat .gitignore</span><br><span class="line"><span class="comment">*.[oa]</span></span><br><span class="line"><span class="comment">*~</span></span><br></pre></td></tr></table></figure>
+<p>第一行告诉 Git 忽略所有以 .o 或 .a 结尾的文件。一般这类对象文件和存档文件都是编译过程中出现的。 第二行告诉 Git 忽略所有以波浪符（~）结尾的文件，许多文本编辑软件（比如 Emacs）都用这样的文件名保存副本。 此外，你可能还需要忽略 log，tmp 或者 pid 目录，以及自动生成的文档等等。 </p>
+<blockquote>
+<p>要养成一开始就设置好 .gitignore 文件的习惯，以免将来误提交这类无用的文件。</p>
+</blockquote>
+<p>文件 .gitignore 的格式规范如下：</p>
+<ul>
+<li>所有空行或者以 ＃ 开头的行都会被 Git 忽略。</li>
+<li>可以使用标准的 glob 模式匹配。</li>
+<li>匹配模式可以以（/）开头防止递归。</li>
+<li>匹配模式可以以（/）结尾指定目录。</li>
+<li>要忽略指定模式以外的文件或目录，可以在模式前加上惊叹号（!）取反。</li>
+</ul>
+<p>所谓的 glob 模式是指 shell 所使用的简化了的正则表达式。 星号（<em>）匹配零个或多个任意字符；[abc] 匹配任何一个列在方括号中的字符（这个例子要么匹配一个 a，要么匹配一个 b，要么匹配一个 c）；问号（?）只匹配一个任意字符；如果在方括号中使用短划线分隔两个字符，表示所有在这两个字符范围内的都可以匹配（比如 [0-9] 表示匹配所有 0 到 9 的数字）。 使用两个星号（</em>) 表示匹配任意中间目录，比如<code>a/**/z</code> 可以匹配 a/z, a/b/z 或 <code>a/b/c/z</code>等。</p>
+<p>我们再看一个 .gitignore 文件的例子：<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># no .a files</span></span><br><span class="line">*.a</span><br><span class="line"></span><br><span class="line"><span class="comment"># but do track lib.a, even though you're ignoring .a files above</span></span><br><span class="line">!<span class="class"><span class="keyword">lib</span>.<span class="title">a</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment"># only ignore the TODO file in the current directory, not subdir/TODO</span></span><br><span class="line">/TODO</span><br><span class="line"></span><br><span class="line"><span class="comment"># ignore all files in the build/ directory</span></span><br><span class="line">build/</span><br><span class="line"></span><br><span class="line"><span class="comment"># ignore doc/notes.txt, but not doc/server/arch.txt</span></span><br><span class="line">doc/*.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># ignore all .pdf files in the doc/ directory</span></span><br><span class="line">doc/**<span class="regexp">/*.pdf</span></span><br></pre></td></tr></table></figure></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/02/01/堆和栈/">堆和栈</a>
         </h1>
         
@@ -462,100 +551,6 @@
 <h2 id="垂直应用架构"><a href="#垂直应用架构" class="headerlink" title="垂直应用架构"></a>垂直应用架构</h2><p>当访问量逐渐增大，单一应用增加机器带来的加速度越来越小，将应用拆成互不相干的几个应用，以提升效率。此时，用于加速前端页面开发的Web框架(MVC)是关键。</p>
 <h2 id="分布式服务架构"><a href="#分布式服务架构" class="headerlink" title="分布式服务架构"></a>分布式服务架构</h2><p>当垂直应用越来越多，应用之间交互不可避免，将核心业务抽取出来，作为独立的服务，逐渐形成稳定的服务中心，使前端应用能更快速的响应多变的市场需求。此时，用于提高业务复用及整合的分布式服务框架(RPC)是关键。</p>
 <h2 id="流动计算架构"><a href="#流动计算架构" class="headerlink" title="流动计算架构"></a>流动计算架构</h2><p>当服务越来越多，容量的评估，小服务资源的浪费等问题逐渐显现，此时需增加一个调度中心基于访问压力实时管理集群容量，提高集群利用率。此时，用于提高机器利用率的资源调度和治理中心(SOA)是关键。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/12/08/优秀的开源项目及优秀文章地址/">优秀的开源项目</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/9/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-12-08T02:18:02.000Z" itemprop="datePublished">2017-12-08</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Web/">Web</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>此部分总结平时工作中积累的项目或者见过的优秀开源项目的总结</p>
-<h1 id="优秀的开源项目"><a href="#优秀的开源项目" class="headerlink" title="优秀的开源项目"></a>优秀的开源项目</h1><p>此部分总结平时工作中积累的项目或者见过的优秀开源项目的总结</p>
-<h2 id="前端相关"><a href="#前端相关" class="headerlink" title="前端相关"></a>前端相关</h2><h2 id="NET相关"><a href="#NET相关" class="headerlink" title="NET相关"></a>NET相关</h2><h2 id="NodeJS相关"><a href="#NodeJS相关" class="headerlink" title="NodeJS相关"></a>NodeJS相关</h2><h3 id="NodeJS-中文社区开源"><a href="#NodeJS-中文社区开源" class="headerlink" title="NodeJS 中文社区开源"></a>NodeJS 中文社区开源</h3><p>官网地址:</p>
-<blockquote>
-<p><a href="https://cnodejs.org/" target="_blank" rel="noopener">https://cnodejs.org/</a></p>
-</blockquote>
-<p>项目开源地址：</p>
-<blockquote>
-<p><a href="https://github.com/cnodejs/nodeclub/" target="_blank" rel="noopener">https://github.com/cnodejs/nodeclub/</a></p>
-</blockquote>
-<h2 id="JAVA相关"><a href="#JAVA相关" class="headerlink" title="JAVA相关"></a>JAVA相关</h2><h2 id="数据库相关"><a href="#数据库相关" class="headerlink" title="数据库相关"></a>数据库相关</h2><h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h2 id="架构相关"><a href="#架构相关" class="headerlink" title="架构相关"></a>架构相关</h2><h1 id="优秀文章地址"><a href="#优秀文章地址" class="headerlink" title="优秀文章地址"></a>优秀文章地址</h1><p>此部分总结平时工作中积累的优秀文章或者博客</p>
-<h2 id="前端、JAVA、Python"><a href="#前端、JAVA、Python" class="headerlink" title="前端、JAVA、Python"></a>前端、JAVA、Python</h2><blockquote>
-<p><a href="https://www.jqhtml.com/" target="_blank" rel="noopener">https://www.jqhtml.com/</a></p>
-</blockquote>
-<h2 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx:"></a>Nginx:</h2><p>详细文档:</p>
-<blockquote>
-<p><a href="http://tengine.taobao.org/book/index.html" target="_blank" rel="noopener">http://tengine.taobao.org/book/index.html</a></p>
-</blockquote>
-<h2 id="Jekins"><a href="#Jekins" class="headerlink" title="Jekins:"></a>Jekins:</h2><p>教程<br><a href="http://blog.51cto.com/12832314/2140304" target="_blank" rel="noopener">http://blog.51cto.com/12832314/2140304</a></p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/12/01/修改jar包中的配置文件/">修改jar包中的配置文件</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/9/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-12-01T09:10:10.000Z" itemprop="datePublished">2017-12-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="修改jar包中的配置文件"><a href="#修改jar包中的配置文件" class="headerlink" title="修改jar包中的配置文件"></a>修改jar包中的配置文件</h1><h2 id="一-通过vim命令直接修改保存jar。超方便。"><a href="#一-通过vim命令直接修改保存jar。超方便。" class="headerlink" title="一    通过vim命令直接修改保存jar。超方便。"></a>一    通过vim命令直接修改保存jar。超方便。</h2><p>1.通过vim命令直接编辑jar<br>vim xxx.jar 该命令首先会列出全部文件，可以通过输入/abc来搜索，定位到对应的abc文件后回车进入配置文件内进行编辑，:wq保存。</p>
-<h2 id="二-通过jar命令替换jar包中的文件-也可新增"><a href="#二-通过jar命令替换jar包中的文件-也可新增" class="headerlink" title="二    通过jar命令替换jar包中的文件(也可新增)"></a>二    通过jar命令替换jar包中的文件(也可新增)</h2><p>1.列出jar包中的文件清单<br>jar tf client.jar</p>
-<p>2.提取出内部jar包的指定文件<br>jar xf client.jar BOOT-INF/classes/realtime/t_ivr_data_bj.json</p>
-<p>3.然后可以修改文件<br>vim BOOT-INF/classes/realtime/t_ivr_data_bj.json</p>
-<p>4.更新配置文件到内部jar包.(存在覆盖，不存在就新增)<br>jar uf client.jar BOOT-INF/classes/realtime/t_ivr_data_bj.json</p>
-<p>4.1更新内部jar包到jar文件<br>jar uf client.jar 内部jar包.jar</p>
-<p>5.可以查看验证是否已经更改<br>vim client.jar</p>
 
         
     </section>
