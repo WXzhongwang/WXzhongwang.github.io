@@ -131,6 +131,167 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2017/06/01/Linux 处理目录的常用命令/">Linux处理目录的常用命令</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/11/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-06-01T08:18:02.000Z" itemprop="datePublished">2017-06-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h2 id="Linux处理目录的常用命令"><a href="#Linux处理目录的常用命令" class="headerlink" title="Linux处理目录的常用命令"></a>Linux处理目录的常用命令</h2><p>常见的处理目录的命令：</p>
+<ul>
+<li>ls: 列出目录</li>
+<li>cd：切换目录</li>
+<li>pwd：显示目前的目录</li>
+<li>mkdir：创建一个新的目录</li>
+<li>rmdir：删除一个空的目录</li>
+<li>cp: 复制文件或目录</li>
+<li>rm: 移除文件或目录</li>
+<li>mv: 移动文件与目录，或修改文件与目录的名称</li>
+</ul>
+<p>使用 man [命令] 来查看各个命令的使用文档，如 ：man cp。</p>
+<h3 id="ls-列出目录"><a href="#ls-列出目录" class="headerlink" title="ls (列出目录)"></a>ls (列出目录)</h3><p>在Linux系统当中， ls 命令可能是最常被运行的。<br><figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">语法：</span><br><span class="line"></span><br><span class="line">[root@www ~]# <span class="keyword">ls</span> [-aAdfFhilnrRSt] 目录名称</span><br><span class="line">[root@www ~]# <span class="keyword">ls</span> [--<span class="keyword">color</span>=&#123;never,auto,always&#125;] 目录名称</span><br><span class="line">[root@www ~]# <span class="keyword">ls</span> [--full-time] 目录名称</span><br></pre></td></tr></table></figure></p>
+<p>参数：</p>
+<ul>
+<li>-a ：全部的文件，连同隐藏档( 开头为 . 的文件) 一起列出来(常用)</li>
+<li>-d ：仅列出目录本身，而不是列出目录内的文件数据(常用)</li>
+<li>-l ：长数据串列出，包含文件的属性与权限等等数据；(常用)<br>将家目录下的所有文件列出来(含属性与隐藏档)</li>
+</ul>
+<h3 id="mkdir（创建目录）"><a href="#mkdir（创建目录）" class="headerlink" title="mkdir（创建目录）"></a>mkdir（创建目录）</h3><p>语法<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir <span class="string">[-mp]</span> 目录名称</span><br></pre></td></tr></table></figure></p>
+<p>参数：</p>
+<ul>
+<li>-m ：配置文件的权限，不需要看默认权限 (umask) 的脸色</li>
+<li>-p ：将所需要的目录(包含上一级目录)递归创建起来</li>
+</ul>
+<p>实例：在/tmp下尝试创建数新目录：<br><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root<span class="meta">@www</span> ~]<span class="comment"># cd /tmp</span></span><br><span class="line">[root<span class="meta">@www</span> tmp]<span class="comment"># mkdir test    </span></span><br><span class="line">[root<span class="meta">@www</span> tmp]<span class="comment"># mkdir test1/test2/test3/test4</span></span><br><span class="line">mkdir: cannot create directory `test1/test2/test3/test4': </span><br><span class="line">No such file or directory       </span><br><span class="line">[root<span class="meta">@www</span> tmp]<span class="comment"># mkdir -p test1/test2/test3/test4</span></span><br><span class="line">加了这个 -p 的选项，可以自行帮你创建多层目录！</span><br></pre></td></tr></table></figure></p>
+<p>实例：创建权限为 rwx–x–x 的目录。<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@www tmp]<span class="comment"># mkdir -m 711 test2</span></span><br><span class="line">[root@www tmp]<span class="comment"># ls -l</span></span><br><span class="line">drwxr-xr-x <span class="number"> 3 </span>root  root<span class="number"> 4096 </span>Jul<span class="number"> 18 </span>12:50 test</span><br><span class="line">drwxr-xr-x <span class="number"> 3 </span>root  root<span class="number"> 4096 </span>Jul<span class="number"> 18 </span>12:53 test1</span><br><span class="line">drwx--x--x <span class="number"> 2 </span>root  root<span class="number"> 4096 </span>Jul<span class="number"> 18 </span>12:54 test2</span><br></pre></td></tr></table></figure></p>
+<h3 id="rmdir（删除目录）"><a href="#rmdir（删除目录）" class="headerlink" title="rmdir（删除目录）"></a>rmdir（删除目录）</h3><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rmdir <span class="string">[-p]</span> 目录名称</span><br></pre></td></tr></table></figure>
+<p>参数：</p>
+<p>-p ：连同上一级『空的』目录也一起删除<br>删除 runoob 目录<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root<span class="symbol">@www</span> tmp]<span class="meta"># rmdir runoob/</span></span><br></pre></td></tr></table></figure></p>
+<p>过要注意的是，这个 rmdir 仅能删除空的目录，你可以使用 rm 命令来删除非空目录。</p>
+<h3 id="cp（拷贝文件和目录）"><a href="#cp（拷贝文件和目录）" class="headerlink" title="cp（拷贝文件和目录）"></a>cp（拷贝文件和目录）</h3><p>语法:<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">cp</span> <span class="selector-attr">[-adfilprsu]</span> 来源档(source) 目标档(destination)</span><br><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">cp</span> <span class="selector-attr">[options]</span> <span class="selector-tag">source1</span> <span class="selector-tag">source2</span> <span class="selector-tag">source3</span> .... <span class="selector-tag">directory</span></span><br></pre></td></tr></table></figure></p>
+<p>参数：</p>
+<p>-a：相当於 -pdr 的意思，至於 pdr 请参考下列说明；(常用)</p>
+<p>-d：若来源档为连结档的属性(link file)，则复制连结档属性而非文件本身；</p>
+<p>-f：为强制(force)的意思，若目标文件已经存在且无法开启，则移除后再尝试一次；</p>
+<p>-i：若目标档(destination)已经存在时，在覆盖时会先询问动作的进行(常用)</p>
+<p>-l：进行硬式连结(hard link)的连结档创建，而非复制文件本身；</p>
+<p>-p：连同文件的属性一起复制过去，而非使用默认属性(备份常用)；</p>
+<p>-r：递归持续复制，用於目录的复制行为；(常用)</p>
+<p>-s：复制成为符号连结档 (symbolic link)，亦即『捷径』文件；</p>
+<p>-u：若 destination 比 source 旧才升级 destination ！</p>
+<p>用 root 身份，将 root 目录下的 .bashrc 复制到 /tmp 下，并命名为 bashrc<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root<span class="symbol">@www</span> ~]<span class="meta"># cp ~/.bashrc /tmp/bashrc</span></span><br><span class="line">[root<span class="symbol">@www</span> ~]<span class="meta"># cp -i ~/.bashrc /tmp/bashrc</span></span><br><span class="line">cp: overwrite `/tmp/bashrc<span class="string">'? n  &lt;==n不覆盖，y为覆盖</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="rm-移除文件或目录"><a href="#rm-移除文件或目录" class="headerlink" title="rm (移除文件或目录)"></a>rm (移除文件或目录)</h3><p>语法：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm <span class="string">[-fir]</span> 文件或目录</span><br></pre></td></tr></table></figure></p>
+<p>参数：</p>
+<ul>
+<li>-f ：就是 force 的意思，忽略不存在的文件，不会出现警告信息；</li>
+<li>-i ：互动模式，在删除前会询问使用者是否动作</li>
+<li>-r ：递归删除啊,最常用在目录的删除了</li>
+</ul>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@www tmp]# <span class="keyword">rm</span> -i bashrc</span><br><span class="line"><span class="keyword">rm</span>: remove regular <span class="keyword">file</span> <span class="symbol">`bashrc'</span>? <span class="built_in">y</span></span><br></pre></td></tr></table></figure>
+<p>如果加上 -i 的选项就会主动询问喔，避免你删除到错误的档名</p>
+<h3 id="mv-移动文件与目录，或修改名称"><a href="#mv-移动文件与目录，或修改名称" class="headerlink" title="mv (移动文件与目录，或修改名称)"></a>mv (移动文件与目录，或修改名称)</h3><p>语法：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">[root@www ~]</span># mv <span class="string">[-fiu]</span> source destination</span><br><span class="line"><span class="string">[root@www ~]</span># mv <span class="string">[options]</span> source1 source2 source3 .... directory</span><br></pre></td></tr></table></figure></p>
+<p>参数：</p>
+<ul>
+<li>-f ：force 强制的意思，如果目标文件已经存在，不会询问而直接覆盖；</li>
+<li>-i ：若目标文件 (destination) 已经存在时，就会询问是否覆盖！</li>
+<li>-u ：若目标文件已经存在，且 source 比较新，才会升级 (update)</li>
+</ul>
+<p>复制一文件，创建一目录，将文件移动到目录中<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root<span class="symbol">@www</span> ~]<span class="meta"># cd /tmp</span></span><br><span class="line">[root<span class="symbol">@www</span> tmp]<span class="meta"># cp ~/.bashrc bashrc</span></span><br><span class="line">[root<span class="symbol">@www</span> tmp]<span class="meta"># mkdir mvtest</span></span><br><span class="line">[root<span class="symbol">@www</span> tmp]<span class="meta"># mv bashrc mvtest</span></span><br></pre></td></tr></table></figure></p>
+<p>将某个文件移动到某个目录去，就是这样做！</p>
+<p>将刚刚的目录名称更名为 mvtest2<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root<span class="symbol">@www</span> tmp]<span class="meta"># mv mvtest mvtest2</span></span><br></pre></td></tr></table></figure></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2017/06/01/Linux目录结构/">Linux 目录结构</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/11/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-06-01T08:18:02.000Z" itemprop="datePublished">2017-06-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h2 id="Linux目录结构"><a href="#Linux目录结构" class="headerlink" title="Linux目录结构"></a>Linux目录结构</h2><p>/bin：<br>bin是Binary的缩写, 这个目录存放着最经常使用的命令。</p>
+<p>/boot：<br>这里存放的是启动Linux时使用的一些核心文件，包括一些连接文件以及镜像文件。</p>
+<p>/dev ：<br>dev是Device(设备)的缩写, 该目录下存放的是Linux的外部设备，在Linux中访问设备的方式和访问文件的方式是相同的。</p>
+<p>/etc：<br>这个目录用来存放所有的系统管理所需要的配置文件和子目录。</p>
+<p>/home：<br>用户的主目录，在Linux中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的。</p>
+<p>/lib：<br>这个目录里存放着系统最基本的动态连接共享库，其作用类似于Windows里的DLL文件。几乎所有的应用程序都需要用到这些共享库。</p>
+<p>/lost+found：<br>这个目录一般情况下是空的，当系统非法关机后，这里就存放了一些文件。</p>
+<p>/media：<br>linux系统会自动识别一些设备，例如U盘、光驱等等，当识别后，linux会把识别的设备挂载到这个目录下。</p>
+<p>/mnt：<br>系统提供该目录是为了让用户临时挂载别的文件系统的，我们可以将光驱挂载在/mnt/上，然后进入该目录就可以查看光驱里的内容了。</p>
+<p>/opt：<br> 这是给主机额外安装软件所摆放的目录。比如你安装一个ORACLE数据库则就可以放到这个目录下。默认是空的。</p>
+<p>/proc：<br>这个目录是一个虚拟的目录，它是系统内存的映射，我们可以通过直接访问这个目录来获取系统信息。<br>这个目录的内容不在硬盘上而是在内存里，我们也可以直接修改里面的某些文件，比如可以通过下面的命令来屏蔽主机的ping命令，使别人无法ping你的机器：</p>
+<p>echo 1 &gt; /proc/sys/net/ipv4/icmp_echo_ignore_all<br>/root：<br>该目录为系统管理员，也称作超级权限者的用户主目录。</p>
+<p>/sbin：<br>s就是Super User的意思，这里存放的是系统管理员使用的系统管理程序。</p>
+<p>/selinux：<br> 这个目录是Redhat/CentOS所特有的目录，Selinux是一个安全机制，类似于windows的防火墙，但是这套机制比较复杂，这个目录就是存放selinux相关的文件的。</p>
+<p>/srv：<br> 该目录存放一些服务启动之后需要提取的数据。</p>
+<p>/sys：</p>
+<p> 这是linux2.6内核的一个很大的变化。该目录下安装了2.6内核中新出现的一个文件系统 sysfs 。</p>
+<p>sysfs文件系统集成了下面3种文件系统的信息：针对进程信息的proc文件系统、针对设备的devfs文件系统以及针对伪终端的devpts文件系统。<br>该文件系统是内核设备树的一个直观反映。</p>
+<p>当一个内核对象被创建的时候，对应的文件和目录也在内核对象子系统中被创建。</p>
+<p>/tmp：<br>这个目录是用来存放一些临时文件的。</p>
+<p>/usr：<br> 这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似于windows下的program files目录。</p>
+<p>/usr/bin：<br>系统用户使用的应用程序。</p>
+<p>/usr/sbin：<br>超级用户使用的比较高级的管理程序和系统守护程序。</p>
+<p>/usr/src：<br>内核源代码默认的放置目录。</p>
+<p>/var：<br>这个目录中存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。包括各种日志文件。</p>
+<p>/run：<br>是一个临时文件系统，存储系统启动以来的信息。当系统重启时，这个目录下的文件应该被删掉或清除。如果你的系统上有 /var/run 目录，应该让它指向 run。</p>
+<h2 id="note"><a href="#note" class="headerlink" title="note"></a>note</h2><p>在 Linux 系统中，有几个目录是比较重要的，平时需要注意不要误删除或者随意更改内部文件。</p>
+<p>/etc： 上边也提到了，这个是系统中的配置文件，如果你更改了该目录下的某个文件可能会导致系统不能启动。</p>
+<p>/bin, /sbin, /usr/bin, /usr/sbin: 这是系统预设的执行文件的放置目录，比如 ls 就是在/bin/ls 目录下的。</p>
+<p>值得提出的是，/bin, /usr/bin 是给系统用户使用的指令（除root外的通用户），而/sbin, /usr/sbin 则是给root使用的指令。</p>
+<p>/var： 这是一个非常重要的目录，系统上跑了很多程序，那么每个程序都会有相应的日志产生，而这些日志就被记录到这个目录下，具体在/var/log 目录下，另外mail的预设放置也是在这里。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2017/04/08/mybatis/">mybatis相关问题</a>
         </h1>
         
@@ -292,47 +453,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2017/03/01/NodeJs相关插件/">NodeJs插件</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/11/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-03-01T14:22:22.000Z" itemprop="datePublished">2017-03-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/NodeJs/">NodeJs</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h3 id="lodash"><a href="#lodash" class="headerlink" title="lodash"></a>lodash</h3><p>采用延迟计算，意味着我们的链式方法在显式或者隐式的value()调用之前是不会执行的，<br>因此lodash可以进行shortcut（捷径） fusion（融合）这样的优化，<br>通过合并链式大大降低迭代的次数，从而大大提升其执行性能。</p>
-<h3 id="cors"><a href="#cors" class="headerlink" title="cors"></a>cors</h3><p>实现跨域的功能</p>
-<h3 id="helmet"><a href="#helmet" class="headerlink" title="helmet"></a>helmet</h3><p>是一个保护Node.JS应用的安全项目<br>一些著名的对Web攻击有XSS跨站脚本， 脚本注入 clickjacking<br>以及各种非安全的请求等对Node.js的Web应用构成各种威胁，<br>使用Helmet能帮助你的应用避免这些攻击。</p>
-<h3 id="csurf"><a href="#csurf" class="headerlink" title="csurf"></a>csurf</h3><p>跨站请求伪造</p>
-<h3 id="colors"><a href="#colors" class="headerlink" title="colors"></a>colors</h3><p>终端着色插件</p>
-<h3 id="express-validator"><a href="#express-validator" class="headerlink" title="express-validator"></a>express-validator</h3><p>校验插件<br>npm install –save express-validator</p>
-<h3 id="uuid-GUID插件"><a href="#uuid-GUID插件" class="headerlink" title="uuid GUID插件"></a>uuid GUID插件</h3><p>npm install –save node-uuid</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2017/03/01/NodeJs基础/">NodeJs基础</a>
         </h1>
         
@@ -480,6 +600,47 @@ req.acceptsLanguages：返回指定字符集的第一个可接受字符编码
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2017/03/01/NodeJs相关插件/">NodeJs插件</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/11/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-03-01T14:22:22.000Z" itemprop="datePublished">2017-03-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/NodeJs/">NodeJs</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h3 id="lodash"><a href="#lodash" class="headerlink" title="lodash"></a>lodash</h3><p>采用延迟计算，意味着我们的链式方法在显式或者隐式的value()调用之前是不会执行的，<br>因此lodash可以进行shortcut（捷径） fusion（融合）这样的优化，<br>通过合并链式大大降低迭代的次数，从而大大提升其执行性能。</p>
+<h3 id="cors"><a href="#cors" class="headerlink" title="cors"></a>cors</h3><p>实现跨域的功能</p>
+<h3 id="helmet"><a href="#helmet" class="headerlink" title="helmet"></a>helmet</h3><p>是一个保护Node.JS应用的安全项目<br>一些著名的对Web攻击有XSS跨站脚本， 脚本注入 clickjacking<br>以及各种非安全的请求等对Node.js的Web应用构成各种威胁，<br>使用Helmet能帮助你的应用避免这些攻击。</p>
+<h3 id="csurf"><a href="#csurf" class="headerlink" title="csurf"></a>csurf</h3><p>跨站请求伪造</p>
+<h3 id="colors"><a href="#colors" class="headerlink" title="colors"></a>colors</h3><p>终端着色插件</p>
+<h3 id="express-validator"><a href="#express-validator" class="headerlink" title="express-validator"></a>express-validator</h3><p>校验插件<br>npm install –save express-validator</p>
+<h3 id="uuid-GUID插件"><a href="#uuid-GUID插件" class="headerlink" title="uuid GUID插件"></a>uuid GUID插件</h3><p>npm install –save node-uuid</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2017/02/12/动态属性ExpandoObject/">动态属性ExpandoObject</a>
         </h1>
         
@@ -614,138 +775,10 @@ req.acceptsLanguages：返回指定字符集的第一个可接受字符编码
 </article>
 
 
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/01/24/C# 编码规范/">编码规范</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/11/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-01-24T02:10:00.000Z" itemprop="datePublished">2017-01-24</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/NET/">NET</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="编码规范"><a href="#编码规范" class="headerlink" title="编码规范"></a>编码规范</h1><h2 id="C-编码风格指南"><a href="#C-编码风格指南" class="headerlink" title="C# 编码风格指南"></a>C# 编码风格指南</h2><p>一旦进入代码开发阶段，你必须安排好代码审查计划以确保每个人都遵守同样的规则。建议按以下3种方式进行代码审查：</p>
-<ol>
-<li><p>互相审查 - 由其他团队成员进行代码审查以确保遵守了代码规范且达到要求。这种方式可以配合单元测试。项目中每个代码文件必须要通过这个程序。</p>
-</li>
-<li><p>架构审查 - 架构人员需对项目核心模块进行审查以确保符合设计，没有出现大的甚至有可能影响整个项目运转的纰漏。</p>
-</li>
-<li><p>团队审查 - 每周随机选择一个或多个文件进行一次团队审查。审查会议开始前30分钟，将文件打印并分发到每个成员手里，会议开始后用投影仪将文件内容展示出来。代码的每一块都要进行审查，让所有成员提出改进建议。（别忘了要感谢提供素材的开发人员，并确保他不会觉得受到了“群嘲”！）</p>
-</li>
-</ol>
-<h2 id="代码文件组织"><a href="#代码文件组织" class="headerlink" title="代码文件组织"></a>代码文件组织</h2><h3 id="C-源代码文件"><a href="#C-源代码文件" class="headerlink" title="C# 源代码文件"></a>C# 源代码文件</h3><p>每个源代码文件应该只包含一个类定义，也即类定义只出现在它自己的文件中。源代码文件名需与类声明里的类名保持一致。<br>譬如一个名为User的类的源文件名应该是User.cs。</p>
-<h3 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h3><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment">// Copyright (c) dick. All Right Reserved. </span></span><br><span class="line"><span class="comment">// This source is subject to the Microsoft Permissive License. </span></span><br><span class="line"><span class="comment">// Please see the License.txt file for more information. </span></span><br><span class="line"><span class="comment">// All other rights reserved. </span></span><br><span class="line"><span class="comment">// </span></span><br><span class="line"><span class="comment">// THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY </span></span><br><span class="line"><span class="comment">// KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE </span></span><br><span class="line"><span class="comment">// IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A </span></span><br><span class="line"><span class="comment">// PARTICULAR PURPOSE. </span></span><br><span class="line"><span class="comment">//-------------------------------------------------------------------------------</span></span><br></pre></td></tr></table></figure>
-<h3 id="目录设计"><a href="#目录设计" class="headerlink" title="目录设计"></a>目录设计</h3><p>每层命名空间都要建立目录（以MyProject.UI.Admin为例，请使用MyProject/UI/Admin这样的目录结构，而不是只建立一层名为MyProject.UI.Admin的目录）。</p>
-<h3 id="代码排列"><a href="#代码排列" class="headerlink" title="代码排列"></a>代码排列</h3><p>C#源代码文件整体顺序应为：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Using 声明</span><br><span class="line">Namespace声明</span><br><span class="line">Class 和<span class="built_in"> interface </span>声明</span><br></pre></td></tr></table></figure></p>
-<p>C#类内部分的顺序应为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">成员变量</span><br><span class="line">属性</span><br><span class="line">构造函数</span><br><span class="line">方法</span><br><span class="line">`</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>以上每个部分都需要放到 #region里。</p>
-</blockquote>
-<h3 id="命名空间和USING声明"><a href="#命名空间和USING声明" class="headerlink" title="命名空间和USING声明"></a>命名空间和USING声明</h3><ol>
-<li>Using 和命名空间声明都要左边界齐平。</li>
-<li>命名空间的每个组件名首字母要大写</li>
-<li>如果组件名是个缩写，只让第一个字母大写，如 System.Data.Sql。</li>
-<li>如果这个缩写只有2个字母，那可以2个字母都大写，如 System.IO。</li>
-</ol>
-<p>注意: 移除不需要的或重复的命名空间，使用短的命名空间来代替。譬如：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Preferred</span></span><br><span class="line"><span class="keyword">using</span> System.Data.SqlClient;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ValidationCall</span><span class="params">()</span></span>&#123;  </span><br><span class="line">… </span><br><span class="line">SqlConnection conn = <span class="keyword">new</span> SqlConnection(connstr);</span><br><span class="line">…</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Avoid</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ValidationCall</span><span class="params">()</span></span>&#123;  </span><br><span class="line">… </span><br><span class="line">System.Data.SqlClient.SqlConnection conn = <span class="keyword">new</span> SqlConnection(connstr);</span><br><span class="line">…</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="创建和修订记录"><a href="#创建和修订记录" class="headerlink" title="创建和修订记录"></a>创建和修订记录</h3><p>文件创建和修订记录需要按以下格式填写到using代码段后面，namespace之前。<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/<span class="strong">*</span></span><br><span class="line"><span class="strong">*</span> 作者:                创建日期:</span><br><span class="line"><span class="bullet">* </span>修订者：             修订日期：               修订内容：</span><br><span class="line"><span class="bullet">* </span></span><br><span class="line"><span class="strong">*/</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="XML-文档"><a href="#XML-文档" class="headerlink" title="XML 文档"></a>XML 文档</h3><p>Visual Studio提供了一种文档类型，在开发环境中可以用来检测并导出到结构化的XML中，以用来创建与源代码分离的代码级别的文档。<br>XML 文档用于描述类、方法和属性。它应当在所有可用的情况下尽可能使用。</p>
-<h2 id="缩进"><a href="#缩进" class="headerlink" title="缩进"></a>缩进</h2><h3 id="空行"><a href="#空行" class="headerlink" title="空行"></a>空行</h3><p>适当的空行能增强代码可读性。它们能帮助区分逻辑不相干的代码片段。<br>双行空行要放在：<br>源代码中逻辑不相关的代码片段之间<br>不同的类和接口定义（如果有时候不得不放在同个文件，尽量避免这种情况）<br>单行空行要放在：</p>
-<ul>
-<li>方法与方法之间</li>
-<li>属性与属性之间</li>
-<li>方法体内的局部变量和它的第一次使用之间</li>
-<li>方法体内不同逻辑片段之间以增强可读性</li>
-</ul>
-<h3 id="换行"><a href="#换行" class="headerlink" title="换行"></a>换行</h3><p>如果一个表达式在一行内放不下，则根据以下常用原则来进行换行：</p>
-<ol>
-<li>操作符号之后换行</li>
-<li>逗号之后换行</li>
-<li>择较高等的换行，其次才是较低等的换行 （譬如优先对括号外的部分换行）<br>换行后需要缩进<br>：<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 调用方法</span></span><br><span class="line">SomeMethod1(expression1, expression2, expression3, expression4, expression5);</span><br><span class="line"><span class="comment">// 声明方法</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">SomeMethod1</span><span class="params">(<span class="keyword">long</span> Expression1, <span class="keyword">long</span> Expression2, <span class="keyword">long</span> Expression3,                 <span class="keyword">long</span> Expression4, <span class="keyword">long</span> Expression5)</span></span></span><br><span class="line"><span class="function"></span>&#123;     </span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>注意: 换行后第二行的缩进与第一个参数齐平<br>以下是一个数学表达式换行的例子。第一种换行方式是较好的，因为是在括号以外的地方进行的换行，也即是在较高等进行的分行。</p>
-<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Preferred</span></span><br><span class="line">var<span class="number">1</span> = var<span class="number">2</span> * <span class="comment">(var3 + var4 – var5)</span> + </span><br><span class="line">       var<span class="number">4</span> * var<span class="number">6</span>;</span><br><span class="line"><span class="comment">// Avoid</span></span><br><span class="line">var<span class="number">1</span> = var<span class="number">2</span> * <span class="comment">(var3 + var4 - var5)</span> + var<span class="number">4</span> * var<span class="number">6</span>;</span><br></pre></td></tr></table></figure>
-<p>对if表达式的分行需要使用缩进：<br><figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="comment">((condition1 &amp;&amp; condition2)</span> || <span class="comment">(condition3 &amp;&amp; condition4)</span> &amp;&amp; co<span class="symbol">ndition5</span> || !co<span class="symbol">ndition6</span>)</span><br><span class="line">&#123;	</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>三元表达式请用这两种格式：<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Alpha</span> = aLongBooleanExpression ? beta : gamma;</span><br><span class="line"><span class="attribute">Alpha</span> = aLongBooleanExpression ?</span><br><span class="line">        beta : </span><br><span class="line">        gamma;</span><br></pre></td></tr></table></figure></p>
-<h2 id="代码间距"><a href="#代码间距" class="headerlink" title="代码间距"></a>代码间距</h2><h3 id="空格间距"><a href="#空格间距" class="headerlink" title="空格间距"></a>空格间距</h3><p>在代码中间的逗号或分号后应该有单独的一个空格，此外一个关键字与后跟的括号之间也要有个空格，譬如：<br><figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Correct</span></span><br><span class="line">TestMethod<span class="comment">(a, b, c)</span>;</span><br><span class="line"><span class="keyword">while</span> <span class="comment">(condition)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//... </span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Avoid</span></span><br><span class="line">TestMethod<span class="comment">(a, b, c)</span>;</span><br><span class="line">TestMethod<span class="comment">(a, b, c)</span>;</span><br></pre></td></tr></table></figure></p>
-<p>注意: 在方法名和它的前括号之间不需要有空格。这样便于区分是关键字还是方法名。<br>操作符两边要加上空格（++或逻辑非这样的一元运算符除外），譬如：<br><figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">a = b; <span class="regexp">//</span> Avoid a=b;</span><br><span class="line"></span><br><span class="line">// Avoid <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">10</span>; ++i) <span class="keyword">or</span> <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;++i)</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; ++i)</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="TAB间距"><a href="#TAB间距" class="headerlink" title="TAB间距"></a>TAB间距</h3><p>该使用几个空格作为代码缩进距离从来没有达成一致过。有人喜欢2个空格，有人喜欢4个而有人喜欢8个甚至更多。所以最好使用Tab缩进。它的好处有：<br>可以自定义缩进距离<br>它只需一个字符，所以只要按一次键而不是2,4,8…</p>
-<p>如果你要增加缩进（或减少）一片代码，可以选中它们然后按Tab来增加或者Shift+Tab来减少缩进。几乎所有文本编辑器都支持这个操作。<br>在这里Tab指的就是标准的缩进字符。<br>注意： 不要使用空格来缩进代码-用Tab！在VS中把Tab配置成4个空格的距离。</p>
-<h2 id="一般注释"><a href="#一般注释" class="headerlink" title="一般注释"></a>一般注释</h2><h3 id="通用注释前缀"><a href="#通用注释前缀" class="headerlink" title="通用注释前缀"></a>通用注释前缀</h3><p>TODO : 表示以后别忘了在这里还需要进一步处理<br>BUG: [bugid]：表示这里有个已知bug，解释一下bug情况，如果可以则给出bug id。<br>KLUDGE: 表示这里的代码有点糟糕，解释一下有时间的话将如何改进。<br>TRICKY: 表示以下代码比较奇技淫巧，如果没有仔细思考请不要改动。<br>WARNING: 表示当心某事<br>COMPILER: 表示临时注释掉某些影响编译通过的代码。这些问题最终会被解决的。<br>ATTRIBUTE: value：嵌在注释中的属性的一般形式。你可以自定义属性，它们最终会被VS提取。</p>
-<h3 id="单行注释"><a href="#单行注释" class="headerlink" title="单行注释"></a>单行注释</h3><figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//Console.WriteLine(<span class="string">"哈哈"</span>)<span class="comment">;</span></span><br><span class="line">//Console.ReadKey()<span class="comment">;</span></span><br></pre></td></tr></table></figure>
-<h3 id="多行注释"><a href="#多行注释" class="headerlink" title="多行注释"></a>多行注释</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line"><span class="bullet"> * </span>注释内容</span><br><span class="line"><span class="bullet"> * </span>注释内容</span><br><span class="line"> */</span><br></pre></td></tr></table></figure>
-<h3 id="文档注释"><a href="#文档注释" class="headerlink" title="文档注释"></a>文档注释</h3><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> 文档注释</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> 文档注释</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br></pre></td></tr></table></figure>
-<h1 id="变量声明及命名规范"><a href="#变量声明及命名规范" class="headerlink" title="变量声明及命名规范"></a>变量声明及命名规范</h1><h3 id="变量："><a href="#变量：" class="headerlink" title="变量："></a>变量：</h3><p>Camel：变量名首单词的首字母小写，其余每个单词首字母单词大写,多用于给变量或字段或方法参数命名。　　<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">var str</span> = <span class="string">"123"</span>;</span><br><span class="line"><span class="attribute">var highSchoolStudent</span> = <span class="string">"123"</span>;</span><br><span class="line"><span class="attribute">int num</span> = 5;</span><br></pre></td></tr></table></figure></p>
-<h3 id="常量："><a href="#常量：" class="headerlink" title="常量："></a>常量：</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">string</span> BaseIpAddress = <span class="string">""</span>;</span><br></pre></td></tr></table></figure>
-<h3 id="方法名："><a href="#方法名：" class="headerlink" title="方法名："></a>方法名：</h3><p>Pascal：每个单词的首字母都要大些其余小写，多用于类或方法。尽量用一般名词或动名词。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">GetHighSchoolStudent</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/01/24/Centos7安装nginx后仍然无法访问/">Nginx无法访问的问题</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/11/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-01-24T02:10:00.000Z" itemprop="datePublished">2017-01-24</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Nginx/">Nginx</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Centos7安装nginx后，无法访问的问题"><a href="#Centos7安装nginx后，无法访问的问题" class="headerlink" title="Centos7安装nginx后，无法访问的问题"></a>Centos7安装nginx后，无法访问的问题</h1><p><a href="https://www.runoob.com/linux/nginx-install-setup.html" target="_blank" rel="noopener">安装步骤</a></p>
-<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">curl localhost</span></span><br></pre></td></tr></table></figure>
-<p>发现是通的 （Welcome to nginx）</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd <span class="attribute">--zone</span>=public <span class="attribute">--add-port</span>=80/tcp --permanent</span><br></pre></td></tr></table></figure>
-<p>重启防火墙：<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="literal">stop</span> firewalld.service</span><br><span class="line">systemctl <span class="literal">start</span> firewalld.service</span><br></pre></td></tr></table></figure></p>
-
-        
-    </section>
-</article>
-
-
 
 
 <nav class="page-nav">
-    <a class="extend prev" rel="prev" href="/page/10/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span>
+    <a class="extend prev" rel="prev" href="/page/10/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/12/">下一页 &raquo;</a>
 </nav>
 
 

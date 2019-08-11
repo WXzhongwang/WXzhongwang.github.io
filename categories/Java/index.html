@@ -131,70 +131,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/08/07/Java基础面试题五/">Java基础面试题五</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2019-08-07T14:37:25.985Z" itemprop="datePublished">2019-08-07</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/面试题/">面试题</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>Java基础面试题五</p>
-<blockquote>
-<p>Q1: &amp; 和 &amp;&amp; 的区别</p>
-</blockquote>
-<p>&amp;是位运算符，表示按位与运算，&amp;&amp;是逻辑运算符，表示逻辑与（and）。</p>
-<blockquote>
-<p>Q2: final, finally, finalize的区别</p>
-</blockquote>
-<ul>
-<li>final 用于声明属性，方法和类，分别表示属性不可变，方法不可覆盖，类不可继承。 </li>
-<li>finally,异常处理语句结构的一部分，表示总是执行。 </li>
-<li>finalize是Object类的一个方法，垃圾收集器执行的时候会调用被回收对象的此方法，可以覆盖此方法提供垃圾收集时的其他资源回收，例如关闭文件等。</li>
-</ul>
-<blockquote>
-<p>Q3: sleep() 和 wait() 有什么区别? </p>
-</blockquote>
-<p>sleep是线程类（Thread）的方法，导致此线程暂停执行指定时间，给执行机会给其他线程，但是监控状态依然保持，到时后会自动恢复。调用sleep不会释放对象锁。 </p>
-<p>wait是Object类的方法，对此对象调用wait方法导致本线程放弃对象锁，进入等待此对象的等待锁定池，只有针对此对象发出notify方法（或not ifyAll）后本线程才进入对象锁定池准备获得对象锁进入运行状态。</p>
-<blockquote>
-<p>Q4: error和exception有什么区别? </p>
-</blockquote>
-<ul>
-<li>error:<br>表示恢复不是不可能但很困难的情况下的一种严重问题。比如说内存溢出。不可能指望程序能处理这样的情况。 </li>
-<li>exception: 表示一种设计或实现问题。也就是说，它表示如果程序运行正常，从不会发生的情况。</li>
-</ul>
-<blockquote>
-<p>Q5: GC是什么? 为什么要有GC? </p>
-</blockquote>
-<p>GC是垃圾收集的意思（Gabage Collection）,内存处理是编程人员容易出现问题的地方，忘记或者错误的内存回收会导致程序或系统的不稳定甚至崩溃，Java提供的GC功能可以自动监测对象是否超过作用域从而达到自动回收内存的目的，Java语言没有提供释放已分配内存的显示操作方法。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">要请求垃圾收集，可以调用下面的方法之一：  </span><br><span class="line"><span class="selector-tag">System</span><span class="selector-class">.gc</span>() </span><br><span class="line"><span class="selector-tag">Runtime</span><span class="selector-class">.getRuntime</span>()<span class="selector-class">.gc</span>()</span><br></pre></td></tr></table></figure></p>
-<p>当然，如果需要，程序员可以在Java程序中显式地使用System.gc()来强制进行一次立即的内存清理。<br>因为显式声明是做堆内存全扫描，也就是FullGC，是需要停止所有的活动的（Stop The World Collection），你的应用能承受这个吗？而其显示调用System.gc()只是给虚拟机一个建议，不一定会执行，因为System.gc()在一个优先级很低的线程中执行。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2019/08/07/Java基础面试题四/">Java基础面试题四</a>
         </h1>
         
@@ -259,6 +195,111 @@
 </blockquote>
 <p>Collection是集合类的上级接口，继承与他的接口主要有Set和List. </p>
 <p>Collections是针对集合类的一个帮助类，他提供一系列静态方法实现对各种集合的搜索、排序、线程安全化等操作。<br>集合的继承体系：<br><img src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1551609409314&amp;di=26c716fbc7abe264f61d07f051639caf&amp;imgtype=0&amp;src=http%3A%2F%2Faliyunzixunbucket.oss-cn-beijing.aliyuncs.com%2Fjpg%2F16f3e1d844693be57f7e0f55c969f42d.jpg%3Fx-oss-process%3Dimage%2Fresize%2Cp_100%2Fauto-orient%2C1%2Fquality%2Cq_90%2Fformat%2Cjpg%2Fwatermark%2Cimage_eXVuY2VzaGk%3D%2Ct_100" alt="image"></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2019/08/07/Java基础面试题五/">Java基础面试题五</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-08-07T14:37:25.985Z" itemprop="datePublished">2019-08-07</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/面试题/">面试题</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>Java基础面试题五</p>
+<blockquote>
+<p>Q1: &amp; 和 &amp;&amp; 的区别</p>
+</blockquote>
+<p>&amp;是位运算符，表示按位与运算，&amp;&amp;是逻辑运算符，表示逻辑与（and）。</p>
+<blockquote>
+<p>Q2: final, finally, finalize的区别</p>
+</blockquote>
+<ul>
+<li>final 用于声明属性，方法和类，分别表示属性不可变，方法不可覆盖，类不可继承。 </li>
+<li>finally,异常处理语句结构的一部分，表示总是执行。 </li>
+<li>finalize是Object类的一个方法，垃圾收集器执行的时候会调用被回收对象的此方法，可以覆盖此方法提供垃圾收集时的其他资源回收，例如关闭文件等。</li>
+</ul>
+<blockquote>
+<p>Q3: sleep() 和 wait() 有什么区别? </p>
+</blockquote>
+<p>sleep是线程类（Thread）的方法，导致此线程暂停执行指定时间，给执行机会给其他线程，但是监控状态依然保持，到时后会自动恢复。调用sleep不会释放对象锁。 </p>
+<p>wait是Object类的方法，对此对象调用wait方法导致本线程放弃对象锁，进入等待此对象的等待锁定池，只有针对此对象发出notify方法（或not ifyAll）后本线程才进入对象锁定池准备获得对象锁进入运行状态。</p>
+<blockquote>
+<p>Q4: error和exception有什么区别? </p>
+</blockquote>
+<ul>
+<li>error:<br>表示恢复不是不可能但很困难的情况下的一种严重问题。比如说内存溢出。不可能指望程序能处理这样的情况。 </li>
+<li>exception: 表示一种设计或实现问题。也就是说，它表示如果程序运行正常，从不会发生的情况。</li>
+</ul>
+<blockquote>
+<p>Q5: GC是什么? 为什么要有GC? </p>
+</blockquote>
+<p>GC是垃圾收集的意思（Gabage Collection）,内存处理是编程人员容易出现问题的地方，忘记或者错误的内存回收会导致程序或系统的不稳定甚至崩溃，Java提供的GC功能可以自动监测对象是否超过作用域从而达到自动回收内存的目的，Java语言没有提供释放已分配内存的显示操作方法。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">要请求垃圾收集，可以调用下面的方法之一：  </span><br><span class="line"><span class="selector-tag">System</span><span class="selector-class">.gc</span>() </span><br><span class="line"><span class="selector-tag">Runtime</span><span class="selector-class">.getRuntime</span>()<span class="selector-class">.gc</span>()</span><br></pre></td></tr></table></figure></p>
+<p>当然，如果需要，程序员可以在Java程序中显式地使用System.gc()来强制进行一次立即的内存清理。<br>因为显式声明是做堆内存全扫描，也就是FullGC，是需要停止所有的活动的（Stop The World Collection），你的应用能承受这个吗？而其显示调用System.gc()只是给虚拟机一个建议，不一定会执行，因为System.gc()在一个优先级很低的线程中执行。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2019/08/07/Java基础面试题二/">Java基础面试题二</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-08-07T14:37:25.984Z" itemprop="datePublished">2019-08-07</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/面试题/">面试题</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>Java基础面试题二</p>
+<blockquote>
+<p>Q1: 什么是死锁(deadlock)？ </p>
+</blockquote>
+<p>两个进程都在等待对方执行完毕才能继续往下执行的时候就发生了死锁。结果就是两个进程都陷入了无限的等待中。<br>代码表示：<br><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLockDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> void main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">    DieLock dl1 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">true</span>);</span><br><span class="line">    DieLock dl2 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">false</span>);</span><br><span class="line">    dl1.start();</span><br><span class="line">    dl2.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>理想状态下dl1线程为true从if执行先打出”if objA”然后再接着打出”if objB”之后释放A、B的锁对象，之后dl2线程执行else语句打出”else objB”，”else objA”。<br>非理想状态下dl1先打出”if objA”，之后线程dl2执行打出”else objB”，然后1、2线程的锁对象A和B都处于被锁的状态，两个线程争夺锁对象发生死锁现象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLock</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> flag;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DieLock</span><span class="params">(<span class="keyword">boolean</span> flag)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.flag = flag;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (flag) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                System.out.println(<span class="string">"if objA"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"if objB"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                System.out.println(<span class="string">"else objB"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"else objA"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
         
     </section>
@@ -363,47 +404,6 @@
 </blockquote>
 <p>HashSet是由一个hash表来实现的，因此，它的元素是无序的。add()，remove()，contains()方法的时间复杂度是O(1)。 </p>
 <p>TreeSet是由一个树形的结构来实现的，它里面的元素是有序的。因此，add()，remove()，contains()方法的时间复杂度是O(logn)。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2019/08/07/Java基础面试题二/">Java基础面试题二</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2019-08-07T14:37:25.984Z" itemprop="datePublished">2019-08-07</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/面试题/">面试题</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>Java基础面试题二</p>
-<blockquote>
-<p>Q1: 什么是死锁(deadlock)？ </p>
-</blockquote>
-<p>两个进程都在等待对方执行完毕才能继续往下执行的时候就发生了死锁。结果就是两个进程都陷入了无限的等待中。<br>代码表示：<br><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLockDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> void main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">    DieLock dl1 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">true</span>);</span><br><span class="line">    DieLock dl2 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">false</span>);</span><br><span class="line">    dl1.start();</span><br><span class="line">    dl2.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>理想状态下dl1线程为true从if执行先打出”if objA”然后再接着打出”if objB”之后释放A、B的锁对象，之后dl2线程执行else语句打出”else objB”，”else objA”。<br>非理想状态下dl1先打出”if objA”，之后线程dl2执行打出”else objB”，然后1、2线程的锁对象A和B都处于被锁的状态，两个线程争夺锁对象发生死锁现象。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLock</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> flag;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DieLock</span><span class="params">(<span class="keyword">boolean</span> flag)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.flag = flag;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (flag) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                System.out.println(<span class="string">"if objA"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"if objB"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                System.out.println(<span class="string">"else objB"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"else objA"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
         
     </section>
@@ -522,6 +522,73 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2019/03/01/Java 并发基础常见面试题总结/">Java 并发基础常见面试题总结</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-03-01T02:10:00.000Z" itemprop="datePublished">2019-03-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="进程和线程"><a href="#进程和线程" class="headerlink" title="进程和线程"></a>进程和线程</h1><h2 id="何为进程"><a href="#何为进程" class="headerlink" title="何为进程?"></a>何为进程?</h2><p>进程是程序的一次执行过程，是系统运行程序的基本单位，因此进程是动态的。系统运行一个程序即是一个进程从创建，运行到消亡的过程。</p>
+<p>在 Java 中，当我们启动 main 函数时其实就是启动了一个 JVM 的进程，而 main 函数所在的线程就是这个进程中的一个线程，也称主线程。</p>
+<h2 id="何为线程"><a href="#何为线程" class="headerlink" title="何为线程?"></a>何为线程?</h2><p>与进程不同的是同类的多个线程共享进程的堆和方法区资源，但每个线程有自己的程序计数器、虚拟机栈和本地方法栈，所以系统在产生一个线程，或是在各个线程之间作切换工作时，负担要比进程小得多，也正因为如此，线程也被称为轻量级进程。</p>
+<p>一个 Java 程序的运行是 main 线程和多个其他线程同时运行。</p>
+<p>一个进程中可以有多个线程，多个线程共享进程的堆和方法区，但是每个线程有自己的程序计数器、虚拟机栈 和 本地方法栈。</p>
+<p>进程间彼此相对独立，线程则不一定，因为同一进程中的线程极有可能会相互影响。</p>
+<h2 id="为什么程序计数器、虚拟机栈和本地方法栈是线程私有的呢？为什么堆和方法区是线程共享的呢？"><a href="#为什么程序计数器、虚拟机栈和本地方法栈是线程私有的呢？为什么堆和方法区是线程共享的呢？" class="headerlink" title="为什么程序计数器、虚拟机栈和本地方法栈是线程私有的呢？为什么堆和方法区是线程共享的呢？"></a>为什么程序计数器、虚拟机栈和本地方法栈是线程私有的呢？为什么堆和方法区是线程共享的呢？</h2><h3 id="程序计数器为什么是私有的"><a href="#程序计数器为什么是私有的" class="headerlink" title="程序计数器为什么是私有的?"></a>程序计数器为什么是私有的?</h3><p>程序计数器主要有下面两个作用：</p>
+<p>1.字节码解释器通过改变程序计数器来依次读取指令，从而实现代码的流程控制，如：顺序执行、选择、循环、异常处理。</p>
+<p>2.在多线程的情况下，程序计数器用于记录当前线程执行的位置，从而当线程被切换回来的时候能够知道该线程上次运行到哪儿了。</p>
+<p>需要注意的是，如果执行的是 native 方法，那么程序计数器记录的是 undefined 地址，只有执行的是 Java 代码时程序计数器记录的才是下一条指令的地址。</p>
+<blockquote>
+<p>所以，程序计数器私有主要是为了线程切换后能恢复到正确的执行位置。</p>
+</blockquote>
+<h3 id="虚拟机栈和本地方法栈为什么是私有的"><a href="#虚拟机栈和本地方法栈为什么是私有的" class="headerlink" title="虚拟机栈和本地方法栈为什么是私有的?"></a>虚拟机栈和本地方法栈为什么是私有的?</h3><p>虚拟机栈： 每个 Java 方法在执行的同时会创建一个栈帧用于存储局部变量表、操作数栈、常量池引用等信息。从方法调用直至执行完成的过程，就对应着一个栈帧在 Java 虚拟机栈中入栈和出栈的过程。</p>
+<p>本地方法栈： 和虚拟机栈所发挥的作用非常相似，区别是： 虚拟机栈为虚拟机执行 Java 方法 （也就是字节码）服务，而本地方法栈则为虚拟机使用到的 Native 方法服务。 </p>
+<blockquote>
+<p>所以，为了保证线程中的局部变量不被别的线程访问到，虚拟机栈和本地方法栈是线程私有的。</p>
+</blockquote>
+<h3 id="一句话简单了解堆和方法区"><a href="#一句话简单了解堆和方法区" class="headerlink" title="一句话简单了解堆和方法区"></a>一句话简单了解堆和方法区</h3><p>堆和方法区是所有线程共享的资源，其中堆是进程中最大的一块内存，主要用于存放新创建的对象<br>(所有对象都在这里分配内存)，方法区主要用于存放已被加载的类信息、常量、静态变量、即时编译器编译后的代码等数据。</p>
+<h2 id="说说并发与并行的区别"><a href="#说说并发与并行的区别" class="headerlink" title="说说并发与并行的区别?"></a>说说并发与并行的区别?</h2><p>并发： 同一时间段，多个任务都在执行 (单位时间内不一定同时执行)；<br>并行： 单位时间内，多个任务同时执行。</p>
+<h2 id="为什么要使用多线程呢"><a href="#为什么要使用多线程呢" class="headerlink" title="为什么要使用多线程呢?"></a>为什么要使用多线程呢?</h2><p>先从总体上来说：</p>
+<p>计算机底层角度： 线程可以比作是轻量级的进程，是程序执行的最小单位,线程间的切换和调度的成本远远小于进程。另外，多核 CPU 时代意味着多个线程可以同时运行，这减少了线程上下文切换的开销。+</p>
+<p>当代互联网发展趋势角度： 现在的系统动不动就要求百万级甚至千万级的并发量，而多线程并发编程正是开发高并发系统的基础，利用好多线程机制可以大大提高系统整体的并发能力以及性能。</p>
+<p>再深入到计算机底层来探讨：</p>
+<p>单核时代： 在单核时代多线程主要是为了提高 CPU 和 IO 设备的综合利用率。举个例子：当只有一个线程的时候会导致 CPU 计算时，IO 设备空闲；进行 IO 操作时，CPU 空闲。我们可以简单地说这两者的利用率目前都是 50%左右。但是当有两个线程的时候就不一样了，当一个线程执行 CPU 计算时，另外一个线程可以进行 IO 操作，这样两个的利用率就可以在理想情况下达到 100%了。</p>
+<p>多核时代: 多核时代多线程主要是为了提高 CPU 利用率。举个例子：假如我们要计算一个复杂的任务，我们只用一个线程的话，CPU 只会一个 CPU 核心被利用到，而创建多个线程就可以让多个 CPU 核心被利用到，这样就提高了 CPU 的利用率。</p>
+<h2 id="多线程带来的问题"><a href="#多线程带来的问题" class="headerlink" title="多线程带来的问题"></a>多线程带来的问题</h2><p>并发编程的目的就是为了能提高程序的执行效率提高程序运行速度，但是并发编程并不总是能提高程序运行速度的，而且并发编程可能会遇到很多问题，比如：内存泄漏、上下文切换、死锁还有受限于硬件和软件的资源闲置问题。</p>
+<h2 id="线程的生命周期和状态"><a href="#线程的生命周期和状态" class="headerlink" title="线程的生命周期和状态?"></a>线程的生命周期和状态?</h2><p>线程创建之后它将处于 NEW（新建） 状态，调用 start() 方法后开始运行，线程这时候处于 READY（可运行） 状态。可运行状态的线程获得了 CPU 时间片（timeslice）后就处于 RUNNING（运行） 状态。</p>
+<p>当线程执行 wait()方法之后，线程进入WAITING（等待）状态。进入等待状态的线程需要依靠其他线程的通知才能够返回到运行状态，而TIME_WAITING(超时等待)状态相当于在等待状态的基础上增加了超时限制，比如通过 sleep（long millis）方法或 wait（long millis）方法可以将 Java 线程置于 TIMED WAITING 状态。当超时时间到达后 Java 线程将会返回到 RUNNABLE 状态。当线程调用同步方法时，在没有获取到锁的情况下，线程将会进入到 BLOCKED（阻塞） 状态。线程在执行 Runnable 的run()方法之后将会进入到 TERMINATED（终止） 状态。</p>
+<h2 id="上下文切换"><a href="#上下文切换" class="headerlink" title="上下文切换"></a>上下文切换</h2><p>多线程编程中一般线程的个数都大于 CPU 核心的个数，而一个 CPU 核心在任意时刻只能被一个线程使用，为了让这些线程都能得到有效执行，CPU 采取的策略是为每个线程分配时间片并轮转的形式。当一个线程的时间片用完的时候就会重新处于就绪状态让给其他线程使用，这个过程就属于一次上下文切换。（时间片策略）</p>
+<p>概括来说就是：当前任务在执行完 CPU 时间片切换到另一个任务之前会先保存自己的状态，以便下次再切换会这个任务时，可以再加载这个任务的状态。任务从保存到再加载的过程就是一次上下文切换。</p>
+<p>上下文切换通常是计算密集型的。也就是说，它需要相当可观的处理器时间，在每秒几十上百次的切换中，每次切换都需要纳秒量级的时间。所以，上下文切换对系统来说意味着消耗大量的 CPU 时间，事实上，可能是操作系统中时间消耗最大的操作。</p>
+<p>Linux 相比与其他操作系统（包括其他类 Unix 系统）有很多的优点，其中有一项就是，其上下文切换和模式切换的时间消耗非常少。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/06/08/JVM相关/">JVM 相关问题</a>
         </h1>
         
@@ -553,48 +620,6 @@
 <p>5.什么情况下我们需要破坏双亲委派模型？</p>
 <p>6.常见的JVM调优有哪些？可以具体到那个参数，调成什么值？</p>
 <p>7.JVM虚拟机内存划分、类加载器、垃圾收集算法、垃圾收集器、class文件结构是如何解析的？</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/06/03/Spring Boot/">Spring Boot 介绍</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-06-03T04:00:00.000Z" itemprop="datePublished">2018-06-03</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Spring/">Spring</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h2 id="Spring-Boot-介绍"><a href="#Spring-Boot-介绍" class="headerlink" title="Spring Boot 介绍"></a>Spring Boot 介绍</h2><p>Spring Boot 提供了一组工具只需要极少的配置就可以快速的构建并启动基于 Spring 的应用程序。解决了传统 Spring 开发需要配置大量配置文件的痛点，同时 Spring Boot 对于第三方库设置了合理的默认值，可以快速的构建起应用程序。当然 Spring Boot 也可以轻松的自定义各种配置，无论是在开发的初始阶段还是投入生成的后期阶段。</p>
-<h2 id="Spring-Boot-优点"><a href="#Spring-Boot-优点" class="headerlink" title="Spring Boot 优点"></a>Spring Boot 优点</h2><p>1.快速的创建可以独立运行的 Spring 项目以及与主流框架的集成。</p>
-<p>2.使用嵌入式的 Servlet 容器，用于不需要打成war包。</p>
-<p>3.使用很多的启动器（Starters）自动依赖与版本控制。</p>
-<p>4.大量的自动化配置，简化了开发，当然，我们也可以修改默认值。</p>
-<p>5.不需要配置 XML 文件，无代码生成，开箱即用。</p>
-<p>6.准生产环境的运行时应用监控。</p>
-<p>7.与云计算的天然集成。</p>
 
         
     </section>
@@ -651,6 +676,48 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/06/03/Spring Boot/">Spring Boot 介绍</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-06-03T04:00:00.000Z" itemprop="datePublished">2018-06-03</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Spring/">Spring</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h2 id="Spring-Boot-介绍"><a href="#Spring-Boot-介绍" class="headerlink" title="Spring Boot 介绍"></a>Spring Boot 介绍</h2><p>Spring Boot 提供了一组工具只需要极少的配置就可以快速的构建并启动基于 Spring 的应用程序。解决了传统 Spring 开发需要配置大量配置文件的痛点，同时 Spring Boot 对于第三方库设置了合理的默认值，可以快速的构建起应用程序。当然 Spring Boot 也可以轻松的自定义各种配置，无论是在开发的初始阶段还是投入生成的后期阶段。</p>
+<h2 id="Spring-Boot-优点"><a href="#Spring-Boot-优点" class="headerlink" title="Spring Boot 优点"></a>Spring Boot 优点</h2><p>1.快速的创建可以独立运行的 Spring 项目以及与主流框架的集成。</p>
+<p>2.使用嵌入式的 Servlet 容器，用于不需要打成war包。</p>
+<p>3.使用很多的启动器（Starters）自动依赖与版本控制。</p>
+<p>4.大量的自动化配置，简化了开发，当然，我们也可以修改默认值。</p>
+<p>5.不需要配置 XML 文件，无代码生成，开箱即用。</p>
+<p>6.准生产环境的运行时应用监控。</p>
+<p>7.与云计算的天然集成。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/05/08/JVM/">JVM相关问题</a>
         </h1>
         
@@ -689,45 +756,6 @@
 <pre><code>线程共享区：  Heap堆， Method Area方法区
 线程独占区：  程序计数器，虚拟机栈，本地方法栈
 </code></pre><p>程序最小单元：线程</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/04/20/tomcat源码解析/">tomcat源码解析</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-04-20T04:00:00.000Z" itemprop="datePublished">2018-04-20</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Tomcat/">Tomcat</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="tomcat源码解析"><a href="#tomcat源码解析" class="headerlink" title="tomcat源码解析"></a>tomcat源码解析</h1><p>1.tomcat的总体概述和tomcat的启动流程源码分析</p>
-<p>2.tomcat当中的web请求源码分析？一个http请求是如何请求到tomcat的？tomcat如何处理的？</p>
-<p>3.tomcat的协议分析，从源码分析tomcat当中各种协议详细配置的意义。</p>
-<p>4.tomcat和apache、nginx等主流静态资源服务器的搭配使用</p>
-<p>5.tomcat的性能调优？生产环境下如何让tomcat容器的性能达到最高</p>
 
         
     </section>

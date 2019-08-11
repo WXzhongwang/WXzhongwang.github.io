@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wxzhongwang.github.io/"/>
-  <updated>2019-08-11T04:59:46.312Z</updated>
+  <updated>2019-08-11T05:15:06.198Z</updated>
   <id>https://wxzhongwang.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://wxzhongwang.github.io/2019/08/07/NOSQL/"/>
     <id>https://wxzhongwang.github.io/2019/08/07/NOSQL/</id>
     <published>2019-08-07T14:59:05.594Z</published>
-    <updated>2019-08-11T04:59:46.312Z</updated>
+    <updated>2019-08-11T05:15:06.198Z</updated>
     
     <content type="html"><![CDATA[<h1 id="NOSQL"><a href="#NOSQL" class="headerlink" title="NOSQL"></a>NOSQL</h1><p>全称：NoSQL = Not Only SQL</p><p>泛指非关系型数据库</p><p>四大分类：</p><p>1）键值(Key-Value)存储数据库</p><p>Key/value模型对于IT系统来说的优势在于简单、易部署。<br>但是如果DBA只对部分值进行查询或更新的时候，Key/value就显得效率低下了。<br>举例如：Redis.</p><p>2）列存储数据库</p><p>这部分数据库通常是用来应对分布式存储的海量数据。<br>键仍然存在，但是它们的特点是指向了多个列。这些列是由列家族来安排的。<br>如：Cassandra, HBase, Riak.</p><p>3）文档型</p><p>文档型数据库的灵感是来自于Lotus Notes办公软件的，而且它同第一种键值存储相类似。<br>该类型的数据模型是版本化的文档，半结构化的文档以特定的格式存储，比如JSON。<br>文档型数据库可以看作是键值数据库的升级版，允许之间嵌套键值。<br>而且文档型数据库比键值数据库的查询效率更高。如：CouchDB, MongoDb.<br>国内也有文档型数据库SequoiaDB，已经开源。</p><p>4）图形(Graph)数据库</p><p>图形结构的数据库同其他行列以及刚性结构的SQL数据库不同，它是使用灵活的图形模型，并且能够扩展到多个服务器上。</p><p>NoSQL数据库没有标准的查询语言(SQL)，因此进行数据库查询需要制定数据模型。<br>许多NoSQL数据库都有REST式的数据接口或者查询API。</p><p>我们总结NoSQL数据库在以下的这几种情况下比较适用：</p><ol><li>数据模型比较简单；</li><li>需要灵活性更强的IT系统；</li><li>对数据库性能要求较高；</li><li>不需要高度的数据一致性；</li><li>对于给定key，比较容易映射复杂值的环境。</li></ol>]]></content>
     
@@ -37,10 +37,10 @@
     
     </summary>
     
-      <category term="NOSQL" scheme="https://wxzhongwang.github.io/categories/NOSQL/"/>
+      <category term="Redis" scheme="https://wxzhongwang.github.io/categories/Redis/"/>
     
     
-      <category term="NOSQL" scheme="https://wxzhongwang.github.io/tags/NOSQL/"/>
+      <category term="Redis" scheme="https://wxzhongwang.github.io/tags/Redis/"/>
     
   </entry>
   
@@ -99,7 +99,7 @@
     <link href="https://wxzhongwang.github.io/2019/08/07/Java%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95%E9%A2%98%E4%BA%94/"/>
     <id>https://wxzhongwang.github.io/2019/08/07/Java基础面试题五/</id>
     <published>2019-08-07T14:37:25.985Z</published>
-    <updated>2019-08-11T04:55:45.764Z</updated>
+    <updated>2019-08-11T05:16:10.202Z</updated>
     
     <content type="html"><![CDATA[<p>Java基础面试题五</p><blockquote><p>Q1: &amp; 和 &amp;&amp; 的区别</p></blockquote><p>&amp;是位运算符，表示按位与运算，&amp;&amp;是逻辑运算符，表示逻辑与（and）。</p><blockquote><p>Q2: final, finally, finalize的区别</p></blockquote><ul><li>final 用于声明属性，方法和类，分别表示属性不可变，方法不可覆盖，类不可继承。 </li><li>finally,异常处理语句结构的一部分，表示总是执行。 </li><li>finalize是Object类的一个方法，垃圾收集器执行的时候会调用被回收对象的此方法，可以覆盖此方法提供垃圾收集时的其他资源回收，例如关闭文件等。</li></ul><blockquote><p>Q3: sleep() 和 wait() 有什么区别? </p></blockquote><p>sleep是线程类（Thread）的方法，导致此线程暂停执行指定时间，给执行机会给其他线程，但是监控状态依然保持，到时后会自动恢复。调用sleep不会释放对象锁。 </p><p>wait是Object类的方法，对此对象调用wait方法导致本线程放弃对象锁，进入等待此对象的等待锁定池，只有针对此对象发出notify方法（或not ifyAll）后本线程才进入对象锁定池准备获得对象锁进入运行状态。</p><blockquote><p>Q4: error和exception有什么区别? </p></blockquote><ul><li>error:<br>表示恢复不是不可能但很困难的情况下的一种严重问题。比如说内存溢出。不可能指望程序能处理这样的情况。 </li><li>exception: 表示一种设计或实现问题。也就是说，它表示如果程序运行正常，从不会发生的情况。</li></ul><blockquote><p>Q5: GC是什么? 为什么要有GC? </p></blockquote><p>GC是垃圾收集的意思（Gabage Collection）,内存处理是编程人员容易出现问题的地方，忘记或者错误的内存回收会导致程序或系统的不稳定甚至崩溃，Java提供的GC功能可以自动监测对象是否超过作用域从而达到自动回收内存的目的，Java语言没有提供释放已分配内存的显示操作方法。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">要请求垃圾收集，可以调用下面的方法之一：  </span><br><span class="line"><span class="selector-tag">System</span><span class="selector-class">.gc</span>() </span><br><span class="line"><span class="selector-tag">Runtime</span><span class="selector-class">.getRuntime</span>()<span class="selector-class">.gc</span>()</span><br></pre></td></tr></table></figure></p><p>当然，如果需要，程序员可以在Java程序中显式地使用System.gc()来强制进行一次立即的内存清理。<br>因为显式声明是做堆内存全扫描，也就是FullGC，是需要停止所有的活动的（Stop The World Collection），你的应用能承受这个吗？而其显示调用System.gc()只是给虚拟机一个建议，不一定会执行，因为System.gc()在一个优先级很低的线程中执行。</p>]]></content>
     
@@ -129,7 +129,7 @@
     <link href="https://wxzhongwang.github.io/2019/08/07/Java%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95%E9%A2%98%E5%9B%9B/"/>
     <id>https://wxzhongwang.github.io/2019/08/07/Java基础面试题四/</id>
     <published>2019-08-07T14:37:25.985Z</published>
-    <updated>2019-08-11T04:55:49.403Z</updated>
+    <updated>2019-08-11T05:16:14.083Z</updated>
     
     <content type="html"><![CDATA[<p>Java基础面试题四</p><blockquote><p>Q1: Java中垃圾回收有什么目的？什么时候进行垃圾回收？ </p></blockquote><p>垃圾回收的目的是识别并且丢弃应用不再使用的对象来释放和重用资源。</p><blockquote><p>Q2：如果对象的引用被置为null，垃圾收集器是否会立即释放对象占用的内存？ </p></blockquote><p>不会，在下一个垃圾回收周期中，这个对象将是可被回收的。</p><blockquote><p>Q3: String是最基本的数据类型吗? </p></blockquote><p>基本数据类型包括:</p><ul><li>byte</li><li>int</li><li>char</li><li>long</li><li>float</li><li>double</li><li>boolean</li><li>short </li></ul><p>java.lang.String类是final类型的，因此不可以继承这个类、不能修改这个类。为了提高效率节省空间，我们应该用StringBuffer类。</p><blockquote><p>Q4: int 和 Integer 有什么区别?</p></blockquote><p>Java 提供两种不同的类型：引用类型和原始类型（或内置类型）。Int是java的原始数据类型，Integer是java为int提供的封装类。Java为每个原始类型提供了封装类。</p><blockquote><p>Q5: String 和 StringBuffer的区别?</p></blockquote><p>JAVA平台提供了两个类：String和StringBuffer，它们可以储存和操作字符串，即包含多个字符的字符数据。这个String类提供了数值不可改变的字符串。而这个StringBuffer类提供的字符串进行修改。</p><blockquote><p>Q6: ArrayList,Vector,LinkedList的存储性能和特性?</p></blockquote><p>ArrayList和Vector都是使用数组方式存储数据，此数组元素数大于实际存储的数据以便增加和插入元素，它们都允许直接按序号索引元素，但是插入元素要涉及数组元素移动等内存操作，所以索引数据快而插入数据慢，Vector由于使用了synchronized方法（线程安全），通常性能上较ArrayList差，而LinkedList使用双向链表实现存储，按序号索引数据需要进行前向或后向遍历，但是插入数据时只需要记录本项的前后项即可，所以插入速度较快。<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">List的子类特点</span><br><span class="line"><span class="symbol">        ArrayList:</span></span><br><span class="line">            底层数据结构是数组，查询快，增删慢</span><br><span class="line">            线程不安全，效率高</span><br><span class="line"><span class="symbol">        Vector:</span></span><br><span class="line">            底层数据结构是数组，查询快，增删慢</span><br><span class="line">            线程安全，效率低</span><br><span class="line"><span class="symbol">        LinkedList:</span></span><br><span class="line">            底层数据结构是链表，查询慢，增删快</span><br><span class="line">            线程不安全，效率高</span><br></pre></td></tr></table></figure></p><blockquote><p>Q7: Collection 和 Collections的区别 </p></blockquote><p>Collection是集合类的上级接口，继承与他的接口主要有Set和List. </p><p>Collections是针对集合类的一个帮助类，他提供一系列静态方法实现对各种集合的搜索、排序、线程安全化等操作。<br>集合的继承体系：<br><img src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1551609409314&amp;di=26c716fbc7abe264f61d07f051639caf&amp;imgtype=0&amp;src=http%3A%2F%2Faliyunzixunbucket.oss-cn-beijing.aliyuncs.com%2Fjpg%2F16f3e1d844693be57f7e0f55c969f42d.jpg%3Fx-oss-process%3Dimage%2Fresize%2Cp_100%2Fauto-orient%2C1%2Fquality%2Cq_90%2Fformat%2Cjpg%2Fwatermark%2Cimage_eXVuY2VzaGk%3D%2Ct_100" alt="image"></p>]]></content>
     
@@ -156,40 +156,11 @@
   </entry>
   
   <entry>
-    <title>Java基础面试题三</title>
-    <link href="https://wxzhongwang.github.io/2019/08/07/Java%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95%E9%A2%98%E4%B8%89/"/>
-    <id>https://wxzhongwang.github.io/2019/08/07/Java基础面试题三/</id>
-    <published>2019-08-07T14:37:25.984Z</published>
-    <updated>2019-08-11T04:55:40.205Z</updated>
-    
-    <content type="html"><![CDATA[<p>Java基础面试题三</p><blockquote><p>Q1: 如何确保N个线程可以访问N个资源同时又不导致死锁？ </p></blockquote><p>使用多线程的时候，一种非常简单的避免死锁的方式就是：指定获取锁的顺序，并强制线程按照指定的顺序获取锁。因此，如果所有的线程都是以同样的顺序加锁和释放锁，就不会出现死锁了。</p><blockquote><p>Q2: Java集合类框架的基本接口有哪些？</p></blockquote><p>Java集合类提供了一套设计良好的支持对一组对象进行操作的接口和类。<br>Java集合类里面最基本的接口有： </p><ul><li>Collection：代表一组对象，每一个对象都是它的子元素。 </li><li>Set：不包含重复元素的Collection。 </li><li>List：有顺序的collection，并且可以包含重复元素。 </li><li>Map：可以把键(key)映射到值(value)的对象，键不能重复。</li></ul><blockquote><p>Q3: 什么是迭代器(Iterator)？ </p></blockquote><p>Iterator接口提供了很多对集合元素进行迭代的方法。每一个集合类都包含了可以返回迭代器实例的迭代方法。迭代器可以在迭代的过程中删除底层集合的元素。</p><blockquote><p>Q4: Iterator和ListIterator的区别是什么？</p></blockquote><p>下面列出了他们的区别： </p><ul><li>Iterator可用来遍历Set和List集合，但是ListIterator只能用来遍历List。 </li><li>Iterator对集合只能是前向遍历，ListIterator既可以前向也可以后向。 </li><li>ListIterator实现了Iterator接口，并包含其他的功能，比如：增加元素，替换元素，获取前一个和后一个元素的索引，等等。</li></ul><blockquote><p>Q5: Java中的HashMap的工作原理是什么？ </p></blockquote><p>Java中的HashMap是以键值对(key-value)的形式存储元素的。HashMap需要一个hash函数，它使用hashCode()和equals()方法来向集合/从集合添加和检索元素。当调用put()方法的时候，HashMap会计算key的hash值，然后把键值对存储在集合中合适的索引上。如果key已经存在了，value会被更新成新值。</p><p>HashMap的一些重要的特性是它的容量(capacity)，负载因子(load factor)和扩容极限(threshold resizing)。</p><blockquote><p>Q6: HashMap和Hashtable有什么区别？ </p></blockquote><ul><li>HashMap和Hashtable都实现了Map接口，因此很多特性非常相似。但是，他们有以下不同点： </li><li>HashMap允许键和值是null，而Hashtable不允许键或者值是null。 </li><li>Hashtable是同步的，而HashMap不是。因此，HashMap更适合于单线程环境，而Hashtable适合于多线程环境。 </li><li>HashMap提供了可供应用迭代的键的集合，因此，HashMap是快速失败的。另一方面，Hashtable提供了对键的列举(Enumeration)。 </li></ul><blockquote><p>Q7: 数组(Array)和列表(ArrayList)有什么区别？什么时候应该使用Array而不是ArrayList？ </p></blockquote><p>下面列出了Array和ArrayList的不同点： </p><ul><li>Array可以包含基本类型和对象类型，ArrayList只能包含对象类型。 </li><li>Array大小是固定的，ArrayList的大小是动态变化的。 </li><li>ArrayList提供了更多的方法和特性，比如：addAll()，removeAll()，iterator()等等。 </li><li>对于基本类型数据，集合使用自动装箱来减少编码工作量。但是，当处理固定大小的基本数据类型的时候，这种方式相对比较慢。</li></ul><blockquote><p>Q8: ArrayList和LinkedList有什么区别？ </p></blockquote><p>ArrayList和LinkedList都实现了List接口，他们有以下的不同点： </p><ul><li>ArrayList是基于索引的数据接口，它的底层是数组。它可以以O(1)时间复杂度对元素进行随机访问。与此对应，LinkedList是以元素链表的形式存储它的数据，每一个元素都和它的前一个和后一个元素链接在一起，在这种情况下，查找某个元素的时间复杂度是O(n)。 </li><li>相对于ArrayList，LinkedList的插入，添加，删除操作速度更快，因为当元素被添加到集合任意位置的时候，不需要像数组那样重新计算大小或者是更新索引。 </li><li>LinkedList比ArrayList更占内存，因为LinkedList为每一个节点存储了两个引用，一个指向前一个元素，一个指向下一个元素。也可以参考ArrayList vs. LinkedList。</li></ul><blockquote><p>Q9: 如何权衡是使用无序的数组还是有序的数组？ </p></blockquote><p>有序数组最大的好处在于查找的时间复杂度是O(log n)，而无序数组是O(n)。有序数组的缺点是插入操作的时间复杂度是O(n)，因为值大的元素需要往后移动来给新元素腾位置。相反，无序数组的插入时间复杂度是常量O(1)。</p><blockquote><p>Q10: HashSet和TreeSet有什么区别？ </p></blockquote><p>HashSet是由一个hash表来实现的，因此，它的元素是无序的。add()，remove()，contains()方法的时间复杂度是O(1)。 </p><p>TreeSet是由一个树形的结构来实现的，它里面的元素是有序的。因此，add()，remove()，contains()方法的时间复杂度是O(logn)。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;Java基础面试题三&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Q1: 如何确保N个线程可以访问N个资源同时又不导致死锁？ &lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;使用多线程的时候，一种非常简单的避免死锁的方式就是：指定获取锁的顺序，并强制线程按照指定的顺序获取锁。因此，
-      
-    
-    </summary>
-    
-      <category term="Java" scheme="https://wxzhongwang.github.io/categories/Java/"/>
-    
-    
-      <category term="面试题" scheme="https://wxzhongwang.github.io/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/"/>
-    
-  </entry>
-  
-  <entry>
     <title>Java基础面试题二</title>
     <link href="https://wxzhongwang.github.io/2019/08/07/Java%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95%E9%A2%98%E4%BA%8C/"/>
     <id>https://wxzhongwang.github.io/2019/08/07/Java基础面试题二/</id>
     <published>2019-08-07T14:37:25.984Z</published>
-    <updated>2019-08-11T04:55:42.952Z</updated>
+    <updated>2019-08-11T05:16:06.958Z</updated>
     
     <content type="html"><![CDATA[<p>Java基础面试题二</p><blockquote><p>Q1: 什么是死锁(deadlock)？ </p></blockquote><p>两个进程都在等待对方执行完毕才能继续往下执行的时候就发生了死锁。结果就是两个进程都陷入了无限的等待中。<br>代码表示：<br><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLockDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> void main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">    DieLock dl1 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">true</span>);</span><br><span class="line">    DieLock dl2 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">false</span>);</span><br><span class="line">    dl1.start();</span><br><span class="line">    dl2.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>理想状态下dl1线程为true从if执行先打出”if objA”然后再接着打出”if objB”之后释放A、B的锁对象，之后dl2线程执行else语句打出”else objB”，”else objA”。<br>非理想状态下dl1先打出”if objA”，之后线程dl2执行打出”else objB”，然后1、2线程的锁对象A和B都处于被锁的状态，两个线程争夺锁对象发生死锁现象。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLock</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> flag;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DieLock</span><span class="params">(<span class="keyword">boolean</span> flag)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.flag = flag;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (flag) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                System.out.println(<span class="string">"if objA"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"if objB"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                System.out.println(<span class="string">"else objB"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"else objA"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
     
@@ -214,11 +185,40 @@
   </entry>
   
   <entry>
+    <title>Java基础面试题三</title>
+    <link href="https://wxzhongwang.github.io/2019/08/07/Java%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95%E9%A2%98%E4%B8%89/"/>
+    <id>https://wxzhongwang.github.io/2019/08/07/Java基础面试题三/</id>
+    <published>2019-08-07T14:37:25.984Z</published>
+    <updated>2019-08-11T05:16:03.862Z</updated>
+    
+    <content type="html"><![CDATA[<p>Java基础面试题三</p><blockquote><p>Q1: 如何确保N个线程可以访问N个资源同时又不导致死锁？ </p></blockquote><p>使用多线程的时候，一种非常简单的避免死锁的方式就是：指定获取锁的顺序，并强制线程按照指定的顺序获取锁。因此，如果所有的线程都是以同样的顺序加锁和释放锁，就不会出现死锁了。</p><blockquote><p>Q2: Java集合类框架的基本接口有哪些？</p></blockquote><p>Java集合类提供了一套设计良好的支持对一组对象进行操作的接口和类。<br>Java集合类里面最基本的接口有： </p><ul><li>Collection：代表一组对象，每一个对象都是它的子元素。 </li><li>Set：不包含重复元素的Collection。 </li><li>List：有顺序的collection，并且可以包含重复元素。 </li><li>Map：可以把键(key)映射到值(value)的对象，键不能重复。</li></ul><blockquote><p>Q3: 什么是迭代器(Iterator)？ </p></blockquote><p>Iterator接口提供了很多对集合元素进行迭代的方法。每一个集合类都包含了可以返回迭代器实例的迭代方法。迭代器可以在迭代的过程中删除底层集合的元素。</p><blockquote><p>Q4: Iterator和ListIterator的区别是什么？</p></blockquote><p>下面列出了他们的区别： </p><ul><li>Iterator可用来遍历Set和List集合，但是ListIterator只能用来遍历List。 </li><li>Iterator对集合只能是前向遍历，ListIterator既可以前向也可以后向。 </li><li>ListIterator实现了Iterator接口，并包含其他的功能，比如：增加元素，替换元素，获取前一个和后一个元素的索引，等等。</li></ul><blockquote><p>Q5: Java中的HashMap的工作原理是什么？ </p></blockquote><p>Java中的HashMap是以键值对(key-value)的形式存储元素的。HashMap需要一个hash函数，它使用hashCode()和equals()方法来向集合/从集合添加和检索元素。当调用put()方法的时候，HashMap会计算key的hash值，然后把键值对存储在集合中合适的索引上。如果key已经存在了，value会被更新成新值。</p><p>HashMap的一些重要的特性是它的容量(capacity)，负载因子(load factor)和扩容极限(threshold resizing)。</p><blockquote><p>Q6: HashMap和Hashtable有什么区别？ </p></blockquote><ul><li>HashMap和Hashtable都实现了Map接口，因此很多特性非常相似。但是，他们有以下不同点： </li><li>HashMap允许键和值是null，而Hashtable不允许键或者值是null。 </li><li>Hashtable是同步的，而HashMap不是。因此，HashMap更适合于单线程环境，而Hashtable适合于多线程环境。 </li><li>HashMap提供了可供应用迭代的键的集合，因此，HashMap是快速失败的。另一方面，Hashtable提供了对键的列举(Enumeration)。 </li></ul><blockquote><p>Q7: 数组(Array)和列表(ArrayList)有什么区别？什么时候应该使用Array而不是ArrayList？ </p></blockquote><p>下面列出了Array和ArrayList的不同点： </p><ul><li>Array可以包含基本类型和对象类型，ArrayList只能包含对象类型。 </li><li>Array大小是固定的，ArrayList的大小是动态变化的。 </li><li>ArrayList提供了更多的方法和特性，比如：addAll()，removeAll()，iterator()等等。 </li><li>对于基本类型数据，集合使用自动装箱来减少编码工作量。但是，当处理固定大小的基本数据类型的时候，这种方式相对比较慢。</li></ul><blockquote><p>Q8: ArrayList和LinkedList有什么区别？ </p></blockquote><p>ArrayList和LinkedList都实现了List接口，他们有以下的不同点： </p><ul><li>ArrayList是基于索引的数据接口，它的底层是数组。它可以以O(1)时间复杂度对元素进行随机访问。与此对应，LinkedList是以元素链表的形式存储它的数据，每一个元素都和它的前一个和后一个元素链接在一起，在这种情况下，查找某个元素的时间复杂度是O(n)。 </li><li>相对于ArrayList，LinkedList的插入，添加，删除操作速度更快，因为当元素被添加到集合任意位置的时候，不需要像数组那样重新计算大小或者是更新索引。 </li><li>LinkedList比ArrayList更占内存，因为LinkedList为每一个节点存储了两个引用，一个指向前一个元素，一个指向下一个元素。也可以参考ArrayList vs. LinkedList。</li></ul><blockquote><p>Q9: 如何权衡是使用无序的数组还是有序的数组？ </p></blockquote><p>有序数组最大的好处在于查找的时间复杂度是O(log n)，而无序数组是O(n)。有序数组的缺点是插入操作的时间复杂度是O(n)，因为值大的元素需要往后移动来给新元素腾位置。相反，无序数组的插入时间复杂度是常量O(1)。</p><blockquote><p>Q10: HashSet和TreeSet有什么区别？ </p></blockquote><p>HashSet是由一个hash表来实现的，因此，它的元素是无序的。add()，remove()，contains()方法的时间复杂度是O(1)。 </p><p>TreeSet是由一个树形的结构来实现的，它里面的元素是有序的。因此，add()，remove()，contains()方法的时间复杂度是O(logn)。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;Java基础面试题三&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Q1: 如何确保N个线程可以访问N个资源同时又不导致死锁？ &lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;使用多线程的时候，一种非常简单的避免死锁的方式就是：指定获取锁的顺序，并强制线程按照指定的顺序获取锁。因此，
+      
+    
+    </summary>
+    
+      <category term="Java" scheme="https://wxzhongwang.github.io/categories/Java/"/>
+    
+    
+      <category term="面试题" scheme="https://wxzhongwang.github.io/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Java基础面试题一</title>
     <link href="https://wxzhongwang.github.io/2019/08/07/Java%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95%E9%A2%98/"/>
     <id>https://wxzhongwang.github.io/2019/08/07/Java基础面试题/</id>
     <published>2019-08-07T14:37:25.983Z</published>
-    <updated>2019-08-11T04:55:36.026Z</updated>
+    <updated>2019-08-11T05:15:59.742Z</updated>
     
     <content type="html"><![CDATA[<p>Java基础面试题</p><blockquote><p>Q1: 什么是Java虚拟机?</p></blockquote><p>Java虚拟机是一个可以执行Java字节码的虚拟机进程。Java源文件被编译成能被Java虚拟机执行的字节码文件。</p><blockquote><p>Q2: “static”关键字是什么意思？Java中是否可以覆盖(override)一个private或者是static的方法？</p></blockquote><p>“static”关键字表明一个成员变量或者是成员方法可以在没有所属的类的实例变量的情况下被访问。简单说就是：不声明所属类的实例就可访问该变量或方法。Java中static方法不能被覆盖，因为方法覆盖是基于运行时动态绑定的，而static方法是编译时静态绑定的。</p><blockquote><p>Q3: 是否可以在static环境中访问非static变量？ </p></blockquote><p>static变量在Java中是属于类的，它在所有的实例中的值是一样的。当类被Java虚拟机载入的时候，会对static变量进行初始化。如果你的代码尝试不用实例来访问非static的变量，编译器会报错，因为这些变量还没有被创建出来，还没有跟任何实例关联上。</p><blockquote><p>Q4: Java支持的数据类型有哪些？什么是自动拆装箱？ </p></blockquote><p>基本数据类型是： </p><ul><li>byte </li><li>short </li><li>int </li><li>long </li><li>float </li><li>double </li><li>boolean </li><li>char </li></ul><p>自动装箱是Java编译器在基本数据类型和对应的对象包装类型之间做的一个转化。比如：把int转化成Integer，float转化成double，等等。反之就是自动拆箱。</p><blockquote><p>Q5: Overload和Override的区别。Overloaded的方法是否可以改变返回值的类型? </p></blockquote><p>方法的重写Overriding和重载Overloading是Java多态性的不同表现。重写Overriding是父类与子类之间多态性的一种表现，重载Overloading是一个类中多态性的一种表现。如果在子类中定义某方法与其父类有相同的名称和参数，我们说该方法被重写(Overriding)。子类的对象使用这个方法时，将调用子类中的定义，对它而言，父类中的定义如同被”屏蔽”了。如果在一个类中定义了多个同名的方法，它们或有不同的参数个数或有不同的参数类型，则称为方法的重载(Overloading)。Overloaded的方法是可以改变返回值的类型。</p><p>Overload： 重写 子类重写父类方法<br>Overload:  重载 相同方法名</p><blockquote><p>Q6: Java支持多继承么？ </p></blockquote><p>不支持，Java不支持多继承。每个类都只能继承一个类，但是可以实现多个接口。</p><blockquote><p>Q7: 接口和抽象类的区别是什么？ </p></blockquote><p>Java提供和支持创建抽象类和接口。它们的实现有共同点，不同点在于： </p><ul><li>接口中所有的方法隐含的都是抽象的。而抽象类则可以同时包含抽象和非抽象的方法。 </li><li>类可以实现很多个接口，但是只能继承一个抽象类 </li><li>类如果要实现一个接口，它必须要实现接口声明的所有方法。但是，类可以不实现抽象类声明的所有方法，当然，在这种情况下，类也必须得声明成是抽象的。 </li><li>抽象类可以在不提供接口方法实现的情况下实现接口。 </li><li>Java接口中声明的变量默认都是final的。抽象类可以包含非final的变量。 </li><li>Java接口中的成员函数默认是public的。抽象类的成员函数可以是private，protected或者是public。 </li><li>接口是绝对抽象的，不可以被实例化。抽象类也不可以被实例化，但是，如果它包含main方法的话是可以被调用的。</li></ul><blockquote><p>Q8: 什么是值传递和引用传递？</p></blockquote><p>值传递: 意味着传递了对象的一个副本。因此，就算是改变了对象副本，也不会影响源对象的值。 </p><p>引用传递: 意味着传递的并不是实际的对象，而是对象的引用。因此，外部对引用对象所做的改变会反映到所有的对象上。</p><blockquote><p>Q9: 创建线程有几种不同的方式？你喜欢哪一种？为什么？</p></blockquote><p>有三种方式可以用来创建线程： </p><ul><li>继承Thread类 </li><li>实现Runnable接口 </li><li>应用程序可以使用Executor框架来创建线程池 </li></ul><p>实现Runnable接口这种方式更受欢迎，因为这不需要继承Thread类。在应用设计中已经继承了别的对象的情况下，这需要多继承（而Java不支持多继承），只能实现接口。同时，线程池也是非常高效的，很容易实现和使用。</p><blockquote><p>Q10: 同步方法和同步代码块的区别是什么？ </p></blockquote><p>在Java语言中，每一个对象有一把锁。线程可以使用synchronized关键字来获取对象上的锁。<br>synchronized关键字可应用在方法级别(粗粒度锁：这里的锁对象可以是This)或者是代码块级别(细粒度锁：这里的锁对象就是任意对象)。</p><ul><li>方法级别(粗粒度锁：这里的锁对象可以是This)</li><li>代码块级别(细粒度锁：这里的锁对象就是任意对象)</li></ul>]]></content>
     
@@ -340,6 +340,31 @@
     
     
       <category term="编码规范" scheme="https://wxzhongwang.github.io/tags/%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java 并发基础常见面试题总结</title>
+    <link href="https://wxzhongwang.github.io/2019/03/01/Java%20%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98%E6%80%BB%E7%BB%93/"/>
+    <id>https://wxzhongwang.github.io/2019/03/01/Java 并发基础常见面试题总结/</id>
+    <published>2019-03-01T02:10:00.000Z</published>
+    <updated>2019-08-11T05:16:33.933Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="进程和线程"><a href="#进程和线程" class="headerlink" title="进程和线程"></a>进程和线程</h1><h2 id="何为进程"><a href="#何为进程" class="headerlink" title="何为进程?"></a>何为进程?</h2><p>进程是程序的一次执行过程，是系统运行程序的基本单位，因此进程是动态的。系统运行一个程序即是一个进程从创建，运行到消亡的过程。</p><p>在 Java 中，当我们启动 main 函数时其实就是启动了一个 JVM 的进程，而 main 函数所在的线程就是这个进程中的一个线程，也称主线程。</p><h2 id="何为线程"><a href="#何为线程" class="headerlink" title="何为线程?"></a>何为线程?</h2><p>与进程不同的是同类的多个线程共享进程的堆和方法区资源，但每个线程有自己的程序计数器、虚拟机栈和本地方法栈，所以系统在产生一个线程，或是在各个线程之间作切换工作时，负担要比进程小得多，也正因为如此，线程也被称为轻量级进程。</p><p>一个 Java 程序的运行是 main 线程和多个其他线程同时运行。</p><p>一个进程中可以有多个线程，多个线程共享进程的堆和方法区，但是每个线程有自己的程序计数器、虚拟机栈 和 本地方法栈。</p><p>进程间彼此相对独立，线程则不一定，因为同一进程中的线程极有可能会相互影响。</p><h2 id="为什么程序计数器、虚拟机栈和本地方法栈是线程私有的呢？为什么堆和方法区是线程共享的呢？"><a href="#为什么程序计数器、虚拟机栈和本地方法栈是线程私有的呢？为什么堆和方法区是线程共享的呢？" class="headerlink" title="为什么程序计数器、虚拟机栈和本地方法栈是线程私有的呢？为什么堆和方法区是线程共享的呢？"></a>为什么程序计数器、虚拟机栈和本地方法栈是线程私有的呢？为什么堆和方法区是线程共享的呢？</h2><h3 id="程序计数器为什么是私有的"><a href="#程序计数器为什么是私有的" class="headerlink" title="程序计数器为什么是私有的?"></a>程序计数器为什么是私有的?</h3><p>程序计数器主要有下面两个作用：</p><p>1.字节码解释器通过改变程序计数器来依次读取指令，从而实现代码的流程控制，如：顺序执行、选择、循环、异常处理。</p><p>2.在多线程的情况下，程序计数器用于记录当前线程执行的位置，从而当线程被切换回来的时候能够知道该线程上次运行到哪儿了。</p><p>需要注意的是，如果执行的是 native 方法，那么程序计数器记录的是 undefined 地址，只有执行的是 Java 代码时程序计数器记录的才是下一条指令的地址。</p><blockquote><p>所以，程序计数器私有主要是为了线程切换后能恢复到正确的执行位置。</p></blockquote><h3 id="虚拟机栈和本地方法栈为什么是私有的"><a href="#虚拟机栈和本地方法栈为什么是私有的" class="headerlink" title="虚拟机栈和本地方法栈为什么是私有的?"></a>虚拟机栈和本地方法栈为什么是私有的?</h3><p>虚拟机栈： 每个 Java 方法在执行的同时会创建一个栈帧用于存储局部变量表、操作数栈、常量池引用等信息。从方法调用直至执行完成的过程，就对应着一个栈帧在 Java 虚拟机栈中入栈和出栈的过程。</p><p>本地方法栈： 和虚拟机栈所发挥的作用非常相似，区别是： 虚拟机栈为虚拟机执行 Java 方法 （也就是字节码）服务，而本地方法栈则为虚拟机使用到的 Native 方法服务。 </p><blockquote><p>所以，为了保证线程中的局部变量不被别的线程访问到，虚拟机栈和本地方法栈是线程私有的。</p></blockquote><h3 id="一句话简单了解堆和方法区"><a href="#一句话简单了解堆和方法区" class="headerlink" title="一句话简单了解堆和方法区"></a>一句话简单了解堆和方法区</h3><p>堆和方法区是所有线程共享的资源，其中堆是进程中最大的一块内存，主要用于存放新创建的对象<br>(所有对象都在这里分配内存)，方法区主要用于存放已被加载的类信息、常量、静态变量、即时编译器编译后的代码等数据。</p><h2 id="说说并发与并行的区别"><a href="#说说并发与并行的区别" class="headerlink" title="说说并发与并行的区别?"></a>说说并发与并行的区别?</h2><p>并发： 同一时间段，多个任务都在执行 (单位时间内不一定同时执行)；<br>并行： 单位时间内，多个任务同时执行。</p><h2 id="为什么要使用多线程呢"><a href="#为什么要使用多线程呢" class="headerlink" title="为什么要使用多线程呢?"></a>为什么要使用多线程呢?</h2><p>先从总体上来说：</p><p>计算机底层角度： 线程可以比作是轻量级的进程，是程序执行的最小单位,线程间的切换和调度的成本远远小于进程。另外，多核 CPU 时代意味着多个线程可以同时运行，这减少了线程上下文切换的开销。+</p><p>当代互联网发展趋势角度： 现在的系统动不动就要求百万级甚至千万级的并发量，而多线程并发编程正是开发高并发系统的基础，利用好多线程机制可以大大提高系统整体的并发能力以及性能。</p><p>再深入到计算机底层来探讨：</p><p>单核时代： 在单核时代多线程主要是为了提高 CPU 和 IO 设备的综合利用率。举个例子：当只有一个线程的时候会导致 CPU 计算时，IO 设备空闲；进行 IO 操作时，CPU 空闲。我们可以简单地说这两者的利用率目前都是 50%左右。但是当有两个线程的时候就不一样了，当一个线程执行 CPU 计算时，另外一个线程可以进行 IO 操作，这样两个的利用率就可以在理想情况下达到 100%了。</p><p>多核时代: 多核时代多线程主要是为了提高 CPU 利用率。举个例子：假如我们要计算一个复杂的任务，我们只用一个线程的话，CPU 只会一个 CPU 核心被利用到，而创建多个线程就可以让多个 CPU 核心被利用到，这样就提高了 CPU 的利用率。</p><h2 id="多线程带来的问题"><a href="#多线程带来的问题" class="headerlink" title="多线程带来的问题"></a>多线程带来的问题</h2><p>并发编程的目的就是为了能提高程序的执行效率提高程序运行速度，但是并发编程并不总是能提高程序运行速度的，而且并发编程可能会遇到很多问题，比如：内存泄漏、上下文切换、死锁还有受限于硬件和软件的资源闲置问题。</p><h2 id="线程的生命周期和状态"><a href="#线程的生命周期和状态" class="headerlink" title="线程的生命周期和状态?"></a>线程的生命周期和状态?</h2><p>线程创建之后它将处于 NEW（新建） 状态，调用 start() 方法后开始运行，线程这时候处于 READY（可运行） 状态。可运行状态的线程获得了 CPU 时间片（timeslice）后就处于 RUNNING（运行） 状态。</p><p>当线程执行 wait()方法之后，线程进入WAITING（等待）状态。进入等待状态的线程需要依靠其他线程的通知才能够返回到运行状态，而TIME_WAITING(超时等待)状态相当于在等待状态的基础上增加了超时限制，比如通过 sleep（long millis）方法或 wait（long millis）方法可以将 Java 线程置于 TIMED WAITING 状态。当超时时间到达后 Java 线程将会返回到 RUNNABLE 状态。当线程调用同步方法时，在没有获取到锁的情况下，线程将会进入到 BLOCKED（阻塞） 状态。线程在执行 Runnable 的run()方法之后将会进入到 TERMINATED（终止） 状态。</p><h2 id="上下文切换"><a href="#上下文切换" class="headerlink" title="上下文切换"></a>上下文切换</h2><p>多线程编程中一般线程的个数都大于 CPU 核心的个数，而一个 CPU 核心在任意时刻只能被一个线程使用，为了让这些线程都能得到有效执行，CPU 采取的策略是为每个线程分配时间片并轮转的形式。当一个线程的时间片用完的时候就会重新处于就绪状态让给其他线程使用，这个过程就属于一次上下文切换。（时间片策略）</p><p>概括来说就是：当前任务在执行完 CPU 时间片切换到另一个任务之前会先保存自己的状态，以便下次再切换会这个任务时，可以再加载这个任务的状态。任务从保存到再加载的过程就是一次上下文切换。</p><p>上下文切换通常是计算密集型的。也就是说，它需要相当可观的处理器时间，在每秒几十上百次的切换中，每次切换都需要纳秒量级的时间。所以，上下文切换对系统来说意味着消耗大量的 CPU 时间，事实上，可能是操作系统中时间消耗最大的操作。</p><p>Linux 相比与其他操作系统（包括其他类 Unix 系统）有很多的优点，其中有一项就是，其上下文切换和模式切换的时间消耗非常少。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;进程和线程&quot;&gt;&lt;a href=&quot;#进程和线程&quot; class=&quot;headerlink&quot; title=&quot;进程和线程&quot;&gt;&lt;/a&gt;进程和线程&lt;/h1&gt;&lt;h2 id=&quot;何为进程&quot;&gt;&lt;a href=&quot;#何为进程&quot; class=&quot;headerlink&quot; title=&quot;何为进程?
+      
+    
+    </summary>
+    
+      <category term="Java" scheme="https://wxzhongwang.github.io/categories/Java/"/>
+    
+    
+      <category term="多线程" scheme="https://wxzhongwang.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
     
   </entry>
   
@@ -496,52 +521,20 @@
   </entry>
   
   <entry>
-    <title>大数据</title>
-    <link href="https://wxzhongwang.github.io/2019/01/08/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
-    <id>https://wxzhongwang.github.io/2019/01/08/大数据/</id>
+    <title>Hadoop概念</title>
+    <link href="https://wxzhongwang.github.io/2019/01/08/Hadoop/"/>
+    <id>https://wxzhongwang.github.io/2019/01/08/Hadoop/</id>
     <published>2019-01-08T06:18:02.000Z</published>
-    <updated>2019-06-27T11:05:12.000Z</updated>
+    <updated>2019-06-27T11:05:00.000Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="大数据生命周期"><a href="#大数据生命周期" class="headerlink" title="大数据生命周期"></a>大数据生命周期</h1><ul><li>基础设施层，涵盖计算资源、内存与存储和网络互联，具体表现为计算节点、集群、机柜和数据中心。</li><li>数据存储和管理层，包括文件系统、数据库和类似YARN的资源管理系统。</li><li>计算处理层，如hadoop、MapReduce和Spark</li><li>在此之上的各种不同计算范式，如批处理、流处理和图计算等，包括衍生出编程模型的计算模型，如BSP、GAS等</li></ul><blockquote><p>数据分析和可视化基于计算处理层。分析包括简单的查询分析、流分析以及更复杂的分析(如机器学习、图计算等)。查询分析多基于表结构和关系函数，流分析基于数据、事件流以及简单的统计分析，而复杂分析则基于更复杂的数据结构与方法，如图、矩阵、迭代计算和线性代数。一般意义的可视化是对分析结果的展示。但是通过交互式可视化，还可以探索性地提问，使分析获得新的线索，形成迭代的分析和可视化。基于大规模数据的实时交互可视化分析以及在这个过程中引入自动化的因素是目前研究的热点。</p></blockquote><h1 id="大数据技术生态"><a href="#大数据技术生态" class="headerlink" title="大数据技术生态"></a>大数据技术生态</h1><p>大数据的基本处理流程与传统数据处理流程并无太大差异，主要区别在于：由于大数据要处理大量、非结构化的数据，所以在各处理环节中都可以采用并行处理。目前，Hadoop、MapReduce和Spark等分布式处理方式已经成为大数据处理各环节的通用处理方法。</p><h1 id="大数据采集与预处理"><a href="#大数据采集与预处理" class="headerlink" title="大数据采集与预处理"></a>大数据采集与预处理</h1><ul><li>存储层</li><li>预处理层</li><li>采集层</li></ul><p>在大数据的生命周期中，数据采集处于第一个环节。根据MapReduce产生数据的应用系统分类，大数据的采集主要有4种来源：管理信息系统、Web信息系统、物理信息系统、科学实验系统。对于不同的数据集，可能存在不同的结构和模式，如文件、XML树、关系表等，表现为数据的异构性。对多个异构的数据集，需要做进一步集成处理或整合处理，将来自不同数据集的数据收集、整理、清洗、转换后，生成到一个新的数据集，为后续查询和分析处理提供统一的数据视图。针对管理信息系统中异构数据库集成技术、Web信息系统中的实体识别技术和DeepWeb集成技术、传感器网络数据融合技术已经有很多研究工作，取得了较大的进展，已经推出了多种数据清洗和质量控制工具。</p><h1 id="大数据的存储和管理"><a href="#大数据的存储和管理" class="headerlink" title="大数据的存储和管理"></a>大数据的存储和管理</h1><p>按数据类型的不同，大数据的存储和管理采用不同的技术路线，大致可以分为3类。</p><h2 id="第1类"><a href="#第1类" class="headerlink" title="第1类"></a>第1类</h2><p>主要面对的是大规模的结构化数据。针对这类大数据，通常采用新型数据库集群。它们通过列存储或行列混合存储以及粗粒度索引等技术，结合MPP(MassiveParallelProcessing)架构高效的分布式计算模式，实现对PB量级数据的存储和管理。这类集群具有高性能和高扩展性特点，在企业分析类应用领域已获得广泛应用;</p><h2 id="第2类"><a href="#第2类" class="headerlink" title="第2类"></a>第2类</h2><p>主要面对的是半结构化和非结构化数据。应对这类应用场景，基于Hadoop开源体系的系统平台更为擅长。它们通过对Hadoop生态体系的技术扩展和封装，实现对半结构化和非结构化数据的存储和管理;</p><h2 id="第3类"><a href="#第3类" class="headerlink" title="第3类"></a>第3类</h2><p>面对的是结构化和非结构化混合的大数据，因此采用MPP并行数据库集群与Hadoop集群的混合来实现对百PB量级、EB量级数据的存储和管理。一方面，用MPP来管理计算高质量的结构化数据，提供强大的SQL和OLTP型服务;另一方面，用Hadoop实现对半结构化和非结构化数据的处理，以支持诸如内容检索、深度挖掘与综合分析等新型应用。这类混合模式将是大数据存储和管理未来发展的趋势。</p>]]></content>
+    <content type="html"><![CDATA[<p>Hadoop是一个开源的框架，可编写和运行分布式应用处理大规模数据，是专为离线和大规模数据分析而设计的，并不适合那种对几个记录随机读写的在线事务处理模式。</p><h1 id="Hadoop"><a href="#Hadoop" class="headerlink" title="Hadoop"></a>Hadoop</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ul><li>Hadoop是一个开源的框架，可编写和运行分布式应用处理大规模数据，是专为离线和大规模数据分析而设计的，并不适合那种对几个记录随机读写的在线事务处理模式。 ==不是为了大数据而大数据==</li><li>Hadoop 是以一种可靠、高效、可伸缩的方式进行处理的。Hadoop 是可靠的，因为它假设计算元素和存储会失败，因此它维护多个工作数据副本，确保能够针对失败的节点重新分布处理。Hadoop 是高效的，因为它以并行的方式工作，通过并行处理加快处理速度。Hadoop 还是可伸缩的，能够处理 PB 级数据。<h2 id="核心"><a href="#核心" class="headerlink" title="核心"></a>核心</h2>Hadoop的核心就是==HDFS==和==MapReduce===，Hadoop旗下有很多经典子项目，比如HBase、Hive等，这些都是基于HDFS和MapReduce发展出来的。要想了解Hadoop，就必须知道HDFS和MapReduce是什么。<h3 id="HDFS"><a href="#HDFS" class="headerlink" title="HDFS"></a>HDFS</h3>Hadoop Distributed File System，Hadoop 分布式文件系统<br>高度容错性的系统，适合部署在廉价的机器上，HDFS能提供高吞吐量的数据访问，适合那些有着超大数据集（large data set）的应用程序。<h3 id="MapReduce"><a href="#MapReduce" class="headerlink" title="MapReduce"></a>MapReduce</h3>Mapreduce是一个计算框架，一个处理分布式海量数据的软件框架及计算集群。</li></ul><h2 id="用处"><a href="#用处" class="headerlink" title="用处"></a>用处</h2><ul><li>搜索引擎 - 设计Hadoop的初衷，为了针对大规模的网页快速建立索引）</li><li>大数据存储 - 利用Hadoop的分布式存储能力，例如数据备份、数据仓库等。</li><li>大数据处理 - 利用Hadoop的分布式处理能力，例如数据挖掘、数据分析等。</li><li>科学研究 - Hadoop是一种分布式的开源框架，对于分布式计算有很大程度地参考价值。</li></ul><h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><p>==高可靠性==<br>Hadoop按位存储和处理数据的能力值得信赖。</p><p>==高扩展性==<br>Hadoop是在可用的计算机集簇间分配数据并完成计算任务的，这些集簇可以方便地扩展到数以千计的节点中。</p><p>==高效性==<br>Hadoop能够在节点之间动态地移动数据，并保证各个节点的动态平衡，因此处理速度非常快。</p><p>==高容错性==<br>Hadoop能够自动保存数据的多个副本，并且能够自动将失败的任务重新分配。</p><p>==低成本==<br>与一体机、商用数据仓库以及QlikView、Yonghong Z-Suite等数据集市相比，hadoop是开源的，项目的软件成本因此会大大降低。</p><blockquote><p>Hadoop设计对硬件需求比较低，只须运行在低廉的商用硬件集群上，而无需昂贵的高可用性机器上。廉价的商用机也就意味着大型集群中出现节点故障情况的概率非常高。这就要求设计HDFS时要充分考虑数据的可靠性，安全性及高可用性。</p></blockquote><h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><p>==不适合低延迟数据访问==</p><blockquote><p>如果要处理一些用户要求时间比较短的低延迟应用请求，则HDFS不适合。HDFS是为了处理大型数据集分析任务的，主要是为达到高的数据吞吐量而设计的，这就可能要求以高延迟作为代价。</p></blockquote><blockquote><p>改进策略：对于那些有低延时要求的应用程序，HBase是一个更好的选择。通过上层数据管理项目来尽可能地弥补这个不足。在性能上有了很大的提升，它的口号就是goes real time。使用缓存或多master设计可以降低client的数据请求压力，以减少延时。还有就是对HDFS系统内部的修改，这就得权衡大吞吐量与低延时了，HDFS不是万能的银弹。</p></blockquote><p>==无法高效存储大量小文件==</p><blockquote><p>因为Namenode把文件系统的元数据放置在内存中，所以文件系统所能容纳的文件数目是由Namenode的内存大小来决定。一般来说，每一个文件、文件夹和Block需要占据150字节左右的空间，所以，如果你有100万个文件，每一个占据一个Block，你就至少需要300MB内存。当前来说，数百万的文件还是可行的，当扩展到数十亿时，对于当前的硬件水平来说就没法实现了。还有一个问题就是，因为Maptask的数量是由splits来决定的，所以用MR处理大量的小文件时，就会产生过多的Maptask，线程管理开销将会增加作业时间。举个例子，处理10000M的文件，若每个split为1M，那就会有10000个Maptasks，会有很大的线程开销；若每个split为100M，则只有100个Maptasks，每个Maptask将会有更多的事情做，而线程的管理开销将减小很多。</p></blockquote><p>==不支持多用户写入及任意修改文件==  </p><blockquote><p>在HDFS的一个文件中只有一个写入者，而且写操作只能在文件末尾完成，即只能执行追加操作。目前HDFS还不支持多个用户对同一文件的写操作，以及在文件任意位置进行修改。</p></blockquote>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;h1 id=&quot;大数据生命周期&quot;&gt;&lt;a href=&quot;#大数据生命周期&quot; class=&quot;headerlink&quot; title=&quot;大数据生命周期&quot;&gt;&lt;/a&gt;大数据生命周期&lt;/h1&gt;&lt;ul&gt;
-&lt;li&gt;基础设施层，涵盖计算资源、内存与存储和网络互联，具体表现为计算节点、集群、机柜和数据中心
-      
-    
-    </summary>
-    
-      <category term="大数据" scheme="https://wxzhongwang.github.io/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
-    
-    
-      <category term="大数据" scheme="https://wxzhongwang.github.io/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>流处理、批处理、交互式查询</title>
-    <link href="https://wxzhongwang.github.io/2019/01/08/%E6%B5%81%E5%A4%84%E7%90%86%E3%80%81%E6%89%B9%E5%A4%84%E7%90%86%E3%80%81%E4%BA%A4%E4%BA%92%E5%BC%8F%E6%9F%A5%E8%AF%A2/"/>
-    <id>https://wxzhongwang.github.io/2019/01/08/流处理、批处理、交互式查询/</id>
-    <published>2019-01-08T06:18:02.000Z</published>
-    <updated>2019-06-27T11:05:14.000Z</updated>
-    
-    <content type="html"><![CDATA[<pre><code>我们将大数据处理按处理时间的跨度要求分为以下几类基于实时数据流的处理，通常的时间跨度在数百毫秒到数秒之间基于历史数据的交互式查询，通常时间跨度在数十秒到数分钟之间复杂的批量数据处理，通常的时间跨度在几分钟到数小时之间</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;pre&gt;&lt;code&gt;我们将大数据处理按处理时间的跨度要求分为以下几类
-
-基于实时数据流的处理，通常的时间跨度在数百毫秒到数秒之间
-
-基于历史数据的交互式查询，通常时间跨度在数十秒到数分钟之间
-
-复杂的批量数据处理，通常的时间跨度在几分钟到数小时之间
-&lt;/code&gt;&lt;/pre&gt;
+        &lt;p&gt;Hadoop是一个开源的框架，可编写和运行分布式应用处理大规模数据，是专为离线和大规模数据分析而设计的，并不适合那种对几个记录随机读写的在线事务处理模式。&lt;/p&gt;
+&lt;h1 id=&quot;Hadoop&quot;&gt;&lt;a href=&quot;#Hadoop&quot; class=&quot;headerlink&quot; ti
       
     
     </summary>

@@ -510,6 +510,93 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2017/06/01/Linux 更改文件属性/">Linux更改文件属性</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Linux/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-06-01T08:18:02.000Z" itemprop="datePublished">2017-06-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h2 id="Linux-更改文件属性"><a href="#Linux-更改文件属性" class="headerlink" title="Linux 更改文件属性"></a>Linux 更改文件属性</h2><p>1、chgrp：改属组 change group</p>
+<p>语法：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chgrp <span class="string">[-R]</span> 属组名 文件名</span><br></pre></td></tr></table></figure></p>
+<p>参数选项 [-R]: 递归更改文件属组，就是在更改某个目录文件的属组时，如果加上-R的参数，那么该目录下的所有文件的属组都会更改。</p>
+<p>2、chown：改属主，也可以同时更改属组  change owner</p>
+<p>语法：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chown <span class="string">[–R]</span> 属主名 文件名</span><br><span class="line">chown <span class="string">[-R]</span> 属主名：属组名 文件名</span><br></pre></td></tr></table></figure></p>
+<p>进入 /root 目录（~）将install.log的拥有者改为bin这个账号：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@www ~] cd ~</span><br><span class="line">[root@www ~]# chown bin install.log</span><br><span class="line">[root@www ~]# ls -l</span><br><span class="line">-rw-r--r--  1 bin <span class="built_in"> users </span>68495 Jun 25 08:53 install.log</span><br></pre></td></tr></table></figure></p>
+<p>3、chmod：更改文件9个属性</p>
+<p>Linux文件的基本权限就有九个，分别是owner/group/others三种身份各有自己的read/write/execute权限。</p>
+<p>例如：文件的权限字符为：『-rwxrwxrwx』， 可以使用数字来代表各个权限，各权限的分数对照表如下：</p>
+<ul>
+<li>r:4</li>
+<li>w:2</li>
+<li>x:1</li>
+</ul>
+<p>每种身份(owner/group/others)各自的三个权限(r/w/x)分数是需要累加的，例如当权限为： [-rwxrwx—] 结果：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">owner = rwx = <span class="number">4</span>+<span class="number">2</span>+<span class="number">1</span> = <span class="number">7</span></span><br><span class="line">group = rwx = <span class="number">4</span>+<span class="number">2</span>+<span class="number">1</span> = <span class="number">7</span></span><br><span class="line">others= --- = <span class="number">0</span>+<span class="number">0</span>+<span class="number">0</span> = <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>设定权限变更为：770</p>
+<p>语法<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod <span class="string">[-R]</span> xyz 文件或目录</span><br></pre></td></tr></table></figure></p>
+<p>参数 xyz : 就是刚刚提到的数字类型的权限属性，为 rwx 属性数值的相加。eg: 770</p>
+<p>Example: 将.bashrc这个文件所有的权限都设定启用<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">ls</span> <span class="selector-tag">-al</span> <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-tag">-rw-r--r--</span>  1 <span class="selector-tag">root</span> <span class="selector-tag">root</span> 395 <span class="selector-tag">Jul</span>  4 11<span class="selector-pseudo">:45</span> <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">chmod</span> 777 <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">ls</span> <span class="selector-tag">-al</span> <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-tag">-rwxrwxrwx</span>  1 <span class="selector-tag">root</span> <span class="selector-tag">root</span> 395 <span class="selector-tag">Jul</span>  4 11<span class="selector-pseudo">:45</span> <span class="selector-class">.bashrc</span></span><br></pre></td></tr></table></figure></p>
+<p>那如果要将权限变成 -rwxr-xr– 呢？那么权限的分数就成为 [4+2+1][4+0+1][4+0+0]=754。</p>
+<h2 id="符号类型改变文件权限"><a href="#符号类型改变文件权限" class="headerlink" title="符号类型改变文件权限"></a>符号类型改变文件权限</h2><p>另一种改权限的方式。针对user,group,others设置权限。</p>
+<ol>
+<li>user</li>
+<li>group</li>
+<li>others</li>
+</ol>
+<p>那么我们就可以使用 u, g, o 来代表三种身份的权限。</p>
+<p>可选 ：</p>
+<ul>
+<li>u</li>
+<li>g</li>
+<li>o</li>
+<li>a (指所有，即全部的身份)</li>
+</ul>
+<p>操作符： </p>
+<ul>
+<li><ul>
+<li>加入</li>
+</ul>
+</li>
+<li><ul>
+<li>除去</li>
+</ul>
+</li>
+<li>=    设定<br>权限：</li>
+<li>r</li>
+<li>w</li>
+<li>x</li>
+</ul>
+<p>可以使用以下语法来设定:<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod <span class="attribute">u</span>=rwx,g=rwx,o=rwx 文件名</span><br></pre></td></tr></table></figure></p>
+<p>Example：将文件权限设置为 -rwxr-xr– ，<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#  touch <span class="keyword">test</span>    <span class="comment">// 创建文件</span></span><br><span class="line"># <span class="keyword">ls</span> -al <span class="keyword">test</span>    <span class="comment">// 查看默认权限</span></span><br><span class="line">-rw-r--r-- 1 root root 0 Nov 15 10:32 <span class="keyword">test</span></span><br><span class="line"># chmod <span class="keyword">u</span>=rwx,<span class="keyword">g</span>=rx,o=r  <span class="keyword">test</span>    <span class="comment">// 修改权限</span></span><br><span class="line"># <span class="keyword">ls</span> -al <span class="keyword">test</span></span><br><span class="line">-rwxr-xr-- 1 root root 0 Nov 15 10:32 <span class="keyword">test</span></span><br></pre></td></tr></table></figure></p>
+<p>而如果是要将权限去掉而不改变其他已存在的权限呢？<br>例如要拿掉全部人的可执行权限，则：<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#  chmod  a-x test1</span></span><br><span class="line"><span class="comment"># ls -al test1</span></span><br><span class="line">-rw-r--r--<span class="number"> 1 </span>root root<span class="number"> 0 </span>Nov<span class="number"> 15 </span>10:32 test1</span><br></pre></td></tr></table></figure></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2017/06/01/Linux 绝对路径 、 相对路径/">Linux绝对路径 、 相对路径</a>
         </h1>
         
@@ -667,93 +754,6 @@
 <p>/bin, /sbin, /usr/bin, /usr/sbin: 这是系统预设的执行文件的放置目录，比如 ls 就是在/bin/ls 目录下的。</p>
 <p>值得提出的是，/bin, /usr/bin 是给系统用户使用的指令（除root外的通用户），而/sbin, /usr/sbin 则是给root使用的指令。</p>
 <p>/var： 这是一个非常重要的目录，系统上跑了很多程序，那么每个程序都会有相应的日志产生，而这些日志就被记录到这个目录下，具体在/var/log 目录下，另外mail的预设放置也是在这里。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/06/01/Linux 更改文件属性/">Linux更改文件属性</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Linux/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-06-01T08:18:02.000Z" itemprop="datePublished">2017-06-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h2 id="Linux-更改文件属性"><a href="#Linux-更改文件属性" class="headerlink" title="Linux 更改文件属性"></a>Linux 更改文件属性</h2><p>1、chgrp：改属组 change group</p>
-<p>语法：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chgrp <span class="string">[-R]</span> 属组名 文件名</span><br></pre></td></tr></table></figure></p>
-<p>参数选项 [-R]: 递归更改文件属组，就是在更改某个目录文件的属组时，如果加上-R的参数，那么该目录下的所有文件的属组都会更改。</p>
-<p>2、chown：改属主，也可以同时更改属组  change owner</p>
-<p>语法：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chown <span class="string">[–R]</span> 属主名 文件名</span><br><span class="line">chown <span class="string">[-R]</span> 属主名：属组名 文件名</span><br></pre></td></tr></table></figure></p>
-<p>进入 /root 目录（~）将install.log的拥有者改为bin这个账号：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@www ~] cd ~</span><br><span class="line">[root@www ~]# chown bin install.log</span><br><span class="line">[root@www ~]# ls -l</span><br><span class="line">-rw-r--r--  1 bin <span class="built_in"> users </span>68495 Jun 25 08:53 install.log</span><br></pre></td></tr></table></figure></p>
-<p>3、chmod：更改文件9个属性</p>
-<p>Linux文件的基本权限就有九个，分别是owner/group/others三种身份各有自己的read/write/execute权限。</p>
-<p>例如：文件的权限字符为：『-rwxrwxrwx』， 可以使用数字来代表各个权限，各权限的分数对照表如下：</p>
-<ul>
-<li>r:4</li>
-<li>w:2</li>
-<li>x:1</li>
-</ul>
-<p>每种身份(owner/group/others)各自的三个权限(r/w/x)分数是需要累加的，例如当权限为： [-rwxrwx—] 结果：</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">owner = rwx = <span class="number">4</span>+<span class="number">2</span>+<span class="number">1</span> = <span class="number">7</span></span><br><span class="line">group = rwx = <span class="number">4</span>+<span class="number">2</span>+<span class="number">1</span> = <span class="number">7</span></span><br><span class="line">others= --- = <span class="number">0</span>+<span class="number">0</span>+<span class="number">0</span> = <span class="number">0</span></span><br></pre></td></tr></table></figure>
-<p>设定权限变更为：770</p>
-<p>语法<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod <span class="string">[-R]</span> xyz 文件或目录</span><br></pre></td></tr></table></figure></p>
-<p>参数 xyz : 就是刚刚提到的数字类型的权限属性，为 rwx 属性数值的相加。eg: 770</p>
-<p>Example: 将.bashrc这个文件所有的权限都设定启用<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">ls</span> <span class="selector-tag">-al</span> <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-tag">-rw-r--r--</span>  1 <span class="selector-tag">root</span> <span class="selector-tag">root</span> 395 <span class="selector-tag">Jul</span>  4 11<span class="selector-pseudo">:45</span> <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">chmod</span> 777 <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">ls</span> <span class="selector-tag">-al</span> <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-tag">-rwxrwxrwx</span>  1 <span class="selector-tag">root</span> <span class="selector-tag">root</span> 395 <span class="selector-tag">Jul</span>  4 11<span class="selector-pseudo">:45</span> <span class="selector-class">.bashrc</span></span><br></pre></td></tr></table></figure></p>
-<p>那如果要将权限变成 -rwxr-xr– 呢？那么权限的分数就成为 [4+2+1][4+0+1][4+0+0]=754。</p>
-<h2 id="符号类型改变文件权限"><a href="#符号类型改变文件权限" class="headerlink" title="符号类型改变文件权限"></a>符号类型改变文件权限</h2><p>另一种改权限的方式。针对user,group,others设置权限。</p>
-<ol>
-<li>user</li>
-<li>group</li>
-<li>others</li>
-</ol>
-<p>那么我们就可以使用 u, g, o 来代表三种身份的权限。</p>
-<p>可选 ：</p>
-<ul>
-<li>u</li>
-<li>g</li>
-<li>o</li>
-<li>a (指所有，即全部的身份)</li>
-</ul>
-<p>操作符： </p>
-<ul>
-<li><ul>
-<li>加入</li>
-</ul>
-</li>
-<li><ul>
-<li>除去</li>
-</ul>
-</li>
-<li>=    设定<br>权限：</li>
-<li>r</li>
-<li>w</li>
-<li>x</li>
-</ul>
-<p>可以使用以下语法来设定:<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod <span class="attribute">u</span>=rwx,g=rwx,o=rwx 文件名</span><br></pre></td></tr></table></figure></p>
-<p>Example：将文件权限设置为 -rwxr-xr– ，<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#  touch <span class="keyword">test</span>    <span class="comment">// 创建文件</span></span><br><span class="line"># <span class="keyword">ls</span> -al <span class="keyword">test</span>    <span class="comment">// 查看默认权限</span></span><br><span class="line">-rw-r--r-- 1 root root 0 Nov 15 10:32 <span class="keyword">test</span></span><br><span class="line"># chmod <span class="keyword">u</span>=rwx,<span class="keyword">g</span>=rx,o=r  <span class="keyword">test</span>    <span class="comment">// 修改权限</span></span><br><span class="line"># <span class="keyword">ls</span> -al <span class="keyword">test</span></span><br><span class="line">-rwxr-xr-- 1 root root 0 Nov 15 10:32 <span class="keyword">test</span></span><br></pre></td></tr></table></figure></p>
-<p>而如果是要将权限去掉而不改变其他已存在的权限呢？<br>例如要拿掉全部人的可执行权限，则：<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#  chmod  a-x test1</span></span><br><span class="line"><span class="comment"># ls -al test1</span></span><br><span class="line">-rw-r--r--<span class="number"> 1 </span>root root<span class="number"> 0 </span>Nov<span class="number"> 15 </span>10:32 test1</span><br></pre></td></tr></table></figure></p>
 
         
     </section>

@@ -131,6 +131,45 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/04/20/tomcat源码解析/">tomcat源码解析</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/2/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-04-20T04:00:00.000Z" itemprop="datePublished">2018-04-20</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Tomcat/">Tomcat</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="tomcat源码解析"><a href="#tomcat源码解析" class="headerlink" title="tomcat源码解析"></a>tomcat源码解析</h1><p>1.tomcat的总体概述和tomcat的启动流程源码分析</p>
+<p>2.tomcat当中的web请求源码分析？一个http请求是如何请求到tomcat的？tomcat如何处理的？</p>
+<p>3.tomcat的协议分析，从源码分析tomcat当中各种协议详细配置的意义。</p>
+<p>4.tomcat和apache、nginx等主流静态资源服务器的搭配使用</p>
+<p>5.tomcat的性能调优？生产环境下如何让tomcat容器的性能达到最高</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/04/11/Thread实现多线程三/">Thread实现多线程三</a>
         </h1>
         
@@ -306,45 +345,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/04/05/引用类型/">引用类型</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/2/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-04-05T04:10:22.000Z" itemprop="datePublished">2018-04-05</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="引用类型"><a href="#引用类型" class="headerlink" title="引用类型"></a>引用类型</h1><pre><code>对象引用类型分为强引用、软引用、弱引用和虚引用。
-</code></pre><p>强引用: 就是我们一般声明对象是时虚拟机生成的引用，强引用环境下，垃圾回收时需要严格判断当前对象是否被强引用，如果被强引用，则不会被垃圾回收</p>
-<p>软引用: 软引用一般被做为缓存来使用。与强引用的区别是，软引用在垃圾回收时，虚拟机会根据当前系统的剩余内存来决定是否对软引用进行回收。如果剩余内存比较紧张，则虚拟机会回收软引用所引用的空间；如果剩余内存相对富裕，则不会进行回收。换句话说，虚拟机在发生OutOfMemory时，肯定是没有软引用存在的。</p>
-<p>弱引用: 弱引用与软引用类似，都是作为缓存来使用。但与软引用不同，弱引用在进行垃圾回收时，是一定会被回收掉的，因此其生命周期只存在于一个垃圾回收周期内。</p>
-<p>强引用不用说，我们系统一般在使用时都是用的强引用。而“软引用”和“弱引用”比较少见。他们一般被作为缓存使用，而且一般是在内存大小比较受限的情况下做为缓存。因为如果内存足够大的话，可以直接使用强引用作为缓存即可，同时可控性更高。因而，他们常见的是被使用在桌面应用系统的缓存。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2018/04/05/并发编程/">并发编程</a>
         </h1>
         
@@ -375,6 +375,45 @@
 <p>Lock和并发常用工具类<br>1.Java当中的Lock、ReenrantLock、ReentrantReadWriteLock、Condition<br>2.Java当中的并发工具类CyclicBarrier、CountdownLatch、Semphore<br>3.Java当中的并发集合类ConcurrentHashMap、ConcurrentLinkedQueue…</p>
 <p>原子操作常用知识讲解<br>1.基本类型的原子操作比如经典的AtomicBoolean、AtomicIngter、AtomicLong<br>2.数组类型的原子操作代表的几个类AtomicIntegerArray、AtomicLongArray、AtomicReferenceArray<br>3.引用类型的原子操作的典型AtomicReference、AtomicReferenceFieldUpdater…<br>4.CAS概念知识、COmpare And Swap以及缺陷</p>
 <p>线程池和并发并行<br>1.Excutor、ThreadPoolExcutor、Callable &amp; Future、ScheduledExcutorService<br>2.ThreadLocal、Fork &amp; Join？什么是并行？线程池如何保证核心线程不被销毁？</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/04/05/引用类型/">引用类型</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/2/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-04-05T04:10:22.000Z" itemprop="datePublished">2018-04-05</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="引用类型"><a href="#引用类型" class="headerlink" title="引用类型"></a>引用类型</h1><pre><code>对象引用类型分为强引用、软引用、弱引用和虚引用。
+</code></pre><p>强引用: 就是我们一般声明对象是时虚拟机生成的引用，强引用环境下，垃圾回收时需要严格判断当前对象是否被强引用，如果被强引用，则不会被垃圾回收</p>
+<p>软引用: 软引用一般被做为缓存来使用。与强引用的区别是，软引用在垃圾回收时，虚拟机会根据当前系统的剩余内存来决定是否对软引用进行回收。如果剩余内存比较紧张，则虚拟机会回收软引用所引用的空间；如果剩余内存相对富裕，则不会进行回收。换句话说，虚拟机在发生OutOfMemory时，肯定是没有软引用存在的。</p>
+<p>弱引用: 弱引用与软引用类似，都是作为缓存来使用。但与软引用不同，弱引用在进行垃圾回收时，是一定会被回收掉的，因此其生命周期只存在于一个垃圾回收周期内。</p>
+<p>强引用不用说，我们系统一般在使用时都是用的强引用。而“软引用”和“弱引用”比较少见。他们一般被作为缓存使用，而且一般是在内存大小比较受限的情况下做为缓存。因为如果内存足够大的话，可以直接使用强引用作为缓存即可，同时可控性更高。因而，他们常见的是被使用在桌面应用系统的缓存。</p>
 
         
     </section>
@@ -441,7 +480,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/04/01/多线程上下文切换/">Java 多线程上下文切换</a>
+            <a href="/2018/04/01/死锁问题/">死锁问题</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -464,11 +503,26 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="多线程上下文切换"><a href="#多线程上下文切换" class="headerlink" title="多线程上下文切换"></a>多线程上下文切换</h1><p>对于单核CPU来说（对于多核CPU，此处就理解为一个核），CPU在一个时刻只能运行一个线程，当在运行一个线程的过程中转去运行另外一个线程，这个叫做线程上下文切换（对于进程也是类似）。</p>
-<p>由于可能当前线程的任务并没有执行完毕，所以在切换时需要保存线程的运行状态，以便下次重新切换回来时能够继续切换之前的状态运行。举个简单的例子：比如一个线程A正在读取一个文件的内容，正读到文件的一半，此时需要暂停线程A，转去执行线程B，当再次切换回来执行线程A的时候，我们不希望线程A又从文件的开头来读取。</p>
-<p>因此需要记录线程A的运行状态，那么会记录哪些数据呢？因为下次恢复时需要知道在这之前当前线程已经执行到哪条指令了，所以需要记录程序计数器的值，另外比如说线程正在进行某个计算的时候被挂起了，那么下次继续执行的时候需要知道之前挂起时变量的值时多少，因此需要记录CPU寄存器的状态。所以一般来说，线程上下文切换过程中会记录程序计数器、CPU寄存器状态等数据。</p>
-<p>说简单点的：对于线程的上下文切换实际上就是 存储和恢复CPU状态的过程，它使得线程执行能够从中断点恢复执行。</p>
-<p>虽然多线程可以使得任务执行的效率得到提升，但是由于在线程切换时同样会带来一定的开销代价，并且多个线程会导致系统资源占用的增加，所以在进行多线程编程时要注意这些因素。</p>
+        <h1 id="死锁问题"><a href="#死锁问题" class="headerlink" title="死锁问题"></a>死锁问题</h1><figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">DeadLockDemo</span> &#123;</span></span><br><span class="line">    private static Object resource1 = <span class="keyword">new</span> Object();<span class="regexp">//资源 1</span></span><br><span class="line"><span class="regexp">    private static Object resource2 = new Object();//</span>资源 <span class="number">2</span></span><br><span class="line"></span><br><span class="line">    public static <span class="literal">void</span> main(String[] args) &#123;</span><br><span class="line">        <span class="keyword">new</span> Thread<span class="function"><span class="params">(() -&gt; &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">            synchronized (resource1) &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                System.out.println(Thread.currentThread() + <span class="string">"get resource1"</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">try</span> &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                    Thread.sleep(<span class="number">1000</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                    e.printStackTrace();</span></span></span><br><span class="line"><span class="function"><span class="params">                &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">                System.out.println(Thread.currentThread() + <span class="string">"waiting get resource2"</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                synchronized (resource2) &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                    System.out.println(Thread.currentThread() + <span class="string">"get resource2"</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">            &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">        &#125;, <span class="string">"线程 1"</span>)</span>.<span class="title">start</span><span class="params">()</span>;</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">        <span class="title">new</span> <span class="title">Thread</span><span class="params">(() -&gt; &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">            synchronized (resource2) &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                System.out.println(Thread.currentThread() + <span class="string">"get resource2"</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">try</span> &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                    Thread.sleep(<span class="number">1000</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                    e.printStackTrace();</span></span></span><br><span class="line"><span class="function"><span class="params">                &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">                System.out.println(Thread.currentThread() + <span class="string">"waiting get resource1"</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                synchronized (resource1) &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                    System.out.println(Thread.currentThread() + <span class="string">"get resource1"</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">            &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">        &#125;, <span class="string">"线程 2"</span>)</span>.<span class="title">start</span><span class="params">()</span>;</span></span><br><span class="line"><span class="function">    &#125;</span></span><br><span class="line"><span class="function">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>产生死锁必须具备以下四个条件：</p>
+<ul>
+<li>互斥条件：该资源任意一个时刻只由一个线程占用</li>
+<li>请求与保持条件：一个进程因请求资源而阻塞时，对已获得的资源保持不放</li>
+<li>不剥夺条件:线程已获得的资源在末使用完之前不能被其他线程强行剥夺，只有自己使用完毕后才释放资源</li>
+<li>循环等待条件:若干进程之间形成一种头尾相接的循环等待资源关系</li>
+</ul>
+<h2 id="如何避免线程死锁"><a href="#如何避免线程死锁" class="headerlink" title="如何避免线程死锁?"></a>如何避免线程死锁?</h2><p>我们只要破坏产生死锁的四个条件中的其中一个就可以了。</p>
+<p>破坏互斥条件</p>
+<p>这个条件我们没有办法破坏，因为我们用锁本来就是想让他们互斥的（临界资源需要互斥访问）。</p>
+<p>破坏请求与保持条件</p>
+<p>一次性申请所有的资源。</p>
+<p>破坏不剥夺条件</p>
+<p>占用部分资源的线程进一步申请其他资源时，如果申请不到，可以主动释放它占有的资源。</p>
+<p>破坏循环等待条件</p>
+<p>靠按序申请资源来预防。按某一顺序申请资源，释放资源则反序释放。破坏循环等待条件。</p>
+<blockquote>
+<p>使用多线程的时候，一种非常简单的避免死锁的方式就是：指定获取锁的顺序，并强制线程按照指定的顺序获取锁。因此，如果所有的线程都是以同样的顺序加锁和释放锁，就不会出现死锁了。</p>
+</blockquote>
 
         
     </section>
@@ -480,7 +534,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/04/01/Runnable实现多线程/">Runnable接口程实现多线程</a>
+            <a href="/2018/04/01/Thread sleep() 和  wait()/">Thread sleep() 和 wait()</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -503,8 +557,13 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="Runnable接口程实现多线程"><a href="#Runnable接口程实现多线程" class="headerlink" title="Runnable接口程实现多线程"></a>Runnable接口程实现多线程</h1><p>写一个类实现Runnable接口，实现run方法。用new Thread(Runnableclass).start()方法来启动</p>
-<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RunnableTask</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> void main(<span class="keyword">String</span>[] args) &#123;  </span><br><span class="line">    	RunnableTask rt = <span class="keyword">new</span> <span class="type">RunnableTask</span>();</span><br><span class="line">        Runner1 runner1 = rt.<span class="keyword">new</span> <span class="type">Runner1</span>();  </span><br><span class="line">        Runner2 runner2 = rt.<span class="keyword">new</span> <span class="type">Runner2</span>();  </span><br><span class="line">          </span><br><span class="line">        Thread thread1 = <span class="keyword">new</span> <span class="type">Thread</span>(runner1);  </span><br><span class="line">        Thread thread2 = <span class="keyword">new</span> <span class="type">Thread</span>(runner2);  </span><br><span class="line">	    thread1.start();  </span><br><span class="line">	    thread2.start();  </span><br><span class="line">        <span class="comment">//thread1.run();  </span></span><br><span class="line">        <span class="comment">//thread2.run();  </span></span><br><span class="line">    &#125;  </span><br><span class="line">	 </span><br><span class="line">	  </span><br><span class="line">	<span class="class"><span class="keyword">class</span> <span class="title">Runner1</span> <span class="keyword"><span class="keyword">implements</span> <span class="type">Runnable</span></span> </span>&#123; </span><br><span class="line">		<span class="comment">// 实现了Runnable接口，jdk就知道这个类是一个线程  </span></span><br><span class="line">	    <span class="keyword">public</span> void run() &#123;  </span><br><span class="line">	        <span class="keyword">for</span> (int i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;  </span><br><span class="line">	            System.out.println(<span class="string">"进入Runner1运行状态——————————"</span> + i);  </span><br><span class="line">	        &#125;  </span><br><span class="line">	    &#125;  </span><br><span class="line">	&#125;  </span><br><span class="line">	  </span><br><span class="line">	<span class="class"><span class="keyword">class</span> <span class="title">Runner2</span> <span class="keyword"><span class="keyword">implements</span> <span class="type">Runnable</span></span> </span>&#123; </span><br><span class="line">		<span class="comment">// 实现了Runnable接口，jdk就知道这个类是一个线程  </span></span><br><span class="line">	    <span class="keyword">public</span> void run() &#123;  </span><br><span class="line">	        <span class="keyword">for</span> (int i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;  </span><br><span class="line">	            System.out.println(<span class="string">"进入Runner2运行状态=========="</span> + i);  </span><br><span class="line">	        &#125;  </span><br><span class="line">	    &#125;  </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <h1 id="Thread-sleep-和-wait"><a href="#Thread-sleep-和-wait" class="headerlink" title="Thread sleep() 和  wait()"></a>Thread sleep() 和  wait()</h1><p>sleep()方法是Thread类里面的，主要的意义就是让当前线程停止执行，让出CPU给其他的线程，但是不会释放对象锁资源以及监控的状态，当指定的时间到了之后又会自动恢复运行状态。</p>
+<p>wait()方法是Object类里面的，主要的意义就是让线程放弃当前的对象的锁，进入等待此对象的等待锁定池，只有针对此对象调动notify方法后本线程才能够进入对象锁定池准备获取对象锁进入运行状态。</p>
+<figure class="highlight d"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> ThreadSleepWait &#123;</span><br><span class="line">	<span class="comment">/** java中的sleep()和wait()的区别 */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args) &#123;</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Thread1()).start();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">        	System.<span class="keyword">out</span>.println(<span class="string">"主线程Sleep"</span>);</span><br><span class="line">        	Thread.sleep(<span class="number">5000</span>);</span><br><span class="line">         &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Thread2()).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> Thread1 implements Runnable&#123;</span><br><span class="line">        <span class="keyword">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> run()&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (ThreadSleepWait.<span class="keyword">class</span>) &#123;</span><br><span class="line">            	System.<span class="keyword">out</span>.println(<span class="string">"启动线程"</span> + Thread.currentThread().getName());    </span><br><span class="line">            	System.<span class="keyword">out</span>.println(<span class="string">"线程等待中..."</span>);</span><br><span class="line">	            <span class="keyword">try</span> &#123;</span><br><span class="line">	            	<span class="comment">//调用wait()方法，线程会放弃对象锁，进入等待此对象的等待锁定池</span></span><br><span class="line">	            	ThreadSleepWait.<span class="keyword">class</span>.wait();</span><br><span class="line">	             &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">	                e.printStackTrace();</span><br><span class="line">	            &#125;</span><br><span class="line">	            System.<span class="keyword">out</span>.println(<span class="string">"线程1继续"</span>);</span><br><span class="line">	            System.<span class="keyword">out</span>.println(<span class="string">"线程1结束"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">    	&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> Thread2 implements Runnable&#123;</span><br><span class="line">        <span class="keyword">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> run()&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (ThreadSleepWait.<span class="keyword">class</span>) &#123;</span><br><span class="line">            	System.<span class="keyword">out</span>.println(<span class="string">"启动线程"</span> + Thread.currentThread().getName());    </span><br><span class="line">            	System.<span class="keyword">out</span>.println(<span class="string">"线程等待中..."</span>);</span><br><span class="line">                <span class="comment">//只有针对此锁对象调用notify后</span></span><br><span class="line">            	<span class="comment">//本线程才进入对象锁定池准备获取对象锁进入运行状态。</span></span><br><span class="line">                ThreadSleepWait.<span class="keyword">class</span>.notify();</span><br><span class="line">                 </span><br><span class="line">				<span class="comment">//区别</span></span><br><span class="line">				<span class="comment">//如果我们把代码：ThreadSleepWait.class.notify给注释掉，</span></span><br><span class="line">				<span class="comment">//ThreadSleepWait.class调用了wait()方法但是没有调用notify()方法,</span></span><br><span class="line">				<span class="comment">//则线程1永远处于挂起状态。</span></span><br><span class="line">                 </span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">				<span class="comment">//Sleep方法导致了程序暂停执行指定的时间,让出cpu该其他线程，</span></span><br><span class="line">				<span class="comment">//但是他的监控状态依然保持者,当指定的时间过又会自动恢复运行状态。</span></span><br><span class="line">				<span class="comment">//在调用sleep方法的过程中，线程不会释放对象锁。</span></span><br><span class="line">                     Thread.sleep(<span class="number">5000</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                System.<span class="keyword">out</span>.println(<span class="string">"线程2继续"</span>);</span><br><span class="line">	            System.<span class="keyword">out</span>.println(<span class="string">"线程2结束"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行效果：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">主线程Sleep</span><br><span class="line">启动线程Thread<span class="number">-0</span></span><br><span class="line">线程等待中...</span><br><span class="line">启动线程Thread<span class="number">-1</span></span><br><span class="line">线程等待中...</span><br><span class="line">线程<span class="number">2</span>继续</span><br><span class="line">线程<span class="number">2</span>结束</span><br><span class="line">线程<span class="number">1</span>继续</span><br><span class="line">线程<span class="number">1</span>结束</span><br></pre></td></tr></table></figure></p>
+<p>如果注释掉代码，之后调用<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">ThreadSleepWait</span><span class="selector-class">.class</span><span class="selector-class">.notify</span>();</span><br></pre></td></tr></table></figure></p>
+<p>运行效果：<br><figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">主线程Sleep</span><br><span class="line">启动线程<span class="keyword">Thread</span><span class="number">-0</span></span><br><span class="line">线程等待中<span class="params">...</span></span><br><span class="line">启动线程<span class="keyword">Thread</span><span class="number">-1</span></span><br><span class="line">线程等待中<span class="params">...</span></span><br><span class="line">线程<span class="number">2</span>继续</span><br><span class="line">线程<span class="number">2</span>结束</span><br></pre></td></tr></table></figure></p>
+
         
     </section>
 </article>
@@ -544,53 +603,6 @@
 <p>线程在运行状态过程中，可能有多个原因导致当前线程不继续运行下去，比如用户主动让线程睡眠（睡眠一定的时间之后再重新执行）、用户主动让线程等待，或者被同步块给阻塞，此时就对应着多个状态：time  waiting（睡眠或等待一定的事件）、waiting（等待被唤醒）、blocked（阻塞）。</p>
 <p>当由于突然中断或者子任务执行完毕，线程就会被消亡。</p>
 <p><img src="https://images2015.cnblogs.com/blog/682616/201611/682616-20161115183635779-1231872003.jpg" alt="image"></p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/04/01/Thread线程属性/">Java 线程属性</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/2/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-04-01T02:10:00.000Z" itemprop="datePublished">2018-04-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>#线程属性</p>
-<p>以下是关系到线程属性的几个方法：</p>
-<p>1）getId</p>
-<p>用来得到线程ID</p>
-<p>2）getName和setName</p>
-<p>用来得到或者设置线程名称。</p>
-<p>3）getPriority和setPriority</p>
-<p>用来获取和设置线程优先级。</p>
-<p>4）setDaemon和isDaemon</p>
-<p>用来设置线程是否成为守护线程和判断线程是否是守护线程。</p>
-<p>守护线程和用户线程的区别在于：守护线程依赖于创建它的线程，而用户线程则不依赖。举个简单的例子：如果在main线程中创建了一个守护线程，当main方法运行完毕之后，守护线程也会随着消亡。而用户线程则不会，用户线程会一直运行直到其运行完毕。在JVM中，像垃圾收集器线程就是守护线程。</p>
-<p>Thread类有一个比较常用的静态方法currentThread()用来获取当前线程。</p>
-<p>在上面已经说到了Thread类中的大部分方法，那么Thread类中的方法调用到底会引起线程状态发生怎样的变化呢？<br><img src="https://images2015.cnblogs.com/blog/682616/201611/682616-20161115184256092-1439402886.jpg" alt="image"></p>
 
         
     </section>

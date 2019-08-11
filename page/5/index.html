@@ -131,6 +131,60 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/04/08/Mockjs/">Mock.js</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/5/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-04-08T05:22:02.000Z" itemprop="datePublished">2018-04-08</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Web/">Web</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>目前的大部分公司的项目都是采用的前后端分离, 后端接口的开发和前端人员是同时进行的. 那么这个时候就会存在一个问题, 在页面需要使用大量数据进行渲染生成前, 后端开发人员的接口也许并没有写完, 作为前端的我们也就没有办法获取数据. 所以 前端工程师就需要自己按照接口文档模拟后端人员提供的数据, 以此进行页面的开发.<br>这个时候, Mock.js的作用就体现出来了, 在数据量较大的情况下, 我们不用一个一个的编写数据, 只需要根据接口文档将数据的格式填入,Mock.js就能够自动的按需生成大量的模拟数据. 且Mock.js提供了大量的数据类型, 包括文本, 数字, 布尔值, 日期, 邮箱, 链接, 图片, 颜色等.</p>
+<h1 id="Mock-js"><a href="#Mock-js" class="headerlink" title="Mock.js"></a>Mock.js</h1><h2 id="Mockjs是什么"><a href="#Mockjs是什么" class="headerlink" title="Mockjs是什么?"></a>Mockjs是什么?</h2><p>目前的大部分公司的项目都是采用的前后端分离, 后端接口的开发和前端人员是同时进行的. 那么这个时候就会存在一个问题, 在页面需要使用大量数据进行渲染生成前, 后端开发人员的接口也许并没有写完, 作为前端的我们也就没有办法获取数据. 所以 前端工程师就需要自己按照接口文档模拟后端人员提供的数据, 以此进行页面的开发.<br>这个时候, Mock.js的作用就体现出来了, 在数据量较大的情况下, 我们不用一个一个的编写数据, 只需要根据接口文档将数据的格式填入,Mock.js就能够自动的按需生成大量的模拟数据. 且Mock.js提供了大量的数据类型, 包括文本, 数字, 布尔值, 日期, 邮箱, 链接, 图片, 颜色等.</p>
+<h2 id="安装Mockjs"><a href="#安装Mockjs" class="headerlink" title="安装Mockjs"></a>安装Mockjs</h2><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm <span class="keyword">install</span> mockjs -S </span><br><span class="line"><span class="keyword">or</span> </span><br><span class="line">npm <span class="keyword">install</span> mockjs -D</span><br></pre></td></tr></table></figure>
+<h2 id="引用Mockjs"><a href="#引用Mockjs" class="headerlink" title="引用Mockjs"></a>引用Mockjs</h2><p>Mock.js暴露了一个全局的Mock对象, 我们只需要将Mock对象引入到文件中, 调用Mock对象的方法即可</p>
+<ul>
+<li>CommonJS的引入方式</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//CommonJS引入</span></span><br><span class="line"><span class="keyword">let</span> Mock = require(<span class="symbol">'mockjs</span>)</span><br><span class="line"> </span><br><span class="line"><span class="comment">//调用Mock.mock()方法模拟数据</span></span><br><span class="line"><span class="keyword">let</span> data = Mock.mock(&#123;</span><br><span class="line"><span class="symbol">'list</span>|<span class="number">1</span>-<span class="number">10</span>': [&#123;</span><br><span class="line">  <span class="symbol">'id</span>|+<span class="number">1</span>': <span class="number">1</span></span><br><span class="line">&#125;]</span><br><span class="line">&#125;);</span><br><span class="line">console.log(data);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>ES6的引入方式</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//ES6的引入方式</span></span><br><span class="line"><span class="keyword">import</span> Mock <span class="keyword">from</span> <span class="string">'mockjs'</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">let</span> data = Mock.mock(&#123;</span><br><span class="line"><span class="string">'list|1-10'</span>: [&#123;</span><br><span class="line">  <span class="string">'id|+1'</span>: <span class="number">1</span></span><br><span class="line">&#125;]</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(data);</span><br></pre></td></tr></table></figure>
+<h2 id="简单用法"><a href="#简单用法" class="headerlink" title="简单用法"></a>简单用法</h2><p>Mock对象提供了4个方法, 分别是</p>
+<ul>
+<li>Mock.mock()</li>
+<li>Mock.setup()</li>
+<li>Mock.valid</li>
+<li>Mock.toJSONSchema()</li>
+</ul>
+<p>以及一个工具库 Mock.Random. 其中我们经常使用到的就是Mock.mock()和Mock.Random.</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/04/08/Java对象的大小/">Java对象的大小</a>
         </h1>
         
@@ -254,6 +308,49 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/04/07/Dubbo/">Dubbo</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/5/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-04-07T02:10:00.000Z" itemprop="datePublished">2018-04-07</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Dubbo/">Dubbo</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Dubbo"><a href="#Dubbo" class="headerlink" title="Dubbo"></a>Dubbo</h1><p>高性能Java RPC框架.Apache Dubbo |ˈdʌbəʊ| 是一款高性能、轻量级的开源Java RPC框架，它提供了三大核心能力：面向接口的远程方法调用，智能容错和负载均衡，以及服务自动注册和发现。</p>
+<p>远程过程调用（英语：Remote Procedure Call，缩写为 RPC）是一个计算机通信协议。该协议允许运行于一台计算机的程序调用另一台计算机的子程序，而程序员无需额外地为这个交互作用编程。RPC协议假定某些传输协议的存在，如TCP或UDP，为通信程序之间携带信息数据。在OSI网络通信模型中，RPC跨越了传输层和应用层。RPC使得开发包括网络分布式多程序在内的应用程序更加容易。</p>
+<p>HTTP/TCP 都属于RPC</p>
+<h2 id="特性一览"><a href="#特性一览" class="headerlink" title="特性一览"></a>特性一览</h2><h3 id="面向接口代理的高性能RPC调用"><a href="#面向接口代理的高性能RPC调用" class="headerlink" title="面向接口代理的高性能RPC调用"></a>面向接口代理的高性能RPC调用</h3><p>提供高性能的基于代理的远程调用能力，服务以接口为粒度，为开发者屏蔽远程调用底层细节。</p>
+<h3 id="智能负载均衡"><a href="#智能负载均衡" class="headerlink" title="智能负载均衡"></a>智能负载均衡</h3><p>内置多种负载均衡策略，智能感知下游节点健康状况，显著减少调用延迟，提高系统吞吐量。</p>
+<h3 id="服务自动注册与发现"><a href="#服务自动注册与发现" class="headerlink" title="服务自动注册与发现"></a>服务自动注册与发现</h3><p>支持多种注册中心服务，服务实例上下线实时感知。</p>
+<h3 id="高度可扩展能力"><a href="#高度可扩展能力" class="headerlink" title="高度可扩展能力"></a>高度可扩展能力</h3><p>遵循微内核+插件的设计原则，所有核心能力如Protocol、Transport、Serialization被设计为扩展点，平等对待内置实现和第三方实现。</p>
+<h3 id="运行期流量调度"><a href="#运行期流量调度" class="headerlink" title="运行期流量调度"></a>运行期流量调度</h3><p>内置条件、脚本等路由策略，通过配置不同的路由规则，轻松实现灰度发布，同机房优先等功能。</p>
+<h3 id="可视化的服务治理与运维"><a href="#可视化的服务治理与运维" class="headerlink" title="可视化的服务治理与运维"></a>可视化的服务治理与运维</h3><p>提供丰富服务治理、运维工具：随时查询服务元数据、服务健康状态及调用统计，实时下发路由策略、调整配置参数。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/04/07/Dubbo深入/">Dubbo核心角色</a>
         </h1>
         
@@ -268,7 +365,7 @@
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Dubbo-分布式/">Dubbo 分布式</a>
+    <a class="article-tag-link" href="/tags/Dubbo/">Dubbo</a>
 </div>
 
 
@@ -302,49 +399,6 @@
 <li>根据负载均衡策略选出一个服务地址进行服务调用。</li>
 </ol>
 <p>监控中心：<br>统计服务的调用次数和调用时间的监控中心</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/04/07/Dubbo/">Dubbo</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/5/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-04-07T02:10:00.000Z" itemprop="datePublished">2018-04-07</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Dubbo-分布式/">Dubbo 分布式</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Dubbo"><a href="#Dubbo" class="headerlink" title="Dubbo"></a>Dubbo</h1><p>高性能Java RPC框架.Apache Dubbo |ˈdʌbəʊ| 是一款高性能、轻量级的开源Java RPC框架，它提供了三大核心能力：面向接口的远程方法调用，智能容错和负载均衡，以及服务自动注册和发现。</p>
-<p>远程过程调用（英语：Remote Procedure Call，缩写为 RPC）是一个计算机通信协议。该协议允许运行于一台计算机的程序调用另一台计算机的子程序，而程序员无需额外地为这个交互作用编程。RPC协议假定某些传输协议的存在，如TCP或UDP，为通信程序之间携带信息数据。在OSI网络通信模型中，RPC跨越了传输层和应用层。RPC使得开发包括网络分布式多程序在内的应用程序更加容易。</p>
-<p>HTTP/TCP 都属于RPC</p>
-<h2 id="特性一览"><a href="#特性一览" class="headerlink" title="特性一览"></a>特性一览</h2><h3 id="面向接口代理的高性能RPC调用"><a href="#面向接口代理的高性能RPC调用" class="headerlink" title="面向接口代理的高性能RPC调用"></a>面向接口代理的高性能RPC调用</h3><p>提供高性能的基于代理的远程调用能力，服务以接口为粒度，为开发者屏蔽远程调用底层细节。</p>
-<h3 id="智能负载均衡"><a href="#智能负载均衡" class="headerlink" title="智能负载均衡"></a>智能负载均衡</h3><p>内置多种负载均衡策略，智能感知下游节点健康状况，显著减少调用延迟，提高系统吞吐量。</p>
-<h3 id="服务自动注册与发现"><a href="#服务自动注册与发现" class="headerlink" title="服务自动注册与发现"></a>服务自动注册与发现</h3><p>支持多种注册中心服务，服务实例上下线实时感知。</p>
-<h3 id="高度可扩展能力"><a href="#高度可扩展能力" class="headerlink" title="高度可扩展能力"></a>高度可扩展能力</h3><p>遵循微内核+插件的设计原则，所有核心能力如Protocol、Transport、Serialization被设计为扩展点，平等对待内置实现和第三方实现。</p>
-<h3 id="运行期流量调度"><a href="#运行期流量调度" class="headerlink" title="运行期流量调度"></a>运行期流量调度</h3><p>内置条件、脚本等路由策略，通过配置不同的路由规则，轻松实现灰度发布，同机房优先等功能。</p>
-<h3 id="可视化的服务治理与运维"><a href="#可视化的服务治理与运维" class="headerlink" title="可视化的服务治理与运维"></a>可视化的服务治理与运维</h3><p>提供丰富服务治理、运维工具：随时查询服务元数据、服务健康状态及调用统计，实时下发路由策略、调整配置参数。</p>
 
         
     </section>
@@ -533,7 +587,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/04/01/死锁问题/">死锁问题</a>
+            <a href="/2018/04/01/Thread实现多线程二/">Thread实现多线程二</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -556,71 +610,16 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="死锁问题"><a href="#死锁问题" class="headerlink" title="死锁问题"></a>死锁问题</h1><figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">DeadLockDemo</span> &#123;</span></span><br><span class="line">    private static Object resource1 = <span class="keyword">new</span> Object();<span class="regexp">//资源 1</span></span><br><span class="line"><span class="regexp">    private static Object resource2 = new Object();//</span>资源 <span class="number">2</span></span><br><span class="line"></span><br><span class="line">    public static <span class="literal">void</span> main(String[] args) &#123;</span><br><span class="line">        <span class="keyword">new</span> Thread<span class="function"><span class="params">(() -&gt; &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">            synchronized (resource1) &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                System.out.println(Thread.currentThread() + <span class="string">"get resource1"</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">try</span> &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                    Thread.sleep(<span class="number">1000</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                    e.printStackTrace();</span></span></span><br><span class="line"><span class="function"><span class="params">                &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">                System.out.println(Thread.currentThread() + <span class="string">"waiting get resource2"</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                synchronized (resource2) &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                    System.out.println(Thread.currentThread() + <span class="string">"get resource2"</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">            &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">        &#125;, <span class="string">"线程 1"</span>)</span>.<span class="title">start</span><span class="params">()</span>;</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">        <span class="title">new</span> <span class="title">Thread</span><span class="params">(() -&gt; &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">            synchronized (resource2) &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                System.out.println(Thread.currentThread() + <span class="string">"get resource2"</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">try</span> &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                    Thread.sleep(<span class="number">1000</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                    e.printStackTrace();</span></span></span><br><span class="line"><span class="function"><span class="params">                &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">                System.out.println(Thread.currentThread() + <span class="string">"waiting get resource1"</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                synchronized (resource1) &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                    System.out.println(Thread.currentThread() + <span class="string">"get resource1"</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">            &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">        &#125;, <span class="string">"线程 2"</span>)</span>.<span class="title">start</span><span class="params">()</span>;</span></span><br><span class="line"><span class="function">    &#125;</span></span><br><span class="line"><span class="function">&#125;</span></span><br></pre></td></tr></table></figure>
-<p>产生死锁必须具备以下四个条件：</p>
-<ul>
-<li>互斥条件：该资源任意一个时刻只由一个线程占用</li>
-<li>请求与保持条件：一个进程因请求资源而阻塞时，对已获得的资源保持不放</li>
-<li>不剥夺条件:线程已获得的资源在末使用完之前不能被其他线程强行剥夺，只有自己使用完毕后才释放资源</li>
-<li>循环等待条件:若干进程之间形成一种头尾相接的循环等待资源关系</li>
-</ul>
-<h2 id="如何避免线程死锁"><a href="#如何避免线程死锁" class="headerlink" title="如何避免线程死锁?"></a>如何避免线程死锁?</h2><p>我们只要破坏产生死锁的四个条件中的其中一个就可以了。</p>
-<p>破坏互斥条件</p>
-<p>这个条件我们没有办法破坏，因为我们用锁本来就是想让他们互斥的（临界资源需要互斥访问）。</p>
-<p>破坏请求与保持条件</p>
-<p>一次性申请所有的资源。</p>
-<p>破坏不剥夺条件</p>
-<p>占用部分资源的线程进一步申请其他资源时，如果申请不到，可以主动释放它占有的资源。</p>
-<p>破坏循环等待条件</p>
-<p>靠按序申请资源来预防。按某一顺序申请资源，释放资源则反序释放。破坏循环等待条件。</p>
-<blockquote>
-<p>使用多线程的时候，一种非常简单的避免死锁的方式就是：指定获取锁的顺序，并强制线程按照指定的顺序获取锁。因此，如果所有的线程都是以同样的顺序加锁和释放锁，就不会出现死锁了。</p>
-</blockquote>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/04/01/Thread start() 和  run().md/">Thread start() 和 run()</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/5/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-04-01T02:10:00.000Z" itemprop="datePublished">2018-04-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Thread-start-和-run"><a href="#Thread-start-和-run" class="headerlink" title="Thread start() 和  run()"></a>Thread start() 和  run()</h1><ol>
-<li>start 和 run 方法解释：</li>
-</ol>
-<p>1） start：<br>用start方法来启动线程，真正实现了多线程运行，这时无需等待run方法体代码执行完毕而直接继续执行下面的代码。通过调用Thread类的start()方法来启动一个线程，这时此线程处于就绪（可运行）状态，并没有运行，一旦得到cpu时间片，就开始执行run()方法，这里方法 run()称为线程体，它包含了要执行的这个线程的内容，Run方法运行结束，此线程随即终止。</p>
-<p>2） run：<br>run()方法只是类的一个普通方法而已，如果直接调用Run方法，程序中依然只有主线程这一个线程，其程序执行路径还是只有一条，还是要顺序执行，还是要等待run方法体执行完毕后才可继续执行下面的代码，这样就没有达到写线程的目的。总结：调用start方法方可启动线程，而run方法只是thread的一个普通方法调用，还是在主线程里执行。这两个方法应该都比较熟悉，把需要并行处理的代码放在run()方法中，start()方法启动线程将自动调用 run()方法，这是由jvm的内存机制规定的。并且run()方法必须是public访问权限，返回值类型为void。</p>
-<p>Java 的线程是通过java.lang.Thread类来实现的。VM启动时会有一个由主方法所定义的线程。可以通过创建Thread的实例来创建新的线程。每个线程都是通过某个特定Thread对象所对应的方法run（）来完成其操作的，方法run()称为线程体。通过调用Thread类的start()方法来启动一个线程。</p>
-<p>在Java 当中，线程通常都有五种状态，创建、就绪、运行、阻塞和死亡。<br>第一是创建状态。在生成线程对象，并没有调用该对象的start方法，这是线程处于创建状态。<br>第二是就绪状态。当调用了线程对象的start方法之后，该线程就进入了就绪状态，但是此时线程调度程序还没有把该线程设置为当前线程，此时处于就绪状态。在线程运行之后，从等待或者睡眠中回来之后，也会处于就绪状态。<br>第三是运行状态。线程调度程序将处于就绪状态的线程设置为当前线程，此时线程就进入了运行状态，开始运行run函数当中的代码。<br>第四是阻塞状态。线程正在运行的时候，被暂停，通常是为了等待某个时间的发生(比如说某项资源就绪)之后再继续运行。sleep,suspend，wait等方法都可以导致线程阻塞。<br>第五是死亡状态。如果一个线程的run方法执行结束或者调用stop方法后，该线程就会死亡。对于已经死亡的线程，无法再使用start方法令其进入就绪。</p>
-<blockquote>
-<p>调用start（）后，线程会被放到等待队列，等待CPU调度，并不一定要马上开始执行，只是将这个线程置于可动行状态。然后通过JVM，线程Thread会调用run（）方法，执行本线程的线程体。先调用start后调用run，这么麻烦，为了不直接调用run？就是为了实现多线程的优点，没这个start不行。</p>
-</blockquote>
-<p>1.start（）方法来启动线程，真正实现了多线程运行。这时无需等待run方法体代码执行完毕，可以直接继续执行下面的代码；通过调用Thread类的start()方法来启动一个线程， 这时此线程是处于就绪状态， 并没有运行。 然后通过此Thread类调用方法run()来完成其运行操作的， 这里方法run()称为线程体，它包含了要执行的这个线程的内容， Run方法运行结束， 此线程终止。然后CPU再调度其它线程。<br>2.run（）方法当作普通方法的方式调用。程序还是要顺序执行，要等待run方法体执行完毕后，才可继续执行下面的代码；程序中只有主线程——这一个线程，其程序执行路径还是只有一条， 这样就没有达到写线程的目的。<br>记住：多线程就是分时利用CPU，宏观上让所有线程一起执行 ，也叫并发。</p>
+        <h1 id="Thread实现多线程二"><a href="#Thread实现多线程二" class="headerlink" title="Thread实现多线程二"></a>Thread实现多线程二</h1><p>接上文，关系到线程运行状态的几个方法：</p>
+<p>4）yield方法</p>
+<p>调用yield方法会让当前线程交出CPU权限，让CPU去执行其他的线程。它跟sleep方法类似，同样不会释放锁。但是yield不能控制具体的交出CPU的时间，另外，yield方法只能让拥有相同优先级的线程有获取CPU执行时间的机会。</p>
+<p>注意，调用yield方法并不会让线程进入阻塞状态，而是让线程重回就绪状态，它只需要等待重新获取CPU执行时间，这一点是和sleep方法不一样的。</p>
+<p>5）join方法</p>
+<p>join方法有三个重载版本：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">join</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">join</span><span class="params">(long millis)</span></span>     <span class="comment">//参数为毫秒</span></span><br><span class="line"><span class="function"><span class="title">join</span><span class="params">(long millis,int nanoseconds)</span></span>    <span class="comment">//第一参数为毫秒，第二个参数为纳秒</span></span><br></pre></td></tr></table></figure></p>
+<p>假如在main线程中，调用thread.join方法，则main方法会等待thread线程执行完毕或者等待一定的时间。如果调用的是无参join方法，则等待thread执行完毕，如果调用的是指定了时间参数的join方法，则等待一定的事件。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.<span class="type">IOException</span>;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">ThreadJoin</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	 public static void main(<span class="type">String</span>[] args) <span class="keyword">throws</span> <span class="type">IOException</span>  &#123;</span><br><span class="line">	        <span class="type">System</span>.out.println(<span class="string">"进入线程"</span> + <span class="type">Thread</span>.currentThread().getName());</span><br><span class="line">	        <span class="type">ThreadJoin</span> test = <span class="keyword">new</span> <span class="type">ThreadJoin</span>();</span><br><span class="line">	        <span class="type">MyThread</span> thread1 = test.<span class="keyword">new</span> <span class="type">MyThread</span>();</span><br><span class="line">	        <span class="comment">//线程开始</span></span><br><span class="line">	        thread1.start();</span><br><span class="line">	        <span class="keyword">try</span> &#123;</span><br><span class="line">	            <span class="type">System</span>.out.println(<span class="string">"线程 "</span> + <span class="type">Thread</span>.currentThread().getName() + <span class="string">"等待"</span>);</span><br><span class="line">	            thread1.join();<span class="comment">//使主线程进入等待，其他线程执行完毕</span></span><br><span class="line">	            <span class="type">System</span>.out.println(<span class="string">"线程"</span> + <span class="type">Thread</span>.currentThread().getName() + <span class="string">"继续执行"</span>);</span><br><span class="line">	        &#125; <span class="keyword">catch</span> (<span class="type">InterruptedException</span> e) &#123;</span><br><span class="line">	            <span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">	            e.printStackTrace();</span><br><span class="line">	        &#125;</span><br><span class="line">    &#125; </span><br><span class="line">	     </span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        public void run() &#123;</span><br><span class="line">            <span class="type">System</span>.out.println(<span class="string">"进入线程"</span> + <span class="type">Thread</span>.currentThread().getName());</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="type">Thread</span>.currentThread().sleep(<span class="number">5000</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (<span class="type">InterruptedException</span> e) &#123;</span><br><span class="line">                <span class="comment">// <span class="doctag">TODO:</span> handle exception</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="type">System</span>.out.println(<span class="string">"线程"</span> + <span class="type">Thread</span>.currentThread().getName()+<span class="string">"执行完毕"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>执行结果 ：<br><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">进入线程main</span><br><span class="line">线程 main等待</span><br><span class="line">进入线程<span class="keyword">Thread</span>-<span class="number">0</span></span><br><span class="line">线程<span class="keyword">Thread</span>-<span class="number">0</span>执行完毕</span><br><span class="line">线程main继续执行</span><br></pre></td></tr></table></figure></p>
+<p>可以看出，当调用thread1.join()方法后，main线程会进入等待，然后等待thread1执行完之后再继续执行。</p>
+<p>实际上调用join方法是调用了Object的wait方法 。</p>
 
         
     </section>
@@ -630,7 +629,7 @@
 
 
 <nav class="page-nav">
-    <a class="extend prev" rel="prev" href="/page/4/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/6/">下一页 &raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/4/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/6/">下一页 &raquo;</a>
 </nav>
 
 
