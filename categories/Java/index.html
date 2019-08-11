@@ -131,6 +131,70 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2019/08/07/Java基础面试题五/">Java基础面试题五</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-08-07T14:37:25.985Z" itemprop="datePublished">2019-08-07</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/面试题/">面试题</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>Java基础面试题五</p>
+<blockquote>
+<p>Q1: &amp; 和 &amp;&amp; 的区别</p>
+</blockquote>
+<p>&amp;是位运算符，表示按位与运算，&amp;&amp;是逻辑运算符，表示逻辑与（and）。</p>
+<blockquote>
+<p>Q2: final, finally, finalize的区别</p>
+</blockquote>
+<ul>
+<li>final 用于声明属性，方法和类，分别表示属性不可变，方法不可覆盖，类不可继承。 </li>
+<li>finally,异常处理语句结构的一部分，表示总是执行。 </li>
+<li>finalize是Object类的一个方法，垃圾收集器执行的时候会调用被回收对象的此方法，可以覆盖此方法提供垃圾收集时的其他资源回收，例如关闭文件等。</li>
+</ul>
+<blockquote>
+<p>Q3: sleep() 和 wait() 有什么区别? </p>
+</blockquote>
+<p>sleep是线程类（Thread）的方法，导致此线程暂停执行指定时间，给执行机会给其他线程，但是监控状态依然保持，到时后会自动恢复。调用sleep不会释放对象锁。 </p>
+<p>wait是Object类的方法，对此对象调用wait方法导致本线程放弃对象锁，进入等待此对象的等待锁定池，只有针对此对象发出notify方法（或not ifyAll）后本线程才进入对象锁定池准备获得对象锁进入运行状态。</p>
+<blockquote>
+<p>Q4: error和exception有什么区别? </p>
+</blockquote>
+<ul>
+<li>error:<br>表示恢复不是不可能但很困难的情况下的一种严重问题。比如说内存溢出。不可能指望程序能处理这样的情况。 </li>
+<li>exception: 表示一种设计或实现问题。也就是说，它表示如果程序运行正常，从不会发生的情况。</li>
+</ul>
+<blockquote>
+<p>Q5: GC是什么? 为什么要有GC? </p>
+</blockquote>
+<p>GC是垃圾收集的意思（Gabage Collection）,内存处理是编程人员容易出现问题的地方，忘记或者错误的内存回收会导致程序或系统的不稳定甚至崩溃，Java提供的GC功能可以自动监测对象是否超过作用域从而达到自动回收内存的目的，Java语言没有提供释放已分配内存的显示操作方法。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">要请求垃圾收集，可以调用下面的方法之一：  </span><br><span class="line"><span class="selector-tag">System</span><span class="selector-class">.gc</span>() </span><br><span class="line"><span class="selector-tag">Runtime</span><span class="selector-class">.getRuntime</span>()<span class="selector-class">.gc</span>()</span><br></pre></td></tr></table></figure></p>
+<p>当然，如果需要，程序员可以在Java程序中显式地使用System.gc()来强制进行一次立即的内存清理。<br>因为显式声明是做堆内存全扫描，也就是FullGC，是需要停止所有的活动的（Stop The World Collection），你的应用能承受这个吗？而其显示调用System.gc()只是给虚拟机一个建议，不一定会执行，因为System.gc()在一个优先级很低的线程中执行。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2019/08/07/Java基础面试题四/">Java基础面试题四</a>
         </h1>
         
@@ -145,7 +209,7 @@
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
+    <a class="article-tag-link" href="/tags/面试题/">面试题</a>
 </div>
 
 
@@ -206,70 +270,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/08/07/Java基础面试题五/">Java基础面试题五</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2019-08-07T14:37:25.985Z" itemprop="datePublished">2019-08-07</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>Java基础面试题五</p>
-<blockquote>
-<p>Q1: &amp; 和 &amp;&amp; 的区别</p>
-</blockquote>
-<p>&amp;是位运算符，表示按位与运算，&amp;&amp;是逻辑运算符，表示逻辑与（and）。</p>
-<blockquote>
-<p>Q2: final, finally, finalize的区别</p>
-</blockquote>
-<ul>
-<li>final 用于声明属性，方法和类，分别表示属性不可变，方法不可覆盖，类不可继承。 </li>
-<li>finally,异常处理语句结构的一部分，表示总是执行。 </li>
-<li>finalize是Object类的一个方法，垃圾收集器执行的时候会调用被回收对象的此方法，可以覆盖此方法提供垃圾收集时的其他资源回收，例如关闭文件等。</li>
-</ul>
-<blockquote>
-<p>Q3: sleep() 和 wait() 有什么区别? </p>
-</blockquote>
-<p>sleep是线程类（Thread）的方法，导致此线程暂停执行指定时间，给执行机会给其他线程，但是监控状态依然保持，到时后会自动恢复。调用sleep不会释放对象锁。 </p>
-<p>wait是Object类的方法，对此对象调用wait方法导致本线程放弃对象锁，进入等待此对象的等待锁定池，只有针对此对象发出notify方法（或not ifyAll）后本线程才进入对象锁定池准备获得对象锁进入运行状态。</p>
-<blockquote>
-<p>Q4: error和exception有什么区别? </p>
-</blockquote>
-<ul>
-<li>error:<br>表示恢复不是不可能但很困难的情况下的一种严重问题。比如说内存溢出。不可能指望程序能处理这样的情况。 </li>
-<li>exception: 表示一种设计或实现问题。也就是说，它表示如果程序运行正常，从不会发生的情况。</li>
-</ul>
-<blockquote>
-<p>Q5: GC是什么? 为什么要有GC? </p>
-</blockquote>
-<p>GC是垃圾收集的意思（Gabage Collection）,内存处理是编程人员容易出现问题的地方，忘记或者错误的内存回收会导致程序或系统的不稳定甚至崩溃，Java提供的GC功能可以自动监测对象是否超过作用域从而达到自动回收内存的目的，Java语言没有提供释放已分配内存的显示操作方法。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">要请求垃圾收集，可以调用下面的方法之一：  </span><br><span class="line"><span class="selector-tag">System</span><span class="selector-class">.gc</span>() </span><br><span class="line"><span class="selector-tag">Runtime</span><span class="selector-class">.getRuntime</span>()<span class="selector-class">.gc</span>()</span><br></pre></td></tr></table></figure></p>
-<p>当然，如果需要，程序员可以在Java程序中显式地使用System.gc()来强制进行一次立即的内存清理。<br>因为显式声明是做堆内存全扫描，也就是FullGC，是需要停止所有的活动的（Stop The World Collection），你的应用能承受这个吗？而其显示调用System.gc()只是给虚拟机一个建议，不一定会执行，因为System.gc()在一个优先级很低的线程中执行。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2019/08/07/Java基础面试题三/">Java基础面试题三</a>
         </h1>
         
@@ -284,7 +284,7 @@
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
+    <a class="article-tag-link" href="/tags/面试题/">面试题</a>
 </div>
 
 
@@ -388,7 +388,7 @@
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
+    <a class="article-tag-link" href="/tags/面试题/">面试题</a>
 </div>
 
 
@@ -429,7 +429,7 @@
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
+    <a class="article-tag-link" href="/tags/面试题/">面试题</a>
 </div>
 
 
@@ -564,6 +564,48 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/06/03/Spring Boot/">Spring Boot 介绍</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-06-03T04:00:00.000Z" itemprop="datePublished">2018-06-03</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Spring/">Spring</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h2 id="Spring-Boot-介绍"><a href="#Spring-Boot-介绍" class="headerlink" title="Spring Boot 介绍"></a>Spring Boot 介绍</h2><p>Spring Boot 提供了一组工具只需要极少的配置就可以快速的构建并启动基于 Spring 的应用程序。解决了传统 Spring 开发需要配置大量配置文件的痛点，同时 Spring Boot 对于第三方库设置了合理的默认值，可以快速的构建起应用程序。当然 Spring Boot 也可以轻松的自定义各种配置，无论是在开发的初始阶段还是投入生成的后期阶段。</p>
+<h2 id="Spring-Boot-优点"><a href="#Spring-Boot-优点" class="headerlink" title="Spring Boot 优点"></a>Spring Boot 优点</h2><p>1.快速的创建可以独立运行的 Spring 项目以及与主流框架的集成。</p>
+<p>2.使用嵌入式的 Servlet 容器，用于不需要打成war包。</p>
+<p>3.使用很多的启动器（Starters）自动依赖与版本控制。</p>
+<p>4.大量的自动化配置，简化了开发，当然，我们也可以修改默认值。</p>
+<p>5.不需要配置 XML 文件，无代码生成，开箱即用。</p>
+<p>6.准生产环境的运行时应用监控。</p>
+<p>7.与云计算的天然集成。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/06/03/Spring源码/">Spring源码</a>
         </h1>
         
@@ -598,48 +640,6 @@
 <p>2.BeanDefinitionRegistry的作用，源码分析</p>
 <p>3.BeanNameGenerator如何改变beanName的生成策略</p>
 <p>4.BeanPostProcessor在bean实例化过程中可以做什么？经典应用场景有哪些？</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/06/03/Spring Boot/">Spring Boot 介绍</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-06-03T04:00:00.000Z" itemprop="datePublished">2018-06-03</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Spring/">Spring</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h2 id="Spring-Boot-介绍"><a href="#Spring-Boot-介绍" class="headerlink" title="Spring Boot 介绍"></a>Spring Boot 介绍</h2><p>Spring Boot 提供了一组工具只需要极少的配置就可以快速的构建并启动基于 Spring 的应用程序。解决了传统 Spring 开发需要配置大量配置文件的痛点，同时 Spring Boot 对于第三方库设置了合理的默认值，可以快速的构建起应用程序。当然 Spring Boot 也可以轻松的自定义各种配置，无论是在开发的初始阶段还是投入生成的后期阶段。</p>
-<h2 id="Spring-Boot-优点"><a href="#Spring-Boot-优点" class="headerlink" title="Spring Boot 优点"></a>Spring Boot 优点</h2><p>1.快速的创建可以独立运行的 Spring 项目以及与主流框架的集成。</p>
-<p>2.使用嵌入式的 Servlet 容器，用于不需要打成war包。</p>
-<p>3.使用很多的启动器（Starters）自动依赖与版本控制。</p>
-<p>4.大量的自动化配置，简化了开发，当然，我们也可以修改默认值。</p>
-<p>5.不需要配置 XML 文件，无代码生成，开箱即用。</p>
-<p>6.准生产环境的运行时应用监控。</p>
-<p>7.与云计算的天然集成。</p>
 
         
     </section>
@@ -714,7 +714,7 @@
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
+    <a class="article-tag-link" href="/tags/Tomcat/">Tomcat</a>
 </div>
 
 

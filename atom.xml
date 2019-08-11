@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wxzhongwang.github.io/"/>
-  <updated>2019-08-07T15:39:29.233Z</updated>
+  <updated>2019-08-11T04:59:46.312Z</updated>
   <id>https://wxzhongwang.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://wxzhongwang.github.io/2019/08/07/NOSQL/"/>
     <id>https://wxzhongwang.github.io/2019/08/07/NOSQL/</id>
     <published>2019-08-07T14:59:05.594Z</published>
-    <updated>2019-08-07T15:39:29.233Z</updated>
+    <updated>2019-08-11T04:59:46.312Z</updated>
     
     <content type="html"><![CDATA[<h1 id="NOSQL"><a href="#NOSQL" class="headerlink" title="NOSQL"></a>NOSQL</h1><p>全称：NoSQL = Not Only SQL</p><p>泛指非关系型数据库</p><p>四大分类：</p><p>1）键值(Key-Value)存储数据库</p><p>Key/value模型对于IT系统来说的优势在于简单、易部署。<br>但是如果DBA只对部分值进行查询或更新的时候，Key/value就显得效率低下了。<br>举例如：Redis.</p><p>2）列存储数据库</p><p>这部分数据库通常是用来应对分布式存储的海量数据。<br>键仍然存在，但是它们的特点是指向了多个列。这些列是由列家族来安排的。<br>如：Cassandra, HBase, Riak.</p><p>3）文档型</p><p>文档型数据库的灵感是来自于Lotus Notes办公软件的，而且它同第一种键值存储相类似。<br>该类型的数据模型是版本化的文档，半结构化的文档以特定的格式存储，比如JSON。<br>文档型数据库可以看作是键值数据库的升级版，允许之间嵌套键值。<br>而且文档型数据库比键值数据库的查询效率更高。如：CouchDB, MongoDb.<br>国内也有文档型数据库SequoiaDB，已经开源。</p><p>4）图形(Graph)数据库</p><p>图形结构的数据库同其他行列以及刚性结构的SQL数据库不同，它是使用灵活的图形模型，并且能够扩展到多个服务器上。</p><p>NoSQL数据库没有标准的查询语言(SQL)，因此进行数据库查询需要制定数据模型。<br>许多NoSQL数据库都有REST式的数据接口或者查询API。</p><p>我们总结NoSQL数据库在以下的这几种情况下比较适用：</p><ol><li>数据模型比较简单；</li><li>需要灵活性更强的IT系统；</li><li>对数据库性能要求较高；</li><li>不需要高度的数据一致性；</li><li>对于给定key，比较容易映射复杂值的环境。</li></ol>]]></content>
     
@@ -41,27 +41,6 @@
     
     
       <category term="NOSQL" scheme="https://wxzhongwang.github.io/tags/NOSQL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title></title>
-    <link href="https://wxzhongwang.github.io/2019/08/07/Java%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/"/>
-    <id>https://wxzhongwang.github.io/2019/08/07/Java单例模式/</id>
-    <published>2019-08-07T14:56:58.577Z</published>
-    <updated>2019-08-07T14:56:59.296Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h1><h2 id="什么是单例模式"><a href="#什么是单例模式" class="headerlink" title="什么是单例模式"></a>什么是单例模式</h2><p>因程序需要，有时我们只需要某个类同时保留一个对象，不希望有更多对象，此时，我们则应考虑单例模式的设计。</p><h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><ol><li><p>单例模式只能有一个实例。</p></li><li><p>单例类必须创建自己的唯一实例。</p></li><li><p>单例类必须向其他对象提供这一实例。</p></li></ol><h2 id="单例模式VS静态类"><a href="#单例模式VS静态类" class="headerlink" title="单例模式VS静态类"></a>单例模式VS静态类</h2><p>在知道了什么是单例模式后，我想你一定会想到静态类，“既然只使用一个对象，为何不干脆使用静态类？”，这里我会将单例模式和静态类进行一个比较。</p><ol><li><p>单例可以继承和被继承，方法可以被override，而静态方法不可以。</p></li><li><p>静态方法中产生的对象会在执行后被释放，进而被GC清理，不会一直存在于内存中。</p></li><li><p>静态类会在第一次运行时初始化，单例模式可以有其他的选择，即可以延迟加载。</p></li><li><p>基于2， 3条，由于单例对象往往存在于DAO层（例如sessionFactory），如果反复的初始化和释放，则会占用很多资源，而使用单例模式将其常驻于内存可以更加节约资源。</p></li><li><p>静态方法有更高的访问效率。</p></li><li><p>单例模式很容易被测试。</p></li></ol><p>几个关于静态类的误解：</p><ul><li>误解一：静态方法常驻内存而实例方法不是。</li></ul><blockquote><p>实际上，特殊编写的实例方法可以常驻内存，而静态方法需要不断初始化和释放。</p></blockquote><ul><li>误解二：静态方法在堆(heap)上，实例方法在栈(stack)上。</li></ul><blockquote><p>实际上，都是加载到特殊的不可写的代码内存区域中。</p></blockquote><p>静态类和单例模式情景的选择：</p><p>情景一：不需要维持任何状态，仅仅用于全局访问，此时更适合使用静态类。</p><p>情景二：需要维持一些特定的状态，此时更适合使用单例模式。</p><h2 id="单例模式的实现"><a href="#单例模式的实现" class="headerlink" title="单例模式的实现"></a>单例模式的实现</h2><h3 id="1-懒汉模式（线程不安全）"><a href="#1-懒汉模式（线程不安全）" class="headerlink" title="1. 懒汉模式（线程不安全）"></a>1. 懒汉模式（线程不安全）</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class SingletonDemo &#123;</span><br><span class="line">    private static SingletonDemo instance;</span><br><span class="line">    private SingletonDemo()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    public static SingletonDemo getInstance()&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="attribute">instance</span>==null)&#123;</span><br><span class="line">            <span class="attribute">instance</span>=new SingletonDemo();</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>如上，通过提供一个静态的对象instance，利用private权限的构造方法和getInstance()方法来给予访问者一个单例。</p><p>缺点是，没有考虑到线程安全，可能存在多个访问者同时访问，并同时构造了多个对象的问题。</p><p>之所以叫做懒汉模式，主要是因为此种方法可以非常明显的lazy loading。</p><p>针对懒汉模式线程不安全的问题，我们自然想到了，在getInstance()方法前加锁，于是就有了第二种实现。</p><h3 id="2-懒汉模式二-（线程安全）"><a href="#2-懒汉模式二-（线程安全）" class="headerlink" title="2. 懒汉模式二 （线程安全）"></a>2. 懒汉模式二 （线程安全）</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class SingletonDemo &#123;</span><br><span class="line">    private static SingletonDemo instance;</span><br><span class="line">    private SingletonDemo()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    public static synchronized SingletonDemo getInstance()&#123;</span><br><span class="line">        <span class="keyword">if</span>(instance == <span class="literal">null</span>)&#123;</span><br><span class="line">           <span class="built_in"> instance </span>= new SingletonDemo();</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>然而并发其实是一种特殊情况，大多时候这个锁占用的额外资源都浪费了，这种打补丁方式写出来的结构效率很低。</p><h3 id="3-饿汉模式"><a href="#3-饿汉模式" class="headerlink" title="3. 饿汉模式"></a>3. 饿汉模式</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class SingletonDemo &#123;</span><br><span class="line">    private static SingletonDemo<span class="built_in"> instance </span>= new SingletonDemo();</span><br><span class="line">    private SingletonDemo()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    public static SingletonDemo getInstance()&#123;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>直接在运行这个类的时候进行一次loading，之后直接访问。显然，这种方法没有起到lazy loading的效果，考虑到前面提到的和静态类的对比，这种方法只比静态类多了一个内存常驻而已。</p><h3 id="4-静态类内部加载"><a href="#4-静态类内部加载" class="headerlink" title="4. 静态类内部加载"></a>4. 静态类内部加载</h3><figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public class SingletonDemo &#123;</span><br><span class="line">   <span class="keyword"> private</span><span class="keyword"> static</span> class SingletonHolder&#123;</span><br><span class="line">       <span class="keyword"> private</span><span class="keyword"> static</span> SingletonDemo<span class="built_in"> instance </span>=<span class="built_in"> new </span>SingletonDemo();</span><br><span class="line">    &#125;</span><br><span class="line">   <span class="keyword"> private</span> SingletonDemo()&#123;</span><br><span class="line">        System.out.println(<span class="string">"Singleton has loaded"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">   <span class="keyword"> public</span><span class="keyword"> static</span> SingletonDemo getInstance()&#123;</span><br><span class="line">       <span class="built_in"> return </span>SingletonHolder.instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>使用内部类的好处是，静态内部类不会在单例加载时就加载，而是在调用getInstance()方法时才进行加载，达到了类似懒汉模式的效果，而这种方法又是线程安全的。</p><h3 id="5-枚举方法"><a href="#5-枚举方法" class="headerlink" title="5. 枚举方法"></a>5. 枚举方法</h3><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">SingletonDemo</span>&#123;</span></span><br><span class="line">    INSTANCE;</span><br><span class="line">    public void otherMethods()&#123;</span><br><span class="line">        System.<span class="keyword">out</span>.println(<span class="string">"Something"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">Hello</span> &#123;</span></span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">        SingletonDemo.INSTANCE.otherMethods();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>提倡的方式，在我看来简直是来自神的写法。解决了以下三个问题：</p><ul><li>(1)自由序列化。</li><li>(2)保证只有一个实例。</li><li>(3)线程安全。</li></ul><p>这种充满美感的代码真的已经终结了其他一切实现方法了。</p><h3 id="6-双重校验锁法"><a href="#6-双重校验锁法" class="headerlink" title="6. 双重校验锁法"></a>6. 双重校验锁法</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class SingletonDemo &#123;</span><br><span class="line">    private static SingletonDemo instance;</span><br><span class="line">    private SingletonDemo()&#123;</span><br><span class="line">        System.out.println(<span class="string">"Singleton has loaded"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    public static SingletonDemo getInstance()&#123;</span><br><span class="line">        <span class="keyword">if</span>(instance == <span class="literal">null</span>)&#123;</span><br><span class="line">            synchronized (SingletonDemo.class)&#123;</span><br><span class="line">                <span class="keyword">if</span>(instance == <span class="literal">null</span>)&#123;</span><br><span class="line">                   <span class="built_in"> instance </span>= new SingletonDemo();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>接下来我解释一下在并发时，双重校验锁法会有怎样的情景：</p><p>STEP 1. 线程A访问getInstance()方法，因为单例还没有实例化，所以进入了锁定块。</p><p>STEP 2. 线程B访问getInstance()方法，因为单例还没有实例化，得以访问接下来代码块，而接下来代码块已经被线程1锁定。</p><p>STEP 3. 线程A进入下一判断，因为单例还没有实例化，所以进行单例实例化，成功实例化后退出代码块，解除锁定。</p><p>STEP 4. 线程B进入接下来代码块，锁定线程，进入下一判断，因为已经实例化，退出代码块，解除锁定。</p><p>STEP 5. 线程A初始化并获取到了单例实例并返回，线程B获取了在线程A中初始化的单例。</p><p>理论上双重校验锁法是线程安全的，并且，这种方法实现了lazyloading。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;单例模式&quot;&gt;&lt;a href=&quot;#单例模式&quot; class=&quot;headerlink&quot; title=&quot;单例模式&quot;&gt;&lt;/a&gt;单例模式&lt;/h1&gt;&lt;h2 id=&quot;什么是单例模式&quot;&gt;&lt;a href=&quot;#什么是单例模式&quot; class=&quot;headerlink&quot; title=&quot;什么是
-      
-    
-    </summary>
-    
     
   </entry>
   
@@ -116,52 +95,32 @@
   </entry>
   
   <entry>
-    <title>NodeJs 插件</title>
-    <link href="https://wxzhongwang.github.io/2019/08/07/NodeJs%E7%9B%B8%E5%85%B3%E6%8F%92%E4%BB%B6/"/>
-    <id>https://wxzhongwang.github.io/2019/08/07/NodeJs相关插件/</id>
-    <published>2019-08-07T14:37:26.002Z</published>
-    <updated>2019-06-27T11:05:06.000Z</updated>
+    <title>Java基础面试题五</title>
+    <link href="https://wxzhongwang.github.io/2019/08/07/Java%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95%E9%A2%98%E4%BA%94/"/>
+    <id>https://wxzhongwang.github.io/2019/08/07/Java基础面试题五/</id>
+    <published>2019-08-07T14:37:25.985Z</published>
+    <updated>2019-08-11T04:55:45.764Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="lodash"><a href="#lodash" class="headerlink" title="lodash"></a>lodash</h3><p>采用延迟计算，意味着我们的链式方法在显式或者隐式的value()调用之前是不会执行的，<br>因此lodash可以进行shortcut（捷径） fusion（融合）这样的优化，<br>通过合并链式大大降低迭代的次数，从而大大提升其执行性能。</p><h3 id="cors"><a href="#cors" class="headerlink" title="cors"></a>cors</h3><p>实现跨域的功能</p><h3 id="helmet"><a href="#helmet" class="headerlink" title="helmet"></a>helmet</h3><p>是一个保护Node.JS应用的安全项目<br>一些著名的对Web攻击有XSS跨站脚本， 脚本注入 clickjacking<br>以及各种非安全的请求等对Node.js的Web应用构成各种威胁，<br>使用Helmet能帮助你的应用避免这些攻击。</p><h3 id="csurf"><a href="#csurf" class="headerlink" title="csurf"></a>csurf</h3><p>跨站请求伪造</p><h3 id="colors"><a href="#colors" class="headerlink" title="colors"></a>colors</h3><p>终端着色插件</p><h3 id="express-validator"><a href="#express-validator" class="headerlink" title="express-validator"></a>express-validator</h3><p>校验插件<br>npm install –save express-validator</p><h3 id="uuid-GUID插件"><a href="#uuid-GUID插件" class="headerlink" title="uuid GUID插件"></a>uuid GUID插件</h3><p>npm install –save node-uuid</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h3 id=&quot;lodash&quot;&gt;&lt;a href=&quot;#lodash&quot; class=&quot;headerlink&quot; title=&quot;lodash&quot;&gt;&lt;/a&gt;lodash&lt;/h3&gt;&lt;p&gt;采用延迟计算，意味着我们的链式方法在显式或者隐式的value()调用之前是不会执行的，&lt;br&gt;因此lodas
-      
-    
-    </summary>
-    
-      <category term="NodeJs" scheme="https://wxzhongwang.github.io/categories/NodeJs/"/>
-    
-    
-      <category term="NodeJs" scheme="https://wxzhongwang.github.io/tags/NodeJs/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>NodeJs基础</title>
-    <link href="https://wxzhongwang.github.io/2019/08/07/NodeJs%E5%9F%BA%E7%A1%80/"/>
-    <id>https://wxzhongwang.github.io/2019/08/07/NodeJs基础/</id>
-    <published>2019-08-07T14:37:26.001Z</published>
-    <updated>2019-06-27T11:05:06.000Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="NodeJs基础"><a href="#NodeJs基础" class="headerlink" title="NodeJs基础"></a>NodeJs基础</h1><h2 id="Node-核心"><a href="#Node-核心" class="headerlink" title="Node 核心"></a>Node 核心</h2><p>Node核心： </p><ul><li>非阻塞；　　</li><li>单线程；　　</li><li>事件驱动。</li></ul><h2 id="NodeJs回调"><a href="#NodeJs回调" class="headerlink" title="NodeJs回调"></a>NodeJs回调</h2><p>回调函数：异步编程依托于回调来实现，但不能说使用了回调后程序就异步化了。<br>Node 使用了大量的回调函数，Node所有API都支持回调函数。未使用回调函数可能会产生阻塞。</p><h3 id="阻塞："><a href="#阻塞：" class="headerlink" title="阻塞："></a>阻塞：</h3><figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">var</span> fs = <span class="keyword">require</span>(<span class="string">"fs"</span>);</span><br><span class="line"><span class="built_in">var</span> <span class="built_in">data</span> = fs.readFileSync(<span class="string">'input.txt'</span>);</span><br><span class="line">console.<span class="keyword">log</span>(<span class="built_in">data</span>.toString());</span><br><span class="line">console.<span class="keyword">log</span>(<span class="string">"程序执行结束!"</span>);</span><br></pre></td></tr></table></figure><h3 id="非阻塞："><a href="#非阻塞：" class="headerlink" title="非阻塞："></a>非阻塞：</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">"fs"</span>);</span><br><span class="line"></span><br><span class="line">fs.readFile(<span class="string">'input.txt'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, data</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (err) <span class="keyword">return</span> <span class="built_in">console</span>.error(err);</span><br><span class="line">    <span class="built_in">console</span>.log(data.toString());</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"程序执行结束!"</span>);</span><br></pre></td></tr></table></figure><h2 id="NodeJs事件"><a href="#NodeJs事件" class="headerlink" title="NodeJs事件"></a>NodeJs事件</h2><p>事件驱动程序。当web server接收到请求，就把它关闭然后进行处理，然后去服务下一个web请求。当这个请求完成，它被放回处理队列，当到达队列开头，这个结果被返回给用户。这个模型非常高效可扩展性非常强，因为webserver一直接受请求而不等待任何读写操作。（这也被称之为非阻塞式IO或者事件驱动IO）</p><h2 id="模块化"><a href="#模块化" class="headerlink" title="模块化"></a>模块化</h2><blockquote><p>NodeJs 提供了两个命令，require 和 exports<br>exports是模块中公开的接口，require用于从外部获取接口，其实可以通过如此获取到所需模块的一个对象。</p></blockquote><h2 id="模块的加载顺序"><a href="#模块的加载顺序" class="headerlink" title="模块的加载顺序"></a>模块的加载顺序</h2><p>一）从文件模块缓存中加载：</p><p>尽管原生模块与文件模块的优先级不同，但是都会优先于从文件模块的缓存中加载已经存在的模块。</p><p>二）从原生模块加载：</p><p>原生模块的优先级仅次于文件模块缓存的优先级。<br>require 方法在解析文件名之后，优先检查模块是否在原生模块列表中。<br>以http模块为例，尽管在目录下存在一个 http/http.js/http.node/http.json 文件，<br>require(“http”) 都不会从这些文件中加载，而是从原生模块中加载。<br>原生模块也有一个缓存区，同样也是优先从缓存区加载。<br>如果缓存区没有被加载过，则调用原生模块的加载方式进行加载和执行。</p><p>三）从文件加载：</p><p>当文件模块缓存中不存在，而且不是原生模块的时候，<br>Node.js 会解析 require 方法传入的参数，并从文件系统中加载实际的文件，<br>require方法接受以下几种参数的传递：</p><ul><li>http、fs、path等，原生模块。</li><li>./mod或../mod，相对路径的文件模块。</li><li>/pathtomodule/mod，绝对路径的文件模块。</li><li>mod，非原生模块的文件模块。</li></ul><h3 id="NodeJs-Buffer"><a href="#NodeJs-Buffer" class="headerlink" title="NodeJs Buffer"></a>NodeJs Buffer</h3><p>JS本身只有字符串类型，没有二进制数据类型。但在处理像TCP流或文件流时，必须使用到二进制数据。因此在 Node.js中，定义了一个Buffer类，该类用来创建一个专门存放二进制数据的缓存区。</p><h3 id="NodeJs-Stream"><a href="#NodeJs-Stream" class="headerlink" title="NodeJs Stream"></a>NodeJs Stream</h3><p>Stream 是一个抽象接口，Node 中有很多对象实现了这个接口。<br>例如，对http 服务器发起请求的request 对象就是一个 Stream，还有stdout（标准输出）。    </p><p>Node.js，Stream 有四种流类型：</p><ul><li>Readable - 可读操作。</li><li>Writable - 可写操作。</li><li>Duplex - 可读可写操作.</li><li>Transform - 操作被写入数据，然后读出结果。</li></ul><p>所有的 Stream 对象都是 EventEmitter 的实例。常用的事件有：</p><ul><li>data - 当有数据可读时触发。</li><li>end - 没有更多的数据可读时触发。</li><li>error - 在接收和写入过程中发生错误时触发。</li><li>finish - 所有数据已被写入到底层系统时触发。</li></ul><h2 id="NodeJs-OS模块：（基本的系统操作函数）"><a href="#NodeJs-OS模块：（基本的系统操作函数）" class="headerlink" title="NodeJs OS模块：（基本的系统操作函数）"></a>NodeJs OS模块：（基本的系统操作函数）</h2><ul><li>os.tmpdir()         返回操作系统的默认临时文件夹。</li><li>os.endianness()     返回 CPU 的字节序，可能的是 “BE” 或 “LE”。</li><li>os.hostname()       返回操作系统的主机名。</li><li>os.type()           返回操作系统名</li><li>os.platform()       返回操作系统名</li><li>os.arch()           返回操作系统 CPU 架构，可能的值有 “x64”、”arm” 和 “ia32”。</li><li>os.release()        返回操作系统的发行版本。</li><li>os.uptime()         返回操作系统运行的时间，以秒为单位。</li><li>os.loadavg()        返回一个包含 1、5、15 分钟平均负载的数组。</li><li>os.totalmem()       返回系统内存总量，单位为字节。</li><li>os.freemem()        返回操作系统空闲内存量，单位是字节。</li><li>os.cpus()           返回一个对象数组，包含所安装的每个 CPU/内核的信息：型号、速度（单位 MHz）、时间（一个包含 user、nice、sys、idle 和 irq 所使用 CPU/内核毫秒数的对象）。</li><li>os.networkInterfaces()  获得网络接口列表。</li></ul><h2 id="NodeJs-Path-模块：（提供了处理和转换文件路的工具）"><a href="#NodeJs-Path-模块：（提供了处理和转换文件路的工具）" class="headerlink" title="NodeJs Path 模块：（提供了处理和转换文件路的工具）"></a>NodeJs Path 模块：（提供了处理和转换文件路的工具）</h2><ul><li>path.normalize(p)                    规范化路径，注意’..’ 和 ‘.’。</li><li>path.join([path1][, path2][, …])   用于连接路径。该方法的主要用途在于，会正确使用当前系统的路径分隔符，Unix系统是”/“，Windows系统是”\”。</li><li>path.resolve([from …], to)         将 to 参数解析为绝对路径。</li><li>path.isAbsolute(path)                判断参数 path 是否是绝对路径。</li><li>path.relative(from, to)              用于将相对路径转为绝对路径。</li><li>path.dirname(p)                      返回路径中代表文件夹的部分，同 Unix 的dirname 命令类似。</li><li>path.basename(p[, ext])              返回路径中的最后一部分。同 Unix 命令 bashname 类似。</li><li>path.extname(p)                      返回路径中文件的后缀名，即路径中最后一个’.’之后的部分。如果一个路径中并不包含’.’或该路径只包含一个’.’ 且这个’.’为路径的第一个字符，则此命令返回空字符串。</li><li>path.parse(pathString)               返回路径字符串的对象。</li><li>path.format(pathObject)              从对象中返回路径字符串，和 path.parse 相反。</li></ul><h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>NodeJs Net 模块：（提供了用于底层的网络通信的小工具，包含了创建服务器/客户端的方法）</p><p>NodeJs DNS 模块：（用于解析域名）</p><h2 id="NodeJs-Express框架："><a href="#NodeJs-Express框架：" class="headerlink" title="NodeJs Express框架："></a>NodeJs Express框架：</h2><p>请求和响应：<br>app.get(‘/‘, function (req, res) {<br>   // –<br>})</p><p>Express 应用使用回调函数的参数： request和response对象来处理请求和响应的数据。</p><h3 id="Request-对象："><a href="#Request-对象：" class="headerlink" title="Request 对象："></a>Request 对象：</h3><p>request对象表示 HTTP 请求，包含了请求查询字符串，参数，内容，HTTP 头部等属性。常见属性有：</p><ul><li>(1)req.app：当callback为外部文件时，用req.app访问express的实例</li><li>(2)req.baseUrl：获取路由当前安装的URL路径</li><li>(3)req.body / req.cookies：获得「请求主体」/ Cookies</li><li>(4)req.fresh / req.stale：判断请求是否还「新鲜」</li><li>(5)req.hostname / req.ip：获取主机名和IP地址</li><li>(6)req.originalUrl：获取原始请求URL</li><li>(7)req.params：获取路由的parameters</li><li>(8)req.path：获取请求路径</li><li>(9)req.protocol：获取协议类型</li><li>(10)req.query：获取URL的查询参数串</li><li>(11)req.route：获取当前匹配的路由</li><li>(12)req.subdomains：获取子域名</li><li>(13)req.accepts()：检查可接受的请求的文档类型</li><li>(14)req.acceptsCharsets / <pre><code>req.acceptsEncodings / req.acceptsLanguages：返回指定字符集的第一个可接受字符编码</code></pre></li><li>(15)req.get()：获取指定的HTTP请求头</li><li>(16)req.is()：判断请求头Content-Type的MIME类型</li></ul><h3 id="Reponse-对象："><a href="#Reponse-对象：" class="headerlink" title="Reponse 对象："></a>Reponse 对象：</h3><ul><li>(1)res.app：同req.app一样</li><li>(2)res.append()：追加指定HTTP头</li><li>(3)res.set():    在res.append()后将重置之前设置的头</li><li>(4)res.cookie(name，value [，option])：设置Cookie</li><li>opition: domain / expires / httpOnly / maxAge / path / secure / signed</li><li>(5)res.clearCookie()：清除Cookie</li><li>(6)res.download()：传送指定路径的文件</li><li>(7)res.get()：返回指定的HTTP头</li><li>(8)res.json()：传送JSON响应</li><li>(9)res.jsonp()：传送JSONP响应</li><li>(10)res.location()：只设置响应的Location HTTP头，不设置状态码或者close response</li><li>(11)res.redirect()：设置响应的Location HTTP头，并且设置状态码302</li><li>(12)res.send()：传送HTTP响应</li><li>(13)res.sendFile(path [，options] [，fn])：</li><li>传送指定路径的文件 -会自动根据文件extension设定Content-Type</li><li>(14)res.set()：设置HTTP头，传入object可以一次设置多个头</li><li>(15)res.status()：设置HTTP状态码</li><li>(16)res.type()：设置Content-Type的MIME类型</li></ul>]]></content>
+    <content type="html"><![CDATA[<p>Java基础面试题五</p><blockquote><p>Q1: &amp; 和 &amp;&amp; 的区别</p></blockquote><p>&amp;是位运算符，表示按位与运算，&amp;&amp;是逻辑运算符，表示逻辑与（and）。</p><blockquote><p>Q2: final, finally, finalize的区别</p></blockquote><ul><li>final 用于声明属性，方法和类，分别表示属性不可变，方法不可覆盖，类不可继承。 </li><li>finally,异常处理语句结构的一部分，表示总是执行。 </li><li>finalize是Object类的一个方法，垃圾收集器执行的时候会调用被回收对象的此方法，可以覆盖此方法提供垃圾收集时的其他资源回收，例如关闭文件等。</li></ul><blockquote><p>Q3: sleep() 和 wait() 有什么区别? </p></blockquote><p>sleep是线程类（Thread）的方法，导致此线程暂停执行指定时间，给执行机会给其他线程，但是监控状态依然保持，到时后会自动恢复。调用sleep不会释放对象锁。 </p><p>wait是Object类的方法，对此对象调用wait方法导致本线程放弃对象锁，进入等待此对象的等待锁定池，只有针对此对象发出notify方法（或not ifyAll）后本线程才进入对象锁定池准备获得对象锁进入运行状态。</p><blockquote><p>Q4: error和exception有什么区别? </p></blockquote><ul><li>error:<br>表示恢复不是不可能但很困难的情况下的一种严重问题。比如说内存溢出。不可能指望程序能处理这样的情况。 </li><li>exception: 表示一种设计或实现问题。也就是说，它表示如果程序运行正常，从不会发生的情况。</li></ul><blockquote><p>Q5: GC是什么? 为什么要有GC? </p></blockquote><p>GC是垃圾收集的意思（Gabage Collection）,内存处理是编程人员容易出现问题的地方，忘记或者错误的内存回收会导致程序或系统的不稳定甚至崩溃，Java提供的GC功能可以自动监测对象是否超过作用域从而达到自动回收内存的目的，Java语言没有提供释放已分配内存的显示操作方法。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">要请求垃圾收集，可以调用下面的方法之一：  </span><br><span class="line"><span class="selector-tag">System</span><span class="selector-class">.gc</span>() </span><br><span class="line"><span class="selector-tag">Runtime</span><span class="selector-class">.getRuntime</span>()<span class="selector-class">.gc</span>()</span><br></pre></td></tr></table></figure></p><p>当然，如果需要，程序员可以在Java程序中显式地使用System.gc()来强制进行一次立即的内存清理。<br>因为显式声明是做堆内存全扫描，也就是FullGC，是需要停止所有的活动的（Stop The World Collection），你的应用能承受这个吗？而其显示调用System.gc()只是给虚拟机一个建议，不一定会执行，因为System.gc()在一个优先级很低的线程中执行。</p>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;h1 id=&quot;NodeJs基础&quot;&gt;&lt;a href=&quot;#NodeJs基础&quot; class=&quot;headerlink&quot; title=&quot;NodeJs基础&quot;&gt;&lt;/a&gt;NodeJs基础&lt;/h1&gt;&lt;h2 id=&quot;Node-核心&quot;&gt;&lt;a href=&quot;#Node-核心&quot; class=&quot;header
+        &lt;p&gt;Java基础面试题五&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Q1: &amp;amp; 和 &amp;amp;&amp;amp; 的区别&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&amp;amp;是位运算符，表示按位与运算，&amp;amp;&amp;amp;是逻辑运算符，表示逻辑与（and）。&lt;/p&gt;
+&lt;block
       
     
     </summary>
     
-      <category term="NodeJs" scheme="https://wxzhongwang.github.io/categories/NodeJs/"/>
+      <category term="Java" scheme="https://wxzhongwang.github.io/categories/Java/"/>
     
     
-      <category term="NodeJs" scheme="https://wxzhongwang.github.io/tags/NodeJs/"/>
+      <category term="面试题" scheme="https://wxzhongwang.github.io/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/"/>
     
   </entry>
   
@@ -170,7 +129,7 @@
     <link href="https://wxzhongwang.github.io/2019/08/07/Java%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95%E9%A2%98%E5%9B%9B/"/>
     <id>https://wxzhongwang.github.io/2019/08/07/Java基础面试题四/</id>
     <published>2019-08-07T14:37:25.985Z</published>
-    <updated>2019-06-27T11:05:02.000Z</updated>
+    <updated>2019-08-11T04:55:49.403Z</updated>
     
     <content type="html"><![CDATA[<p>Java基础面试题四</p><blockquote><p>Q1: Java中垃圾回收有什么目的？什么时候进行垃圾回收？ </p></blockquote><p>垃圾回收的目的是识别并且丢弃应用不再使用的对象来释放和重用资源。</p><blockquote><p>Q2：如果对象的引用被置为null，垃圾收集器是否会立即释放对象占用的内存？ </p></blockquote><p>不会，在下一个垃圾回收周期中，这个对象将是可被回收的。</p><blockquote><p>Q3: String是最基本的数据类型吗? </p></blockquote><p>基本数据类型包括:</p><ul><li>byte</li><li>int</li><li>char</li><li>long</li><li>float</li><li>double</li><li>boolean</li><li>short </li></ul><p>java.lang.String类是final类型的，因此不可以继承这个类、不能修改这个类。为了提高效率节省空间，我们应该用StringBuffer类。</p><blockquote><p>Q4: int 和 Integer 有什么区别?</p></blockquote><p>Java 提供两种不同的类型：引用类型和原始类型（或内置类型）。Int是java的原始数据类型，Integer是java为int提供的封装类。Java为每个原始类型提供了封装类。</p><blockquote><p>Q5: String 和 StringBuffer的区别?</p></blockquote><p>JAVA平台提供了两个类：String和StringBuffer，它们可以储存和操作字符串，即包含多个字符的字符数据。这个String类提供了数值不可改变的字符串。而这个StringBuffer类提供的字符串进行修改。</p><blockquote><p>Q6: ArrayList,Vector,LinkedList的存储性能和特性?</p></blockquote><p>ArrayList和Vector都是使用数组方式存储数据，此数组元素数大于实际存储的数据以便增加和插入元素，它们都允许直接按序号索引元素，但是插入元素要涉及数组元素移动等内存操作，所以索引数据快而插入数据慢，Vector由于使用了synchronized方法（线程安全），通常性能上较ArrayList差，而LinkedList使用双向链表实现存储，按序号索引数据需要进行前向或后向遍历，但是插入数据时只需要记录本项的前后项即可，所以插入速度较快。<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">List的子类特点</span><br><span class="line"><span class="symbol">        ArrayList:</span></span><br><span class="line">            底层数据结构是数组，查询快，增删慢</span><br><span class="line">            线程不安全，效率高</span><br><span class="line"><span class="symbol">        Vector:</span></span><br><span class="line">            底层数据结构是数组，查询快，增删慢</span><br><span class="line">            线程安全，效率低</span><br><span class="line"><span class="symbol">        LinkedList:</span></span><br><span class="line">            底层数据结构是链表，查询慢，增删快</span><br><span class="line">            线程不安全，效率高</span><br></pre></td></tr></table></figure></p><blockquote><p>Q7: Collection 和 Collections的区别 </p></blockquote><p>Collection是集合类的上级接口，继承与他的接口主要有Set和List. </p><p>Collections是针对集合类的一个帮助类，他提供一系列静态方法实现对各种集合的搜索、排序、线程安全化等操作。<br>集合的继承体系：<br><img src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1551609409314&amp;di=26c716fbc7abe264f61d07f051639caf&amp;imgtype=0&amp;src=http%3A%2F%2Faliyunzixunbucket.oss-cn-beijing.aliyuncs.com%2Fjpg%2F16f3e1d844693be57f7e0f55c969f42d.jpg%3Fx-oss-process%3Dimage%2Fresize%2Cp_100%2Fauto-orient%2C1%2Fquality%2Cq_90%2Fformat%2Cjpg%2Fwatermark%2Cimage_eXVuY2VzaGk%3D%2Ct_100" alt="image"></p>]]></content>
     
@@ -192,66 +151,7 @@
       <category term="Java" scheme="https://wxzhongwang.github.io/categories/Java/"/>
     
     
-      <category term="Java" scheme="https://wxzhongwang.github.io/tags/Java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Java基础面试题五</title>
-    <link href="https://wxzhongwang.github.io/2019/08/07/Java%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95%E9%A2%98%E4%BA%94/"/>
-    <id>https://wxzhongwang.github.io/2019/08/07/Java基础面试题五/</id>
-    <published>2019-08-07T14:37:25.985Z</published>
-    <updated>2019-06-27T11:05:02.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>Java基础面试题五</p><blockquote><p>Q1: &amp; 和 &amp;&amp; 的区别</p></blockquote><p>&amp;是位运算符，表示按位与运算，&amp;&amp;是逻辑运算符，表示逻辑与（and）。</p><blockquote><p>Q2: final, finally, finalize的区别</p></blockquote><ul><li>final 用于声明属性，方法和类，分别表示属性不可变，方法不可覆盖，类不可继承。 </li><li>finally,异常处理语句结构的一部分，表示总是执行。 </li><li>finalize是Object类的一个方法，垃圾收集器执行的时候会调用被回收对象的此方法，可以覆盖此方法提供垃圾收集时的其他资源回收，例如关闭文件等。</li></ul><blockquote><p>Q3: sleep() 和 wait() 有什么区别? </p></blockquote><p>sleep是线程类（Thread）的方法，导致此线程暂停执行指定时间，给执行机会给其他线程，但是监控状态依然保持，到时后会自动恢复。调用sleep不会释放对象锁。 </p><p>wait是Object类的方法，对此对象调用wait方法导致本线程放弃对象锁，进入等待此对象的等待锁定池，只有针对此对象发出notify方法（或not ifyAll）后本线程才进入对象锁定池准备获得对象锁进入运行状态。</p><blockquote><p>Q4: error和exception有什么区别? </p></blockquote><ul><li>error:<br>表示恢复不是不可能但很困难的情况下的一种严重问题。比如说内存溢出。不可能指望程序能处理这样的情况。 </li><li>exception: 表示一种设计或实现问题。也就是说，它表示如果程序运行正常，从不会发生的情况。</li></ul><blockquote><p>Q5: GC是什么? 为什么要有GC? </p></blockquote><p>GC是垃圾收集的意思（Gabage Collection）,内存处理是编程人员容易出现问题的地方，忘记或者错误的内存回收会导致程序或系统的不稳定甚至崩溃，Java提供的GC功能可以自动监测对象是否超过作用域从而达到自动回收内存的目的，Java语言没有提供释放已分配内存的显示操作方法。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">要请求垃圾收集，可以调用下面的方法之一：  </span><br><span class="line"><span class="selector-tag">System</span><span class="selector-class">.gc</span>() </span><br><span class="line"><span class="selector-tag">Runtime</span><span class="selector-class">.getRuntime</span>()<span class="selector-class">.gc</span>()</span><br></pre></td></tr></table></figure></p><p>当然，如果需要，程序员可以在Java程序中显式地使用System.gc()来强制进行一次立即的内存清理。<br>因为显式声明是做堆内存全扫描，也就是FullGC，是需要停止所有的活动的（Stop The World Collection），你的应用能承受这个吗？而其显示调用System.gc()只是给虚拟机一个建议，不一定会执行，因为System.gc()在一个优先级很低的线程中执行。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;Java基础面试题五&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Q1: &amp;amp; 和 &amp;amp;&amp;amp; 的区别&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&amp;amp;是位运算符，表示按位与运算，&amp;amp;&amp;amp;是逻辑运算符，表示逻辑与（and）。&lt;/p&gt;
-&lt;block
-      
-    
-    </summary>
-    
-      <category term="Java" scheme="https://wxzhongwang.github.io/categories/Java/"/>
-    
-    
-      <category term="Java" scheme="https://wxzhongwang.github.io/tags/Java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Java基础面试题二</title>
-    <link href="https://wxzhongwang.github.io/2019/08/07/Java%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95%E9%A2%98%E4%BA%8C/"/>
-    <id>https://wxzhongwang.github.io/2019/08/07/Java基础面试题二/</id>
-    <published>2019-08-07T14:37:25.984Z</published>
-    <updated>2019-06-27T11:05:02.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>Java基础面试题二</p><blockquote><p>Q1: 什么是死锁(deadlock)？ </p></blockquote><p>两个进程都在等待对方执行完毕才能继续往下执行的时候就发生了死锁。结果就是两个进程都陷入了无限的等待中。<br>代码表示：<br><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLockDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> void main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">    DieLock dl1 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">true</span>);</span><br><span class="line">    DieLock dl2 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">false</span>);</span><br><span class="line">    dl1.start();</span><br><span class="line">    dl2.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>理想状态下dl1线程为true从if执行先打出”if objA”然后再接着打出”if objB”之后释放A、B的锁对象，之后dl2线程执行else语句打出”else objB”，”else objA”。<br>非理想状态下dl1先打出”if objA”，之后线程dl2执行打出”else objB”，然后1、2线程的锁对象A和B都处于被锁的状态，两个线程争夺锁对象发生死锁现象。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLock</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> flag;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DieLock</span><span class="params">(<span class="keyword">boolean</span> flag)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.flag = flag;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (flag) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                System.out.println(<span class="string">"if objA"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"if objB"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                System.out.println(<span class="string">"else objB"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"else objA"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;Java基础面试题二&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Q1: 什么是死锁(deadlock)？ &lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;两个进程都在等待对方执行完毕才能继续往下执行的时候就发生了死锁。结果就是两个进程都陷入了无限的等待中。&lt;br&gt;代码表示：&lt;br
-      
-    
-    </summary>
-    
-      <category term="Java" scheme="https://wxzhongwang.github.io/categories/Java/"/>
-    
-    
-      <category term="Java" scheme="https://wxzhongwang.github.io/tags/Java/"/>
+      <category term="面试题" scheme="https://wxzhongwang.github.io/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/"/>
     
   </entry>
   
@@ -260,7 +160,7 @@
     <link href="https://wxzhongwang.github.io/2019/08/07/Java%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95%E9%A2%98%E4%B8%89/"/>
     <id>https://wxzhongwang.github.io/2019/08/07/Java基础面试题三/</id>
     <published>2019-08-07T14:37:25.984Z</published>
-    <updated>2019-06-27T11:05:02.000Z</updated>
+    <updated>2019-08-11T04:55:40.205Z</updated>
     
     <content type="html"><![CDATA[<p>Java基础面试题三</p><blockquote><p>Q1: 如何确保N个线程可以访问N个资源同时又不导致死锁？ </p></blockquote><p>使用多线程的时候，一种非常简单的避免死锁的方式就是：指定获取锁的顺序，并强制线程按照指定的顺序获取锁。因此，如果所有的线程都是以同样的顺序加锁和释放锁，就不会出现死锁了。</p><blockquote><p>Q2: Java集合类框架的基本接口有哪些？</p></blockquote><p>Java集合类提供了一套设计良好的支持对一组对象进行操作的接口和类。<br>Java集合类里面最基本的接口有： </p><ul><li>Collection：代表一组对象，每一个对象都是它的子元素。 </li><li>Set：不包含重复元素的Collection。 </li><li>List：有顺序的collection，并且可以包含重复元素。 </li><li>Map：可以把键(key)映射到值(value)的对象，键不能重复。</li></ul><blockquote><p>Q3: 什么是迭代器(Iterator)？ </p></blockquote><p>Iterator接口提供了很多对集合元素进行迭代的方法。每一个集合类都包含了可以返回迭代器实例的迭代方法。迭代器可以在迭代的过程中删除底层集合的元素。</p><blockquote><p>Q4: Iterator和ListIterator的区别是什么？</p></blockquote><p>下面列出了他们的区别： </p><ul><li>Iterator可用来遍历Set和List集合，但是ListIterator只能用来遍历List。 </li><li>Iterator对集合只能是前向遍历，ListIterator既可以前向也可以后向。 </li><li>ListIterator实现了Iterator接口，并包含其他的功能，比如：增加元素，替换元素，获取前一个和后一个元素的索引，等等。</li></ul><blockquote><p>Q5: Java中的HashMap的工作原理是什么？ </p></blockquote><p>Java中的HashMap是以键值对(key-value)的形式存储元素的。HashMap需要一个hash函数，它使用hashCode()和equals()方法来向集合/从集合添加和检索元素。当调用put()方法的时候，HashMap会计算key的hash值，然后把键值对存储在集合中合适的索引上。如果key已经存在了，value会被更新成新值。</p><p>HashMap的一些重要的特性是它的容量(capacity)，负载因子(load factor)和扩容极限(threshold resizing)。</p><blockquote><p>Q6: HashMap和Hashtable有什么区别？ </p></blockquote><ul><li>HashMap和Hashtable都实现了Map接口，因此很多特性非常相似。但是，他们有以下不同点： </li><li>HashMap允许键和值是null，而Hashtable不允许键或者值是null。 </li><li>Hashtable是同步的，而HashMap不是。因此，HashMap更适合于单线程环境，而Hashtable适合于多线程环境。 </li><li>HashMap提供了可供应用迭代的键的集合，因此，HashMap是快速失败的。另一方面，Hashtable提供了对键的列举(Enumeration)。 </li></ul><blockquote><p>Q7: 数组(Array)和列表(ArrayList)有什么区别？什么时候应该使用Array而不是ArrayList？ </p></blockquote><p>下面列出了Array和ArrayList的不同点： </p><ul><li>Array可以包含基本类型和对象类型，ArrayList只能包含对象类型。 </li><li>Array大小是固定的，ArrayList的大小是动态变化的。 </li><li>ArrayList提供了更多的方法和特性，比如：addAll()，removeAll()，iterator()等等。 </li><li>对于基本类型数据，集合使用自动装箱来减少编码工作量。但是，当处理固定大小的基本数据类型的时候，这种方式相对比较慢。</li></ul><blockquote><p>Q8: ArrayList和LinkedList有什么区别？ </p></blockquote><p>ArrayList和LinkedList都实现了List接口，他们有以下的不同点： </p><ul><li>ArrayList是基于索引的数据接口，它的底层是数组。它可以以O(1)时间复杂度对元素进行随机访问。与此对应，LinkedList是以元素链表的形式存储它的数据，每一个元素都和它的前一个和后一个元素链接在一起，在这种情况下，查找某个元素的时间复杂度是O(n)。 </li><li>相对于ArrayList，LinkedList的插入，添加，删除操作速度更快，因为当元素被添加到集合任意位置的时候，不需要像数组那样重新计算大小或者是更新索引。 </li><li>LinkedList比ArrayList更占内存，因为LinkedList为每一个节点存储了两个引用，一个指向前一个元素，一个指向下一个元素。也可以参考ArrayList vs. LinkedList。</li></ul><blockquote><p>Q9: 如何权衡是使用无序的数组还是有序的数组？ </p></blockquote><p>有序数组最大的好处在于查找的时间复杂度是O(log n)，而无序数组是O(n)。有序数组的缺点是插入操作的时间复杂度是O(n)，因为值大的元素需要往后移动来给新元素腾位置。相反，无序数组的插入时间复杂度是常量O(1)。</p><blockquote><p>Q10: HashSet和TreeSet有什么区别？ </p></blockquote><p>HashSet是由一个hash表来实现的，因此，它的元素是无序的。add()，remove()，contains()方法的时间复杂度是O(1)。 </p><p>TreeSet是由一个树形的结构来实现的，它里面的元素是有序的。因此，add()，remove()，contains()方法的时间复杂度是O(logn)。</p>]]></content>
     
@@ -280,7 +180,36 @@
       <category term="Java" scheme="https://wxzhongwang.github.io/categories/Java/"/>
     
     
-      <category term="Java" scheme="https://wxzhongwang.github.io/tags/Java/"/>
+      <category term="面试题" scheme="https://wxzhongwang.github.io/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java基础面试题二</title>
+    <link href="https://wxzhongwang.github.io/2019/08/07/Java%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95%E9%A2%98%E4%BA%8C/"/>
+    <id>https://wxzhongwang.github.io/2019/08/07/Java基础面试题二/</id>
+    <published>2019-08-07T14:37:25.984Z</published>
+    <updated>2019-08-11T04:55:42.952Z</updated>
+    
+    <content type="html"><![CDATA[<p>Java基础面试题二</p><blockquote><p>Q1: 什么是死锁(deadlock)？ </p></blockquote><p>两个进程都在等待对方执行完毕才能继续往下执行的时候就发生了死锁。结果就是两个进程都陷入了无限的等待中。<br>代码表示：<br><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLockDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> void main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">    DieLock dl1 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">true</span>);</span><br><span class="line">    DieLock dl2 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">false</span>);</span><br><span class="line">    dl1.start();</span><br><span class="line">    dl2.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>理想状态下dl1线程为true从if执行先打出”if objA”然后再接着打出”if objB”之后释放A、B的锁对象，之后dl2线程执行else语句打出”else objB”，”else objA”。<br>非理想状态下dl1先打出”if objA”，之后线程dl2执行打出”else objB”，然后1、2线程的锁对象A和B都处于被锁的状态，两个线程争夺锁对象发生死锁现象。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLock</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> flag;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DieLock</span><span class="params">(<span class="keyword">boolean</span> flag)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.flag = flag;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (flag) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                System.out.println(<span class="string">"if objA"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"if objB"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                System.out.println(<span class="string">"else objB"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"else objA"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;Java基础面试题二&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Q1: 什么是死锁(deadlock)？ &lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;两个进程都在等待对方执行完毕才能继续往下执行的时候就发生了死锁。结果就是两个进程都陷入了无限的等待中。&lt;br&gt;代码表示：&lt;br
+      
+    
+    </summary>
+    
+      <category term="Java" scheme="https://wxzhongwang.github.io/categories/Java/"/>
+    
+    
+      <category term="面试题" scheme="https://wxzhongwang.github.io/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/"/>
     
   </entry>
   
@@ -289,7 +218,7 @@
     <link href="https://wxzhongwang.github.io/2019/08/07/Java%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95%E9%A2%98/"/>
     <id>https://wxzhongwang.github.io/2019/08/07/Java基础面试题/</id>
     <published>2019-08-07T14:37:25.983Z</published>
-    <updated>2019-06-27T11:05:00.000Z</updated>
+    <updated>2019-08-11T04:55:36.026Z</updated>
     
     <content type="html"><![CDATA[<p>Java基础面试题</p><blockquote><p>Q1: 什么是Java虚拟机?</p></blockquote><p>Java虚拟机是一个可以执行Java字节码的虚拟机进程。Java源文件被编译成能被Java虚拟机执行的字节码文件。</p><blockquote><p>Q2: “static”关键字是什么意思？Java中是否可以覆盖(override)一个private或者是static的方法？</p></blockquote><p>“static”关键字表明一个成员变量或者是成员方法可以在没有所属的类的实例变量的情况下被访问。简单说就是：不声明所属类的实例就可访问该变量或方法。Java中static方法不能被覆盖，因为方法覆盖是基于运行时动态绑定的，而static方法是编译时静态绑定的。</p><blockquote><p>Q3: 是否可以在static环境中访问非static变量？ </p></blockquote><p>static变量在Java中是属于类的，它在所有的实例中的值是一样的。当类被Java虚拟机载入的时候，会对static变量进行初始化。如果你的代码尝试不用实例来访问非static的变量，编译器会报错，因为这些变量还没有被创建出来，还没有跟任何实例关联上。</p><blockquote><p>Q4: Java支持的数据类型有哪些？什么是自动拆装箱？ </p></blockquote><p>基本数据类型是： </p><ul><li>byte </li><li>short </li><li>int </li><li>long </li><li>float </li><li>double </li><li>boolean </li><li>char </li></ul><p>自动装箱是Java编译器在基本数据类型和对应的对象包装类型之间做的一个转化。比如：把int转化成Integer，float转化成double，等等。反之就是自动拆箱。</p><blockquote><p>Q5: Overload和Override的区别。Overloaded的方法是否可以改变返回值的类型? </p></blockquote><p>方法的重写Overriding和重载Overloading是Java多态性的不同表现。重写Overriding是父类与子类之间多态性的一种表现，重载Overloading是一个类中多态性的一种表现。如果在子类中定义某方法与其父类有相同的名称和参数，我们说该方法被重写(Overriding)。子类的对象使用这个方法时，将调用子类中的定义，对它而言，父类中的定义如同被”屏蔽”了。如果在一个类中定义了多个同名的方法，它们或有不同的参数个数或有不同的参数类型，则称为方法的重载(Overloading)。Overloaded的方法是可以改变返回值的类型。</p><p>Overload： 重写 子类重写父类方法<br>Overload:  重载 相同方法名</p><blockquote><p>Q6: Java支持多继承么？ </p></blockquote><p>不支持，Java不支持多继承。每个类都只能继承一个类，但是可以实现多个接口。</p><blockquote><p>Q7: 接口和抽象类的区别是什么？ </p></blockquote><p>Java提供和支持创建抽象类和接口。它们的实现有共同点，不同点在于： </p><ul><li>接口中所有的方法隐含的都是抽象的。而抽象类则可以同时包含抽象和非抽象的方法。 </li><li>类可以实现很多个接口，但是只能继承一个抽象类 </li><li>类如果要实现一个接口，它必须要实现接口声明的所有方法。但是，类可以不实现抽象类声明的所有方法，当然，在这种情况下，类也必须得声明成是抽象的。 </li><li>抽象类可以在不提供接口方法实现的情况下实现接口。 </li><li>Java接口中声明的变量默认都是final的。抽象类可以包含非final的变量。 </li><li>Java接口中的成员函数默认是public的。抽象类的成员函数可以是private，protected或者是public。 </li><li>接口是绝对抽象的，不可以被实例化。抽象类也不可以被实例化，但是，如果它包含main方法的话是可以被调用的。</li></ul><blockquote><p>Q8: 什么是值传递和引用传递？</p></blockquote><p>值传递: 意味着传递了对象的一个副本。因此，就算是改变了对象副本，也不会影响源对象的值。 </p><p>引用传递: 意味着传递的并不是实际的对象，而是对象的引用。因此，外部对引用对象所做的改变会反映到所有的对象上。</p><blockquote><p>Q9: 创建线程有几种不同的方式？你喜欢哪一种？为什么？</p></blockquote><p>有三种方式可以用来创建线程： </p><ul><li>继承Thread类 </li><li>实现Runnable接口 </li><li>应用程序可以使用Executor框架来创建线程池 </li></ul><p>实现Runnable接口这种方式更受欢迎，因为这不需要继承Thread类。在应用设计中已经继承了别的对象的情况下，这需要多继承（而Java不支持多继承），只能实现接口。同时，线程池也是非常高效的，很容易实现和使用。</p><blockquote><p>Q10: 同步方法和同步代码块的区别是什么？ </p></blockquote><p>在Java语言中，每一个对象有一把锁。线程可以使用synchronized关键字来获取对象上的锁。<br>synchronized关键字可应用在方法级别(粗粒度锁：这里的锁对象可以是This)或者是代码块级别(细粒度锁：这里的锁对象就是任意对象)。</p><ul><li>方法级别(粗粒度锁：这里的锁对象可以是This)</li><li>代码块级别(细粒度锁：这里的锁对象就是任意对象)</li></ul>]]></content>
     
@@ -310,7 +239,7 @@
       <category term="Java" scheme="https://wxzhongwang.github.io/categories/Java/"/>
     
     
-      <category term="Java" scheme="https://wxzhongwang.github.io/tags/Java/"/>
+      <category term="面试题" scheme="https://wxzhongwang.github.io/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/"/>
     
   </entry>
   
@@ -538,6 +467,89 @@
     
     
       <category term="个人" scheme="https://wxzhongwang.github.io/tags/%E4%B8%AA%E4%BA%BA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hadoop Hive Hbase 简单区别及应用场景</title>
+    <link href="https://wxzhongwang.github.io/2019/01/11/Hadoop%20Hive%20Hbase%20%E7%AE%80%E5%8D%95%E5%8C%BA%E5%88%AB%E5%8F%8A%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF/"/>
+    <id>https://wxzhongwang.github.io/2019/01/11/Hadoop Hive Hbase 简单区别及应用场景/</id>
+    <published>2019-01-11T02:10:00.000Z</published>
+    <updated>2019-08-07T15:11:46.222Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Hadoop-Hive-Hbase-简单区别及应用场景"><a href="#Hadoop-Hive-Hbase-简单区别及应用场景" class="headerlink" title="Hadoop Hive Hbase 简单区别及应用场景"></a>Hadoop Hive Hbase 简单区别及应用场景</h1><h2 id="Hadoop"><a href="#Hadoop" class="headerlink" title="Hadoop"></a>Hadoop</h2><p>它是一个分布式计算+分布式文件系统，前者其实就是MapReduce，后者是HDFS。后者可以独立运行，前者可以选择性使用，也可以不使用。</p><h2 id="Hive"><a href="#Hive" class="headerlink" title="Hive"></a>Hive</h2><p>通俗的说是一个数据仓库，仓库中的数据是被HDFS管理的数据文件，它支持类似sql语句的功能，你可以通过该语句完成分布式环境下的计算功能，Hive会把语句转换成MapReduce，然后交给Hadoop执行。这里的计算，仅限于查找和分析，而不是更新、增加和删除。它的优势是对历史数据进行处理，用时下流行的说法是离线计算，因为它的底层是MapReduce，MapReduce在实时计算上性能很差。它的做法是把数据文件加载进来作为一个Hive表（或者外部表），让你觉得你的sql操作的是传统的表。</p><h2 id="HBase"><a href="#HBase" class="headerlink" title="HBase"></a>HBase</h2><p>通俗的说，HBase的作用类似于数据库，传统数据库管理的是集中的本地数据文件，而HBase基于Hdfs实现对分布式数据文件的管理，比如增删改查。也就是说，HBase只是利用Hadoop的Hdfs帮助其管理数据的持久化文件（HFile），它跟MapReduce没任何关系。HBase的优势在于实时计算，所有实时数据都直接存入Hbase中，客户端通过API直接访问Hbase，实现实时计算。由于它使用的是nosql，或者说是列式结构，从而提高了查找性能，使其能运用于大数据场景，这是它跟MapReduce的区别。</p><h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><ol><li>Hadoop是Hive和HBase的基础，Hive依赖Hadoop</li><li>HBase仅依赖Hadoop的Hdfs模块。</li><li>Hive适用于离线数据的分析，操作的是通用格式的（如通用的日志文件）、被Hadoop管理的数据文件，它支持类sql，比编写MapReduce的java代码来的更加方便，它的定位是数据仓库，存储和分析历史数据</li><li>Hbase适用于实时计算，采用列式结构的nosql，操作的是自己生成的特殊格式的HFile、被hadoop管理的数据文件，它的定位是数据库，或者叫DBMS</li></ol><blockquote><p>最后补充一下：Hive可以直接操作Hdfs中的文件作为它的表的数据，也可以使HBase数据库作为它的表</p></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;Hadoop-Hive-Hbase-简单区别及应用场景&quot;&gt;&lt;a href=&quot;#Hadoop-Hive-Hbase-简单区别及应用场景&quot; class=&quot;headerlink&quot; title=&quot;Hadoop Hive Hbase 简单区别及应用场景&quot;&gt;&lt;/a&gt;Hadoo
+      
+    
+    </summary>
+    
+      <category term="大数据" scheme="https://wxzhongwang.github.io/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
+    
+      <category term="Hadoop" scheme="https://wxzhongwang.github.io/tags/Hadoop/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>大数据</title>
+    <link href="https://wxzhongwang.github.io/2019/01/08/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    <id>https://wxzhongwang.github.io/2019/01/08/大数据/</id>
+    <published>2019-01-08T06:18:02.000Z</published>
+    <updated>2019-06-27T11:05:12.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="大数据生命周期"><a href="#大数据生命周期" class="headerlink" title="大数据生命周期"></a>大数据生命周期</h1><ul><li>基础设施层，涵盖计算资源、内存与存储和网络互联，具体表现为计算节点、集群、机柜和数据中心。</li><li>数据存储和管理层，包括文件系统、数据库和类似YARN的资源管理系统。</li><li>计算处理层，如hadoop、MapReduce和Spark</li><li>在此之上的各种不同计算范式，如批处理、流处理和图计算等，包括衍生出编程模型的计算模型，如BSP、GAS等</li></ul><blockquote><p>数据分析和可视化基于计算处理层。分析包括简单的查询分析、流分析以及更复杂的分析(如机器学习、图计算等)。查询分析多基于表结构和关系函数，流分析基于数据、事件流以及简单的统计分析，而复杂分析则基于更复杂的数据结构与方法，如图、矩阵、迭代计算和线性代数。一般意义的可视化是对分析结果的展示。但是通过交互式可视化，还可以探索性地提问，使分析获得新的线索，形成迭代的分析和可视化。基于大规模数据的实时交互可视化分析以及在这个过程中引入自动化的因素是目前研究的热点。</p></blockquote><h1 id="大数据技术生态"><a href="#大数据技术生态" class="headerlink" title="大数据技术生态"></a>大数据技术生态</h1><p>大数据的基本处理流程与传统数据处理流程并无太大差异，主要区别在于：由于大数据要处理大量、非结构化的数据，所以在各处理环节中都可以采用并行处理。目前，Hadoop、MapReduce和Spark等分布式处理方式已经成为大数据处理各环节的通用处理方法。</p><h1 id="大数据采集与预处理"><a href="#大数据采集与预处理" class="headerlink" title="大数据采集与预处理"></a>大数据采集与预处理</h1><ul><li>存储层</li><li>预处理层</li><li>采集层</li></ul><p>在大数据的生命周期中，数据采集处于第一个环节。根据MapReduce产生数据的应用系统分类，大数据的采集主要有4种来源：管理信息系统、Web信息系统、物理信息系统、科学实验系统。对于不同的数据集，可能存在不同的结构和模式，如文件、XML树、关系表等，表现为数据的异构性。对多个异构的数据集，需要做进一步集成处理或整合处理，将来自不同数据集的数据收集、整理、清洗、转换后，生成到一个新的数据集，为后续查询和分析处理提供统一的数据视图。针对管理信息系统中异构数据库集成技术、Web信息系统中的实体识别技术和DeepWeb集成技术、传感器网络数据融合技术已经有很多研究工作，取得了较大的进展，已经推出了多种数据清洗和质量控制工具。</p><h1 id="大数据的存储和管理"><a href="#大数据的存储和管理" class="headerlink" title="大数据的存储和管理"></a>大数据的存储和管理</h1><p>按数据类型的不同，大数据的存储和管理采用不同的技术路线，大致可以分为3类。</p><h2 id="第1类"><a href="#第1类" class="headerlink" title="第1类"></a>第1类</h2><p>主要面对的是大规模的结构化数据。针对这类大数据，通常采用新型数据库集群。它们通过列存储或行列混合存储以及粗粒度索引等技术，结合MPP(MassiveParallelProcessing)架构高效的分布式计算模式，实现对PB量级数据的存储和管理。这类集群具有高性能和高扩展性特点，在企业分析类应用领域已获得广泛应用;</p><h2 id="第2类"><a href="#第2类" class="headerlink" title="第2类"></a>第2类</h2><p>主要面对的是半结构化和非结构化数据。应对这类应用场景，基于Hadoop开源体系的系统平台更为擅长。它们通过对Hadoop生态体系的技术扩展和封装，实现对半结构化和非结构化数据的存储和管理;</p><h2 id="第3类"><a href="#第3类" class="headerlink" title="第3类"></a>第3类</h2><p>面对的是结构化和非结构化混合的大数据，因此采用MPP并行数据库集群与Hadoop集群的混合来实现对百PB量级、EB量级数据的存储和管理。一方面，用MPP来管理计算高质量的结构化数据，提供强大的SQL和OLTP型服务;另一方面，用Hadoop实现对半结构化和非结构化数据的处理，以支持诸如内容检索、深度挖掘与综合分析等新型应用。这类混合模式将是大数据存储和管理未来发展的趋势。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;大数据生命周期&quot;&gt;&lt;a href=&quot;#大数据生命周期&quot; class=&quot;headerlink&quot; title=&quot;大数据生命周期&quot;&gt;&lt;/a&gt;大数据生命周期&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;基础设施层，涵盖计算资源、内存与存储和网络互联，具体表现为计算节点、集群、机柜和数据中心
+      
+    
+    </summary>
+    
+      <category term="大数据" scheme="https://wxzhongwang.github.io/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
+    
+      <category term="大数据" scheme="https://wxzhongwang.github.io/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>流处理、批处理、交互式查询</title>
+    <link href="https://wxzhongwang.github.io/2019/01/08/%E6%B5%81%E5%A4%84%E7%90%86%E3%80%81%E6%89%B9%E5%A4%84%E7%90%86%E3%80%81%E4%BA%A4%E4%BA%92%E5%BC%8F%E6%9F%A5%E8%AF%A2/"/>
+    <id>https://wxzhongwang.github.io/2019/01/08/流处理、批处理、交互式查询/</id>
+    <published>2019-01-08T06:18:02.000Z</published>
+    <updated>2019-06-27T11:05:14.000Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>我们将大数据处理按处理时间的跨度要求分为以下几类基于实时数据流的处理，通常的时间跨度在数百毫秒到数秒之间基于历史数据的交互式查询，通常时间跨度在数十秒到数分钟之间复杂的批量数据处理，通常的时间跨度在几分钟到数小时之间</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;pre&gt;&lt;code&gt;我们将大数据处理按处理时间的跨度要求分为以下几类
+
+基于实时数据流的处理，通常的时间跨度在数百毫秒到数秒之间
+
+基于历史数据的交互式查询，通常时间跨度在数十秒到数分钟之间
+
+复杂的批量数据处理，通常的时间跨度在几分钟到数小时之间
+&lt;/code&gt;&lt;/pre&gt;
+      
+    
+    </summary>
+    
+      <category term="大数据" scheme="https://wxzhongwang.github.io/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
+    
+      <category term="Hadoop" scheme="https://wxzhongwang.github.io/tags/Hadoop/"/>
     
   </entry>
   

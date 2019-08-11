@@ -131,7 +131,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2017/06/01/Linux 处理目录的常用命令/">Linux处理目录的常用命令</a>
+            <a href="/2017/04/08/mybatis/">mybatis相关问题</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -139,13 +139,13 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2017-06-01T08:18:02.000Z" itemprop="datePublished">2017-06-01</time>
+    <time datetime="2017-04-08T14:22:22.000Z" itemprop="datePublished">2017-04-08</time>
 </a>
 
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
+    <a class="article-tag-link" href="/tags/Mybatis/">Mybatis</a>
 </div>
 
 
@@ -154,198 +154,17 @@
     
     <section class="article-body markdown-body">
         
-        <h2 id="Linux处理目录的常用命令"><a href="#Linux处理目录的常用命令" class="headerlink" title="Linux处理目录的常用命令"></a>Linux处理目录的常用命令</h2><p>常见的处理目录的命令：</p>
-<ul>
-<li>ls: 列出目录</li>
-<li>cd：切换目录</li>
-<li>pwd：显示目前的目录</li>
-<li>mkdir：创建一个新的目录</li>
-<li>rmdir：删除一个空的目录</li>
-<li>cp: 复制文件或目录</li>
-<li>rm: 移除文件或目录</li>
-<li>mv: 移动文件与目录，或修改文件与目录的名称</li>
-</ul>
-<p>使用 man [命令] 来查看各个命令的使用文档，如 ：man cp。</p>
-<h3 id="ls-列出目录"><a href="#ls-列出目录" class="headerlink" title="ls (列出目录)"></a>ls (列出目录)</h3><p>在Linux系统当中， ls 命令可能是最常被运行的。<br><figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">语法：</span><br><span class="line"></span><br><span class="line">[root@www ~]# <span class="keyword">ls</span> [-aAdfFhilnrRSt] 目录名称</span><br><span class="line">[root@www ~]# <span class="keyword">ls</span> [--<span class="keyword">color</span>=&#123;never,auto,always&#125;] 目录名称</span><br><span class="line">[root@www ~]# <span class="keyword">ls</span> [--full-time] 目录名称</span><br></pre></td></tr></table></figure></p>
-<p>参数：</p>
-<ul>
-<li>-a ：全部的文件，连同隐藏档( 开头为 . 的文件) 一起列出来(常用)</li>
-<li>-d ：仅列出目录本身，而不是列出目录内的文件数据(常用)</li>
-<li>-l ：长数据串列出，包含文件的属性与权限等等数据；(常用)<br>将家目录下的所有文件列出来(含属性与隐藏档)</li>
-</ul>
-<h3 id="mkdir（创建目录）"><a href="#mkdir（创建目录）" class="headerlink" title="mkdir（创建目录）"></a>mkdir（创建目录）</h3><p>语法<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir <span class="string">[-mp]</span> 目录名称</span><br></pre></td></tr></table></figure></p>
-<p>参数：</p>
-<ul>
-<li>-m ：配置文件的权限，不需要看默认权限 (umask) 的脸色</li>
-<li>-p ：将所需要的目录(包含上一级目录)递归创建起来</li>
-</ul>
-<p>实例：在/tmp下尝试创建数新目录：<br><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root<span class="meta">@www</span> ~]<span class="comment"># cd /tmp</span></span><br><span class="line">[root<span class="meta">@www</span> tmp]<span class="comment"># mkdir test    </span></span><br><span class="line">[root<span class="meta">@www</span> tmp]<span class="comment"># mkdir test1/test2/test3/test4</span></span><br><span class="line">mkdir: cannot create directory `test1/test2/test3/test4': </span><br><span class="line">No such file or directory       </span><br><span class="line">[root<span class="meta">@www</span> tmp]<span class="comment"># mkdir -p test1/test2/test3/test4</span></span><br><span class="line">加了这个 -p 的选项，可以自行帮你创建多层目录！</span><br></pre></td></tr></table></figure></p>
-<p>实例：创建权限为 rwx–x–x 的目录。<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@www tmp]<span class="comment"># mkdir -m 711 test2</span></span><br><span class="line">[root@www tmp]<span class="comment"># ls -l</span></span><br><span class="line">drwxr-xr-x <span class="number"> 3 </span>root  root<span class="number"> 4096 </span>Jul<span class="number"> 18 </span>12:50 test</span><br><span class="line">drwxr-xr-x <span class="number"> 3 </span>root  root<span class="number"> 4096 </span>Jul<span class="number"> 18 </span>12:53 test1</span><br><span class="line">drwx--x--x <span class="number"> 2 </span>root  root<span class="number"> 4096 </span>Jul<span class="number"> 18 </span>12:54 test2</span><br></pre></td></tr></table></figure></p>
-<h3 id="rmdir（删除目录）"><a href="#rmdir（删除目录）" class="headerlink" title="rmdir（删除目录）"></a>rmdir（删除目录）</h3><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rmdir <span class="string">[-p]</span> 目录名称</span><br></pre></td></tr></table></figure>
-<p>参数：</p>
-<p>-p ：连同上一级『空的』目录也一起删除<br>删除 runoob 目录<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root<span class="symbol">@www</span> tmp]<span class="meta"># rmdir runoob/</span></span><br></pre></td></tr></table></figure></p>
-<p>过要注意的是，这个 rmdir 仅能删除空的目录，你可以使用 rm 命令来删除非空目录。</p>
-<h3 id="cp（拷贝文件和目录）"><a href="#cp（拷贝文件和目录）" class="headerlink" title="cp（拷贝文件和目录）"></a>cp（拷贝文件和目录）</h3><p>语法:<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">cp</span> <span class="selector-attr">[-adfilprsu]</span> 来源档(source) 目标档(destination)</span><br><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">cp</span> <span class="selector-attr">[options]</span> <span class="selector-tag">source1</span> <span class="selector-tag">source2</span> <span class="selector-tag">source3</span> .... <span class="selector-tag">directory</span></span><br></pre></td></tr></table></figure></p>
-<p>参数：</p>
-<p>-a：相当於 -pdr 的意思，至於 pdr 请参考下列说明；(常用)</p>
-<p>-d：若来源档为连结档的属性(link file)，则复制连结档属性而非文件本身；</p>
-<p>-f：为强制(force)的意思，若目标文件已经存在且无法开启，则移除后再尝试一次；</p>
-<p>-i：若目标档(destination)已经存在时，在覆盖时会先询问动作的进行(常用)</p>
-<p>-l：进行硬式连结(hard link)的连结档创建，而非复制文件本身；</p>
-<p>-p：连同文件的属性一起复制过去，而非使用默认属性(备份常用)；</p>
-<p>-r：递归持续复制，用於目录的复制行为；(常用)</p>
-<p>-s：复制成为符号连结档 (symbolic link)，亦即『捷径』文件；</p>
-<p>-u：若 destination 比 source 旧才升级 destination ！</p>
-<p>用 root 身份，将 root 目录下的 .bashrc 复制到 /tmp 下，并命名为 bashrc<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root<span class="symbol">@www</span> ~]<span class="meta"># cp ~/.bashrc /tmp/bashrc</span></span><br><span class="line">[root<span class="symbol">@www</span> ~]<span class="meta"># cp -i ~/.bashrc /tmp/bashrc</span></span><br><span class="line">cp: overwrite `/tmp/bashrc<span class="string">'? n  &lt;==n不覆盖，y为覆盖</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="rm-移除文件或目录"><a href="#rm-移除文件或目录" class="headerlink" title="rm (移除文件或目录)"></a>rm (移除文件或目录)</h3><p>语法：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm <span class="string">[-fir]</span> 文件或目录</span><br></pre></td></tr></table></figure></p>
-<p>参数：</p>
-<ul>
-<li>-f ：就是 force 的意思，忽略不存在的文件，不会出现警告信息；</li>
-<li>-i ：互动模式，在删除前会询问使用者是否动作</li>
-<li>-r ：递归删除啊,最常用在目录的删除了</li>
-</ul>
-<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@www tmp]# <span class="keyword">rm</span> -i bashrc</span><br><span class="line"><span class="keyword">rm</span>: remove regular <span class="keyword">file</span> <span class="symbol">`bashrc'</span>? <span class="built_in">y</span></span><br></pre></td></tr></table></figure>
-<p>如果加上 -i 的选项就会主动询问喔，避免你删除到错误的档名</p>
-<h3 id="mv-移动文件与目录，或修改名称"><a href="#mv-移动文件与目录，或修改名称" class="headerlink" title="mv (移动文件与目录，或修改名称)"></a>mv (移动文件与目录，或修改名称)</h3><p>语法：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">[root@www ~]</span># mv <span class="string">[-fiu]</span> source destination</span><br><span class="line"><span class="string">[root@www ~]</span># mv <span class="string">[options]</span> source1 source2 source3 .... directory</span><br></pre></td></tr></table></figure></p>
-<p>参数：</p>
-<ul>
-<li>-f ：force 强制的意思，如果目标文件已经存在，不会询问而直接覆盖；</li>
-<li>-i ：若目标文件 (destination) 已经存在时，就会询问是否覆盖！</li>
-<li>-u ：若目标文件已经存在，且 source 比较新，才会升级 (update)</li>
-</ul>
-<p>复制一文件，创建一目录，将文件移动到目录中<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root<span class="symbol">@www</span> ~]<span class="meta"># cd /tmp</span></span><br><span class="line">[root<span class="symbol">@www</span> tmp]<span class="meta"># cp ~/.bashrc bashrc</span></span><br><span class="line">[root<span class="symbol">@www</span> tmp]<span class="meta"># mkdir mvtest</span></span><br><span class="line">[root<span class="symbol">@www</span> tmp]<span class="meta"># mv bashrc mvtest</span></span><br></pre></td></tr></table></figure></p>
-<p>将某个文件移动到某个目录去，就是这样做！</p>
-<p>将刚刚的目录名称更名为 mvtest2<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root<span class="symbol">@www</span> tmp]<span class="meta"># mv mvtest mvtest2</span></span><br></pre></td></tr></table></figure></p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/06/01/Linux目录结构简易理解/">Linux目录结构简易理解</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/11/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-06-01T08:18:02.000Z" itemprop="datePublished">2017-06-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h2 id="Linux目录结构"><a href="#Linux目录结构" class="headerlink" title="Linux目录结构"></a>Linux目录结构</h2><p>/bin：<br>bin是Binary的缩写, 这个目录存放着最经常使用的命令。</p>
-<p>/boot：<br>这里存放的是启动Linux时使用的一些核心文件，包括一些连接文件以及镜像文件。</p>
-<p>/dev ：<br>dev是Device(设备)的缩写, 该目录下存放的是Linux的外部设备，在Linux中访问设备的方式和访问文件的方式是相同的。</p>
-<p>/etc：<br>这个目录用来存放所有的系统管理所需要的配置文件和子目录。</p>
-<p>/home：<br>用户的主目录，在Linux中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的。</p>
-<p>/lib：<br>这个目录里存放着系统最基本的动态连接共享库，其作用类似于Windows里的DLL文件。几乎所有的应用程序都需要用到这些共享库。</p>
-<p>/lost+found：<br>这个目录一般情况下是空的，当系统非法关机后，这里就存放了一些文件。</p>
-<p>/media：<br>linux系统会自动识别一些设备，例如U盘、光驱等等，当识别后，linux会把识别的设备挂载到这个目录下。</p>
-<p>/mnt：<br>系统提供该目录是为了让用户临时挂载别的文件系统的，我们可以将光驱挂载在/mnt/上，然后进入该目录就可以查看光驱里的内容了。</p>
-<p>/opt：<br> 这是给主机额外安装软件所摆放的目录。比如你安装一个ORACLE数据库则就可以放到这个目录下。默认是空的。</p>
-<p>/proc：<br>这个目录是一个虚拟的目录，它是系统内存的映射，我们可以通过直接访问这个目录来获取系统信息。<br>这个目录的内容不在硬盘上而是在内存里，我们也可以直接修改里面的某些文件，比如可以通过下面的命令来屏蔽主机的ping命令，使别人无法ping你的机器：</p>
-<p>echo 1 &gt; /proc/sys/net/ipv4/icmp_echo_ignore_all<br>/root：<br>该目录为系统管理员，也称作超级权限者的用户主目录。</p>
-<p>/sbin：<br>s就是Super User的意思，这里存放的是系统管理员使用的系统管理程序。</p>
-<p>/selinux：<br> 这个目录是Redhat/CentOS所特有的目录，Selinux是一个安全机制，类似于windows的防火墙，但是这套机制比较复杂，这个目录就是存放selinux相关的文件的。</p>
-<p>/srv：<br> 该目录存放一些服务启动之后需要提取的数据。</p>
-<p>/sys：</p>
-<p> 这是linux2.6内核的一个很大的变化。该目录下安装了2.6内核中新出现的一个文件系统 sysfs 。</p>
-<p>sysfs文件系统集成了下面3种文件系统的信息：针对进程信息的proc文件系统、针对设备的devfs文件系统以及针对伪终端的devpts文件系统。<br>该文件系统是内核设备树的一个直观反映。</p>
-<p>当一个内核对象被创建的时候，对应的文件和目录也在内核对象子系统中被创建。</p>
-<p>/tmp：<br>这个目录是用来存放一些临时文件的。</p>
-<p>/usr：<br> 这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似于windows下的program files目录。</p>
-<p>/usr/bin：<br>系统用户使用的应用程序。</p>
-<p>/usr/sbin：<br>超级用户使用的比较高级的管理程序和系统守护程序。</p>
-<p>/usr/src：<br>内核源代码默认的放置目录。</p>
-<p>/var：<br>这个目录中存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。包括各种日志文件。</p>
-<p>/run：<br>是一个临时文件系统，存储系统启动以来的信息。当系统重启时，这个目录下的文件应该被删掉或清除。如果你的系统上有 /var/run 目录，应该让它指向 run。</p>
-<h2 id="note"><a href="#note" class="headerlink" title="note"></a>note</h2><p>在 Linux 系统中，有几个目录是比较重要的，平时需要注意不要误删除或者随意更改内部文件。</p>
-<p>/etc： 上边也提到了，这个是系统中的配置文件，如果你更改了该目录下的某个文件可能会导致系统不能启动。</p>
-<p>/bin, /sbin, /usr/bin, /usr/sbin: 这是系统预设的执行文件的放置目录，比如 ls 就是在/bin/ls 目录下的。</p>
-<p>值得提出的是，/bin, /usr/bin 是给系统用户使用的指令（除root外的通用户），而/sbin, /usr/sbin 则是给root使用的指令。</p>
-<p>/var： 这是一个非常重要的目录，系统上跑了很多程序，那么每个程序都会有相应的日志产生，而这些日志就被记录到这个目录下，具体在/var/log 目录下，另外mail的预设放置也是在这里。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/06/01/Linux目录结构/">Linux 目录结构</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/11/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-06-01T08:18:02.000Z" itemprop="datePublished">2017-06-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h2 id="Linux目录结构"><a href="#Linux目录结构" class="headerlink" title="Linux目录结构"></a>Linux目录结构</h2><p>/bin：<br>bin是Binary的缩写, 这个目录存放着最经常使用的命令。</p>
-<p>/boot：<br>这里存放的是启动Linux时使用的一些核心文件，包括一些连接文件以及镜像文件。</p>
-<p>/dev ：<br>dev是Device(设备)的缩写, 该目录下存放的是Linux的外部设备，在Linux中访问设备的方式和访问文件的方式是相同的。</p>
-<p>/etc：<br>这个目录用来存放所有的系统管理所需要的配置文件和子目录。</p>
-<p>/home：<br>用户的主目录，在Linux中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的。</p>
-<p>/lib：<br>这个目录里存放着系统最基本的动态连接共享库，其作用类似于Windows里的DLL文件。几乎所有的应用程序都需要用到这些共享库。</p>
-<p>/lost+found：<br>这个目录一般情况下是空的，当系统非法关机后，这里就存放了一些文件。</p>
-<p>/media：<br>linux系统会自动识别一些设备，例如U盘、光驱等等，当识别后，linux会把识别的设备挂载到这个目录下。</p>
-<p>/mnt：<br>系统提供该目录是为了让用户临时挂载别的文件系统的，我们可以将光驱挂载在/mnt/上，然后进入该目录就可以查看光驱里的内容了。</p>
-<p>/opt：<br> 这是给主机额外安装软件所摆放的目录。比如你安装一个ORACLE数据库则就可以放到这个目录下。默认是空的。</p>
-<p>/proc：<br>这个目录是一个虚拟的目录，它是系统内存的映射，我们可以通过直接访问这个目录来获取系统信息。<br>这个目录的内容不在硬盘上而是在内存里，我们也可以直接修改里面的某些文件，比如可以通过下面的命令来屏蔽主机的ping命令，使别人无法ping你的机器：</p>
-<p>echo 1 &gt; /proc/sys/net/ipv4/icmp_echo_ignore_all<br>/root：<br>该目录为系统管理员，也称作超级权限者的用户主目录。</p>
-<p>/sbin：<br>s就是Super User的意思，这里存放的是系统管理员使用的系统管理程序。</p>
-<p>/selinux：<br> 这个目录是Redhat/CentOS所特有的目录，Selinux是一个安全机制，类似于windows的防火墙，但是这套机制比较复杂，这个目录就是存放selinux相关的文件的。</p>
-<p>/srv：<br> 该目录存放一些服务启动之后需要提取的数据。</p>
-<p>/sys：</p>
-<p> 这是linux2.6内核的一个很大的变化。该目录下安装了2.6内核中新出现的一个文件系统 sysfs 。</p>
-<p>sysfs文件系统集成了下面3种文件系统的信息：针对进程信息的proc文件系统、针对设备的devfs文件系统以及针对伪终端的devpts文件系统。<br>该文件系统是内核设备树的一个直观反映。</p>
-<p>当一个内核对象被创建的时候，对应的文件和目录也在内核对象子系统中被创建。</p>
-<p>/tmp：<br>这个目录是用来存放一些临时文件的。</p>
-<p>/usr：<br> 这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似于windows下的program files目录。</p>
-<p>/usr/bin：<br>系统用户使用的应用程序。</p>
-<p>/usr/sbin：<br>超级用户使用的比较高级的管理程序和系统守护程序。</p>
-<p>/usr/src：<br>内核源代码默认的放置目录。</p>
-<p>/var：<br>这个目录中存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。包括各种日志文件。</p>
-<p>/run：<br>是一个临时文件系统，存储系统启动以来的信息。当系统重启时，这个目录下的文件应该被删掉或清除。如果你的系统上有 /var/run 目录，应该让它指向 run。</p>
-<h2 id="note"><a href="#note" class="headerlink" title="note"></a>note</h2><p>在 Linux 系统中，有几个目录是比较重要的，平时需要注意不要误删除或者随意更改内部文件。</p>
-<p>/etc： 上边也提到了，这个是系统中的配置文件，如果你更改了该目录下的某个文件可能会导致系统不能启动。</p>
-<p>/bin, /sbin, /usr/bin, /usr/sbin: 这是系统预设的执行文件的放置目录，比如 ls 就是在/bin/ls 目录下的。</p>
-<p>值得提出的是，/bin, /usr/bin 是给系统用户使用的指令（除root外的通用户），而/sbin, /usr/sbin 则是给root使用的指令。</p>
-<p>/var： 这是一个非常重要的目录，系统上跑了很多程序，那么每个程序都会有相应的日志产生，而这些日志就被记录到这个目录下，具体在/var/log 目录下，另外mail的预设放置也是在这里。</p>
+        <h1 id="mybatis相关问题"><a href="#mybatis相关问题" class="headerlink" title="mybatis相关问题"></a>mybatis相关问题</h1><h2 id="mybatis应用"><a href="#mybatis应用" class="headerlink" title="mybatis应用"></a>mybatis应用</h2><p>1.mybatis优缺点，spring与mybatis集成</p>
+<p>2.Config、Sql配置、Mapper配置、有几种注册Mapper的方式，优先级如何？</p>
+<p>3.mybatis的一级缓存、二级缓存、mybatis的二级缓存为何是鸡肋？</p>
+<p>4.通用mapper的实现，mybatis编写sql语句的三种方式。</p>
+<h2 id="mybatis源码分析"><a href="#mybatis源码分析" class="headerlink" title="mybatis源码分析"></a>mybatis源码分析</h2><p>1.@MapperScan的源码分析？mapperScan如何生效</p>
+<p>2.mybatis如何扩展spring的扫描器的，mybatis扫描完之后如何利用FactoryBean？</p>
+<p>3.mybatis底层如何会把一个代理对象放在spring容器中？用到了spring的哪些知识？</p>
+<p>4.mybatis和spring的核心接口ImportBeanDefinitionRegistrar之间的关系。</p>
+<p>5.mybatis如何实现一级缓存，spring集成后如何失效的？为何将其失效，有没有办法解决。</p>
+<p>6.mybatis分析mybatis的执行流程、mybatis的sql什么时候缓存的？缓存在哪里？</p>
+<p>7.mybatis当中的方法名为何要与mapper当中的id一致？从源码分析？</p>
 
         
     </section>
@@ -473,7 +292,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2017/03/06/mybatis/">对maven中setting.xml配置文件进行解释</a>
+            <a href="/2017/03/01/NodeJs相关插件/">NodeJs插件</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -481,13 +300,13 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2017-03-06T08:22:30.000Z" itemprop="datePublished">2017-03-06</time>
+    <time datetime="2017-03-01T14:22:22.000Z" itemprop="datePublished">2017-03-01</time>
 </a>
 
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Maven/">Maven</a>
+    <a class="article-tag-link" href="/tags/NodeJs/">NodeJs</a>
 </div>
 
 
@@ -496,17 +315,160 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="mybatis相关问题"><a href="#mybatis相关问题" class="headerlink" title="mybatis相关问题"></a>mybatis相关问题</h1><h2 id="mybatis应用"><a href="#mybatis应用" class="headerlink" title="mybatis应用"></a>mybatis应用</h2><p>1.mybatis优缺点，spring与mybatis集成</p>
-<p>2.Config、Sql配置、Mapper配置、有几种注册Mapper的方式，优先级如何？</p>
-<p>3.mybatis的一级缓存、二级缓存、mybatis的二级缓存为何是鸡肋？</p>
-<p>4.通用mapper的实现，mybatis编写sql语句的三种方式。</p>
-<h2 id="mybatis源码分析"><a href="#mybatis源码分析" class="headerlink" title="mybatis源码分析"></a>mybatis源码分析</h2><p>1.@MapperScan的源码分析？mapperScan如何生效</p>
-<p>2.mybatis如何扩展spring的扫描器的，mybatis扫描完之后如何利用FactoryBean？</p>
-<p>3.mybatis底层如何会把一个代理对象放在spring容器中？用到了spring的哪些知识？</p>
-<p>4.mybatis和spring的核心接口ImportBeanDefinitionRegistrar之间的关系。</p>
-<p>5.mybatis如何实现一级缓存，spring集成后如何失效的？为何将其失效，有没有办法解决。</p>
-<p>6.mybatis分析mybatis的执行流程、mybatis的sql什么时候缓存的？缓存在哪里？</p>
-<p>7.mybatis当中的方法名为何要与mapper当中的id一致？从源码分析？</p>
+        <h3 id="lodash"><a href="#lodash" class="headerlink" title="lodash"></a>lodash</h3><p>采用延迟计算，意味着我们的链式方法在显式或者隐式的value()调用之前是不会执行的，<br>因此lodash可以进行shortcut（捷径） fusion（融合）这样的优化，<br>通过合并链式大大降低迭代的次数，从而大大提升其执行性能。</p>
+<h3 id="cors"><a href="#cors" class="headerlink" title="cors"></a>cors</h3><p>实现跨域的功能</p>
+<h3 id="helmet"><a href="#helmet" class="headerlink" title="helmet"></a>helmet</h3><p>是一个保护Node.JS应用的安全项目<br>一些著名的对Web攻击有XSS跨站脚本， 脚本注入 clickjacking<br>以及各种非安全的请求等对Node.js的Web应用构成各种威胁，<br>使用Helmet能帮助你的应用避免这些攻击。</p>
+<h3 id="csurf"><a href="#csurf" class="headerlink" title="csurf"></a>csurf</h3><p>跨站请求伪造</p>
+<h3 id="colors"><a href="#colors" class="headerlink" title="colors"></a>colors</h3><p>终端着色插件</p>
+<h3 id="express-validator"><a href="#express-validator" class="headerlink" title="express-validator"></a>express-validator</h3><p>校验插件<br>npm install –save express-validator</p>
+<h3 id="uuid-GUID插件"><a href="#uuid-GUID插件" class="headerlink" title="uuid GUID插件"></a>uuid GUID插件</h3><p>npm install –save node-uuid</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2017/03/01/NodeJs基础/">NodeJs基础</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/11/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-03-01T14:22:22.000Z" itemprop="datePublished">2017-03-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/NodeJs/">NodeJs</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="NodeJs基础"><a href="#NodeJs基础" class="headerlink" title="NodeJs基础"></a>NodeJs基础</h1><h2 id="Node-核心"><a href="#Node-核心" class="headerlink" title="Node 核心"></a>Node 核心</h2><p>Node核心： </p>
+<ul>
+<li>非阻塞；　　</li>
+<li>单线程；　　</li>
+<li>事件驱动。</li>
+</ul>
+<h2 id="NodeJs回调"><a href="#NodeJs回调" class="headerlink" title="NodeJs回调"></a>NodeJs回调</h2><p>回调函数：异步编程依托于回调来实现，但不能说使用了回调后程序就异步化了。<br>Node 使用了大量的回调函数，Node所有API都支持回调函数。未使用回调函数可能会产生阻塞。</p>
+<h3 id="阻塞："><a href="#阻塞：" class="headerlink" title="阻塞："></a>阻塞：</h3><figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">var</span> fs = <span class="keyword">require</span>(<span class="string">"fs"</span>);</span><br><span class="line"><span class="built_in">var</span> <span class="built_in">data</span> = fs.readFileSync(<span class="string">'input.txt'</span>);</span><br><span class="line">console.<span class="keyword">log</span>(<span class="built_in">data</span>.toString());</span><br><span class="line">console.<span class="keyword">log</span>(<span class="string">"程序执行结束!"</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="非阻塞："><a href="#非阻塞：" class="headerlink" title="非阻塞："></a>非阻塞：</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">"fs"</span>);</span><br><span class="line"></span><br><span class="line">fs.readFile(<span class="string">'input.txt'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, data</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (err) <span class="keyword">return</span> <span class="built_in">console</span>.error(err);</span><br><span class="line">    <span class="built_in">console</span>.log(data.toString());</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"程序执行结束!"</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="NodeJs事件"><a href="#NodeJs事件" class="headerlink" title="NodeJs事件"></a>NodeJs事件</h2><p>事件驱动程序。当web server接收到请求，就把它关闭然后进行处理，然后去服务下一个web请求。当这个请求完成，它被放回处理队列，当到达队列开头，这个结果被返回给用户。这个模型非常高效可扩展性非常强，因为webserver一直接受请求而不等待任何读写操作。（这也被称之为非阻塞式IO或者事件驱动IO）</p>
+<h2 id="模块化"><a href="#模块化" class="headerlink" title="模块化"></a>模块化</h2><blockquote>
+<p>NodeJs 提供了两个命令，require 和 exports<br>exports是模块中公开的接口，require用于从外部获取接口，其实可以通过如此获取到所需模块的一个对象。</p>
+</blockquote>
+<h2 id="模块的加载顺序"><a href="#模块的加载顺序" class="headerlink" title="模块的加载顺序"></a>模块的加载顺序</h2><p>一）从文件模块缓存中加载：</p>
+<p>尽管原生模块与文件模块的优先级不同，但是都会优先于从文件模块的缓存中加载已经存在的模块。</p>
+<p>二）从原生模块加载：</p>
+<p>原生模块的优先级仅次于文件模块缓存的优先级。<br>require 方法在解析文件名之后，优先检查模块是否在原生模块列表中。<br>以http模块为例，尽管在目录下存在一个 http/http.js/http.node/http.json 文件，<br>require(“http”) 都不会从这些文件中加载，而是从原生模块中加载。<br>原生模块也有一个缓存区，同样也是优先从缓存区加载。<br>如果缓存区没有被加载过，则调用原生模块的加载方式进行加载和执行。</p>
+<p>三）从文件加载：</p>
+<p>当文件模块缓存中不存在，而且不是原生模块的时候，<br>Node.js 会解析 require 方法传入的参数，并从文件系统中加载实际的文件，<br>require方法接受以下几种参数的传递：</p>
+<ul>
+<li>http、fs、path等，原生模块。</li>
+<li>./mod或../mod，相对路径的文件模块。</li>
+<li>/pathtomodule/mod，绝对路径的文件模块。</li>
+<li>mod，非原生模块的文件模块。</li>
+</ul>
+<h3 id="NodeJs-Buffer"><a href="#NodeJs-Buffer" class="headerlink" title="NodeJs Buffer"></a>NodeJs Buffer</h3><p>JS本身只有字符串类型，没有二进制数据类型。但在处理像TCP流或文件流时，必须使用到二进制数据。因此在 Node.js中，定义了一个Buffer类，该类用来创建一个专门存放二进制数据的缓存区。</p>
+<h3 id="NodeJs-Stream"><a href="#NodeJs-Stream" class="headerlink" title="NodeJs Stream"></a>NodeJs Stream</h3><p>Stream 是一个抽象接口，Node 中有很多对象实现了这个接口。<br>例如，对http 服务器发起请求的request 对象就是一个 Stream，还有stdout（标准输出）。    </p>
+<p>Node.js，Stream 有四种流类型：</p>
+<ul>
+<li>Readable - 可读操作。</li>
+<li>Writable - 可写操作。</li>
+<li>Duplex - 可读可写操作.</li>
+<li>Transform - 操作被写入数据，然后读出结果。</li>
+</ul>
+<p>所有的 Stream 对象都是 EventEmitter 的实例。常用的事件有：</p>
+<ul>
+<li>data - 当有数据可读时触发。</li>
+<li>end - 没有更多的数据可读时触发。</li>
+<li>error - 在接收和写入过程中发生错误时触发。</li>
+<li>finish - 所有数据已被写入到底层系统时触发。</li>
+</ul>
+<h2 id="NodeJs-OS模块：（基本的系统操作函数）"><a href="#NodeJs-OS模块：（基本的系统操作函数）" class="headerlink" title="NodeJs OS模块：（基本的系统操作函数）"></a>NodeJs OS模块：（基本的系统操作函数）</h2><ul>
+<li>os.tmpdir()         返回操作系统的默认临时文件夹。</li>
+<li>os.endianness()     返回 CPU 的字节序，可能的是 “BE” 或 “LE”。</li>
+<li>os.hostname()       返回操作系统的主机名。</li>
+<li>os.type()           返回操作系统名</li>
+<li>os.platform()       返回操作系统名</li>
+<li>os.arch()           返回操作系统 CPU 架构，可能的值有 “x64”、”arm” 和 “ia32”。</li>
+<li>os.release()        返回操作系统的发行版本。</li>
+<li>os.uptime()         返回操作系统运行的时间，以秒为单位。</li>
+<li>os.loadavg()        返回一个包含 1、5、15 分钟平均负载的数组。</li>
+<li>os.totalmem()       返回系统内存总量，单位为字节。</li>
+<li>os.freemem()        返回操作系统空闲内存量，单位是字节。</li>
+<li>os.cpus()           返回一个对象数组，包含所安装的每个 CPU/内核的信息：型号、速度（单位 MHz）、时间（一个包含 user、nice、sys、idle 和 irq 所使用 CPU/内核毫秒数的对象）。</li>
+<li>os.networkInterfaces()  获得网络接口列表。</li>
+</ul>
+<h2 id="NodeJs-Path-模块：（提供了处理和转换文件路的工具）"><a href="#NodeJs-Path-模块：（提供了处理和转换文件路的工具）" class="headerlink" title="NodeJs Path 模块：（提供了处理和转换文件路的工具）"></a>NodeJs Path 模块：（提供了处理和转换文件路的工具）</h2><ul>
+<li>path.normalize(p)                    规范化路径，注意’..’ 和 ‘.’。</li>
+<li>path.join([path1][, path2][, …])   用于连接路径。该方法的主要用途在于，会正确使用当前系统的路径分隔符，Unix系统是”/“，Windows系统是”\”。</li>
+<li>path.resolve([from …], to)         将 to 参数解析为绝对路径。</li>
+<li>path.isAbsolute(path)                判断参数 path 是否是绝对路径。</li>
+<li>path.relative(from, to)              用于将相对路径转为绝对路径。</li>
+<li>path.dirname(p)                      返回路径中代表文件夹的部分，同 Unix 的dirname 命令类似。</li>
+<li>path.basename(p[, ext])              返回路径中的最后一部分。同 Unix 命令 bashname 类似。</li>
+<li>path.extname(p)                      返回路径中文件的后缀名，即路径中最后一个’.’之后的部分。如果一个路径中并不包含’.’或该路径只包含一个’.’ 且这个’.’为路径的第一个字符，则此命令返回空字符串。</li>
+<li>path.parse(pathString)               返回路径字符串的对象。</li>
+<li>path.format(pathObject)              从对象中返回路径字符串，和 path.parse 相反。</li>
+</ul>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>NodeJs Net 模块：（提供了用于底层的网络通信的小工具，包含了创建服务器/客户端的方法）</p>
+<p>NodeJs DNS 模块：（用于解析域名）</p>
+<h2 id="NodeJs-Express框架："><a href="#NodeJs-Express框架：" class="headerlink" title="NodeJs Express框架："></a>NodeJs Express框架：</h2><p>请求和响应：<br>app.get(‘/‘, function (req, res) {<br>   // –<br>})</p>
+<p>Express 应用使用回调函数的参数： request和response对象来处理请求和响应的数据。</p>
+<h3 id="Request-对象："><a href="#Request-对象：" class="headerlink" title="Request 对象："></a>Request 对象：</h3><p>request对象表示 HTTP 请求，包含了请求查询字符串，参数，内容，HTTP 头部等属性。常见属性有：</p>
+<ul>
+<li>(1)req.app：当callback为外部文件时，用req.app访问express的实例</li>
+<li>(2)req.baseUrl：获取路由当前安装的URL路径</li>
+<li>(3)req.body / req.cookies：获得「请求主体」/ Cookies</li>
+<li>(4)req.fresh / req.stale：判断请求是否还「新鲜」</li>
+<li>(5)req.hostname / req.ip：获取主机名和IP地址</li>
+<li>(6)req.originalUrl：获取原始请求URL</li>
+<li>(7)req.params：获取路由的parameters</li>
+<li>(8)req.path：获取请求路径</li>
+<li>(9)req.protocol：获取协议类型</li>
+<li>(10)req.query：获取URL的查询参数串</li>
+<li>(11)req.route：获取当前匹配的路由</li>
+<li>(12)req.subdomains：获取子域名</li>
+<li>(13)req.accepts()：检查可接受的请求的文档类型</li>
+<li>(14)req.acceptsCharsets / <pre><code>req.acceptsEncodings / 
+req.acceptsLanguages：返回指定字符集的第一个可接受字符编码
+</code></pre></li>
+<li>(15)req.get()：获取指定的HTTP请求头</li>
+<li>(16)req.is()：判断请求头Content-Type的MIME类型</li>
+</ul>
+<h3 id="Reponse-对象："><a href="#Reponse-对象：" class="headerlink" title="Reponse 对象："></a>Reponse 对象：</h3><ul>
+<li>(1)res.app：同req.app一样</li>
+<li>(2)res.append()：追加指定HTTP头</li>
+<li>(3)res.set():    在res.append()后将重置之前设置的头</li>
+<li>(4)res.cookie(name，value [，option])：设置Cookie</li>
+<li>opition: domain / expires / httpOnly / maxAge / path / secure / signed</li>
+<li>(5)res.clearCookie()：清除Cookie</li>
+<li>(6)res.download()：传送指定路径的文件</li>
+<li>(7)res.get()：返回指定的HTTP头</li>
+<li>(8)res.json()：传送JSON响应</li>
+<li>(9)res.jsonp()：传送JSONP响应</li>
+<li>(10)res.location()：只设置响应的Location HTTP头，不设置状态码或者close response</li>
+<li>(11)res.redirect()：设置响应的Location HTTP头，并且设置状态码302</li>
+<li>(12)res.send()：传送HTTP响应</li>
+<li>(13)res.sendFile(path [，options] [，fn])：</li>
+<li>传送指定路径的文件 -会自动根据文件extension设定Content-Type</li>
+<li>(14)res.set()：设置HTTP头，传入object可以一次设置多个头</li>
+<li>(15)res.status()：设置HTTP状态码</li>
+<li>(16)res.type()：设置Content-Type的MIME类型</li>
+</ul>
 
         
     </section>
@@ -545,6 +507,107 @@
 <p>动态对象 ExpandoObject中添加动态属性？</p>
 <figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dynamic</span> obj = <span class="keyword">new</span> ExpandoObject();</span><br><span class="line">IDictionary&lt;<span class="keyword">string</span>, <span class="keyword">object</span>&gt; temp = <span class="keyword">new</span> Dictionary&lt;<span class="keyword">string</span>, <span class="keyword">object</span>&gt;();</span><br><span class="line">temp.Add(Key, Value);</span><br><span class="line"></span><br><span class="line"><span class="keyword">foreach</span> (KeyValuePair&lt;<span class="keyword">string</span>, <span class="keyword">object</span>&gt; item <span class="keyword">in</span> temp)</span><br><span class="line">&#123;</span><br><span class="line">    ((IDictionary&lt;<span class="keyword">string</span>, <span class="keyword">object</span>&gt;)obj).Add(item.Key, item.Value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>因为不难发现ExpandObject继承自以下接口：<br>IDictionary&lt;string, object&gt;, ICollection&lt;KeyValuePair&lt;string, object&gt;&gt;, IEnumerable&lt;KeyValuePair&lt;string, object&gt;&gt;, IEnumerable</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2017/02/08/Java单例模式/">单例模式</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/11/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-02-08T04:18:45.000Z" itemprop="datePublished">2017-02-08</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/设计模式/">设计模式</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h1><h2 id="什么是单例模式"><a href="#什么是单例模式" class="headerlink" title="什么是单例模式"></a>什么是单例模式</h2><p>因程序需要，有时我们只需要某个类同时保留一个对象，不希望有更多对象，此时，我们则应考虑单例模式的设计。</p>
+<h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><ol>
+<li><p>单例模式只能有一个实例。</p>
+</li>
+<li><p>单例类必须创建自己的唯一实例。</p>
+</li>
+<li><p>单例类必须向其他对象提供这一实例。</p>
+</li>
+</ol>
+<h2 id="单例模式VS静态类"><a href="#单例模式VS静态类" class="headerlink" title="单例模式VS静态类"></a>单例模式VS静态类</h2><p>在知道了什么是单例模式后，我想你一定会想到静态类，“既然只使用一个对象，为何不干脆使用静态类？”，这里我会将单例模式和静态类进行一个比较。</p>
+<ol>
+<li><p>单例可以继承和被继承，方法可以被override，而静态方法不可以。</p>
+</li>
+<li><p>静态方法中产生的对象会在执行后被释放，进而被GC清理，不会一直存在于内存中。</p>
+</li>
+<li><p>静态类会在第一次运行时初始化，单例模式可以有其他的选择，即可以延迟加载。</p>
+</li>
+<li><p>基于2， 3条，由于单例对象往往存在于DAO层（例如sessionFactory），如果反复的初始化和释放，则会占用很多资源，而使用单例模式将其常驻于内存可以更加节约资源。</p>
+</li>
+<li><p>静态方法有更高的访问效率。</p>
+</li>
+<li><p>单例模式很容易被测试。</p>
+</li>
+</ol>
+<p>几个关于静态类的误解：</p>
+<ul>
+<li>误解一：静态方法常驻内存而实例方法不是。</li>
+</ul>
+<blockquote>
+<p>实际上，特殊编写的实例方法可以常驻内存，而静态方法需要不断初始化和释放。</p>
+</blockquote>
+<ul>
+<li>误解二：静态方法在堆(heap)上，实例方法在栈(stack)上。</li>
+</ul>
+<blockquote>
+<p>实际上，都是加载到特殊的不可写的代码内存区域中。</p>
+</blockquote>
+<p>静态类和单例模式情景的选择：</p>
+<p>情景一：不需要维持任何状态，仅仅用于全局访问，此时更适合使用静态类。</p>
+<p>情景二：需要维持一些特定的状态，此时更适合使用单例模式。</p>
+<h2 id="单例模式的实现"><a href="#单例模式的实现" class="headerlink" title="单例模式的实现"></a>单例模式的实现</h2><h3 id="1-懒汉模式（线程不安全）"><a href="#1-懒汉模式（线程不安全）" class="headerlink" title="1. 懒汉模式（线程不安全）"></a>1. 懒汉模式（线程不安全）</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class SingletonDemo &#123;</span><br><span class="line">    private static SingletonDemo instance;</span><br><span class="line">    private SingletonDemo()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    public static SingletonDemo getInstance()&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="attribute">instance</span>==null)&#123;</span><br><span class="line">            <span class="attribute">instance</span>=new SingletonDemo();</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如上，通过提供一个静态的对象instance，利用private权限的构造方法和getInstance()方法来给予访问者一个单例。</p>
+<p>缺点是，没有考虑到线程安全，可能存在多个访问者同时访问，并同时构造了多个对象的问题。</p>
+<p>之所以叫做懒汉模式，主要是因为此种方法可以非常明显的lazy loading。</p>
+<p>针对懒汉模式线程不安全的问题，我们自然想到了，在getInstance()方法前加锁，于是就有了第二种实现。</p>
+<h3 id="2-懒汉模式二-（线程安全）"><a href="#2-懒汉模式二-（线程安全）" class="headerlink" title="2. 懒汉模式二 （线程安全）"></a>2. 懒汉模式二 （线程安全）</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class SingletonDemo &#123;</span><br><span class="line">    private static SingletonDemo instance;</span><br><span class="line">    private SingletonDemo()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    public static synchronized SingletonDemo getInstance()&#123;</span><br><span class="line">        <span class="keyword">if</span>(instance == <span class="literal">null</span>)&#123;</span><br><span class="line">           <span class="built_in"> instance </span>= new SingletonDemo();</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然而并发其实是一种特殊情况，大多时候这个锁占用的额外资源都浪费了，这种打补丁方式写出来的结构效率很低。</p>
+<h3 id="3-饿汉模式"><a href="#3-饿汉模式" class="headerlink" title="3. 饿汉模式"></a>3. 饿汉模式</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class SingletonDemo &#123;</span><br><span class="line">    private static SingletonDemo<span class="built_in"> instance </span>= new SingletonDemo();</span><br><span class="line">    private SingletonDemo()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    public static SingletonDemo getInstance()&#123;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>直接在运行这个类的时候进行一次loading，之后直接访问。显然，这种方法没有起到lazy loading的效果，考虑到前面提到的和静态类的对比，这种方法只比静态类多了一个内存常驻而已。</p>
+<h3 id="4-静态类内部加载"><a href="#4-静态类内部加载" class="headerlink" title="4. 静态类内部加载"></a>4. 静态类内部加载</h3><figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public class SingletonDemo &#123;</span><br><span class="line">   <span class="keyword"> private</span><span class="keyword"> static</span> class SingletonHolder&#123;</span><br><span class="line">       <span class="keyword"> private</span><span class="keyword"> static</span> SingletonDemo<span class="built_in"> instance </span>=<span class="built_in"> new </span>SingletonDemo();</span><br><span class="line">    &#125;</span><br><span class="line">   <span class="keyword"> private</span> SingletonDemo()&#123;</span><br><span class="line">        System.out.println(<span class="string">"Singleton has loaded"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">   <span class="keyword"> public</span><span class="keyword"> static</span> SingletonDemo getInstance()&#123;</span><br><span class="line">       <span class="built_in"> return </span>SingletonHolder.instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用内部类的好处是，静态内部类不会在单例加载时就加载，而是在调用getInstance()方法时才进行加载，达到了类似懒汉模式的效果，而这种方法又是线程安全的。</p>
+<h3 id="5-枚举方法"><a href="#5-枚举方法" class="headerlink" title="5. 枚举方法"></a>5. 枚举方法</h3><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">SingletonDemo</span>&#123;</span></span><br><span class="line">    INSTANCE;</span><br><span class="line">    public void otherMethods()&#123;</span><br><span class="line">        System.<span class="keyword">out</span>.println(<span class="string">"Something"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">Hello</span> &#123;</span></span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">        SingletonDemo.INSTANCE.otherMethods();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>提倡的方式，在我看来简直是来自神的写法。解决了以下三个问题：</p>
+<ul>
+<li>(1)自由序列化。</li>
+<li>(2)保证只有一个实例。</li>
+<li>(3)线程安全。</li>
+</ul>
+<p>这种充满美感的代码真的已经终结了其他一切实现方法了。</p>
+<h3 id="6-双重校验锁法"><a href="#6-双重校验锁法" class="headerlink" title="6. 双重校验锁法"></a>6. 双重校验锁法</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class SingletonDemo &#123;</span><br><span class="line">    private static SingletonDemo instance;</span><br><span class="line">    private SingletonDemo()&#123;</span><br><span class="line">        System.out.println(<span class="string">"Singleton has loaded"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    public static SingletonDemo getInstance()&#123;</span><br><span class="line">        <span class="keyword">if</span>(instance == <span class="literal">null</span>)&#123;</span><br><span class="line">            synchronized (SingletonDemo.class)&#123;</span><br><span class="line">                <span class="keyword">if</span>(instance == <span class="literal">null</span>)&#123;</span><br><span class="line">                   <span class="built_in"> instance </span>= new SingletonDemo();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下来我解释一下在并发时，双重校验锁法会有怎样的情景：</p>
+<p>STEP 1. 线程A访问getInstance()方法，因为单例还没有实例化，所以进入了锁定块。</p>
+<p>STEP 2. 线程B访问getInstance()方法，因为单例还没有实例化，得以访问接下来代码块，而接下来代码块已经被线程1锁定。</p>
+<p>STEP 3. 线程A进入下一判断，因为单例还没有实例化，所以进行单例实例化，成功实例化后退出代码块，解除锁定。</p>
+<p>STEP 4. 线程B进入接下来代码块，锁定线程，进入下一判断，因为已经实例化，退出代码块，解除锁定。</p>
+<p>STEP 5. 线程A初始化并获取到了单例实例并返回，线程B获取了在线程A中初始化的单例。</p>
+<p>理论上双重校验锁法是线程安全的，并且，这种方法实现了lazyloading。</p>
 
         
     </section>

@@ -131,7 +131,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/02/08/IO复用技术/">IO复用技术</a>
+            <a href="/2018/02/08/清除eclipse launch configuration/">清除eclipse launch configuration</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -139,13 +139,13 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-02-08T04:18:45.000Z" itemprop="datePublished">2018-02-08</time>
+    <time datetime="2018-02-08T06:18:02.000Z" itemprop="datePublished">2018-02-08</time>
 </a>
 
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
+    <a class="article-tag-link" href="/tags/Java/">Java</a>
 </div>
 
 
@@ -154,26 +154,11 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="IO复用技术"><a href="#IO复用技术" class="headerlink" title="IO复用技术"></a>IO复用技术</h1><p>多进程方式实现的服务器端，一次创建多个工作子进程来给客户端提供服务。其实这种方式是存在问题的。</p>
-<p>可以打个比方：如果我们先前创建的几个进程承载不了目前快速发展的业务的话，是不是还得增加进程数？我们都知道系统创建进程是需要消耗大量资源的，所以这样就会导致系统资源不足的情况。</p>
-<p>那么有没有一种方式可以让一个进程同时为多个客户端端提供服务？</p>
-<p>接下来要讲的IO复用技术就是对于上述问题的最好解答。</p>
-<p>对于IO复用，我们可以通过一个例子来很好的理解它。（例子来自于《TCP/IP网络编程》）</p>
-<p>某教室有10名学生和1名老师，这些学生上课会不停的提问，所以一个老师处理不了这么多的问题。那么学校为每个学生都配一名老师，</p>
-<p>也就是这个教室目前有10名老师。此后，只要有新的转校生，那么就会为这个学生专门分配一个老师。</p>
-<p>如果把以上例子中的学生比作客户端，那么老师就是负责进行数据交换的服务端。则该例子可以比作是多进程的方式。</p>
-<p>后来有一天，来了一位具有超能力的老师，这位老师回答问题非常迅速，并且可以应对所有的问题。而这位老师采用的方式是学生提问前必须先举手，确认举手学生后在回答问题。则现在的情况就是IO复用。</p>
-<p>目前的常用的IO复用模型有三种：select，poll，epoll。</p>
-<h2 id="select模型"><a href="#select模型" class="headerlink" title="select模型"></a>select模型</h2><p>说的通俗一点就是各个客户端(连接的文件描述符)套接字，都被放到了一个集合中，调用select函数之后会一直监视这些文件描述符中有哪些可读，如果有可读的描述符那么我们的工作进程就去读取资源。</p>
-<h2 id="poll模型"><a href="#poll模型" class="headerlink" title="poll模型"></a>poll模型</h2><p>poll 和 select 的实现非常类似，本质上的区别就是存放 fd 集合的数据结构不一样。select 在一个进程内可以维持最多 1024 个连接，poll 在此基础上做了加强，可以维持任意数量的连接。</p>
-<p>但 select 和 poll 方式有一个很大的问题就是，我们不难看出来select是通过轮训的方式来查找是否可读或者可写，打个比方，如果同时有100万个连接都没有断开，而只有一个客户端发送了数据，所以这里它还是需要循环这么多次，造成资源浪费。所以后来出现了 epoll系统调用。</p>
-<h2 id="epoll模型"><a href="#epoll模型" class="headerlink" title="epoll模型"></a>epoll模型</h2><p>epoll是 select 和 poll 的增强版，epoll 同 poll 一样，文件描述符数量无限制。</p>
-<p>epoll是基于内核的反射机制，在有活跃的 socket 时，系统会调用我们提前设置的回调函数。而 poll 和 select 都是遍历。</p>
-<p>但是也并不是所有情况下 epoll 都比 select/poll 好，比如在如下场景：</p>
-<p>在大多数客户端都很活跃的情况下，系统会把所有的回调函数都唤醒，所以会导致负载较高。既然要处理这么多的连接，那倒不如 select 遍历简单有效。</p>
+        <h1 id="清除eclipse-launch-configuration"><a href="#清除eclipse-launch-configuration" class="headerlink" title="清除eclipse launch configuration"></a>清除eclipse launch configuration</h1><p>eclipse里面export runnable jar之前要先run一下才行, 但是之后launch configuration里面的记录一直存在, 非常难看, 清除的方法是:<br>清空workspace文件夹下的里的内容。</p>
 <blockquote>
-<p>内核（kernel）利用文件描述符（file descriptor）来访问文件。文件描述符是非负整数。打开现存文件或新建文件时，内核会返回一个文件描述符。读写文件也需要使用文件描述符来指定待读写的文件。</p>
+<p>注意是删掉文件夹里面的内容, 而不是把文件夹删了</p>
 </blockquote>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.metadata/.plugins/org<span class="selector-class">.eclipse</span><span class="selector-class">.debug</span><span class="selector-class">.core</span>/.launches</span><br><span class="line"></span><br><span class="line">eg:</span><br><span class="line">E:\JavaWorkSpace\.metadata\.plugins\org<span class="selector-class">.eclipse</span><span class="selector-class">.debug</span><span class="selector-class">.core</span>\.launches</span><br></pre></td></tr></table></figure>
 
         
     </section>
@@ -220,6 +205,60 @@
 <p>5.volatile、ThreadLocal的使用场景和原理；</p>
 <p>6.ThreadLocal什么时候会出现OOM情况？为什么？</p>
 <p>7.sychronized、volatile区别？synchronized锁粒度、模拟死锁场景、原子性和可见性</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/02/08/IO复用技术/">IO复用技术</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/4/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-08T04:18:45.000Z" itemprop="datePublished">2018-02-08</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/IO/">IO</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="IO复用技术"><a href="#IO复用技术" class="headerlink" title="IO复用技术"></a>IO复用技术</h1><p>多进程方式实现的服务器端，一次创建多个工作子进程来给客户端提供服务。其实这种方式是存在问题的。</p>
+<p>可以打个比方：如果我们先前创建的几个进程承载不了目前快速发展的业务的话，是不是还得增加进程数？我们都知道系统创建进程是需要消耗大量资源的，所以这样就会导致系统资源不足的情况。</p>
+<p>那么有没有一种方式可以让一个进程同时为多个客户端端提供服务？</p>
+<p>接下来要讲的IO复用技术就是对于上述问题的最好解答。</p>
+<p>对于IO复用，我们可以通过一个例子来很好的理解它。（例子来自于《TCP/IP网络编程》）</p>
+<p>某教室有10名学生和1名老师，这些学生上课会不停的提问，所以一个老师处理不了这么多的问题。那么学校为每个学生都配一名老师，</p>
+<p>也就是这个教室目前有10名老师。此后，只要有新的转校生，那么就会为这个学生专门分配一个老师。</p>
+<p>如果把以上例子中的学生比作客户端，那么老师就是负责进行数据交换的服务端。则该例子可以比作是多进程的方式。</p>
+<p>后来有一天，来了一位具有超能力的老师，这位老师回答问题非常迅速，并且可以应对所有的问题。而这位老师采用的方式是学生提问前必须先举手，确认举手学生后在回答问题。则现在的情况就是IO复用。</p>
+<p>目前的常用的IO复用模型有三种：select，poll，epoll。</p>
+<h2 id="select模型"><a href="#select模型" class="headerlink" title="select模型"></a>select模型</h2><p>说的通俗一点就是各个客户端(连接的文件描述符)套接字，都被放到了一个集合中，调用select函数之后会一直监视这些文件描述符中有哪些可读，如果有可读的描述符那么我们的工作进程就去读取资源。</p>
+<h2 id="poll模型"><a href="#poll模型" class="headerlink" title="poll模型"></a>poll模型</h2><p>poll 和 select 的实现非常类似，本质上的区别就是存放 fd 集合的数据结构不一样。select 在一个进程内可以维持最多 1024 个连接，poll 在此基础上做了加强，可以维持任意数量的连接。</p>
+<p>但 select 和 poll 方式有一个很大的问题就是，我们不难看出来select是通过轮训的方式来查找是否可读或者可写，打个比方，如果同时有100万个连接都没有断开，而只有一个客户端发送了数据，所以这里它还是需要循环这么多次，造成资源浪费。所以后来出现了 epoll系统调用。</p>
+<h2 id="epoll模型"><a href="#epoll模型" class="headerlink" title="epoll模型"></a>epoll模型</h2><p>epoll是 select 和 poll 的增强版，epoll 同 poll 一样，文件描述符数量无限制。</p>
+<p>epoll是基于内核的反射机制，在有活跃的 socket 时，系统会调用我们提前设置的回调函数。而 poll 和 select 都是遍历。</p>
+<p>但是也并不是所有情况下 epoll 都比 select/poll 好，比如在如下场景：</p>
+<p>在大多数客户端都很活跃的情况下，系统会把所有的回调函数都唤醒，所以会导致负载较高。既然要处理这么多的连接，那倒不如 select 遍历简单有效。</p>
+<blockquote>
+<p>内核（kernel）利用文件描述符（file descriptor）来访问文件。文件描述符是非负整数。打开现存文件或新建文件时，内核会返回一个文件描述符。读写文件也需要使用文件描述符来指定待读写的文件。</p>
+</blockquote>
 
         
     </section>

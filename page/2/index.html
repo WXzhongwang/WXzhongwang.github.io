@@ -131,194 +131,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/08/07/Java基础面试题/">Java基础面试题一</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/2/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2019-08-07T14:37:25.983Z" itemprop="datePublished">2019-08-07</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>Java基础面试题</p>
-<blockquote>
-<p>Q1: 什么是Java虚拟机?</p>
-</blockquote>
-<p>Java虚拟机是一个可以执行Java字节码的虚拟机进程。Java源文件被编译成能被Java虚拟机执行的字节码文件。</p>
-<blockquote>
-<p>Q2: “static”关键字是什么意思？Java中是否可以覆盖(override)一个private或者是static的方法？</p>
-</blockquote>
-<p>“static”关键字表明一个成员变量或者是成员方法可以在没有所属的类的实例变量的情况下被访问。简单说就是：不声明所属类的实例就可访问该变量或方法。Java中static方法不能被覆盖，因为方法覆盖是基于运行时动态绑定的，而static方法是编译时静态绑定的。</p>
-<blockquote>
-<p>Q3: 是否可以在static环境中访问非static变量？ </p>
-</blockquote>
-<p>static变量在Java中是属于类的，它在所有的实例中的值是一样的。当类被Java虚拟机载入的时候，会对static变量进行初始化。如果你的代码尝试不用实例来访问非static的变量，编译器会报错，因为这些变量还没有被创建出来，还没有跟任何实例关联上。</p>
-<blockquote>
-<p>Q4: Java支持的数据类型有哪些？什么是自动拆装箱？ </p>
-</blockquote>
-<p>基本数据类型是： </p>
-<ul>
-<li>byte </li>
-<li>short </li>
-<li>int </li>
-<li>long </li>
-<li>float </li>
-<li>double </li>
-<li>boolean </li>
-<li>char </li>
-</ul>
-<p>自动装箱是Java编译器在基本数据类型和对应的对象包装类型之间做的一个转化。比如：把int转化成Integer，float转化成double，等等。反之就是自动拆箱。</p>
-<blockquote>
-<p>Q5: Overload和Override的区别。Overloaded的方法是否可以改变返回值的类型? </p>
-</blockquote>
-<p>方法的重写Overriding和重载Overloading是Java多态性的不同表现。重写Overriding是父类与子类之间多态性的一种表现，重载Overloading是一个类中多态性的一种表现。如果在子类中定义某方法与其父类有相同的名称和参数，我们说该方法被重写(Overriding)。子类的对象使用这个方法时，将调用子类中的定义，对它而言，父类中的定义如同被”屏蔽”了。如果在一个类中定义了多个同名的方法，它们或有不同的参数个数或有不同的参数类型，则称为方法的重载(Overloading)。Overloaded的方法是可以改变返回值的类型。</p>
-<p>Overload： 重写 子类重写父类方法<br>Overload:  重载 相同方法名</p>
-<blockquote>
-<p>Q6: Java支持多继承么？ </p>
-</blockquote>
-<p>不支持，Java不支持多继承。每个类都只能继承一个类，但是可以实现多个接口。</p>
-<blockquote>
-<p>Q7: 接口和抽象类的区别是什么？ </p>
-</blockquote>
-<p>Java提供和支持创建抽象类和接口。它们的实现有共同点，不同点在于： </p>
-<ul>
-<li>接口中所有的方法隐含的都是抽象的。而抽象类则可以同时包含抽象和非抽象的方法。 </li>
-<li>类可以实现很多个接口，但是只能继承一个抽象类 </li>
-<li>类如果要实现一个接口，它必须要实现接口声明的所有方法。但是，类可以不实现抽象类声明的所有方法，当然，在这种情况下，类也必须得声明成是抽象的。 </li>
-<li>抽象类可以在不提供接口方法实现的情况下实现接口。 </li>
-<li>Java接口中声明的变量默认都是final的。抽象类可以包含非final的变量。 </li>
-<li>Java接口中的成员函数默认是public的。抽象类的成员函数可以是private，protected或者是public。 </li>
-<li>接口是绝对抽象的，不可以被实例化。抽象类也不可以被实例化，但是，如果它包含main方法的话是可以被调用的。</li>
-</ul>
-<blockquote>
-<p>Q8: 什么是值传递和引用传递？</p>
-</blockquote>
-<p>值传递: 意味着传递了对象的一个副本。因此，就算是改变了对象副本，也不会影响源对象的值。 </p>
-<p>引用传递: 意味着传递的并不是实际的对象，而是对象的引用。因此，外部对引用对象所做的改变会反映到所有的对象上。</p>
-<blockquote>
-<p>Q9: 创建线程有几种不同的方式？你喜欢哪一种？为什么？</p>
-</blockquote>
-<p>有三种方式可以用来创建线程： </p>
-<ul>
-<li>继承Thread类 </li>
-<li>实现Runnable接口 </li>
-<li>应用程序可以使用Executor框架来创建线程池 </li>
-</ul>
-<p>实现Runnable接口这种方式更受欢迎，因为这不需要继承Thread类。在应用设计中已经继承了别的对象的情况下，这需要多继承（而Java不支持多继承），只能实现接口。同时，线程池也是非常高效的，很容易实现和使用。</p>
-<blockquote>
-<p>Q10: 同步方法和同步代码块的区别是什么？ </p>
-</blockquote>
-<p>在Java语言中，每一个对象有一把锁。线程可以使用synchronized关键字来获取对象上的锁。<br>synchronized关键字可应用在方法级别(粗粒度锁：这里的锁对象可以是This)或者是代码块级别(细粒度锁：这里的锁对象就是任意对象)。</p>
-<ul>
-<li>方法级别(粗粒度锁：这里的锁对象可以是This)</li>
-<li>代码块级别(细粒度锁：这里的锁对象就是任意对象)</li>
-</ul>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2019/08/07/Git安装/">Git安装</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/2/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2019-08-07T14:37:25.977Z" itemprop="datePublished">2019-08-07</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Git/">Git</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Linux-安装Git"><a href="#Linux-安装Git" class="headerlink" title="Linux 安装Git:"></a>Linux 安装Git:</h1><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">检查是否安装Git</span><br><span class="line">git --version </span><br><span class="line"></span><br><span class="line">在 Ubuntu 这类 Debian 体系的系统上，可以用 apt-<span class="builtin-name">get</span> 安装：</span><br><span class="line">sudo apt-<span class="builtin-name">get</span> install git</span><br><span class="line"></span><br><span class="line">CentOs:</span><br><span class="line">yum install -y git</span><br></pre></td></tr></table></figure>
-<p>window安装比较简单不多说。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2019/08/07/apiDoc接口文档/">NodeJs apiDoc</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/2/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2019-08-07T14:37:25.972Z" itemprop="datePublished">2019-08-07</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/NodeJs/">NodeJs</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="apiDoc"><a href="#apiDoc" class="headerlink" title="apiDoc"></a>apiDoc</h1><p>全局安装，方便用命令创建文档<br><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm <span class="keyword">install</span> apidoc -g</span><br></pre></td></tr></table></figure></p>
-<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>在你的项目根目录下新建apidoc.json文件，该文件描述了项目对外提供接口的概要信息如名称、版本、描述、文档打开时浏览器显示标题和接口缺省访问地址。<br>apidoc.json</p>
-<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"name"</span>: <span class="string">"xxx Api"</span>, </span><br><span class="line">    <span class="string">"version"</span>: <span class="string">"1.0.0"</span>, </span><br><span class="line">    <span class="string">"description"</span>: <span class="string">"xxx Api Documentation"</span>, </span><br><span class="line">    <span class="string">"title"</span>: <span class="string">"xxx"</span>,  </span><br><span class="line">    <span class="string">"url"</span> : <span class="string">"http://域名/api/v1"</span>,</span><br><span class="line">    <span class="string">"sampleUrl"</span>: <span class="string">"http://域名/api/v1"</span>,</span><br><span class="line"></span><br><span class="line">    <span class="string">"template"</span>: &#123;</span><br><span class="line">      <span class="string">"withCompare"</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="string">"withGenerator"</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="string">"forceLanguage"</span>:<span class="string">"en"</span></span><br><span class="line">    &#125;,</span><br><span class="line">  //顺序、若有需要可配置(<span class="name">books</span>, student,xxx) Resources Name</span><br><span class="line">  <span class="string">"order"</span>: [<span class="string">"xxx"</span>,<span class="string">"xxx"</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="Sample"><a href="#Sample" class="headerlink" title="Sample"></a>Sample</h2><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"><span class="markdown">/**</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>Get Access Token</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>@api &#123;POST&#125; /token GetAccessToken</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>@apiDescription Generate </span>a<span class="markdown"> token that can be passed with each API request.</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>@apiName GetAccessToken</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>@apiPermission API User</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>@apiParam (Parameters) &#123;String&#125; username username</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>@apiParam (Parameters) &#123;String&#125; password password</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>@apiParamExample &#123;json&#125; Sample (Request body formats: text/plain, application/x-www-form-urlencoded, text/json, application/json)  :</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>&#123;</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *   </span>"username": "</span>your<span class="markdown"> accont",</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *   </span>"password": "</span>your<span class="markdown"> password"</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>&#125;</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>@apiSampleRequest off</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>@apiSuccessExample &#123;json&#125; Response (Response body formats: application/json, text/json):</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>Success Response :</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>Status: 200 OK</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>&#123;</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *   </span>"status": "success",</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *   </span>"message": "Authentication successful.",</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *   </span>"data": &#123;</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *      </span>"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6Ikpxxxxx.xxxxx2VybmFtZSI6InNsIiwiaWF0IjoxNTQ1MTkyMzY4LCJleHAiOjE1NDUxOTI4NDh9.xxxxxxgS1Yw8rNRD31p97A7fdWvmkrXxo3llMJowX7U"</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *   </span>&#125;</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>&#125;</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>Or </span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>Bad Response:</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>Status: 400 </span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>&#123; </span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *   </span>"status": "failure", </span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *   </span>"message": "Authentication failed. Please provide </span>a<span class="markdown"> correct username or password."</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>&#125; </span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>@apiGroup Token</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>@apiVersion 1.0.0</span></span></span><br><span class="line"><span class="comment"><span class="markdown"> */</span></span></span><br></pre></td></tr></table></figure>
-<h2 id="生成"><a href="#生成" class="headerlink" title="生成"></a>生成</h2><p>文档初始化或发生改变时，在应用程序根目录执行相应命令<br>以此项目为例：</p>
-<blockquote>
-<p>apidoc -i api/v1 -o public/apiDoc</p>
-</blockquote>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-<span class="selector-tag">i</span> input</span><br><span class="line">-o output</span><br><span class="line"></span><br><span class="line">指定文件夹路径</span><br></pre></td></tr></table></figure>
-<p>具体注释写法参照官网解释：<br><a href="http://apidocjs.com/#run" target="_blank" rel="noopener">http://apidocjs.com/#run</a></p>
-<p>public/apiDoc内文件不用上传到代码管理中<br>可直接执行npm run doc命令自动生成</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2019/04/08/数据中台和数据仓库、数据平台/">大数据</a>
         </h1>
         
@@ -733,6 +545,147 @@
 <p>又是在杭州，2019年01月29日早8: 00点，同样的戏码，姨夫病逝，癌症晚期，距离收到通知，也就短短三个多月时间，大概一百多天，原本一个看上去健健康康的人，就突然离开，就像上帝给你的人生突然上了锁，然后把钥匙给扔掉了的感觉…</p>
 <p>醒来又是一天，开始干活，累…</p>
 
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2019/01/11/Hadoop Hive Hbase 简单区别及应用场景/">Hadoop Hive Hbase 简单区别及应用场景</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/2/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-01-11T02:10:00.000Z" itemprop="datePublished">2019-01-11</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Hadoop/">Hadoop</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Hadoop-Hive-Hbase-简单区别及应用场景"><a href="#Hadoop-Hive-Hbase-简单区别及应用场景" class="headerlink" title="Hadoop Hive Hbase 简单区别及应用场景"></a>Hadoop Hive Hbase 简单区别及应用场景</h1><h2 id="Hadoop"><a href="#Hadoop" class="headerlink" title="Hadoop"></a>Hadoop</h2><p>它是一个分布式计算+分布式文件系统，前者其实就是MapReduce，后者是HDFS。后者可以独立运行，前者可以选择性使用，也可以不使用。</p>
+<h2 id="Hive"><a href="#Hive" class="headerlink" title="Hive"></a>Hive</h2><p>通俗的说是一个数据仓库，仓库中的数据是被HDFS管理的数据文件，它支持类似sql语句的功能，你可以通过该语句完成分布式环境下的计算功能，Hive会把语句转换成MapReduce，然后交给Hadoop执行。这里的计算，仅限于查找和分析，而不是更新、增加和删除。它的优势是对历史数据进行处理，用时下流行的说法是离线计算，因为它的底层是MapReduce，MapReduce在实时计算上性能很差。它的做法是把数据文件加载进来作为一个Hive表（或者外部表），让你觉得你的sql操作的是传统的表。</p>
+<h2 id="HBase"><a href="#HBase" class="headerlink" title="HBase"></a>HBase</h2><p>通俗的说，HBase的作用类似于数据库，传统数据库管理的是集中的本地数据文件，而HBase基于Hdfs实现对分布式数据文件的管理，比如增删改查。也就是说，HBase只是利用Hadoop的Hdfs帮助其管理数据的持久化文件（HFile），它跟MapReduce没任何关系。HBase的优势在于实时计算，所有实时数据都直接存入Hbase中，客户端通过API直接访问Hbase，实现实时计算。由于它使用的是nosql，或者说是列式结构，从而提高了查找性能，使其能运用于大数据场景，这是它跟MapReduce的区别。</p>
+<h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><ol>
+<li>Hadoop是Hive和HBase的基础，Hive依赖Hadoop</li>
+<li>HBase仅依赖Hadoop的Hdfs模块。</li>
+<li>Hive适用于离线数据的分析，操作的是通用格式的（如通用的日志文件）、被Hadoop管理的数据文件，它支持类sql，比编写MapReduce的java代码来的更加方便，它的定位是数据仓库，存储和分析历史数据</li>
+<li>Hbase适用于实时计算，采用列式结构的nosql，操作的是自己生成的特殊格式的HFile、被hadoop管理的数据文件，它的定位是数据库，或者叫DBMS</li>
+</ol>
+<blockquote>
+<p>最后补充一下：Hive可以直接操作Hdfs中的文件作为它的表的数据，也可以使HBase数据库作为它的表</p>
+</blockquote>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2019/01/08/大数据/">大数据</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/2/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-01-08T06:18:02.000Z" itemprop="datePublished">2019-01-08</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/大数据/">大数据</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="大数据生命周期"><a href="#大数据生命周期" class="headerlink" title="大数据生命周期"></a>大数据生命周期</h1><ul>
+<li>基础设施层，涵盖计算资源、内存与存储和网络互联，具体表现为计算节点、集群、机柜和数据中心。</li>
+<li>数据存储和管理层，包括文件系统、数据库和类似YARN的资源管理系统。</li>
+<li>计算处理层，如hadoop、MapReduce和Spark</li>
+<li>在此之上的各种不同计算范式，如批处理、流处理和图计算等，包括衍生出编程模型的计算模型，如BSP、GAS等</li>
+</ul>
+<blockquote>
+<p>数据分析和可视化基于计算处理层。分析包括简单的查询分析、流分析以及更复杂的分析(如机器学习、图计算等)。查询分析多基于表结构和关系函数，流分析基于数据、事件流以及简单的统计分析，而复杂分析则基于更复杂的数据结构与方法，如图、矩阵、迭代计算和线性代数。一般意义的可视化是对分析结果的展示。但是通过交互式可视化，还可以探索性地提问，使分析获得新的线索，形成迭代的分析和可视化。基于大规模数据的实时交互可视化分析以及在这个过程中引入自动化的因素是目前研究的热点。</p>
+</blockquote>
+<h1 id="大数据技术生态"><a href="#大数据技术生态" class="headerlink" title="大数据技术生态"></a>大数据技术生态</h1><p>大数据的基本处理流程与传统数据处理流程并无太大差异，主要区别在于：由于大数据要处理大量、非结构化的数据，所以在各处理环节中都可以采用并行处理。目前，Hadoop、MapReduce和Spark等分布式处理方式已经成为大数据处理各环节的通用处理方法。</p>
+<h1 id="大数据采集与预处理"><a href="#大数据采集与预处理" class="headerlink" title="大数据采集与预处理"></a>大数据采集与预处理</h1><ul>
+<li>存储层</li>
+<li>预处理层</li>
+<li>采集层</li>
+</ul>
+<p>在大数据的生命周期中，数据采集处于第一个环节。根据MapReduce产生数据的应用系统分类，大数据的采集主要有4种来源：管理信息系统、Web信息系统、物理信息系统、科学实验系统。对于不同的数据集，可能存在不同的结构和模式，如文件、XML树、关系表等，表现为数据的异构性。对多个异构的数据集，需要做进一步集成处理或整合处理，将来自不同数据集的数据收集、整理、清洗、转换后，生成到一个新的数据集，为后续查询和分析处理提供统一的数据视图。针对管理信息系统中异构数据库集成技术、Web信息系统中的实体识别技术和DeepWeb集成技术、传感器网络数据融合技术已经有很多研究工作，取得了较大的进展，已经推出了多种数据清洗和质量控制工具。</p>
+<h1 id="大数据的存储和管理"><a href="#大数据的存储和管理" class="headerlink" title="大数据的存储和管理"></a>大数据的存储和管理</h1><p>按数据类型的不同，大数据的存储和管理采用不同的技术路线，大致可以分为3类。</p>
+<h2 id="第1类"><a href="#第1类" class="headerlink" title="第1类"></a>第1类</h2><p>主要面对的是大规模的结构化数据。针对这类大数据，通常采用新型数据库集群。它们通过列存储或行列混合存储以及粗粒度索引等技术，结合MPP(MassiveParallelProcessing)架构高效的分布式计算模式，实现对PB量级数据的存储和管理。这类集群具有高性能和高扩展性特点，在企业分析类应用领域已获得广泛应用;</p>
+<h2 id="第2类"><a href="#第2类" class="headerlink" title="第2类"></a>第2类</h2><p>主要面对的是半结构化和非结构化数据。应对这类应用场景，基于Hadoop开源体系的系统平台更为擅长。它们通过对Hadoop生态体系的技术扩展和封装，实现对半结构化和非结构化数据的存储和管理;</p>
+<h2 id="第3类"><a href="#第3类" class="headerlink" title="第3类"></a>第3类</h2><p>面对的是结构化和非结构化混合的大数据，因此采用MPP并行数据库集群与Hadoop集群的混合来实现对百PB量级、EB量级数据的存储和管理。一方面，用MPP来管理计算高质量的结构化数据，提供强大的SQL和OLTP型服务;另一方面，用Hadoop实现对半结构化和非结构化数据的处理，以支持诸如内容检索、深度挖掘与综合分析等新型应用。这类混合模式将是大数据存储和管理未来发展的趋势。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2019/01/08/流处理、批处理、交互式查询/">流处理、批处理、交互式查询</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/2/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-01-08T06:18:02.000Z" itemprop="datePublished">2019-01-08</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Hadoop/">Hadoop</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <pre><code>我们将大数据处理按处理时间的跨度要求分为以下几类
+
+基于实时数据流的处理，通常的时间跨度在数百毫秒到数秒之间
+
+基于历史数据的交互式查询，通常时间跨度在数十秒到数分钟之间
+
+复杂的批量数据处理，通常的时间跨度在几分钟到数小时之间
+</code></pre>
         
     </section>
 </article>

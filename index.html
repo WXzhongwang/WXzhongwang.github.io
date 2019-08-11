@@ -182,83 +182,6 @@
 
     <article class="article" itemscope itemprop="blogPost">
     
-    <section class="article-body markdown-body">
-        
-        <h1 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h1><h2 id="什么是单例模式"><a href="#什么是单例模式" class="headerlink" title="什么是单例模式"></a>什么是单例模式</h2><p>因程序需要，有时我们只需要某个类同时保留一个对象，不希望有更多对象，此时，我们则应考虑单例模式的设计。</p>
-<h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><ol>
-<li><p>单例模式只能有一个实例。</p>
-</li>
-<li><p>单例类必须创建自己的唯一实例。</p>
-</li>
-<li><p>单例类必须向其他对象提供这一实例。</p>
-</li>
-</ol>
-<h2 id="单例模式VS静态类"><a href="#单例模式VS静态类" class="headerlink" title="单例模式VS静态类"></a>单例模式VS静态类</h2><p>在知道了什么是单例模式后，我想你一定会想到静态类，“既然只使用一个对象，为何不干脆使用静态类？”，这里我会将单例模式和静态类进行一个比较。</p>
-<ol>
-<li><p>单例可以继承和被继承，方法可以被override，而静态方法不可以。</p>
-</li>
-<li><p>静态方法中产生的对象会在执行后被释放，进而被GC清理，不会一直存在于内存中。</p>
-</li>
-<li><p>静态类会在第一次运行时初始化，单例模式可以有其他的选择，即可以延迟加载。</p>
-</li>
-<li><p>基于2， 3条，由于单例对象往往存在于DAO层（例如sessionFactory），如果反复的初始化和释放，则会占用很多资源，而使用单例模式将其常驻于内存可以更加节约资源。</p>
-</li>
-<li><p>静态方法有更高的访问效率。</p>
-</li>
-<li><p>单例模式很容易被测试。</p>
-</li>
-</ol>
-<p>几个关于静态类的误解：</p>
-<ul>
-<li>误解一：静态方法常驻内存而实例方法不是。</li>
-</ul>
-<blockquote>
-<p>实际上，特殊编写的实例方法可以常驻内存，而静态方法需要不断初始化和释放。</p>
-</blockquote>
-<ul>
-<li>误解二：静态方法在堆(heap)上，实例方法在栈(stack)上。</li>
-</ul>
-<blockquote>
-<p>实际上，都是加载到特殊的不可写的代码内存区域中。</p>
-</blockquote>
-<p>静态类和单例模式情景的选择：</p>
-<p>情景一：不需要维持任何状态，仅仅用于全局访问，此时更适合使用静态类。</p>
-<p>情景二：需要维持一些特定的状态，此时更适合使用单例模式。</p>
-<h2 id="单例模式的实现"><a href="#单例模式的实现" class="headerlink" title="单例模式的实现"></a>单例模式的实现</h2><h3 id="1-懒汉模式（线程不安全）"><a href="#1-懒汉模式（线程不安全）" class="headerlink" title="1. 懒汉模式（线程不安全）"></a>1. 懒汉模式（线程不安全）</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class SingletonDemo &#123;</span><br><span class="line">    private static SingletonDemo instance;</span><br><span class="line">    private SingletonDemo()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    public static SingletonDemo getInstance()&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="attribute">instance</span>==null)&#123;</span><br><span class="line">            <span class="attribute">instance</span>=new SingletonDemo();</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如上，通过提供一个静态的对象instance，利用private权限的构造方法和getInstance()方法来给予访问者一个单例。</p>
-<p>缺点是，没有考虑到线程安全，可能存在多个访问者同时访问，并同时构造了多个对象的问题。</p>
-<p>之所以叫做懒汉模式，主要是因为此种方法可以非常明显的lazy loading。</p>
-<p>针对懒汉模式线程不安全的问题，我们自然想到了，在getInstance()方法前加锁，于是就有了第二种实现。</p>
-<h3 id="2-懒汉模式二-（线程安全）"><a href="#2-懒汉模式二-（线程安全）" class="headerlink" title="2. 懒汉模式二 （线程安全）"></a>2. 懒汉模式二 （线程安全）</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class SingletonDemo &#123;</span><br><span class="line">    private static SingletonDemo instance;</span><br><span class="line">    private SingletonDemo()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    public static synchronized SingletonDemo getInstance()&#123;</span><br><span class="line">        <span class="keyword">if</span>(instance == <span class="literal">null</span>)&#123;</span><br><span class="line">           <span class="built_in"> instance </span>= new SingletonDemo();</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>然而并发其实是一种特殊情况，大多时候这个锁占用的额外资源都浪费了，这种打补丁方式写出来的结构效率很低。</p>
-<h3 id="3-饿汉模式"><a href="#3-饿汉模式" class="headerlink" title="3. 饿汉模式"></a>3. 饿汉模式</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class SingletonDemo &#123;</span><br><span class="line">    private static SingletonDemo<span class="built_in"> instance </span>= new SingletonDemo();</span><br><span class="line">    private SingletonDemo()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    public static SingletonDemo getInstance()&#123;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>直接在运行这个类的时候进行一次loading，之后直接访问。显然，这种方法没有起到lazy loading的效果，考虑到前面提到的和静态类的对比，这种方法只比静态类多了一个内存常驻而已。</p>
-<h3 id="4-静态类内部加载"><a href="#4-静态类内部加载" class="headerlink" title="4. 静态类内部加载"></a>4. 静态类内部加载</h3><figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public class SingletonDemo &#123;</span><br><span class="line">   <span class="keyword"> private</span><span class="keyword"> static</span> class SingletonHolder&#123;</span><br><span class="line">       <span class="keyword"> private</span><span class="keyword"> static</span> SingletonDemo<span class="built_in"> instance </span>=<span class="built_in"> new </span>SingletonDemo();</span><br><span class="line">    &#125;</span><br><span class="line">   <span class="keyword"> private</span> SingletonDemo()&#123;</span><br><span class="line">        System.out.println(<span class="string">"Singleton has loaded"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">   <span class="keyword"> public</span><span class="keyword"> static</span> SingletonDemo getInstance()&#123;</span><br><span class="line">       <span class="built_in"> return </span>SingletonHolder.instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>使用内部类的好处是，静态内部类不会在单例加载时就加载，而是在调用getInstance()方法时才进行加载，达到了类似懒汉模式的效果，而这种方法又是线程安全的。</p>
-<h3 id="5-枚举方法"><a href="#5-枚举方法" class="headerlink" title="5. 枚举方法"></a>5. 枚举方法</h3><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">SingletonDemo</span>&#123;</span></span><br><span class="line">    INSTANCE;</span><br><span class="line">    public void otherMethods()&#123;</span><br><span class="line">        System.<span class="keyword">out</span>.println(<span class="string">"Something"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">Hello</span> &#123;</span></span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">        SingletonDemo.INSTANCE.otherMethods();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>提倡的方式，在我看来简直是来自神的写法。解决了以下三个问题：</p>
-<ul>
-<li>(1)自由序列化。</li>
-<li>(2)保证只有一个实例。</li>
-<li>(3)线程安全。</li>
-</ul>
-<p>这种充满美感的代码真的已经终结了其他一切实现方法了。</p>
-<h3 id="6-双重校验锁法"><a href="#6-双重校验锁法" class="headerlink" title="6. 双重校验锁法"></a>6. 双重校验锁法</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class SingletonDemo &#123;</span><br><span class="line">    private static SingletonDemo instance;</span><br><span class="line">    private SingletonDemo()&#123;</span><br><span class="line">        System.out.println(<span class="string">"Singleton has loaded"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    public static SingletonDemo getInstance()&#123;</span><br><span class="line">        <span class="keyword">if</span>(instance == <span class="literal">null</span>)&#123;</span><br><span class="line">            synchronized (SingletonDemo.class)&#123;</span><br><span class="line">                <span class="keyword">if</span>(instance == <span class="literal">null</span>)&#123;</span><br><span class="line">                   <span class="built_in"> instance </span>= new SingletonDemo();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>接下来我解释一下在并发时，双重校验锁法会有怎样的情景：</p>
-<p>STEP 1. 线程A访问getInstance()方法，因为单例还没有实例化，所以进入了锁定块。</p>
-<p>STEP 2. 线程B访问getInstance()方法，因为单例还没有实例化，得以访问接下来代码块，而接下来代码块已经被线程1锁定。</p>
-<p>STEP 3. 线程A进入下一判断，因为单例还没有实例化，所以进行单例实例化，成功实例化后退出代码块，解除锁定。</p>
-<p>STEP 4. 线程B进入接下来代码块，锁定线程，进入下一判断，因为已经实例化，退出代码块，解除锁定。</p>
-<p>STEP 5. 线程A初始化并获取到了单例实例并返回，线程B获取了在线程A中初始化的单例。</p>
-<p>理论上双重校验锁法是线程安全的，并且，这种方法实现了lazyloading。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
     <header class="article-header">
         
         <h1 itemprop="name">
@@ -402,7 +325,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/08/07/NodeJs相关插件/">NodeJs 插件</a>
+            <a href="/2019/08/07/Java基础面试题五/">Java基础面试题五</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -410,13 +333,13 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2019-08-07T14:37:26.002Z" itemprop="datePublished">2019-08-07</time>
+    <time datetime="2019-08-07T14:37:25.985Z" itemprop="datePublished">2019-08-07</time>
 </a>
 
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/NodeJs/">NodeJs</a>
+    <a class="article-tag-link" href="/tags/面试题/">面试题</a>
 </div>
 
 
@@ -425,160 +348,36 @@
     
     <section class="article-body markdown-body">
         
-        <h3 id="lodash"><a href="#lodash" class="headerlink" title="lodash"></a>lodash</h3><p>采用延迟计算，意味着我们的链式方法在显式或者隐式的value()调用之前是不会执行的，<br>因此lodash可以进行shortcut（捷径） fusion（融合）这样的优化，<br>通过合并链式大大降低迭代的次数，从而大大提升其执行性能。</p>
-<h3 id="cors"><a href="#cors" class="headerlink" title="cors"></a>cors</h3><p>实现跨域的功能</p>
-<h3 id="helmet"><a href="#helmet" class="headerlink" title="helmet"></a>helmet</h3><p>是一个保护Node.JS应用的安全项目<br>一些著名的对Web攻击有XSS跨站脚本， 脚本注入 clickjacking<br>以及各种非安全的请求等对Node.js的Web应用构成各种威胁，<br>使用Helmet能帮助你的应用避免这些攻击。</p>
-<h3 id="csurf"><a href="#csurf" class="headerlink" title="csurf"></a>csurf</h3><p>跨站请求伪造</p>
-<h3 id="colors"><a href="#colors" class="headerlink" title="colors"></a>colors</h3><p>终端着色插件</p>
-<h3 id="express-validator"><a href="#express-validator" class="headerlink" title="express-validator"></a>express-validator</h3><p>校验插件<br>npm install –save express-validator</p>
-<h3 id="uuid-GUID插件"><a href="#uuid-GUID插件" class="headerlink" title="uuid GUID插件"></a>uuid GUID插件</h3><p>npm install –save node-uuid</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2019/08/07/NodeJs基础/">NodeJs基础</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2019-08-07T14:37:26.001Z" itemprop="datePublished">2019-08-07</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/NodeJs/">NodeJs</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="NodeJs基础"><a href="#NodeJs基础" class="headerlink" title="NodeJs基础"></a>NodeJs基础</h1><h2 id="Node-核心"><a href="#Node-核心" class="headerlink" title="Node 核心"></a>Node 核心</h2><p>Node核心： </p>
-<ul>
-<li>非阻塞；　　</li>
-<li>单线程；　　</li>
-<li>事件驱动。</li>
-</ul>
-<h2 id="NodeJs回调"><a href="#NodeJs回调" class="headerlink" title="NodeJs回调"></a>NodeJs回调</h2><p>回调函数：异步编程依托于回调来实现，但不能说使用了回调后程序就异步化了。<br>Node 使用了大量的回调函数，Node所有API都支持回调函数。未使用回调函数可能会产生阻塞。</p>
-<h3 id="阻塞："><a href="#阻塞：" class="headerlink" title="阻塞："></a>阻塞：</h3><figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">var</span> fs = <span class="keyword">require</span>(<span class="string">"fs"</span>);</span><br><span class="line"><span class="built_in">var</span> <span class="built_in">data</span> = fs.readFileSync(<span class="string">'input.txt'</span>);</span><br><span class="line">console.<span class="keyword">log</span>(<span class="built_in">data</span>.toString());</span><br><span class="line">console.<span class="keyword">log</span>(<span class="string">"程序执行结束!"</span>);</span><br></pre></td></tr></table></figure>
-<h3 id="非阻塞："><a href="#非阻塞：" class="headerlink" title="非阻塞："></a>非阻塞：</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">"fs"</span>);</span><br><span class="line"></span><br><span class="line">fs.readFile(<span class="string">'input.txt'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, data</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (err) <span class="keyword">return</span> <span class="built_in">console</span>.error(err);</span><br><span class="line">    <span class="built_in">console</span>.log(data.toString());</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"程序执行结束!"</span>);</span><br></pre></td></tr></table></figure>
-<h2 id="NodeJs事件"><a href="#NodeJs事件" class="headerlink" title="NodeJs事件"></a>NodeJs事件</h2><p>事件驱动程序。当web server接收到请求，就把它关闭然后进行处理，然后去服务下一个web请求。当这个请求完成，它被放回处理队列，当到达队列开头，这个结果被返回给用户。这个模型非常高效可扩展性非常强，因为webserver一直接受请求而不等待任何读写操作。（这也被称之为非阻塞式IO或者事件驱动IO）</p>
-<h2 id="模块化"><a href="#模块化" class="headerlink" title="模块化"></a>模块化</h2><blockquote>
-<p>NodeJs 提供了两个命令，require 和 exports<br>exports是模块中公开的接口，require用于从外部获取接口，其实可以通过如此获取到所需模块的一个对象。</p>
+        <p>Java基础面试题五</p>
+<blockquote>
+<p>Q1: &amp; 和 &amp;&amp; 的区别</p>
 </blockquote>
-<h2 id="模块的加载顺序"><a href="#模块的加载顺序" class="headerlink" title="模块的加载顺序"></a>模块的加载顺序</h2><p>一）从文件模块缓存中加载：</p>
-<p>尽管原生模块与文件模块的优先级不同，但是都会优先于从文件模块的缓存中加载已经存在的模块。</p>
-<p>二）从原生模块加载：</p>
-<p>原生模块的优先级仅次于文件模块缓存的优先级。<br>require 方法在解析文件名之后，优先检查模块是否在原生模块列表中。<br>以http模块为例，尽管在目录下存在一个 http/http.js/http.node/http.json 文件，<br>require(“http”) 都不会从这些文件中加载，而是从原生模块中加载。<br>原生模块也有一个缓存区，同样也是优先从缓存区加载。<br>如果缓存区没有被加载过，则调用原生模块的加载方式进行加载和执行。</p>
-<p>三）从文件加载：</p>
-<p>当文件模块缓存中不存在，而且不是原生模块的时候，<br>Node.js 会解析 require 方法传入的参数，并从文件系统中加载实际的文件，<br>require方法接受以下几种参数的传递：</p>
+<p>&amp;是位运算符，表示按位与运算，&amp;&amp;是逻辑运算符，表示逻辑与（and）。</p>
+<blockquote>
+<p>Q2: final, finally, finalize的区别</p>
+</blockquote>
 <ul>
-<li>http、fs、path等，原生模块。</li>
-<li>./mod或../mod，相对路径的文件模块。</li>
-<li>/pathtomodule/mod，绝对路径的文件模块。</li>
-<li>mod，非原生模块的文件模块。</li>
+<li>final 用于声明属性，方法和类，分别表示属性不可变，方法不可覆盖，类不可继承。 </li>
+<li>finally,异常处理语句结构的一部分，表示总是执行。 </li>
+<li>finalize是Object类的一个方法，垃圾收集器执行的时候会调用被回收对象的此方法，可以覆盖此方法提供垃圾收集时的其他资源回收，例如关闭文件等。</li>
 </ul>
-<h3 id="NodeJs-Buffer"><a href="#NodeJs-Buffer" class="headerlink" title="NodeJs Buffer"></a>NodeJs Buffer</h3><p>JS本身只有字符串类型，没有二进制数据类型。但在处理像TCP流或文件流时，必须使用到二进制数据。因此在 Node.js中，定义了一个Buffer类，该类用来创建一个专门存放二进制数据的缓存区。</p>
-<h3 id="NodeJs-Stream"><a href="#NodeJs-Stream" class="headerlink" title="NodeJs Stream"></a>NodeJs Stream</h3><p>Stream 是一个抽象接口，Node 中有很多对象实现了这个接口。<br>例如，对http 服务器发起请求的request 对象就是一个 Stream，还有stdout（标准输出）。    </p>
-<p>Node.js，Stream 有四种流类型：</p>
+<blockquote>
+<p>Q3: sleep() 和 wait() 有什么区别? </p>
+</blockquote>
+<p>sleep是线程类（Thread）的方法，导致此线程暂停执行指定时间，给执行机会给其他线程，但是监控状态依然保持，到时后会自动恢复。调用sleep不会释放对象锁。 </p>
+<p>wait是Object类的方法，对此对象调用wait方法导致本线程放弃对象锁，进入等待此对象的等待锁定池，只有针对此对象发出notify方法（或not ifyAll）后本线程才进入对象锁定池准备获得对象锁进入运行状态。</p>
+<blockquote>
+<p>Q4: error和exception有什么区别? </p>
+</blockquote>
 <ul>
-<li>Readable - 可读操作。</li>
-<li>Writable - 可写操作。</li>
-<li>Duplex - 可读可写操作.</li>
-<li>Transform - 操作被写入数据，然后读出结果。</li>
+<li>error:<br>表示恢复不是不可能但很困难的情况下的一种严重问题。比如说内存溢出。不可能指望程序能处理这样的情况。 </li>
+<li>exception: 表示一种设计或实现问题。也就是说，它表示如果程序运行正常，从不会发生的情况。</li>
 </ul>
-<p>所有的 Stream 对象都是 EventEmitter 的实例。常用的事件有：</p>
-<ul>
-<li>data - 当有数据可读时触发。</li>
-<li>end - 没有更多的数据可读时触发。</li>
-<li>error - 在接收和写入过程中发生错误时触发。</li>
-<li>finish - 所有数据已被写入到底层系统时触发。</li>
-</ul>
-<h2 id="NodeJs-OS模块：（基本的系统操作函数）"><a href="#NodeJs-OS模块：（基本的系统操作函数）" class="headerlink" title="NodeJs OS模块：（基本的系统操作函数）"></a>NodeJs OS模块：（基本的系统操作函数）</h2><ul>
-<li>os.tmpdir()         返回操作系统的默认临时文件夹。</li>
-<li>os.endianness()     返回 CPU 的字节序，可能的是 “BE” 或 “LE”。</li>
-<li>os.hostname()       返回操作系统的主机名。</li>
-<li>os.type()           返回操作系统名</li>
-<li>os.platform()       返回操作系统名</li>
-<li>os.arch()           返回操作系统 CPU 架构，可能的值有 “x64”、”arm” 和 “ia32”。</li>
-<li>os.release()        返回操作系统的发行版本。</li>
-<li>os.uptime()         返回操作系统运行的时间，以秒为单位。</li>
-<li>os.loadavg()        返回一个包含 1、5、15 分钟平均负载的数组。</li>
-<li>os.totalmem()       返回系统内存总量，单位为字节。</li>
-<li>os.freemem()        返回操作系统空闲内存量，单位是字节。</li>
-<li>os.cpus()           返回一个对象数组，包含所安装的每个 CPU/内核的信息：型号、速度（单位 MHz）、时间（一个包含 user、nice、sys、idle 和 irq 所使用 CPU/内核毫秒数的对象）。</li>
-<li>os.networkInterfaces()  获得网络接口列表。</li>
-</ul>
-<h2 id="NodeJs-Path-模块：（提供了处理和转换文件路的工具）"><a href="#NodeJs-Path-模块：（提供了处理和转换文件路的工具）" class="headerlink" title="NodeJs Path 模块：（提供了处理和转换文件路的工具）"></a>NodeJs Path 模块：（提供了处理和转换文件路的工具）</h2><ul>
-<li>path.normalize(p)                    规范化路径，注意’..’ 和 ‘.’。</li>
-<li>path.join([path1][, path2][, …])   用于连接路径。该方法的主要用途在于，会正确使用当前系统的路径分隔符，Unix系统是”/“，Windows系统是”\”。</li>
-<li>path.resolve([from …], to)         将 to 参数解析为绝对路径。</li>
-<li>path.isAbsolute(path)                判断参数 path 是否是绝对路径。</li>
-<li>path.relative(from, to)              用于将相对路径转为绝对路径。</li>
-<li>path.dirname(p)                      返回路径中代表文件夹的部分，同 Unix 的dirname 命令类似。</li>
-<li>path.basename(p[, ext])              返回路径中的最后一部分。同 Unix 命令 bashname 类似。</li>
-<li>path.extname(p)                      返回路径中文件的后缀名，即路径中最后一个’.’之后的部分。如果一个路径中并不包含’.’或该路径只包含一个’.’ 且这个’.’为路径的第一个字符，则此命令返回空字符串。</li>
-<li>path.parse(pathString)               返回路径字符串的对象。</li>
-<li>path.format(pathObject)              从对象中返回路径字符串，和 path.parse 相反。</li>
-</ul>
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>NodeJs Net 模块：（提供了用于底层的网络通信的小工具，包含了创建服务器/客户端的方法）</p>
-<p>NodeJs DNS 模块：（用于解析域名）</p>
-<h2 id="NodeJs-Express框架："><a href="#NodeJs-Express框架：" class="headerlink" title="NodeJs Express框架："></a>NodeJs Express框架：</h2><p>请求和响应：<br>app.get(‘/‘, function (req, res) {<br>   // –<br>})</p>
-<p>Express 应用使用回调函数的参数： request和response对象来处理请求和响应的数据。</p>
-<h3 id="Request-对象："><a href="#Request-对象：" class="headerlink" title="Request 对象："></a>Request 对象：</h3><p>request对象表示 HTTP 请求，包含了请求查询字符串，参数，内容，HTTP 头部等属性。常见属性有：</p>
-<ul>
-<li>(1)req.app：当callback为外部文件时，用req.app访问express的实例</li>
-<li>(2)req.baseUrl：获取路由当前安装的URL路径</li>
-<li>(3)req.body / req.cookies：获得「请求主体」/ Cookies</li>
-<li>(4)req.fresh / req.stale：判断请求是否还「新鲜」</li>
-<li>(5)req.hostname / req.ip：获取主机名和IP地址</li>
-<li>(6)req.originalUrl：获取原始请求URL</li>
-<li>(7)req.params：获取路由的parameters</li>
-<li>(8)req.path：获取请求路径</li>
-<li>(9)req.protocol：获取协议类型</li>
-<li>(10)req.query：获取URL的查询参数串</li>
-<li>(11)req.route：获取当前匹配的路由</li>
-<li>(12)req.subdomains：获取子域名</li>
-<li>(13)req.accepts()：检查可接受的请求的文档类型</li>
-<li>(14)req.acceptsCharsets / <pre><code>req.acceptsEncodings / 
-req.acceptsLanguages：返回指定字符集的第一个可接受字符编码
-</code></pre></li>
-<li>(15)req.get()：获取指定的HTTP请求头</li>
-<li>(16)req.is()：判断请求头Content-Type的MIME类型</li>
-</ul>
-<h3 id="Reponse-对象："><a href="#Reponse-对象：" class="headerlink" title="Reponse 对象："></a>Reponse 对象：</h3><ul>
-<li>(1)res.app：同req.app一样</li>
-<li>(2)res.append()：追加指定HTTP头</li>
-<li>(3)res.set():    在res.append()后将重置之前设置的头</li>
-<li>(4)res.cookie(name，value [，option])：设置Cookie</li>
-<li>opition: domain / expires / httpOnly / maxAge / path / secure / signed</li>
-<li>(5)res.clearCookie()：清除Cookie</li>
-<li>(6)res.download()：传送指定路径的文件</li>
-<li>(7)res.get()：返回指定的HTTP头</li>
-<li>(8)res.json()：传送JSON响应</li>
-<li>(9)res.jsonp()：传送JSONP响应</li>
-<li>(10)res.location()：只设置响应的Location HTTP头，不设置状态码或者close response</li>
-<li>(11)res.redirect()：设置响应的Location HTTP头，并且设置状态码302</li>
-<li>(12)res.send()：传送HTTP响应</li>
-<li>(13)res.sendFile(path [，options] [，fn])：</li>
-<li>传送指定路径的文件 -会自动根据文件extension设定Content-Type</li>
-<li>(14)res.set()：设置HTTP头，传入object可以一次设置多个头</li>
-<li>(15)res.status()：设置HTTP状态码</li>
-<li>(16)res.type()：设置Content-Type的MIME类型</li>
-</ul>
+<blockquote>
+<p>Q5: GC是什么? 为什么要有GC? </p>
+</blockquote>
+<p>GC是垃圾收集的意思（Gabage Collection）,内存处理是编程人员容易出现问题的地方，忘记或者错误的内存回收会导致程序或系统的不稳定甚至崩溃，Java提供的GC功能可以自动监测对象是否超过作用域从而达到自动回收内存的目的，Java语言没有提供释放已分配内存的显示操作方法。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">要请求垃圾收集，可以调用下面的方法之一：  </span><br><span class="line"><span class="selector-tag">System</span><span class="selector-class">.gc</span>() </span><br><span class="line"><span class="selector-tag">Runtime</span><span class="selector-class">.getRuntime</span>()<span class="selector-class">.gc</span>()</span><br></pre></td></tr></table></figure></p>
+<p>当然，如果需要，程序员可以在Java程序中显式地使用System.gc()来强制进行一次立即的内存清理。<br>因为显式声明是做堆内存全扫描，也就是FullGC，是需要停止所有的活动的（Stop The World Collection），你的应用能承受这个吗？而其显示调用System.gc()只是给虚拟机一个建议，不一定会执行，因为System.gc()在一个优先级很低的线程中执行。</p>
 
         
     </section>
@@ -604,7 +403,7 @@ req.acceptsLanguages：返回指定字符集的第一个可接受字符编码
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
+    <a class="article-tag-link" href="/tags/面试题/">面试题</a>
 </div>
 
 
@@ -665,111 +464,6 @@ req.acceptsLanguages：返回指定字符集的第一个可接受字符编码
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/08/07/Java基础面试题五/">Java基础面试题五</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2019-08-07T14:37:25.985Z" itemprop="datePublished">2019-08-07</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>Java基础面试题五</p>
-<blockquote>
-<p>Q1: &amp; 和 &amp;&amp; 的区别</p>
-</blockquote>
-<p>&amp;是位运算符，表示按位与运算，&amp;&amp;是逻辑运算符，表示逻辑与（and）。</p>
-<blockquote>
-<p>Q2: final, finally, finalize的区别</p>
-</blockquote>
-<ul>
-<li>final 用于声明属性，方法和类，分别表示属性不可变，方法不可覆盖，类不可继承。 </li>
-<li>finally,异常处理语句结构的一部分，表示总是执行。 </li>
-<li>finalize是Object类的一个方法，垃圾收集器执行的时候会调用被回收对象的此方法，可以覆盖此方法提供垃圾收集时的其他资源回收，例如关闭文件等。</li>
-</ul>
-<blockquote>
-<p>Q3: sleep() 和 wait() 有什么区别? </p>
-</blockquote>
-<p>sleep是线程类（Thread）的方法，导致此线程暂停执行指定时间，给执行机会给其他线程，但是监控状态依然保持，到时后会自动恢复。调用sleep不会释放对象锁。 </p>
-<p>wait是Object类的方法，对此对象调用wait方法导致本线程放弃对象锁，进入等待此对象的等待锁定池，只有针对此对象发出notify方法（或not ifyAll）后本线程才进入对象锁定池准备获得对象锁进入运行状态。</p>
-<blockquote>
-<p>Q4: error和exception有什么区别? </p>
-</blockquote>
-<ul>
-<li>error:<br>表示恢复不是不可能但很困难的情况下的一种严重问题。比如说内存溢出。不可能指望程序能处理这样的情况。 </li>
-<li>exception: 表示一种设计或实现问题。也就是说，它表示如果程序运行正常，从不会发生的情况。</li>
-</ul>
-<blockquote>
-<p>Q5: GC是什么? 为什么要有GC? </p>
-</blockquote>
-<p>GC是垃圾收集的意思（Gabage Collection）,内存处理是编程人员容易出现问题的地方，忘记或者错误的内存回收会导致程序或系统的不稳定甚至崩溃，Java提供的GC功能可以自动监测对象是否超过作用域从而达到自动回收内存的目的，Java语言没有提供释放已分配内存的显示操作方法。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">要请求垃圾收集，可以调用下面的方法之一：  </span><br><span class="line"><span class="selector-tag">System</span><span class="selector-class">.gc</span>() </span><br><span class="line"><span class="selector-tag">Runtime</span><span class="selector-class">.getRuntime</span>()<span class="selector-class">.gc</span>()</span><br></pre></td></tr></table></figure></p>
-<p>当然，如果需要，程序员可以在Java程序中显式地使用System.gc()来强制进行一次立即的内存清理。<br>因为显式声明是做堆内存全扫描，也就是FullGC，是需要停止所有的活动的（Stop The World Collection），你的应用能承受这个吗？而其显示调用System.gc()只是给虚拟机一个建议，不一定会执行，因为System.gc()在一个优先级很低的线程中执行。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2019/08/07/Java基础面试题二/">Java基础面试题二</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2019-08-07T14:37:25.984Z" itemprop="datePublished">2019-08-07</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>Java基础面试题二</p>
-<blockquote>
-<p>Q1: 什么是死锁(deadlock)？ </p>
-</blockquote>
-<p>两个进程都在等待对方执行完毕才能继续往下执行的时候就发生了死锁。结果就是两个进程都陷入了无限的等待中。<br>代码表示：<br><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLockDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> void main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">    DieLock dl1 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">true</span>);</span><br><span class="line">    DieLock dl2 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">false</span>);</span><br><span class="line">    dl1.start();</span><br><span class="line">    dl2.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>理想状态下dl1线程为true从if执行先打出”if objA”然后再接着打出”if objB”之后释放A、B的锁对象，之后dl2线程执行else语句打出”else objB”，”else objA”。<br>非理想状态下dl1先打出”if objA”，之后线程dl2执行打出”else objB”，然后1、2线程的锁对象A和B都处于被锁的状态，两个线程争夺锁对象发生死锁现象。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLock</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> flag;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DieLock</span><span class="params">(<span class="keyword">boolean</span> flag)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.flag = flag;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (flag) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                System.out.println(<span class="string">"if objA"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"if objB"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                System.out.println(<span class="string">"else objB"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"else objA"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2019/08/07/Java基础面试题三/">Java基础面试题三</a>
         </h1>
         
@@ -784,7 +478,7 @@ req.acceptsLanguages：返回指定字符集的第一个可接受字符编码
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
+    <a class="article-tag-link" href="/tags/面试题/">面试题</a>
 </div>
 
 
@@ -863,6 +557,235 @@ req.acceptsLanguages：返回指定字符集的第一个可接受字符编码
 </blockquote>
 <p>HashSet是由一个hash表来实现的，因此，它的元素是无序的。add()，remove()，contains()方法的时间复杂度是O(1)。 </p>
 <p>TreeSet是由一个树形的结构来实现的，它里面的元素是有序的。因此，add()，remove()，contains()方法的时间复杂度是O(logn)。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2019/08/07/Java基础面试题二/">Java基础面试题二</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-08-07T14:37:25.984Z" itemprop="datePublished">2019-08-07</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/面试题/">面试题</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>Java基础面试题二</p>
+<blockquote>
+<p>Q1: 什么是死锁(deadlock)？ </p>
+</blockquote>
+<p>两个进程都在等待对方执行完毕才能继续往下执行的时候就发生了死锁。结果就是两个进程都陷入了无限的等待中。<br>代码表示：<br><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLockDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> void main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">    DieLock dl1 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">true</span>);</span><br><span class="line">    DieLock dl2 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">false</span>);</span><br><span class="line">    dl1.start();</span><br><span class="line">    dl2.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>理想状态下dl1线程为true从if执行先打出”if objA”然后再接着打出”if objB”之后释放A、B的锁对象，之后dl2线程执行else语句打出”else objB”，”else objA”。<br>非理想状态下dl1先打出”if objA”，之后线程dl2执行打出”else objB”，然后1、2线程的锁对象A和B都处于被锁的状态，两个线程争夺锁对象发生死锁现象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLock</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> flag;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DieLock</span><span class="params">(<span class="keyword">boolean</span> flag)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.flag = flag;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (flag) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                System.out.println(<span class="string">"if objA"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"if objB"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                System.out.println(<span class="string">"else objB"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"else objA"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2019/08/07/Java基础面试题/">Java基础面试题一</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-08-07T14:37:25.983Z" itemprop="datePublished">2019-08-07</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/面试题/">面试题</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>Java基础面试题</p>
+<blockquote>
+<p>Q1: 什么是Java虚拟机?</p>
+</blockquote>
+<p>Java虚拟机是一个可以执行Java字节码的虚拟机进程。Java源文件被编译成能被Java虚拟机执行的字节码文件。</p>
+<blockquote>
+<p>Q2: “static”关键字是什么意思？Java中是否可以覆盖(override)一个private或者是static的方法？</p>
+</blockquote>
+<p>“static”关键字表明一个成员变量或者是成员方法可以在没有所属的类的实例变量的情况下被访问。简单说就是：不声明所属类的实例就可访问该变量或方法。Java中static方法不能被覆盖，因为方法覆盖是基于运行时动态绑定的，而static方法是编译时静态绑定的。</p>
+<blockquote>
+<p>Q3: 是否可以在static环境中访问非static变量？ </p>
+</blockquote>
+<p>static变量在Java中是属于类的，它在所有的实例中的值是一样的。当类被Java虚拟机载入的时候，会对static变量进行初始化。如果你的代码尝试不用实例来访问非static的变量，编译器会报错，因为这些变量还没有被创建出来，还没有跟任何实例关联上。</p>
+<blockquote>
+<p>Q4: Java支持的数据类型有哪些？什么是自动拆装箱？ </p>
+</blockquote>
+<p>基本数据类型是： </p>
+<ul>
+<li>byte </li>
+<li>short </li>
+<li>int </li>
+<li>long </li>
+<li>float </li>
+<li>double </li>
+<li>boolean </li>
+<li>char </li>
+</ul>
+<p>自动装箱是Java编译器在基本数据类型和对应的对象包装类型之间做的一个转化。比如：把int转化成Integer，float转化成double，等等。反之就是自动拆箱。</p>
+<blockquote>
+<p>Q5: Overload和Override的区别。Overloaded的方法是否可以改变返回值的类型? </p>
+</blockquote>
+<p>方法的重写Overriding和重载Overloading是Java多态性的不同表现。重写Overriding是父类与子类之间多态性的一种表现，重载Overloading是一个类中多态性的一种表现。如果在子类中定义某方法与其父类有相同的名称和参数，我们说该方法被重写(Overriding)。子类的对象使用这个方法时，将调用子类中的定义，对它而言，父类中的定义如同被”屏蔽”了。如果在一个类中定义了多个同名的方法，它们或有不同的参数个数或有不同的参数类型，则称为方法的重载(Overloading)。Overloaded的方法是可以改变返回值的类型。</p>
+<p>Overload： 重写 子类重写父类方法<br>Overload:  重载 相同方法名</p>
+<blockquote>
+<p>Q6: Java支持多继承么？ </p>
+</blockquote>
+<p>不支持，Java不支持多继承。每个类都只能继承一个类，但是可以实现多个接口。</p>
+<blockquote>
+<p>Q7: 接口和抽象类的区别是什么？ </p>
+</blockquote>
+<p>Java提供和支持创建抽象类和接口。它们的实现有共同点，不同点在于： </p>
+<ul>
+<li>接口中所有的方法隐含的都是抽象的。而抽象类则可以同时包含抽象和非抽象的方法。 </li>
+<li>类可以实现很多个接口，但是只能继承一个抽象类 </li>
+<li>类如果要实现一个接口，它必须要实现接口声明的所有方法。但是，类可以不实现抽象类声明的所有方法，当然，在这种情况下，类也必须得声明成是抽象的。 </li>
+<li>抽象类可以在不提供接口方法实现的情况下实现接口。 </li>
+<li>Java接口中声明的变量默认都是final的。抽象类可以包含非final的变量。 </li>
+<li>Java接口中的成员函数默认是public的。抽象类的成员函数可以是private，protected或者是public。 </li>
+<li>接口是绝对抽象的，不可以被实例化。抽象类也不可以被实例化，但是，如果它包含main方法的话是可以被调用的。</li>
+</ul>
+<blockquote>
+<p>Q8: 什么是值传递和引用传递？</p>
+</blockquote>
+<p>值传递: 意味着传递了对象的一个副本。因此，就算是改变了对象副本，也不会影响源对象的值。 </p>
+<p>引用传递: 意味着传递的并不是实际的对象，而是对象的引用。因此，外部对引用对象所做的改变会反映到所有的对象上。</p>
+<blockquote>
+<p>Q9: 创建线程有几种不同的方式？你喜欢哪一种？为什么？</p>
+</blockquote>
+<p>有三种方式可以用来创建线程： </p>
+<ul>
+<li>继承Thread类 </li>
+<li>实现Runnable接口 </li>
+<li>应用程序可以使用Executor框架来创建线程池 </li>
+</ul>
+<p>实现Runnable接口这种方式更受欢迎，因为这不需要继承Thread类。在应用设计中已经继承了别的对象的情况下，这需要多继承（而Java不支持多继承），只能实现接口。同时，线程池也是非常高效的，很容易实现和使用。</p>
+<blockquote>
+<p>Q10: 同步方法和同步代码块的区别是什么？ </p>
+</blockquote>
+<p>在Java语言中，每一个对象有一把锁。线程可以使用synchronized关键字来获取对象上的锁。<br>synchronized关键字可应用在方法级别(粗粒度锁：这里的锁对象可以是This)或者是代码块级别(细粒度锁：这里的锁对象就是任意对象)。</p>
+<ul>
+<li>方法级别(粗粒度锁：这里的锁对象可以是This)</li>
+<li>代码块级别(细粒度锁：这里的锁对象就是任意对象)</li>
+</ul>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2019/08/07/Git安装/">Git安装</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-08-07T14:37:25.977Z" itemprop="datePublished">2019-08-07</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Git/">Git</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Linux-安装Git"><a href="#Linux-安装Git" class="headerlink" title="Linux 安装Git:"></a>Linux 安装Git:</h1><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">检查是否安装Git</span><br><span class="line">git --version </span><br><span class="line"></span><br><span class="line">在 Ubuntu 这类 Debian 体系的系统上，可以用 apt-<span class="builtin-name">get</span> 安装：</span><br><span class="line">sudo apt-<span class="builtin-name">get</span> install git</span><br><span class="line"></span><br><span class="line">CentOs:</span><br><span class="line">yum install -y git</span><br></pre></td></tr></table></figure>
+<p>window安装比较简单不多说。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2019/08/07/apiDoc接口文档/">NodeJs apiDoc</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-08-07T14:37:25.972Z" itemprop="datePublished">2019-08-07</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/NodeJs/">NodeJs</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="apiDoc"><a href="#apiDoc" class="headerlink" title="apiDoc"></a>apiDoc</h1><p>全局安装，方便用命令创建文档<br><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm <span class="keyword">install</span> apidoc -g</span><br></pre></td></tr></table></figure></p>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>在你的项目根目录下新建apidoc.json文件，该文件描述了项目对外提供接口的概要信息如名称、版本、描述、文档打开时浏览器显示标题和接口缺省访问地址。<br>apidoc.json</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"name"</span>: <span class="string">"xxx Api"</span>, </span><br><span class="line">    <span class="string">"version"</span>: <span class="string">"1.0.0"</span>, </span><br><span class="line">    <span class="string">"description"</span>: <span class="string">"xxx Api Documentation"</span>, </span><br><span class="line">    <span class="string">"title"</span>: <span class="string">"xxx"</span>,  </span><br><span class="line">    <span class="string">"url"</span> : <span class="string">"http://域名/api/v1"</span>,</span><br><span class="line">    <span class="string">"sampleUrl"</span>: <span class="string">"http://域名/api/v1"</span>,</span><br><span class="line"></span><br><span class="line">    <span class="string">"template"</span>: &#123;</span><br><span class="line">      <span class="string">"withCompare"</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="string">"withGenerator"</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="string">"forceLanguage"</span>:<span class="string">"en"</span></span><br><span class="line">    &#125;,</span><br><span class="line">  //顺序、若有需要可配置(<span class="name">books</span>, student,xxx) Resources Name</span><br><span class="line">  <span class="string">"order"</span>: [<span class="string">"xxx"</span>,<span class="string">"xxx"</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Sample"><a href="#Sample" class="headerlink" title="Sample"></a>Sample</h2><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"><span class="markdown">/**</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>Get Access Token</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>@api &#123;POST&#125; /token GetAccessToken</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>@apiDescription Generate </span>a<span class="markdown"> token that can be passed with each API request.</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>@apiName GetAccessToken</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>@apiPermission API User</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>@apiParam (Parameters) &#123;String&#125; username username</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>@apiParam (Parameters) &#123;String&#125; password password</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>@apiParamExample &#123;json&#125; Sample (Request body formats: text/plain, application/x-www-form-urlencoded, text/json, application/json)  :</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>&#123;</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *   </span>"username": "</span>your<span class="markdown"> accont",</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *   </span>"password": "</span>your<span class="markdown"> password"</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>&#125;</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>@apiSampleRequest off</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>@apiSuccessExample &#123;json&#125; Response (Response body formats: application/json, text/json):</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>Success Response :</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>Status: 200 OK</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>&#123;</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *   </span>"status": "success",</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *   </span>"message": "Authentication successful.",</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *   </span>"data": &#123;</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *      </span>"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6Ikpxxxxx.xxxxx2VybmFtZSI6InNsIiwiaWF0IjoxNTQ1MTkyMzY4LCJleHAiOjE1NDUxOTI4NDh9.xxxxxxgS1Yw8rNRD31p97A7fdWvmkrXxo3llMJowX7U"</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *   </span>&#125;</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>&#125;</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>Or </span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>Bad Response:</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>Status: 400 </span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>&#123; </span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *   </span>"status": "failure", </span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *   </span>"message": "Authentication failed. Please provide </span>a<span class="markdown"> correct username or password."</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>&#125; </span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>@apiGroup Token</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> * </span>@apiVersion 1.0.0</span></span></span><br><span class="line"><span class="comment"><span class="markdown"> */</span></span></span><br></pre></td></tr></table></figure>
+<h2 id="生成"><a href="#生成" class="headerlink" title="生成"></a>生成</h2><p>文档初始化或发生改变时，在应用程序根目录执行相应命令<br>以此项目为例：</p>
+<blockquote>
+<p>apidoc -i api/v1 -o public/apiDoc</p>
+</blockquote>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-<span class="selector-tag">i</span> input</span><br><span class="line">-o output</span><br><span class="line"></span><br><span class="line">指定文件夹路径</span><br></pre></td></tr></table></figure>
+<p>具体注释写法参照官网解释：<br><a href="http://apidocjs.com/#run" target="_blank" rel="noopener">http://apidocjs.com/#run</a></p>
+<p>public/apiDoc内文件不用上传到代码管理中<br>可直接执行npm run doc命令自动生成</p>
 
         
     </section>
