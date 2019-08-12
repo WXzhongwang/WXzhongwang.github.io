@@ -131,6 +131,52 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2019/01/11/Hadoop Hive Hbase 简单区别及应用场景/">Hadoop Hive Hbase 简单区别及应用场景</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/3/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-01-11T02:10:00.000Z" itemprop="datePublished">2019-01-11</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Hadoop/">Hadoop</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Hadoop-Hive-Hbase-简单区别及应用场景"><a href="#Hadoop-Hive-Hbase-简单区别及应用场景" class="headerlink" title="Hadoop Hive Hbase 简单区别及应用场景"></a>Hadoop Hive Hbase 简单区别及应用场景</h1><h2 id="Hadoop"><a href="#Hadoop" class="headerlink" title="Hadoop"></a>Hadoop</h2><p>它是一个分布式计算+分布式文件系统，前者其实就是MapReduce，后者是HDFS。后者可以独立运行，前者可以选择性使用，也可以不使用。</p>
+<h2 id="Hive"><a href="#Hive" class="headerlink" title="Hive"></a>Hive</h2><p>通俗的说是一个数据仓库，仓库中的数据是被HDFS管理的数据文件，它支持类似sql语句的功能，你可以通过该语句完成分布式环境下的计算功能，Hive会把语句转换成MapReduce，然后交给Hadoop执行。这里的计算，仅限于查找和分析，而不是更新、增加和删除。它的优势是对历史数据进行处理，用时下流行的说法是离线计算，因为它的底层是MapReduce，MapReduce在实时计算上性能很差。它的做法是把数据文件加载进来作为一个Hive表（或者外部表），让你觉得你的sql操作的是传统的表。</p>
+<h2 id="HBase"><a href="#HBase" class="headerlink" title="HBase"></a>HBase</h2><p>通俗的说，HBase的作用类似于数据库，传统数据库管理的是集中的本地数据文件，而HBase基于Hdfs实现对分布式数据文件的管理，比如增删改查。也就是说，HBase只是利用Hadoop的Hdfs帮助其管理数据的持久化文件（HFile），它跟MapReduce没任何关系。HBase的优势在于实时计算，所有实时数据都直接存入Hbase中，客户端通过API直接访问Hbase，实现实时计算。由于它使用的是nosql，或者说是列式结构，从而提高了查找性能，使其能运用于大数据场景，这是它跟MapReduce的区别。</p>
+<h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><ol>
+<li>Hadoop是Hive和HBase的基础，Hive依赖Hadoop</li>
+<li>HBase仅依赖Hadoop的Hdfs模块。</li>
+<li>Hive适用于离线数据的分析，操作的是通用格式的（如通用的日志文件）、被Hadoop管理的数据文件，它支持类sql，比编写MapReduce的java代码来的更加方便，它的定位是数据仓库，存储和分析历史数据</li>
+<li>Hbase适用于实时计算，采用列式结构的nosql，操作的是自己生成的特殊格式的HFile、被hadoop管理的数据文件，它的定位是数据库，或者叫DBMS</li>
+</ol>
+<blockquote>
+<p>最后补充一下：Hive可以直接操作Hdfs中的文件作为它的表的数据，也可以使HBase数据库作为它的表</p>
+</blockquote>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2019/01/08/大数据/">大数据</a>
         </h1>
         
@@ -185,7 +231,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/01/08/流处理、批处理、交互式查询/">流处理、批处理、交互式查询</a>
+            <a href="/2019/01/08/Hadoop/">Hadoop概念</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -208,14 +254,41 @@
     
     <section class="article-body markdown-body">
         
-        <pre><code>我们将大数据处理按处理时间的跨度要求分为以下几类
+        <p>Hadoop是一个开源的框架，可编写和运行分布式应用处理大规模数据，是专为离线和大规模数据分析而设计的，并不适合那种对几个记录随机读写的在线事务处理模式。</p>
+<h1 id="Hadoop"><a href="#Hadoop" class="headerlink" title="Hadoop"></a>Hadoop</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ul>
+<li>Hadoop是一个开源的框架，可编写和运行分布式应用处理大规模数据，是专为离线和大规模数据分析而设计的，并不适合那种对几个记录随机读写的在线事务处理模式。 ==不是为了大数据而大数据==</li>
+<li>Hadoop 是以一种可靠、高效、可伸缩的方式进行处理的。Hadoop 是可靠的，因为它假设计算元素和存储会失败，因此它维护多个工作数据副本，确保能够针对失败的节点重新分布处理。Hadoop 是高效的，因为它以并行的方式工作，通过并行处理加快处理速度。Hadoop 还是可伸缩的，能够处理 PB 级数据。<h2 id="核心"><a href="#核心" class="headerlink" title="核心"></a>核心</h2>Hadoop的核心就是==HDFS==和==MapReduce===，Hadoop旗下有很多经典子项目，比如HBase、Hive等，这些都是基于HDFS和MapReduce发展出来的。要想了解Hadoop，就必须知道HDFS和MapReduce是什么。<h3 id="HDFS"><a href="#HDFS" class="headerlink" title="HDFS"></a>HDFS</h3>Hadoop Distributed File System，Hadoop 分布式文件系统<br>高度容错性的系统，适合部署在廉价的机器上，HDFS能提供高吞吐量的数据访问，适合那些有着超大数据集（large data set）的应用程序。<h3 id="MapReduce"><a href="#MapReduce" class="headerlink" title="MapReduce"></a>MapReduce</h3>Mapreduce是一个计算框架，一个处理分布式海量数据的软件框架及计算集群。</li>
+</ul>
+<h2 id="用处"><a href="#用处" class="headerlink" title="用处"></a>用处</h2><ul>
+<li>搜索引擎 - 设计Hadoop的初衷，为了针对大规模的网页快速建立索引）</li>
+<li>大数据存储 - 利用Hadoop的分布式存储能力，例如数据备份、数据仓库等。</li>
+<li>大数据处理 - 利用Hadoop的分布式处理能力，例如数据挖掘、数据分析等。</li>
+<li>科学研究 - Hadoop是一种分布式的开源框架，对于分布式计算有很大程度地参考价值。</li>
+</ul>
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><p>==高可靠性==<br>Hadoop按位存储和处理数据的能力值得信赖。</p>
+<p>==高扩展性==<br>Hadoop是在可用的计算机集簇间分配数据并完成计算任务的，这些集簇可以方便地扩展到数以千计的节点中。</p>
+<p>==高效性==<br>Hadoop能够在节点之间动态地移动数据，并保证各个节点的动态平衡，因此处理速度非常快。</p>
+<p>==高容错性==<br>Hadoop能够自动保存数据的多个副本，并且能够自动将失败的任务重新分配。</p>
+<p>==低成本==<br>与一体机、商用数据仓库以及QlikView、Yonghong Z-Suite等数据集市相比，hadoop是开源的，项目的软件成本因此会大大降低。</p>
+<blockquote>
+<p>Hadoop设计对硬件需求比较低，只须运行在低廉的商用硬件集群上，而无需昂贵的高可用性机器上。廉价的商用机也就意味着大型集群中出现节点故障情况的概率非常高。这就要求设计HDFS时要充分考虑数据的可靠性，安全性及高可用性。</p>
+</blockquote>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><p>==不适合低延迟数据访问==</p>
+<blockquote>
+<p>如果要处理一些用户要求时间比较短的低延迟应用请求，则HDFS不适合。HDFS是为了处理大型数据集分析任务的，主要是为达到高的数据吞吐量而设计的，这就可能要求以高延迟作为代价。</p>
+</blockquote>
+<blockquote>
+<p>改进策略：对于那些有低延时要求的应用程序，HBase是一个更好的选择。通过上层数据管理项目来尽可能地弥补这个不足。在性能上有了很大的提升，它的口号就是goes real time。使用缓存或多master设计可以降低client的数据请求压力，以减少延时。还有就是对HDFS系统内部的修改，这就得权衡大吞吐量与低延时了，HDFS不是万能的银弹。</p>
+</blockquote>
+<p>==无法高效存储大量小文件==</p>
+<blockquote>
+<p>因为Namenode把文件系统的元数据放置在内存中，所以文件系统所能容纳的文件数目是由Namenode的内存大小来决定。一般来说，每一个文件、文件夹和Block需要占据150字节左右的空间，所以，如果你有100万个文件，每一个占据一个Block，你就至少需要300MB内存。当前来说，数百万的文件还是可行的，当扩展到数十亿时，对于当前的硬件水平来说就没法实现了。还有一个问题就是，因为Maptask的数量是由splits来决定的，所以用MR处理大量的小文件时，就会产生过多的Maptask，线程管理开销将会增加作业时间。举个例子，处理10000M的文件，若每个split为1M，那就会有10000个Maptasks，会有很大的线程开销；若每个split为100M，则只有100个Maptasks，每个Maptask将会有更多的事情做，而线程的管理开销将减小很多。</p>
+</blockquote>
+<p>==不支持多用户写入及任意修改文件==  </p>
+<blockquote>
+<p>在HDFS的一个文件中只有一个写入者，而且写操作只能在文件末尾完成，即只能执行追加操作。目前HDFS还不支持多个用户对同一文件的写操作，以及在文件任意位置进行修改。</p>
+</blockquote>
 
-基于实时数据流的处理，通常的时间跨度在数百毫秒到数秒之间
-
-基于历史数据的交互式查询，通常时间跨度在数十秒到数分钟之间
-
-复杂的批量数据处理，通常的时间跨度在几分钟到数小时之间
-</code></pre>
         
     </section>
 </article>
@@ -282,6 +355,47 @@
 <li>无论是kafka集群，还是producer和consumer都依赖于zookeeper集群保存一些meta信息，来保证系统可用性</li>
 </ul>
 
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2019/01/08/流处理、批处理、交互式查询/">流处理、批处理、交互式查询</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/3/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-01-08T06:18:02.000Z" itemprop="datePublished">2019-01-08</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Hadoop/">Hadoop</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <pre><code>我们将大数据处理按处理时间的跨度要求分为以下几类
+
+基于实时数据流的处理，通常的时间跨度在数百毫秒到数秒之间
+
+基于历史数据的交互式查询，通常时间跨度在数十秒到数分钟之间
+
+复杂的批量数据处理，通常的时间跨度在几分钟到数小时之间
+</code></pre>
         
     </section>
 </article>
@@ -405,63 +519,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/08/10/计算机网络相关问题/">计算机网络相关问题</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/3/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-08-10T14:55:00.000Z" itemprop="datePublished">2018-08-10</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/计算机网络/">计算机网络</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="计算机网络相关问题"><a href="#计算机网络相关问题" class="headerlink" title="计算机网络相关问题"></a>计算机网络相关问题</h1><h2 id="①TCP三次握手和四次挥手"><a href="#①TCP三次握手和四次挥手" class="headerlink" title="①TCP三次握手和四次挥手"></a>①TCP三次握手和四次挥手</h2><h3 id="三次握手（创建）"><a href="#三次握手（创建）" class="headerlink" title="三次握手（创建）"></a>三次握手（创建）</h3><p>1）客户端–发送带有SYN标志的数据包–一次握手–服务端<br>2）服务端–发送带有SYN/ACK标志的数据包–二次握手–客户端<br>3）客户端–发送带有带有ACK标志的数据包–三次握手–服务端</p>
-<p>第二次握手中，服务端为何要传回SYN（发起一个新链接）？</p>
-<blockquote>
-<p>接收端传回发送端所发送的SYN是为了告诉发送端，我接收到的信息确实就是你所发送的信号了。</p>
-</blockquote>
-<p>双方通信无误必须是两者互相发送信息都无误。传了SYN，证明发送方到接收方的通道没有问题，但是接收方到发送方的通道还需要ACK信号来进行验证。</p>
-<h3 id="四次挥手（断开）"><a href="#四次挥手（断开）" class="headerlink" title="四次挥手（断开）"></a>四次挥手（断开）</h3><p>1）客户端-发送一个FIN，用来关闭客户端到服务器的数据传送<br>2）服务器-收到这个FIN，发回一个ACK，确认序号为收到的序号加1。和SYN一样，一个FIN将占用一个序号<br>3）服务器-关闭与客户端的连接，发送一个FIN给客户端<br>4）客户端-发回ACK报文确认，并将确认序号设置为收到序号加1</p>
-<h2 id="②在浏览器中输入url地址-gt-gt-显示主页的过程-完整描述"><a href="#②在浏览器中输入url地址-gt-gt-显示主页的过程-完整描述" class="headerlink" title="②在浏览器中输入url地址-&gt;&gt;显示主页的过程(完整描述)"></a>②在浏览器中输入url地址-&gt;&gt;显示主页的过程(完整描述)</h2><p>域名解析 –&gt; 发起TCP的3次握手 –&gt; 建立TCP连接后发起http请求 –&gt; 服务器响应http请求，浏览器得到html代码 –&gt; 浏览器解析html代码，并请求html代码中的资源（如js、css、图片等） –&gt; 浏览器对页面进行渲染呈现给用户</p>
-<h2 id="③HTTP和HTTPS的区别"><a href="#③HTTP和HTTPS的区别" class="headerlink" title="③HTTP和HTTPS的区别"></a>③HTTP和HTTPS的区别</h2><h2 id="④TCP、UDP协议的区别"><a href="#④TCP、UDP协议的区别" class="headerlink" title="④TCP、UDP协议的区别"></a>④TCP、UDP协议的区别</h2><p>UDP:</p>
-<blockquote>
-<p>UDP在传送数据之前不需要先建立连接，远地主机在收到UDP报文后，不需要给出任何确认。虽然UDP不提供可靠交付，但在某些情况下UDP确是一种最有效的工作方式（一般用于即时通信），比如： QQ语音 QQ视频 、直播等等</p>
-</blockquote>
-<p>1）无连接<br>2）尽力交付，不保证可靠<br>3）面向报文<br>4）没有拥塞控制（网络出现拥塞不会使源主机的发送速率降低，对实时应用很有用）<br>5）支持一对一，一对多，多对多交互通信<br>6）UDP的首部开销小，只有8个字节，比TCP的20个字节的首部要短。</p>
-<p>TCP:</p>
-<blockquote>
-<p>TCP提供面向连接的服务。在传送数据之前必须先建立连接，数据传送结束后要释放连接。TCP不提供广播或多播服务。由于TCP要提供可靠的，面向连接的运输服务（TCP的可靠体现在TCP在传递数据之前，会有三次握手来建立连接，而且在数据传递时，有确认、窗口、重传、拥塞控制机制，在数据传完后，还会断开连接，四次挥手，用来节约系统资源），这一难以避免增加了许多开销，如确认，流量控制，计时器以及连接管理等。这不仅使协议数据单元的首部增大很多，还要占用许多处理机资源。TCP一般用于文件传输、发送和接收邮件、远程登录等场景。</p>
-</blockquote>
-<p>1)面向连接（就好像打电话一样，通话前需要先拨号建立连接，通话结束后要挂机释放连接）<br>2)TCP连接只能是点对点的（一对一）<br>3)可靠(通过TCP连接传送的数据，无差错、不丢失、不重复、并且按序到达)<br>4)TCP提供全双工通信。TCP允许通信双方的应用进程在任何时候都能发送数据。TCP连接的两端都设有发送缓存和接收缓存，用来临时存放双方通信的数据<br>5)面向字节流。TCP中的“流”（stream）指的是流入进程或从进程流出的字节序列。“面向字节流”的含义是：虽然应用程序和TCP的交互是一次一个数据块（大小不等），但TCP把应用程序交下来的数据仅仅看成是一连串的无结构的字节流。</p>
-<h2 id="⑤常见的状态码"><a href="#⑤常见的状态码" class="headerlink" title="⑤常见的状态码"></a>⑤常见的状态码</h2><p>1XX informational（信息性状态码） 请求正在处理</p>
-<p>2XX Success(成功状态码) 请求正常处理完毕</p>
-<p>3XX Redirection(重定向状态码) 需要进行附加操作才能完成请求</p>
-<p>4XX Client Error(客户端错误状态码) 服务无法处理请求</p>
-<p>5XX Server Error（服务端错误状态码） 服务端处理请求出错</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2018/08/10/计算机网络知识回顾/">计算机网络知识回顾</a>
         </h1>
         
@@ -549,6 +606,63 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/08/10/计算机网络相关问题/">计算机网络相关问题</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/3/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-08-10T14:55:00.000Z" itemprop="datePublished">2018-08-10</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/计算机网络/">计算机网络</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="计算机网络相关问题"><a href="#计算机网络相关问题" class="headerlink" title="计算机网络相关问题"></a>计算机网络相关问题</h1><h2 id="①TCP三次握手和四次挥手"><a href="#①TCP三次握手和四次挥手" class="headerlink" title="①TCP三次握手和四次挥手"></a>①TCP三次握手和四次挥手</h2><h3 id="三次握手（创建）"><a href="#三次握手（创建）" class="headerlink" title="三次握手（创建）"></a>三次握手（创建）</h3><p>1）客户端–发送带有SYN标志的数据包–一次握手–服务端<br>2）服务端–发送带有SYN/ACK标志的数据包–二次握手–客户端<br>3）客户端–发送带有带有ACK标志的数据包–三次握手–服务端</p>
+<p>第二次握手中，服务端为何要传回SYN（发起一个新链接）？</p>
+<blockquote>
+<p>接收端传回发送端所发送的SYN是为了告诉发送端，我接收到的信息确实就是你所发送的信号了。</p>
+</blockquote>
+<p>双方通信无误必须是两者互相发送信息都无误。传了SYN，证明发送方到接收方的通道没有问题，但是接收方到发送方的通道还需要ACK信号来进行验证。</p>
+<h3 id="四次挥手（断开）"><a href="#四次挥手（断开）" class="headerlink" title="四次挥手（断开）"></a>四次挥手（断开）</h3><p>1）客户端-发送一个FIN，用来关闭客户端到服务器的数据传送<br>2）服务器-收到这个FIN，发回一个ACK，确认序号为收到的序号加1。和SYN一样，一个FIN将占用一个序号<br>3）服务器-关闭与客户端的连接，发送一个FIN给客户端<br>4）客户端-发回ACK报文确认，并将确认序号设置为收到序号加1</p>
+<h2 id="②在浏览器中输入url地址-gt-gt-显示主页的过程-完整描述"><a href="#②在浏览器中输入url地址-gt-gt-显示主页的过程-完整描述" class="headerlink" title="②在浏览器中输入url地址-&gt;&gt;显示主页的过程(完整描述)"></a>②在浏览器中输入url地址-&gt;&gt;显示主页的过程(完整描述)</h2><p>域名解析 –&gt; 发起TCP的3次握手 –&gt; 建立TCP连接后发起http请求 –&gt; 服务器响应http请求，浏览器得到html代码 –&gt; 浏览器解析html代码，并请求html代码中的资源（如js、css、图片等） –&gt; 浏览器对页面进行渲染呈现给用户</p>
+<h2 id="③HTTP和HTTPS的区别"><a href="#③HTTP和HTTPS的区别" class="headerlink" title="③HTTP和HTTPS的区别"></a>③HTTP和HTTPS的区别</h2><h2 id="④TCP、UDP协议的区别"><a href="#④TCP、UDP协议的区别" class="headerlink" title="④TCP、UDP协议的区别"></a>④TCP、UDP协议的区别</h2><p>UDP:</p>
+<blockquote>
+<p>UDP在传送数据之前不需要先建立连接，远地主机在收到UDP报文后，不需要给出任何确认。虽然UDP不提供可靠交付，但在某些情况下UDP确是一种最有效的工作方式（一般用于即时通信），比如： QQ语音 QQ视频 、直播等等</p>
+</blockquote>
+<p>1）无连接<br>2）尽力交付，不保证可靠<br>3）面向报文<br>4）没有拥塞控制（网络出现拥塞不会使源主机的发送速率降低，对实时应用很有用）<br>5）支持一对一，一对多，多对多交互通信<br>6）UDP的首部开销小，只有8个字节，比TCP的20个字节的首部要短。</p>
+<p>TCP:</p>
+<blockquote>
+<p>TCP提供面向连接的服务。在传送数据之前必须先建立连接，数据传送结束后要释放连接。TCP不提供广播或多播服务。由于TCP要提供可靠的，面向连接的运输服务（TCP的可靠体现在TCP在传递数据之前，会有三次握手来建立连接，而且在数据传递时，有确认、窗口、重传、拥塞控制机制，在数据传完后，还会断开连接，四次挥手，用来节约系统资源），这一难以避免增加了许多开销，如确认，流量控制，计时器以及连接管理等。这不仅使协议数据单元的首部增大很多，还要占用许多处理机资源。TCP一般用于文件传输、发送和接收邮件、远程登录等场景。</p>
+</blockquote>
+<p>1)面向连接（就好像打电话一样，通话前需要先拨号建立连接，通话结束后要挂机释放连接）<br>2)TCP连接只能是点对点的（一对一）<br>3)可靠(通过TCP连接传送的数据，无差错、不丢失、不重复、并且按序到达)<br>4)TCP提供全双工通信。TCP允许通信双方的应用进程在任何时候都能发送数据。TCP连接的两端都设有发送缓存和接收缓存，用来临时存放双方通信的数据<br>5)面向字节流。TCP中的“流”（stream）指的是流入进程或从进程流出的字节序列。“面向字节流”的含义是：虽然应用程序和TCP的交互是一次一个数据块（大小不等），但TCP把应用程序交下来的数据仅仅看成是一连串的无结构的字节流。</p>
+<h2 id="⑤常见的状态码"><a href="#⑤常见的状态码" class="headerlink" title="⑤常见的状态码"></a>⑤常见的状态码</h2><p>1XX informational（信息性状态码） 请求正在处理</p>
+<p>2XX Success(成功状态码) 请求正常处理完毕</p>
+<p>3XX Redirection(重定向状态码) 需要进行附加操作才能完成请求</p>
+<p>4XX Client Error(客户端错误状态码) 服务无法处理请求</p>
+<p>5XX Server Error（服务端错误状态码） 服务端处理请求出错</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/06/12/windows下安装node-sass和sass-loader失败/">sass sass-loader</a>
         </h1>
         
@@ -586,108 +700,10 @@
 </article>
 
 
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/06/08/JVM相关/">JVM 相关问题</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/3/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-06-08T04:22:30.000Z" itemprop="datePublished">2018-06-08</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>JVM相关问题</p>
-<p>1.JVM内存模型，GC机制和原理。</p>
-<p>2.GC分两种，Minor GC和 Full GC有什么区别？什么时候会触发Full GC?分别采用什么算法？</p>
-<p>3.JVM里有几种classloader,为什么会有多种？</p>
-<p>4.什么是双亲委派机制？介绍一些运作过程，双亲委派模式的好处？</p>
-<p>5.什么情况下我们需要破坏双亲委派模型？</p>
-<p>6.常见的JVM调优有哪些？可以具体到那个参数，调成什么值？</p>
-<p>7.JVM虚拟机内存划分、类加载器、垃圾收集算法、垃圾收集器、class文件结构是如何解析的？</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/06/06/Zookeeper通知机制/">Zookeeper通知机制</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/3/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-06-06T02:10:00.000Z" itemprop="datePublished">2018-06-06</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Zookeeper/">Zookeeper</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h2 id="Zookeeper通知机制"><a href="#Zookeeper通知机制" class="headerlink" title="Zookeeper通知机制"></a>Zookeeper通知机制</h2><p>客户端注册监听(watch)它关心的目录节点，当目录节点发生变化（数据改变、被删除、子目录节点增加删除）时，zookeeper会通知客户端。</p>
-<h2 id="Zookeeper做了什么？"><a href="#Zookeeper做了什么？" class="headerlink" title="Zookeeper做了什么？"></a>Zookeeper做了什么？</h2><p>1.命名服务   2.配置管理   3.集群管理   4.分布式锁  5.队列管理</p>
-<h3 id="命名服务"><a href="#命名服务" class="headerlink" title="命名服务"></a>命名服务</h3><p>在zookeeper的文件系统里创建一个目录，即有唯一的path。在我们使用tborg无法确定上游程序的部署机器时即可与下游程序约定好path，通过path即能互相探索发现。</p>
-<p>命名服务是分布式系统中比较常见的一类场景。在分布式系统中，被命名的实体通常可以是集群中的机器、提供的服务地址或远程对象等——这些我们都可以统称它们为名字（Name），<br>其中较为常见的就是一些分布式服务框架（如RPC、RMI）中的服务地址列表，通过使用命名服务，客户端应用能够根据指定名字来获取资源的实体、服务地址和提供者的信息等。</p>
-<p>Java中的JNDI便是一种典型的命名服务。JNDI是Java命名与目录接口（Java Naming and Directory Interface）的缩写，是J2EE体系中重要的规范之一，标准的J2EE容器都提供了对JNDI规范的实现。<br>因此，在实际开发中，开发人员常常使用应用服务窗口自带的JNDI实现来完成数据源的配置与管理。<br>使用JNDI方式后，开发人员可以完全不需要关心数据库相关的任何信息，包括数据库类型、JDBC驱动类型及数据库账户等。</p>
-<p>ZooKeeper的命名服务有两个应用方向： </p>
-<ol>
-<li>ZooKeeper提供类似JNDI服务，都能够帮助应用系统通过一个资源引用的方式来实现对资源的定位与实用。     </li>
-<li>利用ZooKeeper顺序节点的特性，制作分布式的ID生成器。</li>
-</ol>
-<h3 id="配置管理"><a href="#配置管理" class="headerlink" title="配置管理"></a>配置管理</h3><p>程序总是需要配置的，如果程序分散部署在多台机器上，要逐个改变配置就变得困难。现在把这些配置全部放到zookeeper上去，保存在 Zookeeper 的某个目录节点中，<br>然后所有相关应用程序对这个目录节点进行监听，一旦配置信息发生变化，每个应用程序就会收到 Zookeeper 的通知，然后从 Zookeeper 获取新的配置信息应用到系统中就好。</p>
-<h3 id="集群管理"><a href="#集群管理" class="headerlink" title="集群管理"></a>集群管理</h3><p>所谓集群管理无在乎两点：是否有机器退出和加入、选举master。 </p>
-<p>对于第一点，所有机器约定在父目录GroupMembers下创建临时目录节点，然后监听父目录节点的子节点变化消息。一旦有机器挂掉，该机器与 zookeeper的连接断开，其所创建的临时目录节点被删除，所有其他机器都收到通知：某个兄弟目录被删除，于是，所有人都知道：它上船了。<br>新机器加入也是类似，所有机器收到通知：新兄弟目录加入，highcount又有了。</p>
-<p>对于第二点，我们稍微改变一下，所有机器创建临时顺序编号目录节点，每次选取编号最小的机器作为master就好。</p>
-<h3 id="Zookeeper分布式锁"><a href="#Zookeeper分布式锁" class="headerlink" title="Zookeeper分布式锁"></a>Zookeeper分布式锁</h3><p>有了zookeeper的一致性文件系统，锁的问题变得容易。锁服务可以分为两类，一个是保持独占，另一个是控制时序。 </p>
-<p>对于第一类，我们将zookeeper上的一个znode看作是一把锁，通过createznode的方式来实现。所有客户端都去创建 /distribute_lock 节点，最终成功创建的那个客户端也即拥有了这把锁。用完删除掉自己创建的distribute_lock 节点就释放出锁。 </p>
-<p>对于第二类， /distribute_lock 已经预先存在，所有客户端在它下面创建临时顺序编号目录节点，和选master一样，编号最小的获得锁，用完删除，依次方便。</p>
-<h3 id="队列管理"><a href="#队列管理" class="headerlink" title="队列管理"></a>队列管理</h3><p>两种类型的队列：</p>
-<p>1、同步队列，当一个队列的成员都聚齐时，这个队列才可用，否则一直等待所有成员到达。 </p>
-<p>2、队列按照 FIFO 方式进行入队和出队操作。 </p>
-<p>第一类，在约定目录下创建临时目录节点，监听节点数目是否是我们要求的数目。 </p>
-<p>第二类，和分布式锁服务中的控制时序场景基本原理一致，入列有编号，出列按编号。</p>
-
-        
-    </section>
-</article>
-
-
 
 
 <nav class="page-nav">
-    <a class="extend prev" rel="prev" href="/page/2/">&laquo; 上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/4/">下一页 &raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/2/">&laquo; 上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/4/">下一页 &raquo;</a>
 </nav>
 
 
