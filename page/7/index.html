@@ -131,7 +131,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/04/01/死锁问题/">死锁问题</a>
+            <a href="/2018/04/01/Thread实现多线程二/">Thread实现多线程二</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -154,26 +154,61 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="死锁问题"><a href="#死锁问题" class="headerlink" title="死锁问题"></a>死锁问题</h1><figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">DeadLockDemo</span> &#123;</span></span><br><span class="line">    private static Object resource1 = <span class="keyword">new</span> Object();<span class="regexp">//资源 1</span></span><br><span class="line"><span class="regexp">    private static Object resource2 = new Object();//</span>资源 <span class="number">2</span></span><br><span class="line"></span><br><span class="line">    public static <span class="literal">void</span> main(String[] args) &#123;</span><br><span class="line">        <span class="keyword">new</span> Thread<span class="function"><span class="params">(() -&gt; &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">            synchronized (resource1) &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                System.out.println(Thread.currentThread() + <span class="string">"get resource1"</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">try</span> &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                    Thread.sleep(<span class="number">1000</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                    e.printStackTrace();</span></span></span><br><span class="line"><span class="function"><span class="params">                &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">                System.out.println(Thread.currentThread() + <span class="string">"waiting get resource2"</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                synchronized (resource2) &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                    System.out.println(Thread.currentThread() + <span class="string">"get resource2"</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">            &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">        &#125;, <span class="string">"线程 1"</span>)</span>.<span class="title">start</span><span class="params">()</span>;</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">        <span class="title">new</span> <span class="title">Thread</span><span class="params">(() -&gt; &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">            synchronized (resource2) &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                System.out.println(Thread.currentThread() + <span class="string">"get resource2"</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">try</span> &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                    Thread.sleep(<span class="number">1000</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                    e.printStackTrace();</span></span></span><br><span class="line"><span class="function"><span class="params">                &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">                System.out.println(Thread.currentThread() + <span class="string">"waiting get resource1"</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                synchronized (resource1) &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                    System.out.println(Thread.currentThread() + <span class="string">"get resource1"</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">            &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">        &#125;, <span class="string">"线程 2"</span>)</span>.<span class="title">start</span><span class="params">()</span>;</span></span><br><span class="line"><span class="function">    &#125;</span></span><br><span class="line"><span class="function">&#125;</span></span><br></pre></td></tr></table></figure>
-<p>产生死锁必须具备以下四个条件：</p>
-<ul>
-<li>互斥条件：该资源任意一个时刻只由一个线程占用</li>
-<li>请求与保持条件：一个进程因请求资源而阻塞时，对已获得的资源保持不放</li>
-<li>不剥夺条件:线程已获得的资源在末使用完之前不能被其他线程强行剥夺，只有自己使用完毕后才释放资源</li>
-<li>循环等待条件:若干进程之间形成一种头尾相接的循环等待资源关系</li>
-</ul>
-<h2 id="如何避免线程死锁"><a href="#如何避免线程死锁" class="headerlink" title="如何避免线程死锁?"></a>如何避免线程死锁?</h2><p>我们只要破坏产生死锁的四个条件中的其中一个就可以了。</p>
-<p>破坏互斥条件</p>
-<p>这个条件我们没有办法破坏，因为我们用锁本来就是想让他们互斥的（临界资源需要互斥访问）。</p>
-<p>破坏请求与保持条件</p>
-<p>一次性申请所有的资源。</p>
-<p>破坏不剥夺条件</p>
-<p>占用部分资源的线程进一步申请其他资源时，如果申请不到，可以主动释放它占有的资源。</p>
-<p>破坏循环等待条件</p>
-<p>靠按序申请资源来预防。按某一顺序申请资源，释放资源则反序释放。破坏循环等待条件。</p>
+        <h1 id="Thread实现多线程二"><a href="#Thread实现多线程二" class="headerlink" title="Thread实现多线程二"></a>Thread实现多线程二</h1><p>接上文，关系到线程运行状态的几个方法：</p>
+<p>4）yield方法</p>
+<p>调用yield方法会让当前线程交出CPU权限，让CPU去执行其他的线程。它跟sleep方法类似，同样不会释放锁。但是yield不能控制具体的交出CPU的时间，另外，yield方法只能让拥有相同优先级的线程有获取CPU执行时间的机会。</p>
+<p>注意，调用yield方法并不会让线程进入阻塞状态，而是让线程重回就绪状态，它只需要等待重新获取CPU执行时间，这一点是和sleep方法不一样的。</p>
+<p>5）join方法</p>
+<p>join方法有三个重载版本：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">join</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">join</span><span class="params">(long millis)</span></span>     <span class="comment">//参数为毫秒</span></span><br><span class="line"><span class="function"><span class="title">join</span><span class="params">(long millis,int nanoseconds)</span></span>    <span class="comment">//第一参数为毫秒，第二个参数为纳秒</span></span><br></pre></td></tr></table></figure></p>
+<p>假如在main线程中，调用thread.join方法，则main方法会等待thread线程执行完毕或者等待一定的时间。如果调用的是无参join方法，则等待thread执行完毕，如果调用的是指定了时间参数的join方法，则等待一定的事件。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.<span class="type">IOException</span>;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">ThreadJoin</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	 public static void main(<span class="type">String</span>[] args) <span class="keyword">throws</span> <span class="type">IOException</span>  &#123;</span><br><span class="line">	        <span class="type">System</span>.out.println(<span class="string">"进入线程"</span> + <span class="type">Thread</span>.currentThread().getName());</span><br><span class="line">	        <span class="type">ThreadJoin</span> test = <span class="keyword">new</span> <span class="type">ThreadJoin</span>();</span><br><span class="line">	        <span class="type">MyThread</span> thread1 = test.<span class="keyword">new</span> <span class="type">MyThread</span>();</span><br><span class="line">	        <span class="comment">//线程开始</span></span><br><span class="line">	        thread1.start();</span><br><span class="line">	        <span class="keyword">try</span> &#123;</span><br><span class="line">	            <span class="type">System</span>.out.println(<span class="string">"线程 "</span> + <span class="type">Thread</span>.currentThread().getName() + <span class="string">"等待"</span>);</span><br><span class="line">	            thread1.join();<span class="comment">//使主线程进入等待，其他线程执行完毕</span></span><br><span class="line">	            <span class="type">System</span>.out.println(<span class="string">"线程"</span> + <span class="type">Thread</span>.currentThread().getName() + <span class="string">"继续执行"</span>);</span><br><span class="line">	        &#125; <span class="keyword">catch</span> (<span class="type">InterruptedException</span> e) &#123;</span><br><span class="line">	            <span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">	            e.printStackTrace();</span><br><span class="line">	        &#125;</span><br><span class="line">    &#125; </span><br><span class="line">	     </span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        public void run() &#123;</span><br><span class="line">            <span class="type">System</span>.out.println(<span class="string">"进入线程"</span> + <span class="type">Thread</span>.currentThread().getName());</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="type">Thread</span>.currentThread().sleep(<span class="number">5000</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (<span class="type">InterruptedException</span> e) &#123;</span><br><span class="line">                <span class="comment">// <span class="doctag">TODO:</span> handle exception</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="type">System</span>.out.println(<span class="string">"线程"</span> + <span class="type">Thread</span>.currentThread().getName()+<span class="string">"执行完毕"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>执行结果 ：<br><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">进入线程main</span><br><span class="line">线程 main等待</span><br><span class="line">进入线程<span class="keyword">Thread</span>-<span class="number">0</span></span><br><span class="line">线程<span class="keyword">Thread</span>-<span class="number">0</span>执行完毕</span><br><span class="line">线程main继续执行</span><br></pre></td></tr></table></figure></p>
+<p>可以看出，当调用thread1.join()方法后，main线程会进入等待，然后等待thread1执行完之后再继续执行。</p>
+<p>实际上调用join方法是调用了Object的wait方法 。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/04/01/Thread start() 和  run().md/">Thread start() 和 run()</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-04-01T02:10:00.000Z" itemprop="datePublished">2018-04-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Thread-start-和-run"><a href="#Thread-start-和-run" class="headerlink" title="Thread start() 和  run()"></a>Thread start() 和  run()</h1><ol>
+<li>start 和 run 方法解释：</li>
+</ol>
+<p>1） start：<br>用start方法来启动线程，真正实现了多线程运行，这时无需等待run方法体代码执行完毕而直接继续执行下面的代码。通过调用Thread类的start()方法来启动一个线程，这时此线程处于就绪（可运行）状态，并没有运行，一旦得到cpu时间片，就开始执行run()方法，这里方法 run()称为线程体，它包含了要执行的这个线程的内容，Run方法运行结束，此线程随即终止。</p>
+<p>2） run：<br>run()方法只是类的一个普通方法而已，如果直接调用Run方法，程序中依然只有主线程这一个线程，其程序执行路径还是只有一条，还是要顺序执行，还是要等待run方法体执行完毕后才可继续执行下面的代码，这样就没有达到写线程的目的。总结：调用start方法方可启动线程，而run方法只是thread的一个普通方法调用，还是在主线程里执行。这两个方法应该都比较熟悉，把需要并行处理的代码放在run()方法中，start()方法启动线程将自动调用 run()方法，这是由jvm的内存机制规定的。并且run()方法必须是public访问权限，返回值类型为void。</p>
+<p>Java 的线程是通过java.lang.Thread类来实现的。VM启动时会有一个由主方法所定义的线程。可以通过创建Thread的实例来创建新的线程。每个线程都是通过某个特定Thread对象所对应的方法run（）来完成其操作的，方法run()称为线程体。通过调用Thread类的start()方法来启动一个线程。</p>
+<p>在Java 当中，线程通常都有五种状态，创建、就绪、运行、阻塞和死亡。<br>第一是创建状态。在生成线程对象，并没有调用该对象的start方法，这是线程处于创建状态。<br>第二是就绪状态。当调用了线程对象的start方法之后，该线程就进入了就绪状态，但是此时线程调度程序还没有把该线程设置为当前线程，此时处于就绪状态。在线程运行之后，从等待或者睡眠中回来之后，也会处于就绪状态。<br>第三是运行状态。线程调度程序将处于就绪状态的线程设置为当前线程，此时线程就进入了运行状态，开始运行run函数当中的代码。<br>第四是阻塞状态。线程正在运行的时候，被暂停，通常是为了等待某个时间的发生(比如说某项资源就绪)之后再继续运行。sleep,suspend，wait等方法都可以导致线程阻塞。<br>第五是死亡状态。如果一个线程的run方法执行结束或者调用stop方法后，该线程就会死亡。对于已经死亡的线程，无法再使用start方法令其进入就绪。</p>
 <blockquote>
-<p>使用多线程的时候，一种非常简单的避免死锁的方式就是：指定获取锁的顺序，并强制线程按照指定的顺序获取锁。因此，如果所有的线程都是以同样的顺序加锁和释放锁，就不会出现死锁了。</p>
+<p>调用start（）后，线程会被放到等待队列，等待CPU调度，并不一定要马上开始执行，只是将这个线程置于可动行状态。然后通过JVM，线程Thread会调用run（）方法，执行本线程的线程体。先调用start后调用run，这么麻烦，为了不直接调用run？就是为了实现多线程的优点，没这个start不行。</p>
 </blockquote>
+<p>1.start（）方法来启动线程，真正实现了多线程运行。这时无需等待run方法体代码执行完毕，可以直接继续执行下面的代码；通过调用Thread类的start()方法来启动一个线程， 这时此线程是处于就绪状态， 并没有运行。 然后通过此Thread类调用方法run()来完成其运行操作的， 这里方法run()称为线程体，它包含了要执行的这个线程的内容， Run方法运行结束， 此线程终止。然后CPU再调度其它线程。<br>2.run（）方法当作普通方法的方式调用。程序还是要顺序执行，要等待run方法体执行完毕后，才可继续执行下面的代码；程序中只有主线程——这一个线程，其程序执行路径还是只有一条， 这样就没有达到写线程的目的。<br>记住：多线程就是分时利用CPU，宏观上让所有线程一起执行 ，也叫并发。</p>
 
         
     </section>
@@ -225,7 +260,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/04/01/Thread实现多线程一/">Thread实现多线程一</a>
+            <a href="/2018/03/06/Linux文件属性/">Linux 文件属性</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -233,13 +268,13 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-04-01T02:10:00.000Z" itemprop="datePublished">2018-04-01</time>
+    <time datetime="2018-03-06T08:18:02.000Z" itemprop="datePublished">2018-03-06</time>
 </a>
 
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
+    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
 </div>
 
 
@@ -248,22 +283,27 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="Thread实现多线程一"><a href="#Thread实现多线程一" class="headerlink" title="Thread实现多线程一"></a>Thread实现多线程一</h1><p>Thread类实现了Runnable接口。</p>
-<p>以下是关系到线程运行状态的几个方法：</p>
-<p>1）start方法</p>
-<p>start()用来启动一个线程，当调用start方法后，系统才会开启一个新的线程来执行用户定义的子任务，在这个过程中，会为相应的线程分配需要的资源。</p>
-<p>2）run方法</p>
-<p>run()方法是不需要用户来调用的，当通过start方法启动一个线程之后，当线程获得了CPU执行时间，便进入run方法体去执行具体的任务。注意，继承Thread类必须重写run方法，在run方法中定义具体要执行的任务。</p>
-<p>3）sleep方法</p>
-<p>sleep方法有两个重载版本：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">sleep</span><span class="params">(long millis)</span></span>     <span class="comment">//参数为毫秒</span></span><br><span class="line"><span class="function"><span class="title">sleep</span><span class="params">(long millis,int nanoseconds)</span></span>    <span class="comment">//第一参数为毫秒，第二个参数为纳秒</span></span><br></pre></td></tr></table></figure></p>
-<p>sleep相当于让线程睡眠，交出CPU，让CPU去执行其他的任务。</p>
+        <h2 id="Linux-文件属性"><a href="#Linux-文件属性" class="headerlink" title="Linux 文件属性"></a>Linux 文件属性</h2><p>在Linux中我们可以使用命令来显示一个文件的属性以及文件所属的用户和组，如：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@www /]# ls -l</span><br><span class="line">total <span class="number">64</span></span><br><span class="line">dr-xr-xr-x   <span class="number">2</span> root root <span class="number">4096</span> Dec <span class="number">14</span>  <span class="number">2012</span> bin</span><br><span class="line">dr-xr-xr-x   <span class="number">4</span> root root <span class="number">4096</span> Apr <span class="number">19</span>  <span class="number">2012</span> boot</span><br><span class="line">……</span><br></pre></td></tr></table></figure></p>
+<p>note: “ll” 也可以。</p>
+<p>在Linux中第一个字符代表这个文件是目录、文件或链接文件等等。”d”在Linux中代表该文件是一个目录文件。</p>
+<ul>
+<li>当为[ d ]则是目录</li>
+<li>当为[ - ]则是文件；</li>
+<li>若是[ l ]则表示为链接文档(link file)；</li>
+<li>若是[ b ]则表示为装置文件里面的可供储存的接口设备(可随机存取装置)；</li>
+<li>若是[ c ]则表示为装置文件里面的串行端口设备，例如键盘、鼠标(一次性读取装置)。</li>
+</ul>
+<p>接下来的字符中，以三个为一组，且均为『rwx』 的三个参数的组合。</p>
+<ul>
+<li>[ r ]代表可读(read)</li>
+<li>[ w ]代表可写(write)</li>
+<li>[ x ]代表可执行(execute)</li>
+</ul>
+<p>要注意的是，这三个权限的位置不会改变，如果没有权限，就会出现减号[ - ]而已。</p>
 <blockquote>
-<p>但是有一点要非常注意，sleep方法不会释放锁，也就是说如果当前线程持有对某个对象的锁，则即使调用sleep方法，其他线程也无法访问这个对象。</p>
+<p>对于文件来说，它都有一个特定的所有者，也就是对该文件具有所有权的用户。同时，在Linux系统中，用户是按组分类的，一个用户属于一个或多个组。文件所有者以外的用户又可以分为文件所有者的同组用户和其他用户。因此，Linux系统按文件所有者、文件所有者同组用户和其他用户来规定了不同的文件访问权限。</p>
 </blockquote>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.<span class="type">Date</span>;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MutipleThread</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> int i = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">Object</span> <span class="class"><span class="keyword">object</span> </span>= <span class="keyword">new</span> <span class="type">Object</span>(); <span class="comment">//锁</span></span><br><span class="line">	     </span><br><span class="line">	</span><br><span class="line">	public <span class="class"><span class="keyword">class</span> <span class="title">ProcessThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		public void run() &#123;</span><br><span class="line">			<span class="type">System</span>.out.println(<span class="string">"开始线程"</span> + <span class="keyword">new</span> <span class="type">Date</span>());</span><br><span class="line">			<span class="comment">//会上锁</span></span><br><span class="line">			synchronized (<span class="class"><span class="keyword">object</span>) </span>&#123;</span><br><span class="line">				i++;</span><br><span class="line">				<span class="type">System</span>.out.println(<span class="string">"i:"</span> + i);</span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">				    <span class="type">System</span>.out.println(<span class="string">"线程"</span> + <span class="type">Thread</span>.currentThread().getName() + <span class="string">"进入睡眠状态"</span>);</span><br><span class="line">				    <span class="type">Thread</span>.currentThread().sleep(<span class="number">10000</span>);</span><br><span class="line">				&#125; <span class="keyword">catch</span> (<span class="type">InterruptedException</span> e) &#123;</span><br><span class="line">				    <span class="comment">// <span class="doctag">TODO:</span> handle exception</span></span><br><span class="line">				&#125;</span><br><span class="line">				<span class="type">System</span>.out.println(<span class="string">"线程"</span>+<span class="type">Thread</span>.currentThread().getName()+<span class="string">"睡眠结束"</span>);</span><br><span class="line">				i++;</span><br><span class="line">				<span class="type">System</span>.out.println(<span class="string">"i:"</span> + i);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	public static void main(<span class="type">String</span>[] args) &#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">		<span class="type">MutipleThread</span> mThread = <span class="keyword">new</span> <span class="type">MutipleThread</span>();</span><br><span class="line">		<span class="type">ProcessThread</span> pThread = mThread.<span class="keyword">new</span> <span class="type">ProcessThread</span>();</span><br><span class="line">		<span class="type">ProcessThread</span> pThread2 = mThread.<span class="keyword">new</span> <span class="type">ProcessThread</span>();</span><br><span class="line">		pThread.start();</span><br><span class="line">		pThread2.start();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>执行结果 ：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">开始线程<span class="selector-tag">Thu</span> <span class="selector-tag">Jun</span> 27 09<span class="selector-pseudo">:43</span><span class="selector-pseudo">:40</span> <span class="selector-tag">CST</span> 2019</span><br><span class="line"><span class="selector-tag">i</span><span class="selector-pseudo">:11</span></span><br><span class="line">线程<span class="selector-tag">Thread-0</span>进入睡眠状态</span><br><span class="line">开始线程<span class="selector-tag">Thu</span> <span class="selector-tag">Jun</span> 27 09<span class="selector-pseudo">:43</span><span class="selector-pseudo">:40</span> <span class="selector-tag">CST</span> 2019</span><br><span class="line">线程<span class="selector-tag">Thread-0</span>睡眠结束</span><br><span class="line"><span class="selector-tag">i</span><span class="selector-pseudo">:12</span></span><br><span class="line"><span class="selector-tag">i</span><span class="selector-pseudo">:13</span></span><br><span class="line">线程<span class="selector-tag">Thread-1</span>进入睡眠状态</span><br><span class="line">线程<span class="selector-tag">Thread-1</span>睡眠结束</span><br><span class="line"><span class="selector-tag">i</span><span class="selector-pseudo">:14</span></span><br></pre></td></tr></table></figure></p>
-<p>从上面输出结果可以看出，当Thread-0进入睡眠状态之后，Thread-1并没有去执行具体的任务。只有当Thread-0执行完之后，此时Thread-0释放了对象锁，Thread-1才开始执行。</p>
-<p>注意，如果调用了sleep方法，必须捕获InterruptedException异常或者将该异常向上层抛出。当线程睡眠时间满后，不一定会立即得到执行，因为此时可能CPU正在执行其他的任务。所以说调用sleep方法相当于让线程进入阻塞状态。</p>
+<p>对于 root 用户来说，一般情况下，文件的权限对其不起作用。</p>
 
         
     </section>
@@ -342,61 +382,6 @@
 <li>-b对非空输出行号</li>
 <li>-n输出所有行号</li>
 </ol>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/03/06/Linux文件属性/">Linux 文件属性</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-03-06T08:18:02.000Z" itemprop="datePublished">2018-03-06</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h2 id="Linux-文件属性"><a href="#Linux-文件属性" class="headerlink" title="Linux 文件属性"></a>Linux 文件属性</h2><p>在Linux中我们可以使用命令来显示一个文件的属性以及文件所属的用户和组，如：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@www /]# ls -l</span><br><span class="line">total <span class="number">64</span></span><br><span class="line">dr-xr-xr-x   <span class="number">2</span> root root <span class="number">4096</span> Dec <span class="number">14</span>  <span class="number">2012</span> bin</span><br><span class="line">dr-xr-xr-x   <span class="number">4</span> root root <span class="number">4096</span> Apr <span class="number">19</span>  <span class="number">2012</span> boot</span><br><span class="line">……</span><br></pre></td></tr></table></figure></p>
-<p>note: “ll” 也可以。</p>
-<p>在Linux中第一个字符代表这个文件是目录、文件或链接文件等等。”d”在Linux中代表该文件是一个目录文件。</p>
-<ul>
-<li>当为[ d ]则是目录</li>
-<li>当为[ - ]则是文件；</li>
-<li>若是[ l ]则表示为链接文档(link file)；</li>
-<li>若是[ b ]则表示为装置文件里面的可供储存的接口设备(可随机存取装置)；</li>
-<li>若是[ c ]则表示为装置文件里面的串行端口设备，例如键盘、鼠标(一次性读取装置)。</li>
-</ul>
-<p>接下来的字符中，以三个为一组，且均为『rwx』 的三个参数的组合。</p>
-<ul>
-<li>[ r ]代表可读(read)</li>
-<li>[ w ]代表可写(write)</li>
-<li>[ x ]代表可执行(execute)</li>
-</ul>
-<p>要注意的是，这三个权限的位置不会改变，如果没有权限，就会出现减号[ - ]而已。</p>
-<blockquote>
-<p>对于文件来说，它都有一个特定的所有者，也就是对该文件具有所有权的用户。同时，在Linux系统中，用户是按组分类的，一个用户属于一个或多个组。文件所有者以外的用户又可以分为文件所有者的同组用户和其他用户。因此，Linux系统按文件所有者、文件所有者同组用户和其他用户来规定了不同的文件访问权限。</p>
-</blockquote>
-<p>对于 root 用户来说，一般情况下，文件的权限对其不起作用。</p>
 
         
     </section>

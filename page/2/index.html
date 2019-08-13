@@ -333,44 +333,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/03/01/字符型常量和字符串常量的区别/">字符型常量和字符串常量的区别</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/2/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2019-03-01T02:10:00.000Z" itemprop="datePublished">2019-03-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="字符型常量和字符串常量的区别"><a href="#字符型常量和字符串常量的区别" class="headerlink" title="字符型常量和字符串常量的区别"></a>字符型常量和字符串常量的区别</h1><p>形式上: 字符常量是单引号引起的一个字符; 字符串常量是双引号引起的若干个字符</p>
-<p>含义上: 字符常量相当于一个整型值( ASCII 值),可以参加表达式运算; 字符串常量代表一个地址值(该字符串在内存中存放位置)</p>
-<p>占内存大小: 字符常量只占2个字节; 字符串常量占若干个字节(至少一个字符结束标志) (注意： char在Java中占两个字节)</p>
-<p>数据类型     大小        包装器类型<br>boolean      -           Boolean<br>char       16bits        Character<br>byte        8bits        Byte<br>short      16bits        Short<br>int        32bits        Integer<br>long       64bits        Long<br>float      32bits        Float<br>double     64bits        Double</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2019/03/01/Java 并发进阶常见面试题总结/">Java 并发进阶常见面试题总结</a>
         </h1>
         
@@ -411,6 +373,44 @@
 </ul>
 <p>但是由于 JVM 具有指令重排的特性，执行顺序有可能变成 1-&gt;3-&gt;2。指令重排在单线程环境下不会出先问题，但是在多线程环境下会导致一个线程获得还没有初始化的实例。例如，线程 T1 执行了 1 和 3，此时 T2 调用 getUniqueInstance() 后发现 uniqueInstance 不为空，因此返回 uniqueInstance，但此时 uniqueInstance 还未被初始化。</p>
 <p>使用 volatile 可以禁止 JVM 的指令重排，保证在多线程环境下也能正常运行。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2019/03/01/字符型常量和字符串常量的区别/">字符型常量和字符串常量的区别</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/2/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-03-01T02:10:00.000Z" itemprop="datePublished">2019-03-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java/">Java</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="字符型常量和字符串常量的区别"><a href="#字符型常量和字符串常量的区别" class="headerlink" title="字符型常量和字符串常量的区别"></a>字符型常量和字符串常量的区别</h1><p>形式上: 字符常量是单引号引起的一个字符; 字符串常量是双引号引起的若干个字符</p>
+<p>含义上: 字符常量相当于一个整型值( ASCII 值),可以参加表达式运算; 字符串常量代表一个地址值(该字符串在内存中存放位置)</p>
+<p>占内存大小: 字符常量只占2个字节; 字符串常量占若干个字节(至少一个字符结束标志) (注意： char在Java中占两个字节)</p>
+<p>数据类型     大小        包装器类型<br>boolean      -           Boolean<br>char       16bits        Character<br>byte        8bits        Byte<br>short      16bits        Short<br>int        32bits        Integer<br>long       64bits        Long<br>float      32bits        Float<br>double     64bits        Double</p>
 
         
     </section>
