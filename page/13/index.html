@@ -131,6 +131,85 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2017/03/01/NodeJs相关插件/">NodeJs插件</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-03-01T14:22:22.000Z" itemprop="datePublished">2017-03-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/NodeJs/">NodeJs</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h3 id="lodash"><a href="#lodash" class="headerlink" title="lodash"></a>lodash</h3><p>采用延迟计算，意味着我们的链式方法在显式或者隐式的value()调用之前是不会执行的，<br>因此lodash可以进行shortcut（捷径） fusion（融合）这样的优化，<br>通过合并链式大大降低迭代的次数，从而大大提升其执行性能。</p>
+<h3 id="cors"><a href="#cors" class="headerlink" title="cors"></a>cors</h3><p>实现跨域的功能</p>
+<h3 id="helmet"><a href="#helmet" class="headerlink" title="helmet"></a>helmet</h3><p>是一个保护Node.JS应用的安全项目<br>一些著名的对Web攻击有XSS跨站脚本， 脚本注入 clickjacking<br>以及各种非安全的请求等对Node.js的Web应用构成各种威胁，<br>使用Helmet能帮助你的应用避免这些攻击。</p>
+<h3 id="csurf"><a href="#csurf" class="headerlink" title="csurf"></a>csurf</h3><p>跨站请求伪造</p>
+<h3 id="colors"><a href="#colors" class="headerlink" title="colors"></a>colors</h3><p>终端着色插件</p>
+<h3 id="express-validator"><a href="#express-validator" class="headerlink" title="express-validator"></a>express-validator</h3><p>校验插件<br>npm install –save express-validator</p>
+<h3 id="uuid-GUID插件"><a href="#uuid-GUID插件" class="headerlink" title="uuid GUID插件"></a>uuid GUID插件</h3><p>npm install –save node-uuid</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2017/02/12/动态属性ExpandoObject/">动态属性ExpandoObject</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-02-12T08:20:10.000Z" itemprop="datePublished">2017-02-12</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/NET/">NET</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>#动态属性ExpandoObject</p>
+<p>动态对象 ExpandoObject中添加动态属性？</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dynamic</span> obj = <span class="keyword">new</span> ExpandoObject();</span><br><span class="line">IDictionary&lt;<span class="keyword">string</span>, <span class="keyword">object</span>&gt; temp = <span class="keyword">new</span> Dictionary&lt;<span class="keyword">string</span>, <span class="keyword">object</span>&gt;();</span><br><span class="line">temp.Add(Key, Value);</span><br><span class="line"></span><br><span class="line"><span class="keyword">foreach</span> (KeyValuePair&lt;<span class="keyword">string</span>, <span class="keyword">object</span>&gt; item <span class="keyword">in</span> temp)</span><br><span class="line">&#123;</span><br><span class="line">    ((IDictionary&lt;<span class="keyword">string</span>, <span class="keyword">object</span>&gt;)obj).Add(item.Key, item.Value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因为不难发现ExpandObject继承自以下接口：<br>IDictionary&lt;string, object&gt;, ICollection&lt;KeyValuePair&lt;string, object&gt;&gt;, IEnumerable&lt;KeyValuePair&lt;string, object&gt;&gt;, IEnumerable</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2017/02/08/Java单例模式/">单例模式</a>
         </h1>
         
@@ -232,6 +311,45 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2017/01/24/Centos7安装nginx后仍然无法访问/">Nginx无法访问的问题</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-01-24T02:10:00.000Z" itemprop="datePublished">2017-01-24</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Nginx/">Nginx</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Centos7安装nginx后，无法访问的问题"><a href="#Centos7安装nginx后，无法访问的问题" class="headerlink" title="Centos7安装nginx后，无法访问的问题"></a>Centos7安装nginx后，无法访问的问题</h1><p><a href="https://www.runoob.com/linux/nginx-install-setup.html" target="_blank" rel="noopener">安装步骤</a></p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">curl localhost</span></span><br></pre></td></tr></table></figure>
+<p>发现是通的 （Welcome to nginx）</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd <span class="attribute">--zone</span>=public <span class="attribute">--add-port</span>=80/tcp --permanent</span><br></pre></td></tr></table></figure>
+<p>重启防火墙：<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="literal">stop</span> firewalld.service</span><br><span class="line">systemctl <span class="literal">start</span> firewalld.service</span><br></pre></td></tr></table></figure></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2017/01/24/C# 编码规范/">编码规范</a>
         </h1>
         
@@ -310,45 +428,6 @@
 <h1 id="变量声明及命名规范"><a href="#变量声明及命名规范" class="headerlink" title="变量声明及命名规范"></a>变量声明及命名规范</h1><h3 id="变量："><a href="#变量：" class="headerlink" title="变量："></a>变量：</h3><p>Camel：变量名首单词的首字母小写，其余每个单词首字母单词大写,多用于给变量或字段或方法参数命名。　　<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">var str</span> = <span class="string">"123"</span>;</span><br><span class="line"><span class="attribute">var highSchoolStudent</span> = <span class="string">"123"</span>;</span><br><span class="line"><span class="attribute">int num</span> = 5;</span><br></pre></td></tr></table></figure></p>
 <h3 id="常量："><a href="#常量：" class="headerlink" title="常量："></a>常量：</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">string</span> BaseIpAddress = <span class="string">""</span>;</span><br></pre></td></tr></table></figure>
 <h3 id="方法名："><a href="#方法名：" class="headerlink" title="方法名："></a>方法名：</h3><p>Pascal：每个单词的首字母都要大些其余小写，多用于类或方法。尽量用一般名词或动名词。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">GetHighSchoolStudent</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/01/24/Centos7安装nginx后仍然无法访问/">Nginx无法访问的问题</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-01-24T02:10:00.000Z" itemprop="datePublished">2017-01-24</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Nginx/">Nginx</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Centos7安装nginx后，无法访问的问题"><a href="#Centos7安装nginx后，无法访问的问题" class="headerlink" title="Centos7安装nginx后，无法访问的问题"></a>Centos7安装nginx后，无法访问的问题</h1><p><a href="https://www.runoob.com/linux/nginx-install-setup.html" target="_blank" rel="noopener">安装步骤</a></p>
-<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">curl localhost</span></span><br></pre></td></tr></table></figure>
-<p>发现是通的 （Welcome to nginx）</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd <span class="attribute">--zone</span>=public <span class="attribute">--add-port</span>=80/tcp --permanent</span><br></pre></td></tr></table></figure>
-<p>重启防火墙：<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="literal">stop</span> firewalld.service</span><br><span class="line">systemctl <span class="literal">start</span> firewalld.service</span><br></pre></td></tr></table></figure></p>
 
         
     </section>
