@@ -373,6 +373,41 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2017/05/11/数组实现栈/">Java 使用数组实现栈</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/5/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-05-11T15:30:00.000Z" itemprop="datePublished">2017-05-11</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java/">Java</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="使用数组实现栈"><a href="#使用数组实现栈" class="headerlink" title="使用数组实现栈"></a>使用数组实现栈</h1><figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">自己实现一个栈，要求这个栈具有push<span class="comment">()</span>、pop<span class="comment">()</span>（返回栈顶元素并出栈）、peek<span class="comment">()</span> （返回栈顶元素不出栈）、isEmpty<span class="comment">()</span>、size<span class="comment">()</span></span><br><span class="line">这些基本的方法。</span><br><span class="line"></span><br><span class="line">提示：每次入栈之前先判断栈的容量是否够用，如果不够用就用Arrays.copyOf<span class="comment">()</span>进行扩容；</span><br></pre></td></tr></table></figure>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">package</span> program;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> MyStack &#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * 使用数组实现栈： 自己实现一个栈，要求这个栈具有push()、pop()（返回栈顶元素并出栈）、peek()</span></span><br><span class="line"><span class="comment">	 * （返回栈顶元素不出栈）、isEmpty()、size()这些基本的方法。</span></span><br><span class="line"><span class="comment">	 * 提示：每次入栈之前先判断栈的容量是否够用，如果不够用就用Arrays.copyOf()进行扩容；</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * 存数据的数组</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span>[] storage;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * 容量</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> capacity;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * 元素个数</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> <span class="keyword">count</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * 每次以当前容量进行扩容</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> GROW_FACTOR = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// TODO：默认构造函数</span></span><br><span class="line">	<span class="keyword">public</span> MyStack() &#123;</span><br><span class="line">		<span class="keyword">this</span>.capacity = <span class="number">8</span>;</span><br><span class="line">		<span class="keyword">this</span>.<span class="keyword">count</span> = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">this</span>.storage = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">8</span>];</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// TODO：带初始容量的构造方法</span></span><br><span class="line">	<span class="keyword">public</span> MyStack(<span class="keyword">int</span> initialCapacity) &#123;</span><br><span class="line">		<span class="keyword">if</span> (initialCapacity &lt; <span class="number">1</span>)</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Capacity too small."</span>);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">this</span>.capacity = initialCapacity;</span><br><span class="line">		<span class="keyword">this</span>.storage = <span class="keyword">new</span> <span class="keyword">int</span>[initialCapacity];</span><br><span class="line">		<span class="keyword">this</span>.<span class="keyword">count</span> = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// TODO： 入栈</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="keyword">push</span>(<span class="keyword">int</span> value) &#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="keyword">count</span> == capacity) &#123;</span><br><span class="line">			scrollUpCapacity();</span><br><span class="line">		&#125;</span><br><span class="line">		storage[<span class="keyword">count</span>++] = value;		</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// <span class="doctag">TODO:</span> 扩容</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">void</span> scrollUpCapacity() &#123;</span><br><span class="line">		<span class="keyword">int</span> newCapacity = capacity * GROW_FACTOR;</span><br><span class="line">		storage = Arrays.copyOf(storage, newCapacity);</span><br><span class="line">		capacity = newCapacity;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// TODO： 返回栈顶元素(出栈)</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> <span class="keyword">pop</span>() &#123;</span><br><span class="line">		<span class="keyword">count</span>--;</span><br><span class="line">		<span class="keyword">if</span> (<span class="keyword">count</span> == -<span class="number">1</span>) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Stack is empty."</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> storage[<span class="keyword">count</span>];</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// TODO： 返回栈顶元素(不出栈)</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> peek() &#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="keyword">count</span> == <span class="number">0</span>) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Stack is empty."</span>);</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="keyword">return</span> storage[<span class="keyword">count</span> - <span class="number">1</span>];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// <span class="doctag">TODO:</span> 判断是否为空</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">boolean</span> isEmpty() &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">count</span> == <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// <span class="doctag">TODO:</span> 返回长度(元素个数)</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> <span class="keyword">size</span>() &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">count</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args) &#123;</span><br><span class="line">		MyStack myStack = <span class="keyword">new</span> MyStack(<span class="number">3</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">1</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">2</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">3</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">4</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">5</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">6</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">7</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">8</span>);</span><br><span class="line">		System.out.<span class="keyword">println</span>(myStack.peek());<span class="comment">// 8</span></span><br><span class="line">		System.out.<span class="keyword">println</span>(myStack.<span class="keyword">size</span>());<span class="comment">// 8</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++) &#123;</span><br><span class="line">			System.out.<span class="keyword">println</span>(myStack.<span class="keyword">pop</span>());</span><br><span class="line">		&#125;</span><br><span class="line">		System.out.<span class="keyword">println</span>(myStack.isEmpty());<span class="comment">// true</span></span><br><span class="line">		myStack.<span class="keyword">pop</span>();<span class="comment">// 报错：java.lang.IllegalArgumentException: Stack is empty.</span></span><br><span class="line"></span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">520</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2017/04/15/JavaIO/">Java IO</a>
         </h1>
         
@@ -515,54 +550,6 @@ public void printStackTrace():在控制台上打印Throwable对象封装的异�
 <p>1.对于一个final变量，如果是基本数据类型的变量，则其数值一旦在初始化之后便不能更改；<br>如果是引用类型的变量，则在对其初始化之后便不能再让其指向另一个对象。.</p>
 <p>2.当用final修饰一个类时，表明这个类不能被继承。final类中的所有成员方法都会被隐式地指定为final方法。</p>
 <p>3.使用final方法的原因有两个。<br>第一个原因是把方法锁定，以防任何继承类修改它的含义;<br>第二个原因是效率。在早期的Java实现版本中，会将final方法转为内嵌调用。<br>但是如果方法过于庞大，可能看不到内嵌调用带来的任何性能提升（现在的Java版本已经不需要使用final方法进行这些优化了）。<br>类中所有的private方法都隐式地指定为final。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/04/04/hashCode 与 equals/">hashCode 与 equals</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/5/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-04-04T05:30:00.000Z" itemprop="datePublished">2017-04-04</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="hashCode-与-equals"><a href="#hashCode-与-equals" class="headerlink" title="hashCode 与 equals"></a>hashCode 与 equals</h1><h2 id="hashCode（）介绍"><a href="#hashCode（）介绍" class="headerlink" title="hashCode（）介绍"></a>hashCode（）介绍</h2><p>hashCode() 的作用是获取哈希码，也称为散列码；它实际上是返回一个int整数。这个哈希码的作用是确定该对象在哈希表中的索引位置。</p>
-<p>hashCode() 定义在JDK的Object.java中，这就意味着Java中的任何类都包含有hashCode() 函数。</p>
-<p>散列表存储的是键值对(key-value)，它的特点是：能根据“键”快速的检索出对应的“值”。这其中就利用到了散列码！</p>
-<p>意义：可以快速找到所需要的对象。</p>
-<h2 id="为什么要有-hashCode？"><a href="#为什么要有-hashCode？" class="headerlink" title="为什么要有 hashCode？"></a>为什么要有 hashCode？</h2><p>我们先以“HashSet 如何检查重复”为例子来说明为什么要有 hashCode：</p>
-<p>当你把对象加入 HashSet 时，HashSet 会先计算对象的 hashcode 值来判断对象加入的位置，<br>同时也会与其他已经加入的对象的 hashcode 值作比较，如果没有相符的hashcode，HashSet会假设对象没有重复出现。<br>但是如果发现有相同 hashcode 值的对象，这时会调用 equals（）方法来检查 hashcode 相等的对象是否真的相同。<br>如果两者相同，HashSet 就不会让其加入操作成功。如果不同的话，就会重新散列到其他位置。<br>这样我们就大大减少了 equals 的次数，相应就大大提高了执行速度。</p>
-<p>通过我们可以看出：hashCode() 的作用就是获取哈希码，也称为散列码；它实际上是返回一个int整数。<br>这个哈希码的作用是确定该对象在哈希表中的索引位置。<br><strong>hashCode() 在散列表中才有用，在其它情况下没用。</strong><br>在散列表中hashCode() 的作用是获取对象的散列码，进而确定该对象在散列表中的位置。</p>
-<h2 id="hashCode（）与equals（）的相关规定"><a href="#hashCode（）与equals（）的相关规定" class="headerlink" title="hashCode（）与equals（）的相关规定"></a>hashCode（）与equals（）的相关规定</h2><ul>
-<li>如果两个对象相等，则hashcode一定也是相同的</li>
-<li>两个对象相等,对两个对象分别调用equals方法都返回true</li>
-<li>两个对象有相同的hashcode值，它们也不一定是相等的</li>
-<li>因此，equals 方法被覆盖过，则 hashCode 方法也必须被覆盖</li>
-</ul>
-<p>hashCode() 的默认行为是对堆上的对象产生独特值。如果没有重写 hashCode()，<br>则该 class 的两个对象无论如何都不会相等（即使这两个对象指向相同的数据）</p>
 
         
     </section>

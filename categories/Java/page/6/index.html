@@ -131,6 +131,54 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2017/04/04/hashCode 与 equals/">hashCode 与 equals</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-04-04T05:30:00.000Z" itemprop="datePublished">2017-04-04</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java/">Java</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="hashCode-与-equals"><a href="#hashCode-与-equals" class="headerlink" title="hashCode 与 equals"></a>hashCode 与 equals</h1><h2 id="hashCode（）介绍"><a href="#hashCode（）介绍" class="headerlink" title="hashCode（）介绍"></a>hashCode（）介绍</h2><p>hashCode() 的作用是获取哈希码，也称为散列码；它实际上是返回一个int整数。这个哈希码的作用是确定该对象在哈希表中的索引位置。</p>
+<p>hashCode() 定义在JDK的Object.java中，这就意味着Java中的任何类都包含有hashCode() 函数。</p>
+<p>散列表存储的是键值对(key-value)，它的特点是：能根据“键”快速的检索出对应的“值”。这其中就利用到了散列码！</p>
+<p>意义：可以快速找到所需要的对象。</p>
+<h2 id="为什么要有-hashCode？"><a href="#为什么要有-hashCode？" class="headerlink" title="为什么要有 hashCode？"></a>为什么要有 hashCode？</h2><p>我们先以“HashSet 如何检查重复”为例子来说明为什么要有 hashCode：</p>
+<p>当你把对象加入 HashSet 时，HashSet 会先计算对象的 hashcode 值来判断对象加入的位置，<br>同时也会与其他已经加入的对象的 hashcode 值作比较，如果没有相符的hashcode，HashSet会假设对象没有重复出现。<br>但是如果发现有相同 hashcode 值的对象，这时会调用 equals（）方法来检查 hashcode 相等的对象是否真的相同。<br>如果两者相同，HashSet 就不会让其加入操作成功。如果不同的话，就会重新散列到其他位置。<br>这样我们就大大减少了 equals 的次数，相应就大大提高了执行速度。</p>
+<p>通过我们可以看出：hashCode() 的作用就是获取哈希码，也称为散列码；它实际上是返回一个int整数。<br>这个哈希码的作用是确定该对象在哈希表中的索引位置。<br><strong>hashCode() 在散列表中才有用，在其它情况下没用。</strong><br>在散列表中hashCode() 的作用是获取对象的散列码，进而确定该对象在散列表中的位置。</p>
+<h2 id="hashCode（）与equals（）的相关规定"><a href="#hashCode（）与equals（）的相关规定" class="headerlink" title="hashCode（）与equals（）的相关规定"></a>hashCode（）与equals（）的相关规定</h2><ul>
+<li>如果两个对象相等，则hashcode一定也是相同的</li>
+<li>两个对象相等,对两个对象分别调用equals方法都返回true</li>
+<li>两个对象有相同的hashcode值，它们也不一定是相等的</li>
+<li>因此，equals 方法被覆盖过，则 hashCode 方法也必须被覆盖</li>
+</ul>
+<p>hashCode() 的默认行为是对堆上的对象产生独特值。如果没有重写 hashCode()，<br>则该 class 的两个对象无论如何都不会相等（即使这两个对象指向相同的数据）</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2017/04/04/== 与 equals/">== 与 equals</a>
         </h1>
         
