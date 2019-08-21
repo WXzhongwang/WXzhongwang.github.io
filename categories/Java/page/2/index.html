@@ -176,6 +176,48 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/06/03/Spring Boot/">Spring Boot 介绍</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/2/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-06-03T04:00:00.000Z" itemprop="datePublished">2018-06-03</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Spring/">Spring</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h2 id="Spring-Boot-介绍"><a href="#Spring-Boot-介绍" class="headerlink" title="Spring Boot 介绍"></a>Spring Boot 介绍</h2><p>Spring Boot 提供了一组工具只需要极少的配置就可以快速的构建并启动基于 Spring 的应用程序。解决了传统 Spring 开发需要配置大量配置文件的痛点，同时 Spring Boot 对于第三方库设置了合理的默认值，可以快速的构建起应用程序。当然 Spring Boot 也可以轻松的自定义各种配置，无论是在开发的初始阶段还是投入生成的后期阶段。</p>
+<h2 id="Spring-Boot-优点"><a href="#Spring-Boot-优点" class="headerlink" title="Spring Boot 优点"></a>Spring Boot 优点</h2><p>1.快速的创建可以独立运行的 Spring 项目以及与主流框架的集成。</p>
+<p>2.使用嵌入式的 Servlet 容器，用于不需要打成war包。</p>
+<p>3.使用很多的启动器（Starters）自动依赖与版本控制。</p>
+<p>4.大量的自动化配置，简化了开发，当然，我们也可以修改默认值。</p>
+<p>5.不需要配置 XML 文件，无代码生成，开箱即用。</p>
+<p>6.准生产环境的运行时应用监控。</p>
+<p>7.与云计算的天然集成。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/05/08/JVM/">JVM相关问题</a>
         </h1>
         
@@ -546,46 +588,6 @@
 <p>软引用: 软引用一般被做为缓存来使用。与强引用的区别是，软引用在垃圾回收时，虚拟机会根据当前系统的剩余内存来决定是否对软引用进行回收。如果剩余内存比较紧张，则虚拟机会回收软引用所引用的空间；如果剩余内存相对富裕，则不会进行回收。换句话说，虚拟机在发生OutOfMemory时，肯定是没有软引用存在的。</p>
 <p>弱引用: 弱引用与软引用类似，都是作为缓存来使用。但与软引用不同，弱引用在进行垃圾回收时，是一定会被回收掉的，因此其生命周期只存在于一个垃圾回收周期内。</p>
 <p>强引用不用说，我们系统一般在使用时都是用的强引用。而“软引用”和“弱引用”比较少见。他们一般被作为缓存使用，而且一般是在内存大小比较受限的情况下做为缓存。因为如果内存足够大的话，可以直接使用强引用作为缓存即可，同时可控性更高。因而，他们常见的是被使用在桌面应用系统的缓存。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/04/04/对象实例与对象引用有何不同/">对象实例与对象引用有何不同</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/2/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-04-04T01:30:00.000Z" itemprop="datePublished">2018-04-04</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="对象实例与对象引用有何不同"><a href="#对象实例与对象引用有何不同" class="headerlink" title="对象实例与对象引用有何不同"></a>对象实例与对象引用有何不同</h1><p>new运算符，new创建对象实例（对象实例在堆内存中），对象引用指向对象实例（对象引用存放在栈内存中）。<br>一个对象引用可以指向0个或1个对象（一根绳子可以不系气球，也可以系一个气球）;<br>一个对象可以有n个引用指向它（可以用n条绳子系住一个气球）。</p>
-<p>1）分配地址<br>2）创建对象实例（堆内存）<br>3）对象引用指向对象实例 （栈内存）</p>
-<p>栈代表了处理逻辑，而堆代表了数据。</p>
-<p>栈是运行时的单位，而堆是存储式的单位。</p>
-<p>栈解决程序运行的问题，解决程序如何运行的问题，如何处理数据。</p>
-<p>堆解决数据存储问题，数据存哪，怎么存。</p>
 
         
     </section>

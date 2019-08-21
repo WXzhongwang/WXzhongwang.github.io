@@ -177,7 +177,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/01/08/Hadoop/">Hadoop概念</a>
+            <a href="/2019/01/08/流处理、批处理、交互式查询/">流处理、批处理、交互式查询</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -200,41 +200,14 @@
     
     <section class="article-body markdown-body">
         
-        <p>Hadoop是一个开源的框架，可编写和运行分布式应用处理大规模数据，是专为离线和大规模数据分析而设计的，并不适合那种对几个记录随机读写的在线事务处理模式。</p>
-<h1 id="Hadoop"><a href="#Hadoop" class="headerlink" title="Hadoop"></a>Hadoop</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ul>
-<li>Hadoop是一个开源的框架，可编写和运行分布式应用处理大规模数据，是专为离线和大规模数据分析而设计的，并不适合那种对几个记录随机读写的在线事务处理模式。 ==不是为了大数据而大数据==</li>
-<li>Hadoop 是以一种可靠、高效、可伸缩的方式进行处理的。Hadoop 是可靠的，因为它假设计算元素和存储会失败，因此它维护多个工作数据副本，确保能够针对失败的节点重新分布处理。Hadoop 是高效的，因为它以并行的方式工作，通过并行处理加快处理速度。Hadoop 还是可伸缩的，能够处理 PB 级数据。<h2 id="核心"><a href="#核心" class="headerlink" title="核心"></a>核心</h2>Hadoop的核心就是==HDFS==和==MapReduce===，Hadoop旗下有很多经典子项目，比如HBase、Hive等，这些都是基于HDFS和MapReduce发展出来的。要想了解Hadoop，就必须知道HDFS和MapReduce是什么。<h3 id="HDFS"><a href="#HDFS" class="headerlink" title="HDFS"></a>HDFS</h3>Hadoop Distributed File System，Hadoop 分布式文件系统<br>高度容错性的系统，适合部署在廉价的机器上，HDFS能提供高吞吐量的数据访问，适合那些有着超大数据集（large data set）的应用程序。<h3 id="MapReduce"><a href="#MapReduce" class="headerlink" title="MapReduce"></a>MapReduce</h3>Mapreduce是一个计算框架，一个处理分布式海量数据的软件框架及计算集群。</li>
-</ul>
-<h2 id="用处"><a href="#用处" class="headerlink" title="用处"></a>用处</h2><ul>
-<li>搜索引擎 - 设计Hadoop的初衷，为了针对大规模的网页快速建立索引）</li>
-<li>大数据存储 - 利用Hadoop的分布式存储能力，例如数据备份、数据仓库等。</li>
-<li>大数据处理 - 利用Hadoop的分布式处理能力，例如数据挖掘、数据分析等。</li>
-<li>科学研究 - Hadoop是一种分布式的开源框架，对于分布式计算有很大程度地参考价值。</li>
-</ul>
-<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><p>==高可靠性==<br>Hadoop按位存储和处理数据的能力值得信赖。</p>
-<p>==高扩展性==<br>Hadoop是在可用的计算机集簇间分配数据并完成计算任务的，这些集簇可以方便地扩展到数以千计的节点中。</p>
-<p>==高效性==<br>Hadoop能够在节点之间动态地移动数据，并保证各个节点的动态平衡，因此处理速度非常快。</p>
-<p>==高容错性==<br>Hadoop能够自动保存数据的多个副本，并且能够自动将失败的任务重新分配。</p>
-<p>==低成本==<br>与一体机、商用数据仓库以及QlikView、Yonghong Z-Suite等数据集市相比，hadoop是开源的，项目的软件成本因此会大大降低。</p>
-<blockquote>
-<p>Hadoop设计对硬件需求比较低，只须运行在低廉的商用硬件集群上，而无需昂贵的高可用性机器上。廉价的商用机也就意味着大型集群中出现节点故障情况的概率非常高。这就要求设计HDFS时要充分考虑数据的可靠性，安全性及高可用性。</p>
-</blockquote>
-<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><p>==不适合低延迟数据访问==</p>
-<blockquote>
-<p>如果要处理一些用户要求时间比较短的低延迟应用请求，则HDFS不适合。HDFS是为了处理大型数据集分析任务的，主要是为达到高的数据吞吐量而设计的，这就可能要求以高延迟作为代价。</p>
-</blockquote>
-<blockquote>
-<p>改进策略：对于那些有低延时要求的应用程序，HBase是一个更好的选择。通过上层数据管理项目来尽可能地弥补这个不足。在性能上有了很大的提升，它的口号就是goes real time。使用缓存或多master设计可以降低client的数据请求压力，以减少延时。还有就是对HDFS系统内部的修改，这就得权衡大吞吐量与低延时了，HDFS不是万能的银弹。</p>
-</blockquote>
-<p>==无法高效存储大量小文件==</p>
-<blockquote>
-<p>因为Namenode把文件系统的元数据放置在内存中，所以文件系统所能容纳的文件数目是由Namenode的内存大小来决定。一般来说，每一个文件、文件夹和Block需要占据150字节左右的空间，所以，如果你有100万个文件，每一个占据一个Block，你就至少需要300MB内存。当前来说，数百万的文件还是可行的，当扩展到数十亿时，对于当前的硬件水平来说就没法实现了。还有一个问题就是，因为Maptask的数量是由splits来决定的，所以用MR处理大量的小文件时，就会产生过多的Maptask，线程管理开销将会增加作业时间。举个例子，处理10000M的文件，若每个split为1M，那就会有10000个Maptasks，会有很大的线程开销；若每个split为100M，则只有100个Maptasks，每个Maptask将会有更多的事情做，而线程的管理开销将减小很多。</p>
-</blockquote>
-<p>==不支持多用户写入及任意修改文件==  </p>
-<blockquote>
-<p>在HDFS的一个文件中只有一个写入者，而且写操作只能在文件末尾完成，即只能执行追加操作。目前HDFS还不支持多个用户对同一文件的写操作，以及在文件任意位置进行修改。</p>
-</blockquote>
+        <pre><code>我们将大数据处理按处理时间的跨度要求分为以下几类
 
+基于实时数据流的处理，通常的时间跨度在数百毫秒到数秒之间
+
+基于历史数据的交互式查询，通常时间跨度在数十秒到数分钟之间
+
+复杂的批量数据处理，通常的时间跨度在几分钟到数小时之间
+</code></pre>
         
     </section>
 </article>
@@ -311,6 +284,74 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2019/01/08/Hadoop/">Hadoop概念</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/3/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-01-08T06:18:02.000Z" itemprop="datePublished">2019-01-08</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Hadoop/">Hadoop</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>Hadoop是一个开源的框架，可编写和运行分布式应用处理大规模数据，是专为离线和大规模数据分析而设计的，并不适合那种对几个记录随机读写的在线事务处理模式。</p>
+<h1 id="Hadoop"><a href="#Hadoop" class="headerlink" title="Hadoop"></a>Hadoop</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ul>
+<li>Hadoop是一个开源的框架，可编写和运行分布式应用处理大规模数据，是专为离线和大规模数据分析而设计的，并不适合那种对几个记录随机读写的在线事务处理模式。 ==不是为了大数据而大数据==</li>
+<li>Hadoop 是以一种可靠、高效、可伸缩的方式进行处理的。Hadoop 是可靠的，因为它假设计算元素和存储会失败，因此它维护多个工作数据副本，确保能够针对失败的节点重新分布处理。Hadoop 是高效的，因为它以并行的方式工作，通过并行处理加快处理速度。Hadoop 还是可伸缩的，能够处理 PB 级数据。<h2 id="核心"><a href="#核心" class="headerlink" title="核心"></a>核心</h2>Hadoop的核心就是==HDFS==和==MapReduce===，Hadoop旗下有很多经典子项目，比如HBase、Hive等，这些都是基于HDFS和MapReduce发展出来的。要想了解Hadoop，就必须知道HDFS和MapReduce是什么。<h3 id="HDFS"><a href="#HDFS" class="headerlink" title="HDFS"></a>HDFS</h3>Hadoop Distributed File System，Hadoop 分布式文件系统<br>高度容错性的系统，适合部署在廉价的机器上，HDFS能提供高吞吐量的数据访问，适合那些有着超大数据集（large data set）的应用程序。<h3 id="MapReduce"><a href="#MapReduce" class="headerlink" title="MapReduce"></a>MapReduce</h3>Mapreduce是一个计算框架，一个处理分布式海量数据的软件框架及计算集群。</li>
+</ul>
+<h2 id="用处"><a href="#用处" class="headerlink" title="用处"></a>用处</h2><ul>
+<li>搜索引擎 - 设计Hadoop的初衷，为了针对大规模的网页快速建立索引）</li>
+<li>大数据存储 - 利用Hadoop的分布式存储能力，例如数据备份、数据仓库等。</li>
+<li>大数据处理 - 利用Hadoop的分布式处理能力，例如数据挖掘、数据分析等。</li>
+<li>科学研究 - Hadoop是一种分布式的开源框架，对于分布式计算有很大程度地参考价值。</li>
+</ul>
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><p>==高可靠性==<br>Hadoop按位存储和处理数据的能力值得信赖。</p>
+<p>==高扩展性==<br>Hadoop是在可用的计算机集簇间分配数据并完成计算任务的，这些集簇可以方便地扩展到数以千计的节点中。</p>
+<p>==高效性==<br>Hadoop能够在节点之间动态地移动数据，并保证各个节点的动态平衡，因此处理速度非常快。</p>
+<p>==高容错性==<br>Hadoop能够自动保存数据的多个副本，并且能够自动将失败的任务重新分配。</p>
+<p>==低成本==<br>与一体机、商用数据仓库以及QlikView、Yonghong Z-Suite等数据集市相比，hadoop是开源的，项目的软件成本因此会大大降低。</p>
+<blockquote>
+<p>Hadoop设计对硬件需求比较低，只须运行在低廉的商用硬件集群上，而无需昂贵的高可用性机器上。廉价的商用机也就意味着大型集群中出现节点故障情况的概率非常高。这就要求设计HDFS时要充分考虑数据的可靠性，安全性及高可用性。</p>
+</blockquote>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><p>==不适合低延迟数据访问==</p>
+<blockquote>
+<p>如果要处理一些用户要求时间比较短的低延迟应用请求，则HDFS不适合。HDFS是为了处理大型数据集分析任务的，主要是为达到高的数据吞吐量而设计的，这就可能要求以高延迟作为代价。</p>
+</blockquote>
+<blockquote>
+<p>改进策略：对于那些有低延时要求的应用程序，HBase是一个更好的选择。通过上层数据管理项目来尽可能地弥补这个不足。在性能上有了很大的提升，它的口号就是goes real time。使用缓存或多master设计可以降低client的数据请求压力，以减少延时。还有就是对HDFS系统内部的修改，这就得权衡大吞吐量与低延时了，HDFS不是万能的银弹。</p>
+</blockquote>
+<p>==无法高效存储大量小文件==</p>
+<blockquote>
+<p>因为Namenode把文件系统的元数据放置在内存中，所以文件系统所能容纳的文件数目是由Namenode的内存大小来决定。一般来说，每一个文件、文件夹和Block需要占据150字节左右的空间，所以，如果你有100万个文件，每一个占据一个Block，你就至少需要300MB内存。当前来说，数百万的文件还是可行的，当扩展到数十亿时，对于当前的硬件水平来说就没法实现了。还有一个问题就是，因为Maptask的数量是由splits来决定的，所以用MR处理大量的小文件时，就会产生过多的Maptask，线程管理开销将会增加作业时间。举个例子，处理10000M的文件，若每个split为1M，那就会有10000个Maptasks，会有很大的线程开销；若每个split为100M，则只有100个Maptasks，每个Maptask将会有更多的事情做，而线程的管理开销将减小很多。</p>
+</blockquote>
+<p>==不支持多用户写入及任意修改文件==  </p>
+<blockquote>
+<p>在HDFS的一个文件中只有一个写入者，而且写操作只能在文件末尾完成，即只能执行追加操作。目前HDFS还不支持多个用户对同一文件的写操作，以及在文件任意位置进行修改。</p>
+</blockquote>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2019/01/08/大数据/">大数据</a>
         </h1>
         
@@ -355,47 +396,6 @@
 <h2 id="第2类"><a href="#第2类" class="headerlink" title="第2类"></a>第2类</h2><p>主要面对的是半结构化和非结构化数据。应对这类应用场景，基于Hadoop开源体系的系统平台更为擅长。它们通过对Hadoop生态体系的技术扩展和封装，实现对半结构化和非结构化数据的存储和管理;</p>
 <h2 id="第3类"><a href="#第3类" class="headerlink" title="第3类"></a>第3类</h2><p>面对的是结构化和非结构化混合的大数据，因此采用MPP并行数据库集群与Hadoop集群的混合来实现对百PB量级、EB量级数据的存储和管理。一方面，用MPP来管理计算高质量的结构化数据，提供强大的SQL和OLTP型服务;另一方面，用Hadoop实现对半结构化和非结构化数据的处理，以支持诸如内容检索、深度挖掘与综合分析等新型应用。这类混合模式将是大数据存储和管理未来发展的趋势。</p>
 
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2019/01/08/流处理、批处理、交互式查询/">流处理、批处理、交互式查询</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/3/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2019-01-08T06:18:02.000Z" itemprop="datePublished">2019-01-08</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Hadoop/">Hadoop</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <pre><code>我们将大数据处理按处理时间的跨度要求分为以下几类
-
-基于实时数据流的处理，通常的时间跨度在数百毫秒到数秒之间
-
-基于历史数据的交互式查询，通常时间跨度在数十秒到数分钟之间
-
-复杂的批量数据处理，通常的时间跨度在几分钟到数小时之间
-</code></pre>
         
     </section>
 </article>
