@@ -131,6 +131,275 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2017/09/12/Redis相关问题三/">Redis相关问题三</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/12/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-09-12T10:33:59.000Z" itemprop="datePublished">2017-09-12</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Redis-相关问题三"><a href="#Redis-相关问题三" class="headerlink" title="Redis 相关问题三"></a>Redis 相关问题三</h1><ol start="3">
+<li>Redis高并发会出现哪些问题？</li>
+</ol>
+<p>1) 如果redis宕机了，或者链接不上，怎么办？</p>
+<blockquote>
+<p>解决方法：</p>
+</blockquote>
+<p>①配置主从复制，配置哨兵模式（相当于古代门派的长老级别可以选择掌门人的权利），一旦发现主机宕机，让下一个从机当做主机。</p>
+<p>②如果最坏的情况，只能关闭Redis连接，去往数据库连接。但由于数据量大，这样SQL数据库也会宕掉的。</p>
+<p>2) 如果redis缓存在高峰期到期失效，在这个时刻请求会向雪崩一样，直接访问数据库如何处理？</p>
+<p>设置条件查询判断，判断redis缓存里是否有数据，如果没有，则去往数据库连接。当然要加分布式锁，利用redis的单线程+多路IO复用技术，原子性原理，让其它的线程请求等待，假若第一个线程进去获取到分布式锁在查询数据的途中宕掉了，不能让其它线程一直等待，设置等待一定时间判断是否取回数据，如果没有，递归调用自己的方法让第二个线程继续拿分布式锁查询数据库。当第二个锁从数据库拿到数据时，把数据值设置到redis数据库缓存中，设置失效时间，避免占内存，方便使用提高效率。</p>
+<p>3) 如果用户不停地查询一条不存在的数据，缓存没有，数据库也没有，那么会出现什么?</p>
+<p>如果数据不存在，缓存中没有，数据库也没有，当然如果不设置判断，会一直调用数据库，使数据库效率降低，访问量大时甚至会宕机。</p>
+<p>解决方案：从数据库查询，如果数据库没有，则返回值为Null，判断数据库返回的值，如果为Null，则自定义把标识的字段存到Redis中，用key,value的方法，jedis.setex(key,”empty”)，设置失效时间跟具体情况而定，然后调用String json=jedis.get(key),判断是否获取的值”empty”.equal(json),如果相等，则抛出自定义异常，给用户提示，或者直接return null。这样用户再次查询的时候由于先从reids缓存中查询，redis会有对应的Key获取之前设置的value值，这样就不会再次调用数据库，影响效率等问题。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2017/06/01/Linux 绝对路径 、 相对路径/">Linux绝对路径 、 相对路径</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/12/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-06-01T08:18:02.000Z" itemprop="datePublished">2017-06-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h2 id="Linux绝对路径-、-相对路径"><a href="#Linux绝对路径-、-相对路径" class="headerlink" title="Linux绝对路径 、 相对路径"></a>Linux绝对路径 、 相对路径</h2><p>Linux的目录结构为树状结构，最顶级的目录为根目录 /。</p>
+<p>其他目录通过挂载可以将它们添加到树中，通过解除挂载可以移除它们。</p>
+<p>绝对路径：<br>路径的写法，由根目录 / 写起，例如： /usr/share/doc 这个目录。</p>
+<p>相对路径：<br>路径的写法，不是由 / 写起，例如由 /usr/share/doc 要切换到 /usr/share/man 底下时，可以写成： cd ../man 这就是相对路径。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2017/06/01/Linux 处理目录的常用命令/">Linux处理目录的常用命令</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/12/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-06-01T08:18:02.000Z" itemprop="datePublished">2017-06-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h2 id="Linux处理目录的常用命令"><a href="#Linux处理目录的常用命令" class="headerlink" title="Linux处理目录的常用命令"></a>Linux处理目录的常用命令</h2><p>常见的处理目录的命令：</p>
+<ul>
+<li>ls: 列出目录</li>
+<li>cd：切换目录</li>
+<li>pwd：显示目前的目录</li>
+<li>mkdir：创建一个新的目录</li>
+<li>rmdir：删除一个空的目录</li>
+<li>cp: 复制文件或目录</li>
+<li>rm: 移除文件或目录</li>
+<li>mv: 移动文件与目录，或修改文件与目录的名称</li>
+</ul>
+<p>使用 man [命令] 来查看各个命令的使用文档，如 ：man cp。</p>
+<h3 id="ls-列出目录"><a href="#ls-列出目录" class="headerlink" title="ls (列出目录)"></a>ls (列出目录)</h3><p>在Linux系统当中， ls 命令可能是最常被运行的。<br><figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">语法：</span><br><span class="line"></span><br><span class="line">[root@www ~]# <span class="keyword">ls</span> [-aAdfFhilnrRSt] 目录名称</span><br><span class="line">[root@www ~]# <span class="keyword">ls</span> [--<span class="keyword">color</span>=&#123;never,auto,always&#125;] 目录名称</span><br><span class="line">[root@www ~]# <span class="keyword">ls</span> [--full-time] 目录名称</span><br></pre></td></tr></table></figure></p>
+<p>参数：</p>
+<ul>
+<li>-a ：全部的文件，连同隐藏档( 开头为 . 的文件) 一起列出来(常用)</li>
+<li>-d ：仅列出目录本身，而不是列出目录内的文件数据(常用)</li>
+<li>-l ：长数据串列出，包含文件的属性与权限等等数据；(常用)<br>将家目录下的所有文件列出来(含属性与隐藏档)</li>
+</ul>
+<h3 id="mkdir（创建目录）"><a href="#mkdir（创建目录）" class="headerlink" title="mkdir（创建目录）"></a>mkdir（创建目录）</h3><p>语法<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir <span class="string">[-mp]</span> 目录名称</span><br></pre></td></tr></table></figure></p>
+<p>参数：</p>
+<ul>
+<li>-m ：配置文件的权限，不需要看默认权限 (umask) 的脸色</li>
+<li>-p ：将所需要的目录(包含上一级目录)递归创建起来</li>
+</ul>
+<p>实例：在/tmp下尝试创建数新目录：<br><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root<span class="meta">@www</span> ~]<span class="comment"># cd /tmp</span></span><br><span class="line">[root<span class="meta">@www</span> tmp]<span class="comment"># mkdir test    </span></span><br><span class="line">[root<span class="meta">@www</span> tmp]<span class="comment"># mkdir test1/test2/test3/test4</span></span><br><span class="line">mkdir: cannot create directory `test1/test2/test3/test4': </span><br><span class="line">No such file or directory       </span><br><span class="line">[root<span class="meta">@www</span> tmp]<span class="comment"># mkdir -p test1/test2/test3/test4</span></span><br><span class="line">加了这个 -p 的选项，可以自行帮你创建多层目录！</span><br></pre></td></tr></table></figure></p>
+<p>实例：创建权限为 rwx–x–x 的目录。<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@www tmp]<span class="comment"># mkdir -m 711 test2</span></span><br><span class="line">[root@www tmp]<span class="comment"># ls -l</span></span><br><span class="line">drwxr-xr-x <span class="number"> 3 </span>root  root<span class="number"> 4096 </span>Jul<span class="number"> 18 </span>12:50 test</span><br><span class="line">drwxr-xr-x <span class="number"> 3 </span>root  root<span class="number"> 4096 </span>Jul<span class="number"> 18 </span>12:53 test1</span><br><span class="line">drwx--x--x <span class="number"> 2 </span>root  root<span class="number"> 4096 </span>Jul<span class="number"> 18 </span>12:54 test2</span><br></pre></td></tr></table></figure></p>
+<h3 id="rmdir（删除目录）"><a href="#rmdir（删除目录）" class="headerlink" title="rmdir（删除目录）"></a>rmdir（删除目录）</h3><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rmdir <span class="string">[-p]</span> 目录名称</span><br></pre></td></tr></table></figure>
+<p>参数：</p>
+<p>-p ：连同上一级『空的』目录也一起删除<br>删除 runoob 目录<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root<span class="symbol">@www</span> tmp]<span class="meta"># rmdir runoob/</span></span><br></pre></td></tr></table></figure></p>
+<p>过要注意的是，这个 rmdir 仅能删除空的目录，你可以使用 rm 命令来删除非空目录。</p>
+<h3 id="cp（拷贝文件和目录）"><a href="#cp（拷贝文件和目录）" class="headerlink" title="cp（拷贝文件和目录）"></a>cp（拷贝文件和目录）</h3><p>语法:<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">cp</span> <span class="selector-attr">[-adfilprsu]</span> 来源档(source) 目标档(destination)</span><br><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">cp</span> <span class="selector-attr">[options]</span> <span class="selector-tag">source1</span> <span class="selector-tag">source2</span> <span class="selector-tag">source3</span> .... <span class="selector-tag">directory</span></span><br></pre></td></tr></table></figure></p>
+<p>参数：</p>
+<p>-a：相当於 -pdr 的意思，至於 pdr 请参考下列说明；(常用)</p>
+<p>-d：若来源档为连结档的属性(link file)，则复制连结档属性而非文件本身；</p>
+<p>-f：为强制(force)的意思，若目标文件已经存在且无法开启，则移除后再尝试一次；</p>
+<p>-i：若目标档(destination)已经存在时，在覆盖时会先询问动作的进行(常用)</p>
+<p>-l：进行硬式连结(hard link)的连结档创建，而非复制文件本身；</p>
+<p>-p：连同文件的属性一起复制过去，而非使用默认属性(备份常用)；</p>
+<p>-r：递归持续复制，用於目录的复制行为；(常用)</p>
+<p>-s：复制成为符号连结档 (symbolic link)，亦即『捷径』文件；</p>
+<p>-u：若 destination 比 source 旧才升级 destination ！</p>
+<p>用 root 身份，将 root 目录下的 .bashrc 复制到 /tmp 下，并命名为 bashrc<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root<span class="symbol">@www</span> ~]<span class="meta"># cp ~/.bashrc /tmp/bashrc</span></span><br><span class="line">[root<span class="symbol">@www</span> ~]<span class="meta"># cp -i ~/.bashrc /tmp/bashrc</span></span><br><span class="line">cp: overwrite `/tmp/bashrc<span class="string">'? n  &lt;==n不覆盖，y为覆盖</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="rm-移除文件或目录"><a href="#rm-移除文件或目录" class="headerlink" title="rm (移除文件或目录)"></a>rm (移除文件或目录)</h3><p>语法：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm <span class="string">[-fir]</span> 文件或目录</span><br></pre></td></tr></table></figure></p>
+<p>参数：</p>
+<ul>
+<li>-f ：就是 force 的意思，忽略不存在的文件，不会出现警告信息；</li>
+<li>-i ：互动模式，在删除前会询问使用者是否动作</li>
+<li>-r ：递归删除啊,最常用在目录的删除了</li>
+</ul>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@www tmp]# <span class="keyword">rm</span> -i bashrc</span><br><span class="line"><span class="keyword">rm</span>: remove regular <span class="keyword">file</span> <span class="symbol">`bashrc'</span>? <span class="built_in">y</span></span><br></pre></td></tr></table></figure>
+<p>如果加上 -i 的选项就会主动询问喔，避免你删除到错误的档名</p>
+<h3 id="mv-移动文件与目录，或修改名称"><a href="#mv-移动文件与目录，或修改名称" class="headerlink" title="mv (移动文件与目录，或修改名称)"></a>mv (移动文件与目录，或修改名称)</h3><p>语法：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">[root@www ~]</span># mv <span class="string">[-fiu]</span> source destination</span><br><span class="line"><span class="string">[root@www ~]</span># mv <span class="string">[options]</span> source1 source2 source3 .... directory</span><br></pre></td></tr></table></figure></p>
+<p>参数：</p>
+<ul>
+<li>-f ：force 强制的意思，如果目标文件已经存在，不会询问而直接覆盖；</li>
+<li>-i ：若目标文件 (destination) 已经存在时，就会询问是否覆盖！</li>
+<li>-u ：若目标文件已经存在，且 source 比较新，才会升级 (update)</li>
+</ul>
+<p>复制一文件，创建一目录，将文件移动到目录中<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root<span class="symbol">@www</span> ~]<span class="meta"># cd /tmp</span></span><br><span class="line">[root<span class="symbol">@www</span> tmp]<span class="meta"># cp ~/.bashrc bashrc</span></span><br><span class="line">[root<span class="symbol">@www</span> tmp]<span class="meta"># mkdir mvtest</span></span><br><span class="line">[root<span class="symbol">@www</span> tmp]<span class="meta"># mv bashrc mvtest</span></span><br></pre></td></tr></table></figure></p>
+<p>将某个文件移动到某个目录去，就是这样做！</p>
+<p>将刚刚的目录名称更名为 mvtest2<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root<span class="symbol">@www</span> tmp]<span class="meta"># mv mvtest mvtest2</span></span><br></pre></td></tr></table></figure></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2017/06/01/Linux 更改文件属性/">Linux更改文件属性</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/12/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-06-01T08:18:02.000Z" itemprop="datePublished">2017-06-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h2 id="Linux-更改文件属性"><a href="#Linux-更改文件属性" class="headerlink" title="Linux 更改文件属性"></a>Linux 更改文件属性</h2><p>1、chgrp：改属组 change group</p>
+<p>语法：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chgrp <span class="string">[-R]</span> 属组名 文件名</span><br></pre></td></tr></table></figure></p>
+<p>参数选项 [-R]: 递归更改文件属组，就是在更改某个目录文件的属组时，如果加上-R的参数，那么该目录下的所有文件的属组都会更改。</p>
+<p>2、chown：改属主，也可以同时更改属组  change owner</p>
+<p>语法：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chown <span class="string">[–R]</span> 属主名 文件名</span><br><span class="line">chown <span class="string">[-R]</span> 属主名：属组名 文件名</span><br></pre></td></tr></table></figure></p>
+<p>进入 /root 目录（~）将install.log的拥有者改为bin这个账号：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@www ~] cd ~</span><br><span class="line">[root@www ~]# chown bin install.log</span><br><span class="line">[root@www ~]# ls -l</span><br><span class="line">-rw-r--r--  1 bin <span class="built_in"> users </span>68495 Jun 25 08:53 install.log</span><br></pre></td></tr></table></figure></p>
+<p>3、chmod：更改文件9个属性</p>
+<p>Linux文件的基本权限就有九个，分别是owner/group/others三种身份各有自己的read/write/execute权限。</p>
+<p>例如：文件的权限字符为：『-rwxrwxrwx』， 可以使用数字来代表各个权限，各权限的分数对照表如下：</p>
+<ul>
+<li>r:4</li>
+<li>w:2</li>
+<li>x:1</li>
+</ul>
+<p>每种身份(owner/group/others)各自的三个权限(r/w/x)分数是需要累加的，例如当权限为： [-rwxrwx—] 结果：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">owner = rwx = <span class="number">4</span>+<span class="number">2</span>+<span class="number">1</span> = <span class="number">7</span></span><br><span class="line">group = rwx = <span class="number">4</span>+<span class="number">2</span>+<span class="number">1</span> = <span class="number">7</span></span><br><span class="line">others= --- = <span class="number">0</span>+<span class="number">0</span>+<span class="number">0</span> = <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>设定权限变更为：770</p>
+<p>语法<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod <span class="string">[-R]</span> xyz 文件或目录</span><br></pre></td></tr></table></figure></p>
+<p>参数 xyz : 就是刚刚提到的数字类型的权限属性，为 rwx 属性数值的相加。eg: 770</p>
+<p>Example: 将.bashrc这个文件所有的权限都设定启用<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">ls</span> <span class="selector-tag">-al</span> <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-tag">-rw-r--r--</span>  1 <span class="selector-tag">root</span> <span class="selector-tag">root</span> 395 <span class="selector-tag">Jul</span>  4 11<span class="selector-pseudo">:45</span> <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">chmod</span> 777 <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">ls</span> <span class="selector-tag">-al</span> <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-tag">-rwxrwxrwx</span>  1 <span class="selector-tag">root</span> <span class="selector-tag">root</span> 395 <span class="selector-tag">Jul</span>  4 11<span class="selector-pseudo">:45</span> <span class="selector-class">.bashrc</span></span><br></pre></td></tr></table></figure></p>
+<p>那如果要将权限变成 -rwxr-xr– 呢？那么权限的分数就成为 [4+2+1][4+0+1][4+0+0]=754。</p>
+<h2 id="符号类型改变文件权限"><a href="#符号类型改变文件权限" class="headerlink" title="符号类型改变文件权限"></a>符号类型改变文件权限</h2><p>另一种改权限的方式。针对user,group,others设置权限。</p>
+<ol>
+<li>user</li>
+<li>group</li>
+<li>others</li>
+</ol>
+<p>那么我们就可以使用 u, g, o 来代表三种身份的权限。</p>
+<p>可选 ：</p>
+<ul>
+<li>u</li>
+<li>g</li>
+<li>o</li>
+<li>a (指所有，即全部的身份)</li>
+</ul>
+<p>操作符： </p>
+<ul>
+<li><ul>
+<li>加入</li>
+</ul>
+</li>
+<li><ul>
+<li>除去</li>
+</ul>
+</li>
+<li>=    设定<br>权限：</li>
+<li>r</li>
+<li>w</li>
+<li>x</li>
+</ul>
+<p>可以使用以下语法来设定:<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod <span class="attribute">u</span>=rwx,g=rwx,o=rwx 文件名</span><br></pre></td></tr></table></figure></p>
+<p>Example：将文件权限设置为 -rwxr-xr– ，<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#  touch <span class="keyword">test</span>    <span class="comment">// 创建文件</span></span><br><span class="line"># <span class="keyword">ls</span> -al <span class="keyword">test</span>    <span class="comment">// 查看默认权限</span></span><br><span class="line">-rw-r--r-- 1 root root 0 Nov 15 10:32 <span class="keyword">test</span></span><br><span class="line"># chmod <span class="keyword">u</span>=rwx,<span class="keyword">g</span>=rx,o=r  <span class="keyword">test</span>    <span class="comment">// 修改权限</span></span><br><span class="line"># <span class="keyword">ls</span> -al <span class="keyword">test</span></span><br><span class="line">-rwxr-xr-- 1 root root 0 Nov 15 10:32 <span class="keyword">test</span></span><br></pre></td></tr></table></figure></p>
+<p>而如果是要将权限去掉而不改变其他已存在的权限呢？<br>例如要拿掉全部人的可执行权限，则：<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#  chmod  a-x test1</span></span><br><span class="line"><span class="comment"># ls -al test1</span></span><br><span class="line">-rw-r--r--<span class="number"> 1 </span>root root<span class="number"> 0 </span>Nov<span class="number"> 15 </span>10:32 test1</span><br></pre></td></tr></table></figure></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2017/06/01/Linux目录结构/">Linux 目录结构</a>
         </h1>
         
@@ -443,186 +712,10 @@ public void printStackTrace():在控制台上打印Throwable对象封装的异�
 </article>
 
 
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/04/08/mybatis/">mybatis相关问题</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/12/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-04-08T14:22:22.000Z" itemprop="datePublished">2017-04-08</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Mybatis/">Mybatis</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="mybatis相关问题"><a href="#mybatis相关问题" class="headerlink" title="mybatis相关问题"></a>mybatis相关问题</h1><h2 id="mybatis应用"><a href="#mybatis应用" class="headerlink" title="mybatis应用"></a>mybatis应用</h2><p>1.mybatis优缺点，spring与mybatis集成</p>
-<p>2.Config、Sql配置、Mapper配置、有几种注册Mapper的方式，优先级如何？</p>
-<p>3.mybatis的一级缓存、二级缓存、mybatis的二级缓存为何是鸡肋？</p>
-<p>4.通用mapper的实现，mybatis编写sql语句的三种方式。</p>
-<h2 id="mybatis源码分析"><a href="#mybatis源码分析" class="headerlink" title="mybatis源码分析"></a>mybatis源码分析</h2><p>1.@MapperScan的源码分析？mapperScan如何生效</p>
-<p>2.mybatis如何扩展spring的扫描器的，mybatis扫描完之后如何利用FactoryBean？</p>
-<p>3.mybatis底层如何会把一个代理对象放在spring容器中？用到了spring的哪些知识？</p>
-<p>4.mybatis和spring的核心接口ImportBeanDefinitionRegistrar之间的关系。</p>
-<p>5.mybatis如何实现一级缓存，spring集成后如何失效的？为何将其失效，有没有办法解决。</p>
-<p>6.mybatis分析mybatis的执行流程、mybatis的sql什么时候缓存的？缓存在哪里？</p>
-<p>7.mybatis当中的方法名为何要与mapper当中的id一致？从源码分析？</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/04/05/final关键字的一些总结/">关于 final 关键字的一些总结</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/12/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-04-05T07:30:00.000Z" itemprop="datePublished">2017-04-05</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>#关于 final 关键字的一些总结<br>final关键字主要用在三个地方：变量、方法、类。(初始化之后不能修改)</p>
-<p>1.对于一个final变量，如果是基本数据类型的变量，则其数值一旦在初始化之后便不能更改；<br>如果是引用类型的变量，则在对其初始化之后便不能再让其指向另一个对象。.</p>
-<p>2.当用final修饰一个类时，表明这个类不能被继承。final类中的所有成员方法都会被隐式地指定为final方法。</p>
-<p>3.使用final方法的原因有两个。<br>第一个原因是把方法锁定，以防任何继承类修改它的含义;<br>第二个原因是效率。在早期的Java实现版本中，会将final方法转为内嵌调用。<br>但是如果方法过于庞大，可能看不到内嵌调用带来的任何性能提升（现在的Java版本已经不需要使用final方法进行这些优化了）。<br>类中所有的private方法都隐式地指定为final。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/04/04/hashCode 与 equals/">hashCode 与 equals</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/12/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-04-04T05:30:00.000Z" itemprop="datePublished">2017-04-04</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="hashCode-与-equals"><a href="#hashCode-与-equals" class="headerlink" title="hashCode 与 equals"></a>hashCode 与 equals</h1><h2 id="hashCode（）介绍"><a href="#hashCode（）介绍" class="headerlink" title="hashCode（）介绍"></a>hashCode（）介绍</h2><p>hashCode() 的作用是获取哈希码，也称为散列码；它实际上是返回一个int整数。这个哈希码的作用是确定该对象在哈希表中的索引位置。</p>
-<p>hashCode() 定义在JDK的Object.java中，这就意味着Java中的任何类都包含有hashCode() 函数。</p>
-<p>散列表存储的是键值对(key-value)，它的特点是：能根据“键”快速的检索出对应的“值”。这其中就利用到了散列码！</p>
-<p>意义：可以快速找到所需要的对象。</p>
-<h2 id="为什么要有-hashCode？"><a href="#为什么要有-hashCode？" class="headerlink" title="为什么要有 hashCode？"></a>为什么要有 hashCode？</h2><p>我们先以“HashSet 如何检查重复”为例子来说明为什么要有 hashCode：</p>
-<p>当你把对象加入 HashSet 时，HashSet 会先计算对象的 hashcode 值来判断对象加入的位置，<br>同时也会与其他已经加入的对象的 hashcode 值作比较，如果没有相符的hashcode，HashSet会假设对象没有重复出现。<br>但是如果发现有相同 hashcode 值的对象，这时会调用 equals（）方法来检查 hashcode 相等的对象是否真的相同。<br>如果两者相同，HashSet 就不会让其加入操作成功。如果不同的话，就会重新散列到其他位置。<br>这样我们就大大减少了 equals 的次数，相应就大大提高了执行速度。</p>
-<p>通过我们可以看出：hashCode() 的作用就是获取哈希码，也称为散列码；它实际上是返回一个int整数。<br>这个哈希码的作用是确定该对象在哈希表中的索引位置。<br><strong>hashCode() 在散列表中才有用，在其它情况下没用。</strong><br>在散列表中hashCode() 的作用是获取对象的散列码，进而确定该对象在散列表中的位置。</p>
-<h2 id="hashCode（）与equals（）的相关规定"><a href="#hashCode（）与equals（）的相关规定" class="headerlink" title="hashCode（）与equals（）的相关规定"></a>hashCode（）与equals（）的相关规定</h2><ul>
-<li>如果两个对象相等，则hashcode一定也是相同的</li>
-<li>两个对象相等,对两个对象分别调用equals方法都返回true</li>
-<li>两个对象有相同的hashcode值，它们也不一定是相等的</li>
-<li>因此，equals 方法被覆盖过，则 hashCode 方法也必须被覆盖</li>
-</ul>
-<p>hashCode() 的默认行为是对堆上的对象产生独特值。如果没有重写 hashCode()，<br>则该 class 的两个对象无论如何都不会相等（即使这两个对象指向相同的数据）</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/04/04/== 与 equals/">== 与 equals</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/12/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-04-04T01:30:00.000Z" itemprop="datePublished">2017-04-04</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="与-equals"><a href="#与-equals" class="headerlink" title="== 与 equals"></a>== 与 equals</h1><p>== : 它的作用是判断两个对象的地址是不是相等。即，判断两个对象是不是同一个对象(基本数据类型==比较的是值，引用数据类型==比较的是内存地址)。</p>
-<p>equals() : 它的作用也是判断两个对象是否相等。但它一般有两种使用情况：</p>
-<p>情况1：类没有覆盖 equals() 方法。则通过 equals() 比较该类的两个对象时，等价于通过“==”比较这两个对象。</p>
-<p>情况2：类覆盖了 equals() 方法。一般，我们都覆盖 equals() 方法来比较两个对象的内容是否相等；若它们的内容相等，则返回 true<br>(即，认为这两个对象相等)。</p>
-<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> class test1 &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">        <span class="keyword">String</span> a = <span class="keyword">new</span> <span class="keyword">String</span>(<span class="string">"ab"</span>); <span class="comment">// a 为一个引用</span></span><br><span class="line">        <span class="keyword">String</span> b = <span class="keyword">new</span> <span class="keyword">String</span>(<span class="string">"ab"</span>); <span class="comment">// b为另一个引用,对象的内容一样</span></span><br><span class="line">        <span class="keyword">String</span> aa = <span class="string">"ab"</span>; <span class="comment">// 放在常量池中</span></span><br><span class="line">        <span class="keyword">String</span> bb = <span class="string">"ab"</span>; <span class="comment">// 从常量池中查找</span></span><br><span class="line">        <span class="built_in">if</span> (aa == bb) <span class="comment">// true</span></span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"aa==bb"</span>);</span><br><span class="line">        <span class="built_in">if</span> (a == b) <span class="comment">// false，非同一对象</span></span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"a==b"</span>);</span><br><span class="line">        <span class="built_in">if</span> (a.equals(b)) <span class="comment">// true</span></span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"aEQb"</span>);</span><br><span class="line">        <span class="built_in">if</span> (<span class="number">42</span> == <span class="number">42.0</span>) &#123; <span class="comment">// true</span></span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"true"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>Notice:</p>
-<p>String 中的 equals 方法是被重写过的，因为 object 的 equals 方法是比较的对象的内存地址，<br>而 String 的 equals 方法比较的是对象的值。</p>
-<p>当创建 String 类型的对象时，虚拟机会在常量池中查找有没有已经存在的值和要创建的值相同的对象，<br>如果有就把它赋给当前引用。如果没有就在常量池中重新创建一个 String 对象。</p>
-<h2 id="正确使用-equals-方法"><a href="#正确使用-equals-方法" class="headerlink" title="正确使用 equals 方法"></a>正确使用 equals 方法</h2><figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不能使用一个值为null的引用类型变量来调用非静态方法，否则会抛出异常</span></span><br><span class="line"><span class="built_in">String</span> str = <span class="built_in">null</span>;</span><br><span class="line"><span class="keyword">if</span> (str.<span class="keyword">equals</span>(<span class="string">"dick"</span>)) &#123;</span><br><span class="line">  <span class="params">...</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  ..</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>运行上面的程序会抛出空指针异常，但是我们把第二行的条件判断语句改为下面这样的话，就不会抛出空指针异常，else 语句块得到执行。：<br><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"dick"</span><span class="string">.equals</span><span class="params">(str)</span>;<span class="string">//</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure></p>
-<p>不过更推荐使用 java.util.Objects#equals(JDK7 引入的工具类)。<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Objects.<span class="keyword">equals</span>(<span class="literal">null</span>,<span class="string">"SnailClimb"</span>);<span class="comment">// false</span></span><br><span class="line"></span><br><span class="line">源码：</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> boolean <span class="title">equals</span>(<span class="params">Object a, Object b</span>)</span> &#123;</span><br><span class="line">	<span class="comment">// 可以避免空指针异常。如果a==null的话此时a.equals(b)就不会得到执行，避免出现空指针异常。</span></span><br><span class="line">	<span class="keyword">return</span> (a == b) || (a != <span class="literal">null</span> &amp;&amp; a.<span class="keyword">equals</span>(b));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-        
-    </section>
-</article>
-
-
 
 
 <nav class="page-nav">
-    <a class="extend prev" rel="prev" href="/page/11/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/13/">下一页 &raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/11/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/13/">下一页 &raquo;</a>
 </nav>
 
 

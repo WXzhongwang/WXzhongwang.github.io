@@ -131,6 +131,182 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2017/04/08/mybatis/">mybatis相关问题</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-04-08T14:22:22.000Z" itemprop="datePublished">2017-04-08</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Mybatis/">Mybatis</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="mybatis相关问题"><a href="#mybatis相关问题" class="headerlink" title="mybatis相关问题"></a>mybatis相关问题</h1><h2 id="mybatis应用"><a href="#mybatis应用" class="headerlink" title="mybatis应用"></a>mybatis应用</h2><p>1.mybatis优缺点，spring与mybatis集成</p>
+<p>2.Config、Sql配置、Mapper配置、有几种注册Mapper的方式，优先级如何？</p>
+<p>3.mybatis的一级缓存、二级缓存、mybatis的二级缓存为何是鸡肋？</p>
+<p>4.通用mapper的实现，mybatis编写sql语句的三种方式。</p>
+<h2 id="mybatis源码分析"><a href="#mybatis源码分析" class="headerlink" title="mybatis源码分析"></a>mybatis源码分析</h2><p>1.@MapperScan的源码分析？mapperScan如何生效</p>
+<p>2.mybatis如何扩展spring的扫描器的，mybatis扫描完之后如何利用FactoryBean？</p>
+<p>3.mybatis底层如何会把一个代理对象放在spring容器中？用到了spring的哪些知识？</p>
+<p>4.mybatis和spring的核心接口ImportBeanDefinitionRegistrar之间的关系。</p>
+<p>5.mybatis如何实现一级缓存，spring集成后如何失效的？为何将其失效，有没有办法解决。</p>
+<p>6.mybatis分析mybatis的执行流程、mybatis的sql什么时候缓存的？缓存在哪里？</p>
+<p>7.mybatis当中的方法名为何要与mapper当中的id一致？从源码分析？</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2017/04/05/final关键字的一些总结/">关于 final 关键字的一些总结</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-04-05T07:30:00.000Z" itemprop="datePublished">2017-04-05</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java/">Java</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>#关于 final 关键字的一些总结<br>final关键字主要用在三个地方：变量、方法、类。(初始化之后不能修改)</p>
+<p>1.对于一个final变量，如果是基本数据类型的变量，则其数值一旦在初始化之后便不能更改；<br>如果是引用类型的变量，则在对其初始化之后便不能再让其指向另一个对象。.</p>
+<p>2.当用final修饰一个类时，表明这个类不能被继承。final类中的所有成员方法都会被隐式地指定为final方法。</p>
+<p>3.使用final方法的原因有两个。<br>第一个原因是把方法锁定，以防任何继承类修改它的含义;<br>第二个原因是效率。在早期的Java实现版本中，会将final方法转为内嵌调用。<br>但是如果方法过于庞大，可能看不到内嵌调用带来的任何性能提升（现在的Java版本已经不需要使用final方法进行这些优化了）。<br>类中所有的private方法都隐式地指定为final。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2017/04/04/hashCode 与 equals/">hashCode 与 equals</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-04-04T05:30:00.000Z" itemprop="datePublished">2017-04-04</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java/">Java</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="hashCode-与-equals"><a href="#hashCode-与-equals" class="headerlink" title="hashCode 与 equals"></a>hashCode 与 equals</h1><h2 id="hashCode（）介绍"><a href="#hashCode（）介绍" class="headerlink" title="hashCode（）介绍"></a>hashCode（）介绍</h2><p>hashCode() 的作用是获取哈希码，也称为散列码；它实际上是返回一个int整数。这个哈希码的作用是确定该对象在哈希表中的索引位置。</p>
+<p>hashCode() 定义在JDK的Object.java中，这就意味着Java中的任何类都包含有hashCode() 函数。</p>
+<p>散列表存储的是键值对(key-value)，它的特点是：能根据“键”快速的检索出对应的“值”。这其中就利用到了散列码！</p>
+<p>意义：可以快速找到所需要的对象。</p>
+<h2 id="为什么要有-hashCode？"><a href="#为什么要有-hashCode？" class="headerlink" title="为什么要有 hashCode？"></a>为什么要有 hashCode？</h2><p>我们先以“HashSet 如何检查重复”为例子来说明为什么要有 hashCode：</p>
+<p>当你把对象加入 HashSet 时，HashSet 会先计算对象的 hashcode 值来判断对象加入的位置，<br>同时也会与其他已经加入的对象的 hashcode 值作比较，如果没有相符的hashcode，HashSet会假设对象没有重复出现。<br>但是如果发现有相同 hashcode 值的对象，这时会调用 equals（）方法来检查 hashcode 相等的对象是否真的相同。<br>如果两者相同，HashSet 就不会让其加入操作成功。如果不同的话，就会重新散列到其他位置。<br>这样我们就大大减少了 equals 的次数，相应就大大提高了执行速度。</p>
+<p>通过我们可以看出：hashCode() 的作用就是获取哈希码，也称为散列码；它实际上是返回一个int整数。<br>这个哈希码的作用是确定该对象在哈希表中的索引位置。<br><strong>hashCode() 在散列表中才有用，在其它情况下没用。</strong><br>在散列表中hashCode() 的作用是获取对象的散列码，进而确定该对象在散列表中的位置。</p>
+<h2 id="hashCode（）与equals（）的相关规定"><a href="#hashCode（）与equals（）的相关规定" class="headerlink" title="hashCode（）与equals（）的相关规定"></a>hashCode（）与equals（）的相关规定</h2><ul>
+<li>如果两个对象相等，则hashcode一定也是相同的</li>
+<li>两个对象相等,对两个对象分别调用equals方法都返回true</li>
+<li>两个对象有相同的hashcode值，它们也不一定是相等的</li>
+<li>因此，equals 方法被覆盖过，则 hashCode 方法也必须被覆盖</li>
+</ul>
+<p>hashCode() 的默认行为是对堆上的对象产生独特值。如果没有重写 hashCode()，<br>则该 class 的两个对象无论如何都不会相等（即使这两个对象指向相同的数据）</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2017/04/04/== 与 equals/">== 与 equals</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-04-04T01:30:00.000Z" itemprop="datePublished">2017-04-04</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java/">Java</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="与-equals"><a href="#与-equals" class="headerlink" title="== 与 equals"></a>== 与 equals</h1><p>== : 它的作用是判断两个对象的地址是不是相等。即，判断两个对象是不是同一个对象(基本数据类型==比较的是值，引用数据类型==比较的是内存地址)。</p>
+<p>equals() : 它的作用也是判断两个对象是否相等。但它一般有两种使用情况：</p>
+<p>情况1：类没有覆盖 equals() 方法。则通过 equals() 比较该类的两个对象时，等价于通过“==”比较这两个对象。</p>
+<p>情况2：类覆盖了 equals() 方法。一般，我们都覆盖 equals() 方法来比较两个对象的内容是否相等；若它们的内容相等，则返回 true<br>(即，认为这两个对象相等)。</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> class test1 &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">        <span class="keyword">String</span> a = <span class="keyword">new</span> <span class="keyword">String</span>(<span class="string">"ab"</span>); <span class="comment">// a 为一个引用</span></span><br><span class="line">        <span class="keyword">String</span> b = <span class="keyword">new</span> <span class="keyword">String</span>(<span class="string">"ab"</span>); <span class="comment">// b为另一个引用,对象的内容一样</span></span><br><span class="line">        <span class="keyword">String</span> aa = <span class="string">"ab"</span>; <span class="comment">// 放在常量池中</span></span><br><span class="line">        <span class="keyword">String</span> bb = <span class="string">"ab"</span>; <span class="comment">// 从常量池中查找</span></span><br><span class="line">        <span class="built_in">if</span> (aa == bb) <span class="comment">// true</span></span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"aa==bb"</span>);</span><br><span class="line">        <span class="built_in">if</span> (a == b) <span class="comment">// false，非同一对象</span></span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"a==b"</span>);</span><br><span class="line">        <span class="built_in">if</span> (a.equals(b)) <span class="comment">// true</span></span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"aEQb"</span>);</span><br><span class="line">        <span class="built_in">if</span> (<span class="number">42</span> == <span class="number">42.0</span>) &#123; <span class="comment">// true</span></span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"true"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>Notice:</p>
+<p>String 中的 equals 方法是被重写过的，因为 object 的 equals 方法是比较的对象的内存地址，<br>而 String 的 equals 方法比较的是对象的值。</p>
+<p>当创建 String 类型的对象时，虚拟机会在常量池中查找有没有已经存在的值和要创建的值相同的对象，<br>如果有就把它赋给当前引用。如果没有就在常量池中重新创建一个 String 对象。</p>
+<h2 id="正确使用-equals-方法"><a href="#正确使用-equals-方法" class="headerlink" title="正确使用 equals 方法"></a>正确使用 equals 方法</h2><figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不能使用一个值为null的引用类型变量来调用非静态方法，否则会抛出异常</span></span><br><span class="line"><span class="built_in">String</span> str = <span class="built_in">null</span>;</span><br><span class="line"><span class="keyword">if</span> (str.<span class="keyword">equals</span>(<span class="string">"dick"</span>)) &#123;</span><br><span class="line">  <span class="params">...</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  ..</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行上面的程序会抛出空指针异常，但是我们把第二行的条件判断语句改为下面这样的话，就不会抛出空指针异常，else 语句块得到执行。：<br><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"dick"</span><span class="string">.equals</span><span class="params">(str)</span>;<span class="string">//</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure></p>
+<p>不过更推荐使用 java.util.Objects#equals(JDK7 引入的工具类)。<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Objects.<span class="keyword">equals</span>(<span class="literal">null</span>,<span class="string">"SnailClimb"</span>);<span class="comment">// false</span></span><br><span class="line"></span><br><span class="line">源码：</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> boolean <span class="title">equals</span>(<span class="params">Object a, Object b</span>)</span> &#123;</span><br><span class="line">	<span class="comment">// 可以避免空指针异常。如果a==null的话此时a.equals(b)就不会得到执行，避免出现空指针异常。</span></span><br><span class="line">	<span class="keyword">return</span> (a == b) || (a != <span class="literal">null</span> &amp;&amp; a.<span class="keyword">equals</span>(b));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2017/04/01/判断字符串是否为空字符串/">判断字符串是否为空字符串</a>
         </h1>
         
@@ -468,239 +644,10 @@ req.acceptsLanguages：返回指定字符集的第一个可接受字符编码
 </article>
 
 
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/02/08/Java单例模式/">单例模式</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-02-08T04:18:45.000Z" itemprop="datePublished">2017-02-08</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/设计模式/">设计模式</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h1><h2 id="什么是单例模式"><a href="#什么是单例模式" class="headerlink" title="什么是单例模式"></a>什么是单例模式</h2><p>因程序需要，有时我们只需要某个类同时保留一个对象，不希望有更多对象，此时，我们则应考虑单例模式的设计。</p>
-<h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><ol>
-<li><p>单例模式只能有一个实例。</p>
-</li>
-<li><p>单例类必须创建自己的唯一实例。</p>
-</li>
-<li><p>单例类必须向其他对象提供这一实例。</p>
-</li>
-</ol>
-<h2 id="单例模式VS静态类"><a href="#单例模式VS静态类" class="headerlink" title="单例模式VS静态类"></a>单例模式VS静态类</h2><p>在知道了什么是单例模式后，我想你一定会想到静态类，“既然只使用一个对象，为何不干脆使用静态类？”，这里我会将单例模式和静态类进行一个比较。</p>
-<ol>
-<li><p>单例可以继承和被继承，方法可以被override，而静态方法不可以。</p>
-</li>
-<li><p>静态方法中产生的对象会在执行后被释放，进而被GC清理，不会一直存在于内存中。</p>
-</li>
-<li><p>静态类会在第一次运行时初始化，单例模式可以有其他的选择，即可以延迟加载。</p>
-</li>
-<li><p>基于2， 3条，由于单例对象往往存在于DAO层（例如sessionFactory），如果反复的初始化和释放，则会占用很多资源，而使用单例模式将其常驻于内存可以更加节约资源。</p>
-</li>
-<li><p>静态方法有更高的访问效率。</p>
-</li>
-<li><p>单例模式很容易被测试。</p>
-</li>
-</ol>
-<p>几个关于静态类的误解：</p>
-<ul>
-<li>误解一：静态方法常驻内存而实例方法不是。</li>
-</ul>
-<blockquote>
-<p>实际上，特殊编写的实例方法可以常驻内存，而静态方法需要不断初始化和释放。</p>
-</blockquote>
-<ul>
-<li>误解二：静态方法在堆(heap)上，实例方法在栈(stack)上。</li>
-</ul>
-<blockquote>
-<p>实际上，都是加载到特殊的不可写的代码内存区域中。</p>
-</blockquote>
-<p>静态类和单例模式情景的选择：</p>
-<p>情景一：不需要维持任何状态，仅仅用于全局访问，此时更适合使用静态类。</p>
-<p>情景二：需要维持一些特定的状态，此时更适合使用单例模式。</p>
-<h2 id="单例模式的实现"><a href="#单例模式的实现" class="headerlink" title="单例模式的实现"></a>单例模式的实现</h2><h3 id="1-懒汉模式（线程不安全）"><a href="#1-懒汉模式（线程不安全）" class="headerlink" title="1. 懒汉模式（线程不安全）"></a>1. 懒汉模式（线程不安全）</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class SingletonDemo &#123;</span><br><span class="line">    private static SingletonDemo instance;</span><br><span class="line">    private SingletonDemo()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    public static SingletonDemo getInstance()&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="attribute">instance</span>==null)&#123;</span><br><span class="line">            <span class="attribute">instance</span>=new SingletonDemo();</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如上，通过提供一个静态的对象instance，利用private权限的构造方法和getInstance()方法来给予访问者一个单例。</p>
-<p>缺点是，没有考虑到线程安全，可能存在多个访问者同时访问，并同时构造了多个对象的问题。</p>
-<p>之所以叫做懒汉模式，主要是因为此种方法可以非常明显的lazy loading。</p>
-<p>针对懒汉模式线程不安全的问题，我们自然想到了，在getInstance()方法前加锁，于是就有了第二种实现。</p>
-<h3 id="2-懒汉模式二-（线程安全）"><a href="#2-懒汉模式二-（线程安全）" class="headerlink" title="2. 懒汉模式二 （线程安全）"></a>2. 懒汉模式二 （线程安全）</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class SingletonDemo &#123;</span><br><span class="line">    private static SingletonDemo instance;</span><br><span class="line">    private SingletonDemo()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    public static synchronized SingletonDemo getInstance()&#123;</span><br><span class="line">        <span class="keyword">if</span>(instance == <span class="literal">null</span>)&#123;</span><br><span class="line">           <span class="built_in"> instance </span>= new SingletonDemo();</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>然而并发其实是一种特殊情况，大多时候这个锁占用的额外资源都浪费了，这种打补丁方式写出来的结构效率很低。</p>
-<h3 id="3-饿汉模式"><a href="#3-饿汉模式" class="headerlink" title="3. 饿汉模式"></a>3. 饿汉模式</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class SingletonDemo &#123;</span><br><span class="line">    private static SingletonDemo<span class="built_in"> instance </span>= new SingletonDemo();</span><br><span class="line">    private SingletonDemo()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    public static SingletonDemo getInstance()&#123;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>直接在运行这个类的时候进行一次loading，之后直接访问。显然，这种方法没有起到lazy loading的效果，考虑到前面提到的和静态类的对比，这种方法只比静态类多了一个内存常驻而已。</p>
-<h3 id="4-静态类内部加载"><a href="#4-静态类内部加载" class="headerlink" title="4. 静态类内部加载"></a>4. 静态类内部加载</h3><figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public class SingletonDemo &#123;</span><br><span class="line">   <span class="keyword"> private</span><span class="keyword"> static</span> class SingletonHolder&#123;</span><br><span class="line">       <span class="keyword"> private</span><span class="keyword"> static</span> SingletonDemo<span class="built_in"> instance </span>=<span class="built_in"> new </span>SingletonDemo();</span><br><span class="line">    &#125;</span><br><span class="line">   <span class="keyword"> private</span> SingletonDemo()&#123;</span><br><span class="line">        System.out.println(<span class="string">"Singleton has loaded"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">   <span class="keyword"> public</span><span class="keyword"> static</span> SingletonDemo getInstance()&#123;</span><br><span class="line">       <span class="built_in"> return </span>SingletonHolder.instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>使用内部类的好处是，静态内部类不会在单例加载时就加载，而是在调用getInstance()方法时才进行加载，达到了类似懒汉模式的效果，而这种方法又是线程安全的。</p>
-<h3 id="5-枚举方法"><a href="#5-枚举方法" class="headerlink" title="5. 枚举方法"></a>5. 枚举方法</h3><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">SingletonDemo</span>&#123;</span></span><br><span class="line">    INSTANCE;</span><br><span class="line">    public void otherMethods()&#123;</span><br><span class="line">        System.<span class="keyword">out</span>.println(<span class="string">"Something"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">Hello</span> &#123;</span></span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">        SingletonDemo.INSTANCE.otherMethods();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>提倡的方式，在我看来简直是来自神的写法。解决了以下三个问题：</p>
-<ul>
-<li>(1)自由序列化。</li>
-<li>(2)保证只有一个实例。</li>
-<li>(3)线程安全。</li>
-</ul>
-<p>这种充满美感的代码真的已经终结了其他一切实现方法了。</p>
-<h3 id="6-双重校验锁法"><a href="#6-双重校验锁法" class="headerlink" title="6. 双重校验锁法"></a>6. 双重校验锁法</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class SingletonDemo &#123;</span><br><span class="line">    private static SingletonDemo instance;</span><br><span class="line">    private SingletonDemo()&#123;</span><br><span class="line">        System.out.println(<span class="string">"Singleton has loaded"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    public static SingletonDemo getInstance()&#123;</span><br><span class="line">        <span class="keyword">if</span>(instance == <span class="literal">null</span>)&#123;</span><br><span class="line">            synchronized (SingletonDemo.class)&#123;</span><br><span class="line">                <span class="keyword">if</span>(instance == <span class="literal">null</span>)&#123;</span><br><span class="line">                   <span class="built_in"> instance </span>= new SingletonDemo();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>接下来我解释一下在并发时，双重校验锁法会有怎样的情景：</p>
-<p>STEP 1. 线程A访问getInstance()方法，因为单例还没有实例化，所以进入了锁定块。</p>
-<p>STEP 2. 线程B访问getInstance()方法，因为单例还没有实例化，得以访问接下来代码块，而接下来代码块已经被线程1锁定。</p>
-<p>STEP 3. 线程A进入下一判断，因为单例还没有实例化，所以进行单例实例化，成功实例化后退出代码块，解除锁定。</p>
-<p>STEP 4. 线程B进入接下来代码块，锁定线程，进入下一判断，因为已经实例化，退出代码块，解除锁定。</p>
-<p>STEP 5. 线程A初始化并获取到了单例实例并返回，线程B获取了在线程A中初始化的单例。</p>
-<p>理论上双重校验锁法是线程安全的，并且，这种方法实现了lazyloading。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/01/24/Centos7安装nginx后仍然无法访问/">Nginx无法访问的问题</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-01-24T02:10:00.000Z" itemprop="datePublished">2017-01-24</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Nginx/">Nginx</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Centos7安装nginx后，无法访问的问题"><a href="#Centos7安装nginx后，无法访问的问题" class="headerlink" title="Centos7安装nginx后，无法访问的问题"></a>Centos7安装nginx后，无法访问的问题</h1><p><a href="https://www.runoob.com/linux/nginx-install-setup.html" target="_blank" rel="noopener">安装步骤</a></p>
-<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">curl localhost</span></span><br></pre></td></tr></table></figure>
-<p>发现是通的 （Welcome to nginx）</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd <span class="attribute">--zone</span>=public <span class="attribute">--add-port</span>=80/tcp --permanent</span><br></pre></td></tr></table></figure>
-<p>重启防火墙：<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="literal">stop</span> firewalld.service</span><br><span class="line">systemctl <span class="literal">start</span> firewalld.service</span><br></pre></td></tr></table></figure></p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/01/24/C# 编码规范/">编码规范</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-01-24T02:10:00.000Z" itemprop="datePublished">2017-01-24</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/NET/">NET</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="编码规范"><a href="#编码规范" class="headerlink" title="编码规范"></a>编码规范</h1><h2 id="C-编码风格指南"><a href="#C-编码风格指南" class="headerlink" title="C# 编码风格指南"></a>C# 编码风格指南</h2><p>一旦进入代码开发阶段，你必须安排好代码审查计划以确保每个人都遵守同样的规则。建议按以下3种方式进行代码审查：</p>
-<ol>
-<li><p>互相审查 - 由其他团队成员进行代码审查以确保遵守了代码规范且达到要求。这种方式可以配合单元测试。项目中每个代码文件必须要通过这个程序。</p>
-</li>
-<li><p>架构审查 - 架构人员需对项目核心模块进行审查以确保符合设计，没有出现大的甚至有可能影响整个项目运转的纰漏。</p>
-</li>
-<li><p>团队审查 - 每周随机选择一个或多个文件进行一次团队审查。审查会议开始前30分钟，将文件打印并分发到每个成员手里，会议开始后用投影仪将文件内容展示出来。代码的每一块都要进行审查，让所有成员提出改进建议。（别忘了要感谢提供素材的开发人员，并确保他不会觉得受到了“群嘲”！）</p>
-</li>
-</ol>
-<h2 id="代码文件组织"><a href="#代码文件组织" class="headerlink" title="代码文件组织"></a>代码文件组织</h2><h3 id="C-源代码文件"><a href="#C-源代码文件" class="headerlink" title="C# 源代码文件"></a>C# 源代码文件</h3><p>每个源代码文件应该只包含一个类定义，也即类定义只出现在它自己的文件中。源代码文件名需与类声明里的类名保持一致。<br>譬如一个名为User的类的源文件名应该是User.cs。</p>
-<h3 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h3><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//-------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment">// Copyright (c) dick. All Right Reserved. </span></span><br><span class="line"><span class="comment">// This source is subject to the Microsoft Permissive License. </span></span><br><span class="line"><span class="comment">// Please see the License.txt file for more information. </span></span><br><span class="line"><span class="comment">// All other rights reserved. </span></span><br><span class="line"><span class="comment">// </span></span><br><span class="line"><span class="comment">// THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY </span></span><br><span class="line"><span class="comment">// KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE </span></span><br><span class="line"><span class="comment">// IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A </span></span><br><span class="line"><span class="comment">// PARTICULAR PURPOSE. </span></span><br><span class="line"><span class="comment">//-------------------------------------------------------------------------------</span></span><br></pre></td></tr></table></figure>
-<h3 id="目录设计"><a href="#目录设计" class="headerlink" title="目录设计"></a>目录设计</h3><p>每层命名空间都要建立目录（以MyProject.UI.Admin为例，请使用MyProject/UI/Admin这样的目录结构，而不是只建立一层名为MyProject.UI.Admin的目录）。</p>
-<h3 id="代码排列"><a href="#代码排列" class="headerlink" title="代码排列"></a>代码排列</h3><p>C#源代码文件整体顺序应为：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Using 声明</span><br><span class="line">Namespace声明</span><br><span class="line">Class 和<span class="built_in"> interface </span>声明</span><br></pre></td></tr></table></figure></p>
-<p>C#类内部分的顺序应为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">成员变量</span><br><span class="line">属性</span><br><span class="line">构造函数</span><br><span class="line">方法</span><br><span class="line">`</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>以上每个部分都需要放到 #region里。</p>
-</blockquote>
-<h3 id="命名空间和USING声明"><a href="#命名空间和USING声明" class="headerlink" title="命名空间和USING声明"></a>命名空间和USING声明</h3><ol>
-<li>Using 和命名空间声明都要左边界齐平。</li>
-<li>命名空间的每个组件名首字母要大写</li>
-<li>如果组件名是个缩写，只让第一个字母大写，如 System.Data.Sql。</li>
-<li>如果这个缩写只有2个字母，那可以2个字母都大写，如 System.IO。</li>
-</ol>
-<p>注意: 移除不需要的或重复的命名空间，使用短的命名空间来代替。譬如：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Preferred</span></span><br><span class="line"><span class="keyword">using</span> System.Data.SqlClient;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ValidationCall</span><span class="params">()</span></span>&#123;  </span><br><span class="line">… </span><br><span class="line">SqlConnection conn = <span class="keyword">new</span> SqlConnection(connstr);</span><br><span class="line">…</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Avoid</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ValidationCall</span><span class="params">()</span></span>&#123;  </span><br><span class="line">… </span><br><span class="line">System.Data.SqlClient.SqlConnection conn = <span class="keyword">new</span> SqlConnection(connstr);</span><br><span class="line">…</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="创建和修订记录"><a href="#创建和修订记录" class="headerlink" title="创建和修订记录"></a>创建和修订记录</h3><p>文件创建和修订记录需要按以下格式填写到using代码段后面，namespace之前。<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/<span class="strong">*</span></span><br><span class="line"><span class="strong">*</span> 作者:                创建日期:</span><br><span class="line"><span class="bullet">* </span>修订者：             修订日期：               修订内容：</span><br><span class="line"><span class="bullet">* </span></span><br><span class="line"><span class="strong">*/</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="XML-文档"><a href="#XML-文档" class="headerlink" title="XML 文档"></a>XML 文档</h3><p>Visual Studio提供了一种文档类型，在开发环境中可以用来检测并导出到结构化的XML中，以用来创建与源代码分离的代码级别的文档。<br>XML 文档用于描述类、方法和属性。它应当在所有可用的情况下尽可能使用。</p>
-<h2 id="缩进"><a href="#缩进" class="headerlink" title="缩进"></a>缩进</h2><h3 id="空行"><a href="#空行" class="headerlink" title="空行"></a>空行</h3><p>适当的空行能增强代码可读性。它们能帮助区分逻辑不相干的代码片段。<br>双行空行要放在：<br>源代码中逻辑不相关的代码片段之间<br>不同的类和接口定义（如果有时候不得不放在同个文件，尽量避免这种情况）<br>单行空行要放在：</p>
-<ul>
-<li>方法与方法之间</li>
-<li>属性与属性之间</li>
-<li>方法体内的局部变量和它的第一次使用之间</li>
-<li>方法体内不同逻辑片段之间以增强可读性</li>
-</ul>
-<h3 id="换行"><a href="#换行" class="headerlink" title="换行"></a>换行</h3><p>如果一个表达式在一行内放不下，则根据以下常用原则来进行换行：</p>
-<ol>
-<li>操作符号之后换行</li>
-<li>逗号之后换行</li>
-<li>择较高等的换行，其次才是较低等的换行 （譬如优先对括号外的部分换行）<br>换行后需要缩进<br>：<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 调用方法</span></span><br><span class="line">SomeMethod1(expression1, expression2, expression3, expression4, expression5);</span><br><span class="line"><span class="comment">// 声明方法</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">SomeMethod1</span><span class="params">(<span class="keyword">long</span> Expression1, <span class="keyword">long</span> Expression2, <span class="keyword">long</span> Expression3,                 <span class="keyword">long</span> Expression4, <span class="keyword">long</span> Expression5)</span></span></span><br><span class="line"><span class="function"></span>&#123;     </span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>注意: 换行后第二行的缩进与第一个参数齐平<br>以下是一个数学表达式换行的例子。第一种换行方式是较好的，因为是在括号以外的地方进行的换行，也即是在较高等进行的分行。</p>
-<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Preferred</span></span><br><span class="line">var<span class="number">1</span> = var<span class="number">2</span> * <span class="comment">(var3 + var4 – var5)</span> + </span><br><span class="line">       var<span class="number">4</span> * var<span class="number">6</span>;</span><br><span class="line"><span class="comment">// Avoid</span></span><br><span class="line">var<span class="number">1</span> = var<span class="number">2</span> * <span class="comment">(var3 + var4 - var5)</span> + var<span class="number">4</span> * var<span class="number">6</span>;</span><br></pre></td></tr></table></figure>
-<p>对if表达式的分行需要使用缩进：<br><figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="comment">((condition1 &amp;&amp; condition2)</span> || <span class="comment">(condition3 &amp;&amp; condition4)</span> &amp;&amp; co<span class="symbol">ndition5</span> || !co<span class="symbol">ndition6</span>)</span><br><span class="line">&#123;	</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>三元表达式请用这两种格式：<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Alpha</span> = aLongBooleanExpression ? beta : gamma;</span><br><span class="line"><span class="attribute">Alpha</span> = aLongBooleanExpression ?</span><br><span class="line">        beta : </span><br><span class="line">        gamma;</span><br></pre></td></tr></table></figure></p>
-<h2 id="代码间距"><a href="#代码间距" class="headerlink" title="代码间距"></a>代码间距</h2><h3 id="空格间距"><a href="#空格间距" class="headerlink" title="空格间距"></a>空格间距</h3><p>在代码中间的逗号或分号后应该有单独的一个空格，此外一个关键字与后跟的括号之间也要有个空格，譬如：<br><figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Correct</span></span><br><span class="line">TestMethod<span class="comment">(a, b, c)</span>;</span><br><span class="line"><span class="keyword">while</span> <span class="comment">(condition)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//... </span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Avoid</span></span><br><span class="line">TestMethod<span class="comment">(a, b, c)</span>;</span><br><span class="line">TestMethod<span class="comment">(a, b, c)</span>;</span><br></pre></td></tr></table></figure></p>
-<p>注意: 在方法名和它的前括号之间不需要有空格。这样便于区分是关键字还是方法名。<br>操作符两边要加上空格（++或逻辑非这样的一元运算符除外），譬如：<br><figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">a = b; <span class="regexp">//</span> Avoid a=b;</span><br><span class="line"></span><br><span class="line">// Avoid <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">10</span>; ++i) <span class="keyword">or</span> <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;++i)</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; ++i)</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="TAB间距"><a href="#TAB间距" class="headerlink" title="TAB间距"></a>TAB间距</h3><p>该使用几个空格作为代码缩进距离从来没有达成一致过。有人喜欢2个空格，有人喜欢4个而有人喜欢8个甚至更多。所以最好使用Tab缩进。它的好处有：<br>可以自定义缩进距离<br>它只需一个字符，所以只要按一次键而不是2,4,8…</p>
-<p>如果你要增加缩进（或减少）一片代码，可以选中它们然后按Tab来增加或者Shift+Tab来减少缩进。几乎所有文本编辑器都支持这个操作。<br>在这里Tab指的就是标准的缩进字符。<br>注意： 不要使用空格来缩进代码-用Tab！在VS中把Tab配置成4个空格的距离。</p>
-<h2 id="一般注释"><a href="#一般注释" class="headerlink" title="一般注释"></a>一般注释</h2><h3 id="通用注释前缀"><a href="#通用注释前缀" class="headerlink" title="通用注释前缀"></a>通用注释前缀</h3><p>TODO : 表示以后别忘了在这里还需要进一步处理<br>BUG: [bugid]：表示这里有个已知bug，解释一下bug情况，如果可以则给出bug id。<br>KLUDGE: 表示这里的代码有点糟糕，解释一下有时间的话将如何改进。<br>TRICKY: 表示以下代码比较奇技淫巧，如果没有仔细思考请不要改动。<br>WARNING: 表示当心某事<br>COMPILER: 表示临时注释掉某些影响编译通过的代码。这些问题最终会被解决的。<br>ATTRIBUTE: value：嵌在注释中的属性的一般形式。你可以自定义属性，它们最终会被VS提取。</p>
-<h3 id="单行注释"><a href="#单行注释" class="headerlink" title="单行注释"></a>单行注释</h3><figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//Console.WriteLine(<span class="string">"哈哈"</span>)<span class="comment">;</span></span><br><span class="line">//Console.ReadKey()<span class="comment">;</span></span><br></pre></td></tr></table></figure>
-<h3 id="多行注释"><a href="#多行注释" class="headerlink" title="多行注释"></a>多行注释</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line"><span class="bullet"> * </span>注释内容</span><br><span class="line"><span class="bullet"> * </span>注释内容</span><br><span class="line"> */</span><br></pre></td></tr></table></figure>
-<h3 id="文档注释"><a href="#文档注释" class="headerlink" title="文档注释"></a>文档注释</h3><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> 文档注释</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> 文档注释</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br></pre></td></tr></table></figure>
-<h1 id="变量声明及命名规范"><a href="#变量声明及命名规范" class="headerlink" title="变量声明及命名规范"></a>变量声明及命名规范</h1><h3 id="变量："><a href="#变量：" class="headerlink" title="变量："></a>变量：</h3><p>Camel：变量名首单词的首字母小写，其余每个单词首字母单词大写,多用于给变量或字段或方法参数命名。　　<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">var str</span> = <span class="string">"123"</span>;</span><br><span class="line"><span class="attribute">var highSchoolStudent</span> = <span class="string">"123"</span>;</span><br><span class="line"><span class="attribute">int num</span> = 5;</span><br></pre></td></tr></table></figure></p>
-<h3 id="常量："><a href="#常量：" class="headerlink" title="常量："></a>常量：</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">string</span> BaseIpAddress = <span class="string">""</span>;</span><br></pre></td></tr></table></figure>
-<h3 id="方法名："><a href="#方法名：" class="headerlink" title="方法名："></a>方法名：</h3><p>Pascal：每个单词的首字母都要大些其余小写，多用于类或方法。尽量用一般名词或动名词。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">GetHighSchoolStudent</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-        
-    </section>
-</article>
-
-
 
 
 <nav class="page-nav">
-    <a class="extend prev" rel="prev" href="/page/12/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span>
+    <a class="extend prev" rel="prev" href="/page/12/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/14/">下一页 &raquo;</a>
 </nav>
 
 

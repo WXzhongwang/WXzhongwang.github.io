@@ -131,6 +131,351 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/02/07/Git 查看提交历史/">Git查看历史提交</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-07T02:10:00.000Z" itemprop="datePublished">2018-02-07</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Git/">Git</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>在提交了若干更新，又或者克隆了某个项目之后，你也许想回顾下提交历史。 完成这个任务最简单而又有效的工具是 git log 命令。<br>默认不用任何参数的话，git log 会按提交时间列出所有的更新，最近的更新排在最上面。 正如你所看到的，这个命令会列出每个提交的 SHA-1 校验和、作者的名字和电子邮件地址、提交时间以及提交说明。</p>
+<h1 id="Git-查看提交历史"><a href="#Git-查看提交历史" class="headerlink" title="Git 查看提交历史"></a>Git 查看提交历史</h1><p>在提交了若干更新，又或者克隆了某个项目之后，你也许想回顾下提交历史。 完成这个任务最简单而又有效的工具是 git log 命令。<br>默认不用任何参数的话，git log 会按提交时间列出所有的更新，最近的更新排在最上面。 正如你所看到的，这个命令会列出每个提交的 SHA-1 校验和、作者的名字和电子邮件地址、提交时间以及提交说明。</p>
+<p>git log 有许多选项可以帮助你搜寻你所要找的提交， 接下来我们介绍些最常用的。</p>
+<h2 id="定制输出格式"><a href="#定制输出格式" class="headerlink" title="定制输出格式"></a>定制输出格式</h2><h3 id="p"><a href="#p" class="headerlink" title="-p"></a>-p</h3><p>一个常用的选项是 -p，用来显示每次提交的内容差异。 你也可以加上 -2 来仅显示最近两次提交：</p>
+<blockquote>
+<p>该选项除了显示基本信息之外，还附带了每次commit的变化。当进行代码审查，或者快速浏览某个搭档提交的commit所带来的变化的时候，这个参数就非常有用了。<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">$ git log -p -<span class="number">2</span></span><br><span class="line">commit ca82a6dff817ec66f44342007202690a93763949</span><br><span class="line"><span class="symbol">Author:</span> Scott Chacon &lt;schacon@gee-mail.com&gt;</span><br><span class="line"><span class="symbol">Date:</span>   Mon Mar <span class="number">17</span> <span class="number">21</span>:<span class="number">52</span>:<span class="number">11</span> <span class="number">2008</span> -<span class="number">0</span>700</span><br><span class="line"></span><br><span class="line">    changed the version number</span><br><span class="line"></span><br><span class="line">diff --git a/Rakefile b/Rakefile</span><br><span class="line">index a874b73..<span class="number">8</span>f94139 <span class="number">100644</span></span><br><span class="line">--- a/Rakefile</span><br><span class="line">+++ b/Rakefile</span><br><span class="line">@@ -<span class="number">5</span>,<span class="number">7</span> +<span class="number">5</span>,<span class="number">7</span> @@ <span class="keyword">require</span> <span class="string">'rake/gempackagetask'</span></span><br><span class="line"> spec = <span class="symbol">Gem:</span>:Specification.new <span class="keyword">do</span> |s|</span><br><span class="line">     s.platform  =   <span class="symbol">Gem:</span>:<span class="symbol">Platform:</span>:RUBY</span><br><span class="line">     s.name      =   <span class="string">"simplegit"</span></span><br><span class="line">-    s.version   =   <span class="string">"0.1.0"</span></span><br><span class="line">+    s.version   =   <span class="string">"0.1.1"</span></span><br><span class="line">     s.author    =   <span class="string">"Scott Chacon"</span></span><br><span class="line">     s.email     =   <span class="string">"schacon@gee-mail.com"</span></span><br><span class="line">     s.summary   =   <span class="string">"A simple gem for using Git in Ruby code."</span></span><br><span class="line"></span><br><span class="line">commit <span class="number">0</span>85bb3bcb608e1e8451d4b2432f8ecbe6306e7e7</span><br><span class="line"><span class="symbol">Author:</span> Scott Chacon &lt;schacon@gee-mail.com&gt;</span><br><span class="line"><span class="symbol">Date:</span>   Sat Mar <span class="number">15</span> <span class="number">16</span>:<span class="number">40</span>:<span class="number">33</span> <span class="number">2008</span> -<span class="number">0</span>700</span><br><span class="line"></span><br><span class="line">    removed unnecessary test</span><br><span class="line"></span><br><span class="line">diff --git a/<span class="class"><span class="keyword">lib</span>/<span class="title">simplegit</span>.<span class="title">rb</span> <span class="title">b</span>/<span class="title">lib</span>/<span class="title">simplegit</span>.<span class="title">rb</span></span></span><br><span class="line">index a0a60ae..<span class="number">47</span>c6340 <span class="number">100644</span></span><br><span class="line">--- a/<span class="class"><span class="keyword">lib</span>/<span class="title">simplegit</span>.<span class="title">rb</span></span></span><br><span class="line">+++ b/<span class="class"><span class="keyword">lib</span>/<span class="title">simplegit</span>.<span class="title">rb</span></span></span><br><span class="line">@@ -<span class="number">18</span>,<span class="number">8</span> +<span class="number">18</span>,<span class="number">3</span> @@ <span class="class"><span class="keyword">class</span> <span class="title">SimpleGit</span></span></span><br><span class="line">     <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"> <span class="keyword">end</span></span><br><span class="line">-</span><br><span class="line">-<span class="keyword">if</span> $<span class="number">0</span> == <span class="keyword">__FILE__</span></span><br><span class="line">-  git = SimpleGit.new</span><br><span class="line">-  puts git.show</span><br><span class="line">-<span class="keyword">end</span></span><br><span class="line">\ No newline at <span class="keyword">end</span> <span class="keyword">of</span> file</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h3 id="–stat"><a href="#–stat" class="headerlink" title="–stat"></a>–stat</h3><p>你也可以为 git log 附带一系列的总结性选项。比如说，如果你想看到每次提交的简略的统计信息，你可以使用 –stat 选项：<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">$ git log --stat</span><br><span class="line">commit ca82a6dff817ec66f44342007202690a93763949</span><br><span class="line"><span class="symbol">Author:</span> Scott Chacon &lt;schacon@gee-mail.com&gt;</span><br><span class="line"><span class="symbol">Date:</span>   Mon Mar <span class="number">17</span> <span class="number">21</span>:<span class="number">52</span>:<span class="number">11</span> <span class="number">2008</span> -<span class="number">0</span>700</span><br><span class="line"></span><br><span class="line">    changed the version number</span><br><span class="line"></span><br><span class="line"> Rakefile | <span class="number">2</span> +-</span><br><span class="line"> <span class="number">1</span> file changed, <span class="number">1</span> insertion(+), <span class="number">1</span> deletion(-)</span><br><span class="line"></span><br><span class="line">commit <span class="number">0</span>85bb3bcb608e1e8451d4b2432f8ecbe6306e7e7</span><br><span class="line"><span class="symbol">Author:</span> Scott Chacon &lt;schacon@gee-mail.com&gt;</span><br><span class="line"><span class="symbol">Date:</span>   Sat Mar <span class="number">15</span> <span class="number">16</span>:<span class="number">40</span>:<span class="number">33</span> <span class="number">2008</span> -<span class="number">0</span>700</span><br><span class="line"></span><br><span class="line">    removed unnecessary test</span><br><span class="line"></span><br><span class="line"> <span class="class"><span class="keyword">lib</span>/<span class="title">simplegit</span>.<span class="title">rb</span> | 5 -----</span></span><br><span class="line"> <span class="number">1</span> file changed, <span class="number">5</span> deletions(-)</span><br><span class="line"></span><br><span class="line">commit a11bef06a3f659402fe7563abf99ad00de2209e6</span><br><span class="line"><span class="symbol">Author:</span> Scott Chacon &lt;schacon@gee-mail.com&gt;</span><br><span class="line"><span class="symbol">Date:</span>   Sat Mar <span class="number">15</span> <span class="number">10</span>:<span class="number">31</span>:<span class="number">28</span> <span class="number">2008</span> -<span class="number">0</span>700</span><br><span class="line"></span><br><span class="line">    first commit</span><br><span class="line"></span><br><span class="line"> README           |  <span class="number">6</span> ++++++</span><br><span class="line"> Rakefile         | <span class="number">23</span> +++++++++++++++++++++++</span><br><span class="line"> <span class="class"><span class="keyword">lib</span>/<span class="title">simplegit</span>.<span class="title">rb</span> | 25 +++++++++++++++++++++++++</span></span><br><span class="line"> <span class="number">3</span> files changed, <span class="number">54</span> insertions(+)</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>正如你所看到的，–stat 选项在每次提交的下面列出所有被修改过的文件、有多少文件被修改了以及被修改过的文件的哪些行被移除或是添加了。 在每次提交的最后还有一个总结。</p>
+</blockquote>
+<h3 id="–pretty"><a href="#–pretty" class="headerlink" title="–pretty"></a>–pretty</h3><blockquote>
+<p>这个选项可以指定使用不同于默认格式的方式展示提交历史。 这个选项有一些内建的子选项供你使用。 比如用 oneline 将每个提交放在一行显示，查看的提交数很大时非常有用。 另外还有 short，full 和 fuller 可以用，展示的信息或多或少有些不同。<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> <span class="comment">--pretty=oneline</span></span><br><span class="line">ca82a6dff817ec66f44342007202690a93763949 changed <span class="keyword">the</span> <span class="built_in">version</span> <span class="built_in">number</span></span><br><span class="line"><span class="number">085</span>bb3bcb608e1e8451d4b2432f8ecbe6306e7e7 removed unnecessary test</span><br><span class="line">a11bef06a3f659402fe7563abf99ad00de2209e6 <span class="keyword">first</span> commit</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>但最有意思的是 format，可以定制要显示的记录格式。 这样的输出对后期提取分析格外有用。因为你知道输出的格式不会随着 Git 的更新而发生改变：<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> <span class="comment">--pretty=format:"%h - %an, %ar : %s"</span></span><br><span class="line">ca82a6d - Scott Chacon, <span class="number">6</span> years ago : changed <span class="keyword">the</span> <span class="built_in">version</span> <span class="built_in">number</span></span><br><span class="line"><span class="number">085</span>bb3b - Scott Chacon, <span class="number">6</span> years ago : removed unnecessary test</span><br><span class="line">a11bef0 - Scott Chacon, <span class="number">6</span> years ago : <span class="keyword">first</span> commit</span><br></pre></td></tr></table></figure></p>
+<p>git log –pretty=format 常用的选项 列出了常用的格式占位符写法及其代表的意义。</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>%H</td>
+<td>提交对象（commit）的完整哈希字串</td>
+</tr>
+<tr>
+<td>%h</td>
+<td>提交对象的简短哈希字串</td>
+</tr>
+<tr>
+<td>%T</td>
+<td>树对象（tree）的完整哈希字串</td>
+</tr>
+<tr>
+<td>%t</td>
+<td>树对象的简短哈希字串</td>
+</tr>
+<tr>
+<td>%P</td>
+<td>父对象（parent）的完整哈希字串</td>
+</tr>
+<tr>
+<td>%p</td>
+<td>父对象的简短哈希字串</td>
+</tr>
+<tr>
+<td>%an</td>
+<td>作者（author）的名字</td>
+</tr>
+<tr>
+<td>%ae</td>
+<td>作者的电子邮件地址</td>
+</tr>
+<tr>
+<td>%ad</td>
+<td>作者修订日期（可以用 –date= 选项定制格式）</td>
+</tr>
+<tr>
+<td>%ar</td>
+<td>作者修订日期，按多久以前的方式显示</td>
+</tr>
+<tr>
+<td>%cn</td>
+<td>提交者（committer）的名字</td>
+</tr>
+<tr>
+<td>%ce</td>
+<td>提交者的电子邮件地址</td>
+</tr>
+<tr>
+<td>%cd</td>
+<td>提交日期</td>
+</tr>
+<tr>
+<td>%cr</td>
+<td>提交日期，按多久以前的方式显示</td>
+</tr>
+<tr>
+<td>%s</td>
+<td>提交说明</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>你一定奇怪 作者 和 提交者之间究竟有何差别，其实作者指的是实际作出修改的人，提交者指的是最后将此工作成果提交到仓库的人。所以，当你为某个项目发布补丁，然后某个核心成员将你的补丁并入项目时，你就是作者，而那个核心成员就是提交者。</p>
+</blockquote>
+<h3 id="–graph"><a href="#–graph" class="headerlink" title="–graph"></a>–graph</h3><p>当 oneline 或 format 与另一个 log 选项 –graph 结合使用时尤其有用。 这个选项添加了一些ASCII字符串来形象地展示你的分支、合并历史：<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> <span class="comment">--pretty=format:"%h %s" --graph</span></span><br><span class="line">* <span class="number">2</span>d3acf9 ignore errors <span class="built_in">from</span> SIGCHLD <span class="keyword">on</span> <span class="title">trap</span></span><br><span class="line">*  <span class="number">5e3</span>ee11 Merge branch <span class="string">'master'</span> <span class="keyword">of</span> git://github.com/dustin/grit</span><br><span class="line">|\</span><br><span class="line">| * <span class="number">420</span>eac9 Added <span class="keyword">a</span> method <span class="keyword">for</span> getting <span class="keyword">the</span> current branch.</span><br><span class="line">* | <span class="number">30e367</span>c timeout code <span class="keyword">and</span> tests</span><br><span class="line">* | <span class="number">5</span>a09431 <span class="built_in">add</span> timeout protection <span class="built_in">to</span> grit</span><br><span class="line">* | e1193f8 support <span class="keyword">for</span> heads <span class="keyword">with</span> slashes <span class="keyword">in</span> them</span><br><span class="line">|/</span><br><span class="line">* d6016bc <span class="built_in">require</span> <span class="built_in">time</span> <span class="keyword">for</span> xmlschema</span><br><span class="line">*  <span class="number">11</span>d191e Merge branch <span class="string">'defunkt'</span> <span class="keyword">into</span> <span class="built_in">local</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="常用汇总"><a href="#常用汇总" class="headerlink" title="常用汇总"></a>常用汇总</h3><table>
+<thead>
+<tr>
+<th>选项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-p</td>
+<td>按补丁格式显示每个更新之间的差异。</td>
+</tr>
+<tr>
+<td>–stat</td>
+<td>显示每次更新的文件修改统计信息。</td>
+</tr>
+<tr>
+<td>–shortstat</td>
+<td>只显示 –stat 中最后的行数修改添加移除统计。</td>
+</tr>
+<tr>
+<td>–name-only</td>
+<td>仅在提交信息后显示已修改的文件清单。</td>
+</tr>
+<tr>
+<td>–name-status</td>
+<td>显示新增、修改、删除的文件清单。</td>
+</tr>
+<tr>
+<td>–abbrev-commit</td>
+<td>仅显示 SHA-1 的前几个字符，而非所有的 40 个字符。</td>
+</tr>
+<tr>
+<td>–relative-date</td>
+<td>使用较短的相对时间显示（比如，“2 weeks ago”）。</td>
+</tr>
+<tr>
+<td>–graph</td>
+<td>显示 ASCII 图形表示的分支合并历史。</td>
+</tr>
+<tr>
+<td>–pretty</td>
+<td>使用其他格式显示历史提交信息。可用的选项包括 oneline，short，full，fuller 和 format（后跟指定格式）。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="限制输出长度"><a href="#限制输出长度" class="headerlink" title="限制输出长度"></a>限制输出长度</h2><p>it log 还有许多非常实用的限制输出长度的选项，也就是只输出部分提交信息。 之前你已经看到过 -2 了，它只显示最近的两条提交， 实际上，这是 -<n> 选项的写法，其中的 n 可以是任何整数，表示仅显示最近的若干条提交。 不过实践中我们是不太用这个选项的，Git 在输出所有提交时会自动调用分页程序，所以你一次只会看到一页的内容。</n></p>
+<h3 id="常用汇总-1"><a href="#常用汇总-1" class="headerlink" title="常用汇总"></a>常用汇总</h3><table>
+<thead>
+<tr>
+<th>选项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-(n)</td>
+<td>仅显示最近的 n 条提交。</td>
+</tr>
+<tr>
+<td>–since, –after</td>
+<td>仅显示指定时间之后的提交。</td>
+</tr>
+<tr>
+<td>–until, –before</td>
+<td>仅显示指定时间之前的提交。</td>
+</tr>
+<tr>
+<td>–author</td>
+<td>仅显示指定作者相关的提交。</td>
+</tr>
+<tr>
+<td>–committer</td>
+<td>仅显示指定提交者相关的提交。</td>
+</tr>
+<tr>
+<td>–grep</td>
+<td>仅显示含指定关键字的提交。</td>
+</tr>
+<tr>
+<td>-S</td>
+<td>仅显示添加或移除了某个关键字的提交。</td>
+</tr>
+</tbody>
+</table>
+<p>另外还有按照时间作限制的选项，比如 –since 和 –until 也很有用。 例如，下面的命令列出所有最近两周内的提交：<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> <span class="comment">--since=2.weeks</span></span><br></pre></td></tr></table></figure></p>
+<p>这个命令可以在多种格式下工作，比如说具体的某一天 “2008-01-15”，或者是相对地多久以前 “2 years 1 day 3 minutes ago”。</p>
+<p>来看一个实际的例子，如果要查看 Git 仓库中，2008 年 10 月期间，Junio Hamano 提交的但未合并的测试文件，可以用下面的查询命令：<br><figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="keyword">log</span> --pretty=<span class="string">"%h - %s"</span> --author=gitster --since=<span class="string">"2008-10-01"</span> \</span><br><span class="line">   --before=<span class="string">"2008-11-01"</span> --<span class="keyword">no</span>-merges -- t/</span><br><span class="line"><span class="number">5610</span>e3b - Fix testcase failure <span class="keyword">when</span> extended attributes are in <span class="keyword">use</span></span><br><span class="line">acd3b9e - Enhance hold_lock_file_for<span class="number">_</span>&#123;update,append&#125;() API</span><br><span class="line">f563754 - demonstrate breakage of detached checkout with symbolic <span class="keyword">link</span> HEAD</span><br><span class="line">d1a43f2 - <span class="keyword">reset</span> --hard/<span class="keyword">read</span>-tree --<span class="keyword">reset</span> -u: remove unmerged new paths</span><br><span class="line"><span class="number">51</span>a94af - Fix <span class="string">"checkout --track -b newbranch"</span> on detached HEAD</span><br><span class="line">b0ad11e - pull: allow <span class="string">"git pull origin $something:$current_branch"</span> into an unborn branch</span><br></pre></td></tr></table></figure></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/02/03/Git Diff/">Git Diff</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-03T02:10:00.000Z" itemprop="datePublished">2018-02-03</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Git/">Git</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>#Git Diff</p>
+<p>如果 git status 命令的输出对于你来说过于模糊，你想知道具体修改了什么地方，可以用 git diff 命令。 尽管 git status 已经通过在相应栏下列出文件名的方式回答了这个问题，git diff 将通过文件补丁的格式显示具体哪些行发生了改变。</p>
+<p>作用<br>此命令比较的是工作目录中当前文件和暂存区域快照之间的差异，也就是修改之后还没有暂存起来的变。化内容。</p>
+<p>若要查看已暂存的将要添加到下次提交里的内容，可以用 git diff –cached 命令。（Git 1.6.1 及更高版本还允许使用 git diff –staged，效果是相同的，但更好记些。）</p>
+<p>请注意，git diff 本身只显示尚未暂存的改动，而不是自上次提交以来所做的所有改动。 所以有时候你一下子暂存了所有更新过的文件后，运行 git diff 后却什么也没有，就是这个原因。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/02/02/字节码/">Java 字节码</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-02T14:10:00.000Z" itemprop="datePublished">2018-02-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>在 Java 中，JVM可以理解的代码就叫做字节码（即扩展名为 .class 的文件），它不面向任何特定的处理器，只面向虚拟机。<br>Java 语言通过字节码的方式，在一定程度上解决了传统解释型语言执行效率低的问题，同时又保留了解释型语言可移植的特点。所以 Java 程序运行时比较高效，而且，由于字节码并不针对一种特定的机器，因此，Java程序无须重新编译便可在多种不同操作系统的计算机上运行。</p>
+<p>Java程序从源代码到运行一般一下三步：</p>
+<p>(1).java文件</p>
+<p>JDK中javac编译</p>
+<p>(2).class文件（JVM能理解的Java字节）</p>
+<p> JVM</p>
+<p>(3)机器可以执行的二进制文件</p>
+<p>需要格外注意的是 .class-&gt;机器码 这一步：<br>在这一步 JVM 类加载器首先加载字节码文件，然后通过解释器逐行解释执行，这种方式的执行速度会相对比较慢。<br>而且，有些方法和代码块是经常需要被调用的(也就是所谓的热点代码)，所以后面引进了 JIT 编译器，而JIT 属于运行时编译。<br>当 JIT 编译器完成第一次编译后，其会将字节码对应的机器码保存下来，下次可以直接使用。<br>而我们知道，机器码的运行效率肯定是高于 Java 解释器的。<br>这也解释了我们为什么经常会说 Java 是编译与解释共存的语言。</p>
+<p>总结：</p>
+<p>Java虚拟机（JVM）是运行 Java 字节码的虚拟机。JVM有针对不同系统的特定实现（Windows，Linux，macOS），目的是使用相同的字节码<br>，它们都会给出相同的结果。字节码和不同系统的 JVM 实现是 Java 语言“一次编译，随处可以运行”的关键所在。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/02/02/Git gitignore/">Git .gitignore</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-02T02:10:00.000Z" itemprop="datePublished">2018-02-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Git/">Git</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="gitignore-忽略文件"><a href="#gitignore-忽略文件" class="headerlink" title=".gitignore 忽略文件"></a>.gitignore 忽略文件</h1><p>一般我们总会有些文件无需纳入 Git 的管理，也不希望它们总出现在未跟踪文件列表。 通常都是些自动生成的文件，比如日志文件，或者编译过程中创建的临时文件等。 在这种情况下，我们可以创建一个名为 .gitignore 的文件，列出要忽略的文件模式。 来看一个实际的例子：</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">$</span> cat .gitignore</span><br><span class="line"><span class="comment">*.[oa]</span></span><br><span class="line"><span class="comment">*~</span></span><br></pre></td></tr></table></figure>
+<p>第一行告诉 Git 忽略所有以 .o 或 .a 结尾的文件。一般这类对象文件和存档文件都是编译过程中出现的。 第二行告诉 Git 忽略所有以波浪符（~）结尾的文件，许多文本编辑软件（比如 Emacs）都用这样的文件名保存副本。 此外，你可能还需要忽略 log，tmp 或者 pid 目录，以及自动生成的文档等等。 </p>
+<blockquote>
+<p>要养成一开始就设置好 .gitignore 文件的习惯，以免将来误提交这类无用的文件。</p>
+</blockquote>
+<p>文件 .gitignore 的格式规范如下：</p>
+<ul>
+<li>所有空行或者以 ＃ 开头的行都会被 Git 忽略。</li>
+<li>可以使用标准的 glob 模式匹配。</li>
+<li>匹配模式可以以（/）开头防止递归。</li>
+<li>匹配模式可以以（/）结尾指定目录。</li>
+<li>要忽略指定模式以外的文件或目录，可以在模式前加上惊叹号（!）取反。</li>
+</ul>
+<p>所谓的 glob 模式是指 shell 所使用的简化了的正则表达式。 星号（<em>）匹配零个或多个任意字符；[abc] 匹配任何一个列在方括号中的字符（这个例子要么匹配一个 a，要么匹配一个 b，要么匹配一个 c）；问号（?）只匹配一个任意字符；如果在方括号中使用短划线分隔两个字符，表示所有在这两个字符范围内的都可以匹配（比如 [0-9] 表示匹配所有 0 到 9 的数字）。 使用两个星号（</em>) 表示匹配任意中间目录，比如<code>a/**/z</code> 可以匹配 a/z, a/b/z 或 <code>a/b/c/z</code>等。</p>
+<p>我们再看一个 .gitignore 文件的例子：<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># no .a files</span></span><br><span class="line">*.a</span><br><span class="line"></span><br><span class="line"><span class="comment"># but do track lib.a, even though you're ignoring .a files above</span></span><br><span class="line">!<span class="class"><span class="keyword">lib</span>.<span class="title">a</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment"># only ignore the TODO file in the current directory, not subdir/TODO</span></span><br><span class="line">/TODO</span><br><span class="line"></span><br><span class="line"><span class="comment"># ignore all files in the build/ directory</span></span><br><span class="line">build/</span><br><span class="line"></span><br><span class="line"><span class="comment"># ignore doc/notes.txt, but not doc/server/arch.txt</span></span><br><span class="line">doc/*.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># ignore all .pdf files in the doc/ directory</span></span><br><span class="line">doc/**<span class="regexp">/*.pdf</span></span><br></pre></td></tr></table></figure></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/02/01/堆和栈/">堆和栈</a>
         </h1>
         
@@ -388,180 +733,10 @@
 </article>
 
 
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/01/11/Git起步/">Git起步</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-01-11T02:10:00.000Z" itemprop="datePublished">2018-01-11</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Git/">Git</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Git起步"><a href="#Git起步" class="headerlink" title="Git起步"></a>Git起步</h1><blockquote>
-<p>安装好第一步一定是配置用户名和邮箱.</p>
-</blockquote>
-<h2 id="配置用户名邮箱"><a href="#配置用户名邮箱" class="headerlink" title="配置用户名邮箱"></a>配置用户名邮箱</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git<span class="built_in"> config </span>--global user.name <span class="string">"dick"</span></span><br><span class="line">$ git<span class="built_in"> config </span>--global user.email 1528683621@qq.com</span><br></pre></td></tr></table></figure>
-<p>再次强调，如果使用了 –global 选项，那么该命令只需要运行一次，因为之后无论你在该系统上做任何事情， Git 都会使用那些信息。 当你想针对特定项目使用不同的用户名称与邮件地址时，可以在那个项目目录下运行没有 –global 选项的命令来配置。</p>
-<h2 id="检查配置"><a href="#检查配置" class="headerlink" title="检查配置"></a>检查配置</h2><p>如果想要检查你的配置，可以使用 git config –list 命令来列出所有 Git 当时能找到的配置。</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">$ git<span class="built_in"> config </span>--list</span><br><span class="line">core.<span class="attribute">symlinks</span>=<span class="literal">false</span></span><br><span class="line">core.<span class="attribute">autocrlf</span>=<span class="literal">true</span></span><br><span class="line">core.<span class="attribute">fscache</span>=<span class="literal">true</span></span><br><span class="line">color.<span class="attribute">diff</span>=auto</span><br><span class="line">color.<span class="attribute">status</span>=auto</span><br><span class="line">color.<span class="attribute">branch</span>=auto</span><br><span class="line">color.<span class="attribute">interactive</span>=<span class="literal">true</span></span><br><span class="line">help.<span class="attribute">format</span>=html</span><br><span class="line">rebase.<span class="attribute">autosquash</span>=<span class="literal">true</span></span><br><span class="line">http.<span class="attribute">sslcainfo</span>=D:/Git/mingw64/ssl/certs/ca-bundle.crt</span><br><span class="line">http.<span class="attribute">sslbackend</span>=openssl</span><br><span class="line">diff.astextplain.<span class="attribute">textconv</span>=astextplain</span><br><span class="line">filter.lfs.<span class="attribute">clean</span>=git-lfs clean -- %f</span><br><span class="line">filter.lfs.<span class="attribute">smudge</span>=git-lfs smudge -- %f</span><br><span class="line">filter.lfs.<span class="attribute">required</span>=<span class="literal">true</span></span><br><span class="line">filter.lfs.<span class="attribute">process</span>=git-lfs filter-process</span><br><span class="line">credential.<span class="attribute">helper</span>=manager</span><br><span class="line">user.<span class="attribute">name</span>=dick</span><br><span class="line">user.<span class="attribute">email</span>=1528683621@qq.com</span><br><span class="line">credential.<span class="attribute">helper</span>=store</span><br></pre></td></tr></table></figure>
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/01/08/Git使用中的问题/">Git使用中的问题</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-01-08T04:20:02.000Z" itemprop="datePublished">2018-01-08</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Git/">Git</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>git push失败 fatal: Could not read from remote repository</p>
-<h2 id="阐述问题"><a href="#阐述问题" class="headerlink" title="阐述问题"></a>阐述问题</h2><p>git push失败 fatal: Could not read from remote repository. 因为仓库地址不对。更改地址就可以push了。</p>
-<h3 id="问题原因"><a href="#问题原因" class="headerlink" title="问题原因"></a>问题原因</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git remote -v</span><br><span class="line">$ git remote <span class="built_in">set</span>-url origin XXX</span><br></pre></td></tr></table></figure>
-<h2 id="服务器上的-Git-生成-SSH-公钥"><a href="#服务器上的-Git-生成-SSH-公钥" class="headerlink" title="服务器上的 Git - 生成 SSH 公钥"></a>服务器上的 Git - 生成 SSH 公钥</h2><h3 id="生成-SSH-公钥"><a href="#生成-SSH-公钥" class="headerlink" title="生成 SSH 公钥"></a>生成 SSH 公钥</h3><p>大多数 Git 服务器都会选择使用 SSH 公钥来进行授权。系统中的每个用户都必须提供一个公钥用于授权，没有的话就要生成一个。生成公钥的过程在所有操作系统上都差不多。首先先确认一下是否已经有一个公钥了。SSH 公钥默认储存在账户的主目录下的 ~/.ssh 目录。<br>若想在github中使用的话需要将公钥复制到github&gt;setting&gt;SSH and GPG keys中添加ssh keys。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">生成钥匙</span><br><span class="line">$ ssh-keygen</span><br><span class="line">查看公钥</span><br><span class="line"><span class="variable">$cat</span> ~/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/01/01/架构演变背景/">架构演变背景</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-01-01T04:10:10.000Z" itemprop="datePublished">2018-01-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/架构/">架构</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="架构演变背景"><a href="#架构演变背景" class="headerlink" title="架构演变背景"></a>架构演变背景</h1><h2 id="单一应用架构"><a href="#单一应用架构" class="headerlink" title="单一应用架构"></a>单一应用架构</h2><p>当网站流量很小时，只需一个应用，将所有功能都部署在一起，以减少部署节点和成本。此时，用于简化增删改查工作量的数据访问框架(ORM)是关键。</p>
-<h2 id="垂直应用架构"><a href="#垂直应用架构" class="headerlink" title="垂直应用架构"></a>垂直应用架构</h2><p>当访问量逐渐增大，单一应用增加机器带来的加速度越来越小，将应用拆成互不相干的几个应用，以提升效率。此时，用于加速前端页面开发的Web框架(MVC)是关键。</p>
-<h2 id="分布式服务架构"><a href="#分布式服务架构" class="headerlink" title="分布式服务架构"></a>分布式服务架构</h2><p>当垂直应用越来越多，应用之间交互不可避免，将核心业务抽取出来，作为独立的服务，逐渐形成稳定的服务中心，使前端应用能更快速的响应多变的市场需求。此时，用于提高业务复用及整合的分布式服务框架(RPC)是关键。</p>
-<h2 id="流动计算架构"><a href="#流动计算架构" class="headerlink" title="流动计算架构"></a>流动计算架构</h2><p>当服务越来越多，容量的评估，小服务资源的浪费等问题逐渐显现，此时需增加一个调度中心基于访问压力实时管理集群容量，提高集群利用率。此时，用于提高机器利用率的资源调度和治理中心(SOA)是关键。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/12/08/优秀的开源项目及优秀文章地址/">优秀的开源项目</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-12-08T02:18:02.000Z" itemprop="datePublished">2017-12-08</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Web/">Web</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>此部分总结平时工作中积累的项目或者见过的优秀开源项目的总结</p>
-<h1 id="优秀的开源项目"><a href="#优秀的开源项目" class="headerlink" title="优秀的开源项目"></a>优秀的开源项目</h1><p>此部分总结平时工作中积累的项目或者见过的优秀开源项目的总结</p>
-<h2 id="前端相关"><a href="#前端相关" class="headerlink" title="前端相关"></a>前端相关</h2><h2 id="NET相关"><a href="#NET相关" class="headerlink" title="NET相关"></a>NET相关</h2><h2 id="NodeJS相关"><a href="#NodeJS相关" class="headerlink" title="NodeJS相关"></a>NodeJS相关</h2><h3 id="NodeJS-中文社区开源"><a href="#NodeJS-中文社区开源" class="headerlink" title="NodeJS 中文社区开源"></a>NodeJS 中文社区开源</h3><p>官网地址:</p>
-<blockquote>
-<p><a href="https://cnodejs.org/" target="_blank" rel="noopener">https://cnodejs.org/</a></p>
-</blockquote>
-<p>项目开源地址：</p>
-<blockquote>
-<p><a href="https://github.com/cnodejs/nodeclub/" target="_blank" rel="noopener">https://github.com/cnodejs/nodeclub/</a></p>
-</blockquote>
-<h2 id="JAVA相关"><a href="#JAVA相关" class="headerlink" title="JAVA相关"></a>JAVA相关</h2><h2 id="数据库相关"><a href="#数据库相关" class="headerlink" title="数据库相关"></a>数据库相关</h2><h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h2 id="架构相关"><a href="#架构相关" class="headerlink" title="架构相关"></a>架构相关</h2><h1 id="优秀文章地址"><a href="#优秀文章地址" class="headerlink" title="优秀文章地址"></a>优秀文章地址</h1><p>此部分总结平时工作中积累的优秀文章或者博客</p>
-<h2 id="前端、JAVA、Python"><a href="#前端、JAVA、Python" class="headerlink" title="前端、JAVA、Python"></a>前端、JAVA、Python</h2><blockquote>
-<p><a href="https://www.jqhtml.com/" target="_blank" rel="noopener">https://www.jqhtml.com/</a></p>
-</blockquote>
-<h2 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx:"></a>Nginx:</h2><p>详细文档:</p>
-<blockquote>
-<p><a href="http://tengine.taobao.org/book/index.html" target="_blank" rel="noopener">http://tengine.taobao.org/book/index.html</a></p>
-</blockquote>
-<h2 id="Jekins"><a href="#Jekins" class="headerlink" title="Jekins:"></a>Jekins:</h2><p>教程<br><a href="http://blog.51cto.com/12832314/2140304" target="_blank" rel="noopener">http://blog.51cto.com/12832314/2140304</a></p>
-
-        
-    </section>
-</article>
-
-
 
 
 <nav class="page-nav">
-    <a class="extend prev" rel="prev" href="/page/9/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/11/">下一页 &raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/9/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/11/">下一页 &raquo;</a>
 </nav>
 
 

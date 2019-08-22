@@ -131,6 +131,255 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/08/15/Map中的hash理解/">Map中的hash理解</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/4/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-08-15T15:20:00.000Z" itemprop="datePublished">2018-08-15</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java容器/">Java容器</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Map中的hash理解"><a href="#Map中的hash理解" class="headerlink" title="Map中的hash理解"></a>Map中的hash理解</h1><h2 id="哈希-散列"><a href="#哈希-散列" class="headerlink" title="哈希(散列)"></a>哈希(散列)</h2><p>Hash，一般翻译做“散列”，也有直接音译为“哈希”的。</p>
+<p>就是把任意长度的输入，通过散列算法，变换成固定长度的输出，该输出就是散列值。这种转换是一种压缩映射，也就是，散列值的空间通常远小于输入的空间。<br>不同的输入可能会散列成相同的输出，所以不可能从散列值来唯一的确定输入值。简单的说就是一种将任意长度的消息压缩到某一固定长度的消息摘要的函数。</p>
+<p>所有散列函数都有如下一个基本特性：</p>
+<p>根据同一散列函数计算出的散列值如果不同，那么输入值肯定也不同。<br>但是，根据同一散列函数计算出的散列值如果相同，输入值不一定相同。</p>
+<h2 id="碰撞"><a href="#碰撞" class="headerlink" title="碰撞"></a>碰撞</h2><p>输入不同，散列值相同的现象。</p>
+<h2 id="常见的Hash函数有以下几个"><a href="#常见的Hash函数有以下几个" class="headerlink" title="常见的Hash函数有以下几个"></a>常见的Hash函数有以下几个</h2><p>直接定址法：直接以关键字k或者k加上某个常数（k+c）作为哈希地址。</p>
+<p>数字分析法：提取关键字中取值比较均匀的数字作为哈希地址。</p>
+<p>除留余数法：用关键字k除以某个不大于哈希表长度m的数p，将所得余数作为哈希表地址。</p>
+<p>分段叠加法：按照哈希表地址位数将关键字分成位数相等的几部分，其中最后一部分可以比较短。然后将这几部分相加，舍弃最高进位后的结果就是该关键字的哈希地址。</p>
+<p>平方取中法：如果关键字各个部分分布都不均匀的话，可以先求出它的平方值，然后按照需求取中间的几位作为哈希地址。</p>
+<p>伪随机数法：采用一个伪随机数当作哈希函数。</p>
+<blockquote>
+<p>衡量一个哈希函数的好坏的重要指标就是发生碰撞的概率以及发生碰撞的解决方案。</p>
+</blockquote>
+<p>常见的解决碰撞的方法有以下几种：</p>
+<p>开放定址法：</p>
+<p>开放定址法就是一旦发生了冲突，就去寻找下一个空的散列地址，只要散列表足够大，空的散列地址总能找到，并将记录存入。</p>
+<p>链地址法: </p>
+<p>将哈希表的每个单元作为链表的头结点，所有哈希地址为i的元素构成一个同义词链表。即发生冲突时就把该关键字链在以该单元为头结点的链表的尾部。</p>
+<p>再哈希法:</p>
+<p>当哈希地址发生冲突用其他的函数计算另一个哈希函数地址，直到冲突不再产生为止。</p>
+<p>建立公共溢出区:</p>
+<p>将哈希表分为基本表和溢出表两部分，发生冲突的元素都放入溢出表中。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/08/15/HashMap 和 HashTable的区别/">HashMap 和 HashTable的区别</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/4/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-08-15T15:20:00.000Z" itemprop="datePublished">2018-08-15</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java容器/">Java容器</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="HashMap-和-HashTable的区别"><a href="#HashMap-和-HashTable的区别" class="headerlink" title="HashMap 和 HashTable的区别"></a>HashMap 和 HashTable的区别</h1><h2 id="区别："><a href="#区别：" class="headerlink" title="区别："></a>区别：</h2><p>1）线程是否安全： </p>
+<p>HashMap 是非线程安全的，HashTable 是线程安全的；HashTable 内部的方法基本都经过synchronized 修饰。（如果你要保证线程安全的话就使用 ConcurrentHashMap 吧！）；</p>
+<p>2）效率： </p>
+<p>因为线程安全的问题，HashMap 要比 HashTable 效率高一点。另外，HashTable 基本被淘汰，不要在代码中使用它；</p>
+<p>3）对Null key 和Null value的支持：</p>
+<p>HashMap 中，null 可以作为键，这样的键只有一个，可以有一个或多个键所对应的值为 null。<br>但是在 HashTable 中 put 进的键值只要有一个 null，直接抛出 NullPointerException。</p>
+<p>4）初始容量大小和每次扩充容量大小的不同 ：</p>
+<p>①Hashtable 默认的初始大小为11，之后每次扩充，容量变为原来的2n+1。<br>HashMap 默认的初始化大小为16。之后每次扩充，容量变为原来的2倍。</p>
+<p>②创建时如果给定了容量初始值，那么 Hashtable 会直接使用你给定的大小。<br>而 HashMap 会将其扩充为2的幂次方大小（HashMap 中的tableSizeFor()方法保证）。8 16 32 64 …<br>也就是说 HashMap 总是使用2的幂作为哈希表的大小。</p>
+<p>5) 底层数据结构：</p>
+<p> JDK1.8 以后的 HashMap 在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为8）时，将链表转化为红黑树，以减少搜索时间。Hashtable 没有这样的机制。</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">HasMap 中带有初始容量的构造函数：</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity, <span class="keyword">float</span> loadFactor)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (initialCapacity &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Illegal initial capacity: "</span> +</span><br><span class="line">                                               initialCapacity);</span><br><span class="line">        <span class="keyword">if</span> (initialCapacity &gt; MAXIMUM_CAPACITY)</span><br><span class="line">            initialCapacity = MAXIMUM_CAPACITY;</span><br><span class="line">        <span class="keyword">if</span> (loadFactor &lt;= <span class="number">0</span> || Float.isNaN(loadFactor))</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Illegal load factor: "</span> +</span><br><span class="line">                                               loadFactor);</span><br><span class="line">        <span class="keyword">this</span>.loadFactor = loadFactor;</span><br><span class="line">        <span class="keyword">this</span>.threshold = tableSizeFor(initialCapacity);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(initialCapacity, DEFAULT_LOAD_FACTOR);</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">下面这个方法保证了 HashMap 总是使用<span class="number">2</span>的幂作为哈希表的大小。</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">static</span> <span class="keyword">final</span> <span class="function"><span class="keyword">int</span> <span class="title">tableSizeFor</span><span class="params">(<span class="keyword">int</span> cap)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = cap - <span class="number">1</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">2</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">4</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">8</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">16</span>;</span><br><span class="line">        <span class="keyword">return</span> (n &lt; <span class="number">0</span>) ? <span class="number">1</span> : (n &gt;= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="HashMap-和-HashSet区别"><a href="#HashMap-和-HashSet区别" class="headerlink" title="HashMap 和 HashSet区别"></a>HashMap 和 HashSet区别</h2><p>如果你看过 HashSet 源码的话就应该知道：HashSet 底层就是基于 HashMap 实现的。（HashSet 的源码非常非常少，因为除了 clone()、writeObject()、readObject()是 HashSet 自己不得不实现之外，其他方法都是直接调用 HashMap 中的方法。</p>
+<p>HashMap                                HashSet<br>实现了Map接口                        实现Set接口<br>存储键值对                            仅存储对象<br>调用 put（）向map中添加元素            调用 add（）方法向Set中添加元素<br>HashMap使用键（Key）计算Hashcode    HashSet使用成员对象来计算hashcode值，对于两个对象来说hashcode可能相同，所以equals()方法用来判断对象的相等性，</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/08/10/计算机网络相关问题/">计算机网络相关问题</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/4/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-08-10T14:55:00.000Z" itemprop="datePublished">2018-08-10</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/计算机网络/">计算机网络</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="计算机网络相关问题"><a href="#计算机网络相关问题" class="headerlink" title="计算机网络相关问题"></a>计算机网络相关问题</h1><h2 id="①TCP三次握手和四次挥手"><a href="#①TCP三次握手和四次挥手" class="headerlink" title="①TCP三次握手和四次挥手"></a>①TCP三次握手和四次挥手</h2><h3 id="三次握手（创建）"><a href="#三次握手（创建）" class="headerlink" title="三次握手（创建）"></a>三次握手（创建）</h3><p>1）客户端–发送带有SYN标志的数据包–一次握手–服务端<br>2）服务端–发送带有SYN/ACK标志的数据包–二次握手–客户端<br>3）客户端–发送带有带有ACK标志的数据包–三次握手–服务端</p>
+<p>第二次握手中，服务端为何要传回SYN（发起一个新链接）？</p>
+<blockquote>
+<p>接收端传回发送端所发送的SYN是为了告诉发送端，我接收到的信息确实就是你所发送的信号了。</p>
+</blockquote>
+<p>双方通信无误必须是两者互相发送信息都无误。传了SYN，证明发送方到接收方的通道没有问题，但是接收方到发送方的通道还需要ACK信号来进行验证。</p>
+<h3 id="四次挥手（断开）"><a href="#四次挥手（断开）" class="headerlink" title="四次挥手（断开）"></a>四次挥手（断开）</h3><p>1）客户端-发送一个FIN，用来关闭客户端到服务器的数据传送<br>2）服务器-收到这个FIN，发回一个ACK，确认序号为收到的序号加1。和SYN一样，一个FIN将占用一个序号<br>3）服务器-关闭与客户端的连接，发送一个FIN给客户端<br>4）客户端-发回ACK报文确认，并将确认序号设置为收到序号加1</p>
+<h2 id="②在浏览器中输入url地址-gt-gt-显示主页的过程-完整描述"><a href="#②在浏览器中输入url地址-gt-gt-显示主页的过程-完整描述" class="headerlink" title="②在浏览器中输入url地址-&gt;&gt;显示主页的过程(完整描述)"></a>②在浏览器中输入url地址-&gt;&gt;显示主页的过程(完整描述)</h2><p>域名解析 –&gt; 发起TCP的3次握手 –&gt; 建立TCP连接后发起http请求 –&gt; 服务器响应http请求，浏览器得到html代码 –&gt; 浏览器解析html代码，并请求html代码中的资源（如js、css、图片等） –&gt; 浏览器对页面进行渲染呈现给用户</p>
+<h2 id="③HTTP和HTTPS的区别"><a href="#③HTTP和HTTPS的区别" class="headerlink" title="③HTTP和HTTPS的区别"></a>③HTTP和HTTPS的区别</h2><h2 id="④TCP、UDP协议的区别"><a href="#④TCP、UDP协议的区别" class="headerlink" title="④TCP、UDP协议的区别"></a>④TCP、UDP协议的区别</h2><p>UDP:</p>
+<blockquote>
+<p>UDP在传送数据之前不需要先建立连接，远地主机在收到UDP报文后，不需要给出任何确认。虽然UDP不提供可靠交付，但在某些情况下UDP确是一种最有效的工作方式（一般用于即时通信），比如： QQ语音 QQ视频 、直播等等</p>
+</blockquote>
+<p>1）无连接<br>2）尽力交付，不保证可靠<br>3）面向报文<br>4）没有拥塞控制（网络出现拥塞不会使源主机的发送速率降低，对实时应用很有用）<br>5）支持一对一，一对多，多对多交互通信<br>6）UDP的首部开销小，只有8个字节，比TCP的20个字节的首部要短。</p>
+<p>TCP:</p>
+<blockquote>
+<p>TCP提供面向连接的服务。在传送数据之前必须先建立连接，数据传送结束后要释放连接。TCP不提供广播或多播服务。由于TCP要提供可靠的，面向连接的运输服务（TCP的可靠体现在TCP在传递数据之前，会有三次握手来建立连接，而且在数据传递时，有确认、窗口、重传、拥塞控制机制，在数据传完后，还会断开连接，四次挥手，用来节约系统资源），这一难以避免增加了许多开销，如确认，流量控制，计时器以及连接管理等。这不仅使协议数据单元的首部增大很多，还要占用许多处理机资源。TCP一般用于文件传输、发送和接收邮件、远程登录等场景。</p>
+</blockquote>
+<p>1)面向连接（就好像打电话一样，通话前需要先拨号建立连接，通话结束后要挂机释放连接）<br>2)TCP连接只能是点对点的（一对一）<br>3)可靠(通过TCP连接传送的数据，无差错、不丢失、不重复、并且按序到达)<br>4)TCP提供全双工通信。TCP允许通信双方的应用进程在任何时候都能发送数据。TCP连接的两端都设有发送缓存和接收缓存，用来临时存放双方通信的数据<br>5)面向字节流。TCP中的“流”（stream）指的是流入进程或从进程流出的字节序列。“面向字节流”的含义是：虽然应用程序和TCP的交互是一次一个数据块（大小不等），但TCP把应用程序交下来的数据仅仅看成是一连串的无结构的字节流。</p>
+<h2 id="⑤常见的状态码"><a href="#⑤常见的状态码" class="headerlink" title="⑤常见的状态码"></a>⑤常见的状态码</h2><p>1XX informational（信息性状态码） 请求正在处理</p>
+<p>2XX Success(成功状态码) 请求正常处理完毕</p>
+<p>3XX Redirection(重定向状态码) 需要进行附加操作才能完成请求</p>
+<p>4XX Client Error(客户端错误状态码) 服务无法处理请求</p>
+<p>5XX Server Error（服务端错误状态码） 服务端处理请求出错</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/08/10/计算机网络知识回顾/">计算机网络知识回顾</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/4/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-08-10T14:55:00.000Z" itemprop="datePublished">2018-08-10</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/计算机网络/">计算机网络</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>#计算机网络知识回顾</p>
+<h2 id="OSI七层模型"><a href="#OSI七层模型" class="headerlink" title="OSI七层模型:"></a>OSI七层模型:</h2><p>被一些大公司甚至一些国家政府支持的OSI失败的原因：</p>
+<p>1)OSI的专家缺乏实际经验，他们在完成OSI标准时缺乏商业驱动力</p>
+<p>2)OSI的协议实现起来过分复杂，而且运行效率很低</p>
+<p>3)OSI制定标准的周期太长，占领市场失败，使得按OSI标准生产的设备无法及时进入市场（20世纪90年代初期，虽然整套的OSI国际标准都已经制定出来，但基于TCP/IP的互联网已经抢先在全球相当大的范围成功运行了）OSI的层次划分不太合理，有些功能在多个层次中重复出现</p>
+<p>###OSI七层结构：</p>
+<ul>
+<li>应用层</li>
+<li>表示层</li>
+<li>会话层</li>
+<li>运输层</li>
+<li>网络层</li>
+<li>数据链路层</li>
+<li>物理层</li>
+</ul>
+<p>###TCP\IP四层协议：</p>
+<ul>
+<li>应用层（各种应用层协议TELNET,SMTP,FTP）</li>
+<li>运输层（TCP UDP）</li>
+<li>网际层（IP）</li>
+<li>网络接口层</li>
+</ul>
+<p>###五层协议体系结构：</p>
+<ul>
+<li>应用层</li>
+<li>运输层(TCP\UDP)</li>
+<li>网络层（IP）</li>
+<li>数据链路层</li>
+<li>物理层</li>
+</ul>
+<h2 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h2><blockquote>
+<p>应用程序间的网络通信交互规则</p>
+</blockquote>
+<p>应用层的任务是通过应用进程间的交互来完成特定网络应用。应用层协议定义的是应用进程（进程：主机中正在运行的程序）间的通信和交互的规则。对于不同的网络应用需要不同的应用层协议。在互联网中应用层协议很多，如域名系统DNS，支持万维网应用的HTTP协议，支持电子邮件的SMTP协议等等。我们把应用层交互的数据单元称为报文。</p>
+<h3 id="DNS-Domain-Name-System"><a href="#DNS-Domain-Name-System" class="headerlink" title="DNS(Domain Name System)"></a>DNS(Domain Name System)</h3><p>域名系统是因特网的一项核心服务，它作为可以将域名和IP地址相互映射的一个分布式数据库，能够使人更方便的访问互联网，而不用去记住能够被机器直接读取的IP数串。（百度百科）例如：一个公司的Web网站可看作是它在网上的门户，而域名就相当于其门牌地址，通常域名都使用该公司的名称或简称。</p>
+<h3 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h3><p>超文本传输协议（HTTP，HyperText Transfer Protocol)是互联网上应用最为广泛的一种网络协议。</p>
+<h2 id="传输层"><a href="#传输层" class="headerlink" title="传输层"></a>传输层</h2><blockquote>
+<p>传递应用层报文</p>
+</blockquote>
+<p>运输层的主要任务就是负责向两台主机进程之间的通信提供通用的数据传输服务。应用进程利用该服务传送应用层报文。“通用的”是指并不针对某一个特定的网络应用，而是多种应用可以使用同一个运输层服务。由于一台主机可同时运行多个线程，因此运输层有复用和分用的功能。所谓复用就是指多个应用层进程可同时使用下面运输层的服务，分用和复用相反，是运输层把收到的信息分别交付上面应用层中的相应进程。</p>
+<p>-传输控制协议TCP（Transmisson Control Protocol）–提供面向连接的，可靠的数据传输服务。<br>-用户数据协议UDP（User Datagram Protocol）–提供无连接的，尽最大努力的数据传输服务（不保证数据传输的可靠性）。</p>
+<h2 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h2><blockquote>
+<p>打包报文段或用户数据，并找寻合适的路由，进而找到目标主机</p>
+</blockquote>
+<p>网络层负责为分组交换网上的不同主机提供通信服务。在发送数据时，网络层把运输层产生的报文段或用户数据报封装成分组和包进行传送。在TCP/IP体系结构中，由于网络层使用IP协议，因此分组也叫IP数据报，简称数据报。</p>
+<h2 id="数据链路层"><a href="#数据链路层" class="headerlink" title="数据链路层"></a>数据链路层</h2><blockquote>
+<p>两台主机之间的数据传输，总是在一段一段的链路上传送的，这就需要使用专门的链路层的协议。 </p>
+</blockquote>
+<p>在两个相邻节点之间传送数据时，数据链路层将网络层交下来的IP数据报组装程帧，在两个相邻节点间的链路上传送帧。每一帧包括数据和必要的控制信息（如同步信息，地址信息，差错控制等）。</p>
+<p>在接收数据时，控制信息使接收端能够知道一个帧从哪个比特开始和到哪个比特结束。这样，数据链路层在收到一个帧后，就可从中提出数据部分，上交给网络层.</p>
+<h2 id="物理层"><a href="#物理层" class="headerlink" title="物理层"></a>物理层</h2><blockquote>
+<p>在物理层上所传送的数据单位是比特。实现相邻计算机节点之间比特流的透明传送，尽可能屏蔽掉具体传输介质和物理设备的差异。</p>
+</blockquote>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/06/12/windows下安装node-sass和sass-loader失败/">sass sass-loader</a>
         </h1>
         
@@ -453,183 +702,10 @@
 </article>
 
 
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/06/03/Spring源码/">Spring源码</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/4/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-06-03T04:00:00.000Z" itemprop="datePublished">2018-06-03</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Spring/">Spring</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>#Spring源码</p>
-<h2 id="spring-jcl日志源码分析"><a href="#spring-jcl日志源码分析" class="headerlink" title="spring-jcl日志源码分析"></a>spring-jcl日志源码分析</h2><p>1.spring的基本应用和spring源码的编译</p>
-<p>2.java混乱的日志系统，JUL,JCL,log4j,slf4j</p>
-<h2 id="spring-aop源码分析"><a href="#spring-aop源码分析" class="headerlink" title="spring aop源码分析"></a>spring aop源码分析</h2><p>1.AspectJ和spring AOP, aspectj的静态织入</p>
-<p>2.JDK动态代理的源码分析，JDK如何操作字节码</p>
-<p>3.spring通过cglib完成AOP,cglib如何完成方法拦截</p>
-<p>4.AnnotationAwareAspectJAutoProxyCreator是如何实现代理织入的</p>
-<h2 id="spring-IOC、AOP、MVC源码分析"><a href="#spring-IOC、AOP、MVC源码分析" class="headerlink" title="spring IOC、AOP、MVC源码分析"></a>spring IOC、AOP、MVC源码分析</h2><p>1.BeanDefinition作用，如何改变bean的行为</p>
-<p>2.BeanDefinitionRegistry的作用，源码分析</p>
-<p>3.BeanNameGenerator如何改变beanName的生成策略</p>
-<p>4.BeanPostProcessor在bean实例化过程中可以做什么？经典应用场景有哪些？</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/05/08/JVM/">JVM相关问题</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/4/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-05-08T04:22:30.000Z" itemprop="datePublished">2018-05-08</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>JVM,什么是JVM?</p>
-<p>Java语言虚拟机后，Java语言在不同平台上运行时不需要重新编译。Java语言使用Java虚拟机屏蔽了与具体平台相关的信息，使得Java语言编译程序只需生成在Java虚拟机上运行的目标代码（字节码），就可以在多种平台上不加修改地运行。</p>
-<p>Java虚拟机在软件层层面屏蔽了底层硬件、底层指令的细节。<br>跨平台：程序可以运行基于不同平台版本的jvm就可以了。</p>
-<p>数据类型<br>Java虚拟机中，数据类型可以分为两类：基本类型和引用类型。基本类型的变量保存原始值，即：他代表的值就是数值本身；而引用类型的变量保存引用值。“引用值”代表了某个对象的引用，而不是对象本身，对象本身存放在这个引用值所表示的地址的位置。</p>
-<p>基本类型包括：byte,short,int,long,char,float,double,Boolean</p>
-<p>引用类型包括：类类型，接口类型和数组。</p>
-<p>App.java  源码</p>
-<p>编译时环境（jdk）</p>
-<p>App.class 字节码</p>
-<p>JVM<br>Java虚拟机：在软件层层面屏蔽了底层硬件、底层指令的细节。 运行时环境 (jre) </p>
-<p>操作系统可以运行的文件 机器码</p>
-<p>类加载器 ClassLoader  JVM将class文件加载至内存模块。<br>运行时数据区 Runtime Data Area</p>
-<pre><code>线程共享区：  Heap堆， Method Area方法区
-线程独占区：  程序计数器，虚拟机栈，本地方法栈
-</code></pre><p>程序最小单元：线程</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/05/06/Nginx配置文件nginx.conf中文详解/">nginx.conf中文详解</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/4/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-05-06T14:22:22.000Z" itemprop="datePublished">2018-05-06</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Nginx/">Nginx</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Nginx配置文件nginx-conf中文详解"><a href="#Nginx配置文件nginx-conf中文详解" class="headerlink" title="Nginx配置文件nginx.conf中文详解"></a>Nginx配置文件nginx.conf中文详解</h1><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#定义Nginx运行的用户和用户组</span></span><br><span class="line"><span class="attribute">user</span> www www;</span><br><span class="line"></span><br><span class="line"><span class="comment">#nginx进程数，建议设置为等于CPU总核心数。</span></span><br><span class="line"><span class="attribute">worker_processes</span> <span class="number">8</span>;</span><br><span class="line"> </span><br><span class="line"><span class="comment">#全局错误日志定义类型，[ debug | info | notice | warn | error | crit ]</span></span><br><span class="line"><span class="attribute">error_log</span> /usr/local/nginx/logs/error.log <span class="literal">info</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">#进程pid文件</span></span><br><span class="line"><span class="attribute">pid</span> /usr/local/nginx/logs/nginx.pid;</span><br><span class="line"></span><br><span class="line"><span class="comment">#指定进程可以打开的最大描述符：数目</span></span><br><span class="line"><span class="comment">#工作模式与连接数上限</span></span><br><span class="line"><span class="comment">#这个指令是指当一个nginx进程打开的最多文件描述符数目，理论值应该是最多打开文件数（ulimit -n）与nginx进程数相除，但是nginx分配请求并不是那么均匀，所以最好与ulimit -n 的值保持一致。</span></span><br><span class="line"><span class="comment">#现在在linux 2.6内核下开启文件打开数为65535，worker_rlimit_nofile就相应应该填写65535。</span></span><br><span class="line"><span class="comment">#这是因为nginx调度时分配请求到进程并不是那么的均衡，所以假如填写10240，总并发量达到3-4万时就有进程可能超过10240了，这时会返回502错误。</span></span><br><span class="line"><span class="attribute">worker_rlimit_nofile</span> <span class="number">65535</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">events</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">#参考事件模型，use [ kqueue | rtsig | epoll | /dev/poll | select | poll ]; epoll模型</span></span><br><span class="line">    <span class="comment">#是Linux 2.6以上版本内核中的高性能网络I/O模型，linux建议epoll，如果跑在FreeBSD上面，就用kqueue模型。</span></span><br><span class="line">    <span class="comment">#补充说明：</span></span><br><span class="line">    <span class="comment">#与apache相类，nginx针对不同的操作系统，有不同的事件模型</span></span><br><span class="line">    <span class="comment">#A）标准事件模型</span></span><br><span class="line">    <span class="comment">#Select、poll属于标准事件模型，如果当前系统不存在更有效的方法，nginx会选择select或poll</span></span><br><span class="line">    <span class="comment">#B）高效事件模型</span></span><br><span class="line">    <span class="comment">#Kqueue：使用于FreeBSD 4.1+, OpenBSD 2.9+, NetBSD 2.0 和 MacOS X.使用双处理器的MacOS X系统使用kqueue可能会造成内核崩溃。</span></span><br><span class="line">    <span class="comment">#Epoll：使用于Linux内核2.6版本及以后的系统。</span></span><br><span class="line">    <span class="comment">#/dev/poll：使用于Solaris 7 11/99+，HP/UX 11.22+ (eventport)，IRIX 6.5.15+ 和 Tru64 UNIX 5.1A+。</span></span><br><span class="line">    <span class="comment">#Eventport：使用于Solaris 10。 为了防止出现内核崩溃的问题， 有必要安装安全补丁。</span></span><br><span class="line">    <span class="attribute">use</span> <span class="literal">epoll</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#单个进程最大连接数（最大连接数=连接数*进程数）</span></span><br><span class="line">    <span class="comment">#根据硬件调整，和前面工作进程配合起来用，尽量大，但是别把cpu跑到100%就行。每个进程允许的最多连接数，理论上每台nginx服务器的最大连接数为。</span></span><br><span class="line">    <span class="attribute">worker_connections</span> <span class="number">65535</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#keepalive超时时间。</span></span><br><span class="line">    <span class="attribute">keepalive_timeout</span> <span class="number">60</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#客户端请求头部的缓冲区大小。这个可以根据你的系统分页大小来设置，一般一个请求头的大小不会超过1k，不过由于一般系统分页都要大于1k，所以这里设置为分页大小。</span></span><br><span class="line">    <span class="comment">#分页大小可以用命令getconf PAGESIZE 取得。</span></span><br><span class="line">    <span class="comment">#[root@web001 ~]# getconf PAGESIZE</span></span><br><span class="line">    <span class="comment">#4096</span></span><br><span class="line">    <span class="comment">#但也有client_header_buffer_size超过4k的情况，但是client_header_buffer_size该值必须设置为“系统分页大小”的整倍数。</span></span><br><span class="line">    <span class="attribute">client_header_buffer_size</span> <span class="number">4k</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#这个将为打开文件指定缓存，默认是没有启用的，max指定缓存数量，建议和打开文件数一致，inactive是指经过多长时间文件没被请求后删除缓存。</span></span><br><span class="line">    <span class="attribute">open_file_cache</span> max=<span class="number">65535</span> inactive=<span class="number">60s</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#这个是指多长时间检查一次缓存的有效信息。</span></span><br><span class="line">    <span class="comment">#语法:open_file_cache_valid time 默认值:open_file_cache_valid 60 使用字段:http, server, location 这个指令指定了何时需要检查open_file_cache中缓存项目的有效信息.</span></span><br><span class="line">    <span class="attribute">open_file_cache_valid</span> <span class="number">80s</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#open_file_cache指令中的inactive参数时间内文件的最少使用次数，如果超过这个数字，文件描述符一直是在缓存中打开的，如上例，如果有一个文件在inactive时间内一次没被使用，它将被移除。</span></span><br><span class="line">    <span class="comment">#语法:open_file_cache_min_uses number 默认值:open_file_cache_min_uses 1 使用字段:http, server, location  这个指令指定了在open_file_cache指令无效的参数中一定的时间范围内可以使用的最小文件数,如果使用更大的值,文件描述符在cache中总是打开状态.</span></span><br><span class="line">    <span class="attribute">open_file_cache_min_uses</span> <span class="number">1</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#语法:open_file_cache_errors on | off 默认值:open_file_cache_errors off 使用字段:http, server, location 这个指令指定是否在搜索一个文件时记录cache错误.</span></span><br><span class="line">    <span class="attribute">open_file_cache_errors</span> <span class="literal">on</span>;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="comment">#设定http服务器，利用它的反向代理功能提供负载均衡支持</span></span><br><span class="line">http</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">#文件扩展名与文件类型映射表</span></span><br><span class="line">    <span class="attribute">include</span> mime.types;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#默认文件类型</span></span><br><span class="line">    <span class="attribute">default_type</span> application/octet-stream;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#默认编码</span></span><br><span class="line">    <span class="comment">#charset utf-8;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#服务器名字的hash表大小</span></span><br><span class="line">    <span class="comment">#保存服务器名字的hash表是由指令server_names_hash_max_size 和server_names_hash_bucket_size所控制的。参数hash bucket size总是等于hash表的大小，并且是一路处理器缓存大小的倍数。在减少了在内存中的存取次数后，使在处理器中加速查找hash表键值成为可能。如果hash bucket size等于一路处理器缓存的大小，那么在查找键的时候，最坏的情况下在内存中查找的次数为2。第一次是确定存储单元的地址，第二次是在存储单元中查找键 值。因此，如果Nginx给出需要增大hash max size 或 hash bucket size的提示，那么首要的是增大前一个参数的大小.</span></span><br><span class="line">    <span class="attribute">server_names_hash_bucket_size</span> <span class="number">128</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#客户端请求头部的缓冲区大小。这个可以根据你的系统分页大小来设置，一般一个请求的头部大小不会超过1k，不过由于一般系统分页都要大于1k，所以这里设置为分页大小。分页大小可以用命令getconf PAGESIZE取得。</span></span><br><span class="line">    <span class="attribute">client_header_buffer_size</span> <span class="number">32k</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#客户请求头缓冲大小。nginx默认会用client_header_buffer_size这个buffer来读取header值，如果header过大，它会使用large_client_header_buffers来读取。</span></span><br><span class="line">    <span class="attribute">large_client_header_buffers</span> <span class="number">4</span> <span class="number">64k</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#设定通过nginx上传文件的大小</span></span><br><span class="line">    <span class="attribute">client_max_body_size</span> <span class="number">8m</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#开启高效文件传输模式，sendfile指令指定nginx是否调用sendfile函数来输出文件，对于普通应用设为 on，如果用来进行下载等应用磁盘IO重负载应用，可设置为off，以平衡磁盘与网络I/O处理速度，降低系统的负载。注意：如果图片显示不正常把这个改成off。</span></span><br><span class="line">    <span class="comment">#sendfile指令指定 nginx 是否调用sendfile 函数（zero copy 方式）来输出文件，对于普通应用，必须设为on。如果用来进行下载等应用磁盘IO重负载应用，可设置为off，以平衡磁盘与网络IO处理速度，降低系统uptime。</span></span><br><span class="line">    <span class="attribute">sendfile</span> <span class="literal">on</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#开启目录列表访问，合适下载服务器，默认关闭。</span></span><br><span class="line">    <span class="attribute">autoindex</span> <span class="literal">on</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#此选项允许或禁止使用socke的TCP_CORK的选项，此选项仅在使用sendfile的时候使用</span></span><br><span class="line">    <span class="attribute">tcp_nopush</span> <span class="literal">on</span>;</span><br><span class="line">     </span><br><span class="line">    <span class="attribute">tcp_nodelay</span> <span class="literal">on</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#长连接超时时间，单位是秒</span></span><br><span class="line">    <span class="attribute">keepalive_timeout</span> <span class="number">120</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#FastCGI相关参数是为了改善网站的性能：减少资源占用，提高访问速度。下面参数看字面意思都能理解。</span></span><br><span class="line">    <span class="attribute">fastcgi_connect_timeout</span> <span class="number">300</span>;</span><br><span class="line">    <span class="attribute">fastcgi_send_timeout</span> <span class="number">300</span>;</span><br><span class="line">    <span class="attribute">fastcgi_read_timeout</span> <span class="number">300</span>;</span><br><span class="line">    <span class="attribute">fastcgi_buffer_size</span> <span class="number">64k</span>;</span><br><span class="line">    <span class="attribute">fastcgi_buffers</span> <span class="number">4</span> <span class="number">64k</span>;</span><br><span class="line">    <span class="attribute">fastcgi_busy_buffers_size</span> <span class="number">128k</span>;</span><br><span class="line">    <span class="attribute">fastcgi_temp_file_write_size</span> <span class="number">128k</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#gzip模块设置</span></span><br><span class="line">    <span class="attribute">gzip</span> <span class="literal">on</span>; <span class="comment">#开启gzip压缩输出</span></span><br><span class="line">    <span class="attribute">gzip_min_length</span> <span class="number">1k</span>;    <span class="comment">#最小压缩文件大小</span></span><br><span class="line">    <span class="attribute">gzip_buffers</span> <span class="number">4</span> <span class="number">16k</span>;    <span class="comment">#压缩缓冲区</span></span><br><span class="line">    <span class="attribute">gzip_http_version</span> <span class="number">1</span>.<span class="number">0</span>;    <span class="comment">#压缩版本（默认1.1，前端如果是squid2.5请使用1.0）</span></span><br><span class="line">    <span class="attribute">gzip_comp_level</span> <span class="number">2</span>;    <span class="comment">#压缩等级</span></span><br><span class="line">    <span class="attribute">gzip_types</span> text/plain application/x-javascript text/css application/xml;    <span class="comment">#压缩类型，默认就已经包含textml，所以下面就不用再写了，写上去也不会有问题，但是会有一个warn。</span></span><br><span class="line">    <span class="attribute">gzip_vary</span> <span class="literal">on</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#开启限制IP连接数的时候需要使用</span></span><br><span class="line">    <span class="comment">#limit_zone crawler $binary_remote_addr 10m;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">#负载均衡配置</span></span><br><span class="line">    <span class="attribute">upstream</span> jh.w3cschool.cn &#123;</span><br><span class="line">     </span><br><span class="line">        <span class="comment">#upstream的负载均衡，weight是权重，可以根据机器配置定义权重。weigth参数表示权值，权值越高被分配到的几率越大。</span></span><br><span class="line">        <span class="attribute">server</span> <span class="number">192.168.80.121:80</span> weight=<span class="number">3</span>;</span><br><span class="line">        <span class="attribute">server</span> <span class="number">192.168.80.122:80</span> weight=<span class="number">2</span>;</span><br><span class="line">        <span class="attribute">server</span> <span class="number">192.168.80.123:80</span> weight=<span class="number">3</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">#nginx的upstream目前支持4种方式的分配</span></span><br><span class="line">        <span class="comment">#1、轮询（默认）</span></span><br><span class="line">        <span class="comment">#每个请求按时间顺序逐一分配到不同的后端服务器，如果后端服务器down掉，能自动剔除。</span></span><br><span class="line">        <span class="comment">#2、weight</span></span><br><span class="line">        <span class="comment">#指定轮询几率，weight和访问比率成正比，用于后端服务器性能不均的情况。</span></span><br><span class="line">        <span class="comment">#例如：</span></span><br><span class="line">        <span class="comment">#upstream bakend &#123;</span></span><br><span class="line">        <span class="comment">#    server 192.168.0.14 weight=10;</span></span><br><span class="line">        <span class="comment">#    server 192.168.0.15 weight=10;</span></span><br><span class="line">        <span class="comment">#&#125;</span></span><br><span class="line">        <span class="comment">#2、ip_hash</span></span><br><span class="line">        <span class="comment">#每个请求按访问ip的hash结果分配，这样每个访客固定访问一个后端服务器，可以解决session的问题。</span></span><br><span class="line">        <span class="comment">#例如：</span></span><br><span class="line">        <span class="comment">#upstream bakend &#123;</span></span><br><span class="line">        <span class="comment">#    ip_hash;</span></span><br><span class="line">        <span class="comment">#    server 192.168.0.14:88;</span></span><br><span class="line">        <span class="comment">#    server 192.168.0.15:80;</span></span><br><span class="line">        <span class="comment">#&#125;</span></span><br><span class="line">        <span class="comment">#3、fair（第三方）</span></span><br><span class="line">        <span class="comment">#按后端服务器的响应时间来分配请求，响应时间短的优先分配。</span></span><br><span class="line">        <span class="comment">#upstream backend &#123;</span></span><br><span class="line">        <span class="comment">#    server server1;</span></span><br><span class="line">        <span class="comment">#    server server2;</span></span><br><span class="line">        <span class="comment">#    fair;</span></span><br><span class="line">        <span class="comment">#&#125;</span></span><br><span class="line">        <span class="comment">#4、url_hash（第三方）</span></span><br><span class="line">        <span class="comment">#按访问url的hash结果来分配请求，使每个url定向到同一个后端服务器，后端服务器为缓存时比较有效。</span></span><br><span class="line">        <span class="comment">#例：在upstream中加入hash语句，server语句中不能写入weight等其他的参数，hash_method是使用的hash算法</span></span><br><span class="line">        <span class="comment">#upstream backend &#123;</span></span><br><span class="line">        <span class="comment">#    server squid1:3128;</span></span><br><span class="line">        <span class="comment">#    server squid2:3128;</span></span><br><span class="line">        <span class="comment">#    hash $request_uri;</span></span><br><span class="line">        <span class="comment">#    hash_method crc32;</span></span><br><span class="line">        <span class="comment">#&#125;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#tips:</span></span><br><span class="line">        <span class="comment">#upstream bakend&#123;#定义负载均衡设备的Ip及设备状态&#125;&#123;</span></span><br><span class="line">        <span class="comment">#    ip_hash;</span></span><br><span class="line">        <span class="comment">#    server 127.0.0.1:9090 down;</span></span><br><span class="line">        <span class="comment">#    server 127.0.0.1:8080 weight=2;</span></span><br><span class="line">        <span class="comment">#    server 127.0.0.1:6060;</span></span><br><span class="line">        <span class="comment">#    server 127.0.0.1:7070 backup;</span></span><br><span class="line">        <span class="comment">#&#125;</span></span><br><span class="line">        <span class="comment">#在需要使用负载均衡的server中增加 proxy_pass http://bakend/;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#每个设备的状态设置为:</span></span><br><span class="line">        <span class="comment">#1.down表示单前的server暂时不参与负载</span></span><br><span class="line">        <span class="comment">#2.weight为weight越大，负载的权重就越大。</span></span><br><span class="line">        <span class="comment">#3.max_fails：允许请求失败的次数默认为1.当超过最大次数时，返回proxy_next_upstream模块定义的错误</span></span><br><span class="line">        <span class="comment">#4.fail_timeout:max_fails次失败后，暂停的时间。</span></span><br><span class="line">        <span class="comment">#5.backup： 其它所有的非backup机器down或者忙的时候，请求backup机器。所以这台机器压力会最轻。</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#nginx支持同时设置多组的负载均衡，用来给不用的server来使用。</span></span><br><span class="line">        <span class="comment">#client_body_in_file_only设置为On 可以讲client post过来的数据记录到文件中用来做debug</span></span><br><span class="line">        <span class="comment">#client_body_temp_path设置记录文件的目录 可以设置最多3层目录</span></span><br><span class="line">        <span class="comment">#location对URL进行匹配.可以进行重定向或者进行新的代理 负载均衡</span></span><br><span class="line">    &#125;</span><br><span class="line">     </span><br><span class="line">     </span><br><span class="line">     </span><br><span class="line">    <span class="comment">#虚拟主机的配置</span></span><br><span class="line">    server</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">#监听端口</span></span><br><span class="line">        <span class="attribute">listen</span> <span class="number">80</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">#域名可以有多个，用空格隔开</span></span><br><span class="line">        <span class="attribute">server_name</span> www.w3cschool.cn w3cschool.cn;</span><br><span class="line">        <span class="attribute">index</span> index.html index.htm index.php;</span><br><span class="line">        <span class="attribute">root</span> /data/www/w3cschool;</span><br><span class="line"></span><br><span class="line">        <span class="comment">#对******进行负载均衡</span></span><br><span class="line">        <span class="attribute">location</span> <span class="regexp">~ .*.(php|php5)?$</span></span><br><span class="line"><span class="regexp"></span>        &#123;</span><br><span class="line">            <span class="attribute">fastcgi_pass</span> <span class="number">127.0.0.1:9000</span>;</span><br><span class="line">            <span class="attribute">fastcgi_index</span> index.php;</span><br><span class="line">            <span class="attribute">include</span> fastcgi.conf;</span><br><span class="line">        &#125;</span><br><span class="line">         </span><br><span class="line">        <span class="comment">#图片缓存时间设置</span></span><br><span class="line">        <span class="attribute">location</span> <span class="regexp">~ .*.(gif|jpg|jpeg|png|bmp|swf)$</span></span><br><span class="line"><span class="regexp"></span>        &#123;</span><br><span class="line">            <span class="attribute">expires</span> <span class="number">10d</span>;</span><br><span class="line">        &#125;</span><br><span class="line">         </span><br><span class="line">        <span class="comment">#JS和CSS缓存时间设置</span></span><br><span class="line">        <span class="attribute">location</span> <span class="regexp">~ .*.(js|css)?$</span></span><br><span class="line"><span class="regexp"></span>        &#123;</span><br><span class="line">            <span class="attribute">expires</span> <span class="number">1h</span>;</span><br><span class="line">        &#125;</span><br><span class="line">         </span><br><span class="line">        <span class="comment">#日志格式设定</span></span><br><span class="line">        <span class="comment">#$remote_addr与$http_x_forwarded_for用以记录客户端的ip地址；</span></span><br><span class="line">        <span class="comment">#$remote_user：用来记录客户端用户名称；</span></span><br><span class="line">        <span class="comment">#$time_local： 用来记录访问时间与时区；</span></span><br><span class="line">        <span class="comment">#$request： 用来记录请求的url与http协议；</span></span><br><span class="line">        <span class="comment">#$status： 用来记录请求状态；成功是200，</span></span><br><span class="line">        <span class="comment">#$body_bytes_sent ：记录发送给客户端文件主体内容大小；</span></span><br><span class="line">        <span class="comment">#$http_referer：用来记录从那个页面链接访问过来的；</span></span><br><span class="line">        <span class="comment">#$http_user_agent：记录客户浏览器的相关信息；</span></span><br><span class="line">        <span class="comment">#通常web服务器放在反向代理的后面，这样就不能获取到客户的IP地址了，通过$remote_add拿到的IP地址是反向代理服务器的iP地址。反向代理服务器在转发请求的http头信息中，可以增加x_forwarded_for信息，用以记录原有客户端的IP地址和原来客户端的请求的服务器地址。</span></span><br><span class="line">        <span class="attribute">log_format</span> access <span class="string">'<span class="variable">$remote_addr</span> - <span class="variable">$remote_user</span> [<span class="variable">$time_local</span>] "<span class="variable">$request</span>" '</span></span><br><span class="line">        <span class="string">'<span class="variable">$status</span> <span class="variable">$body_bytes_sent</span> "<span class="variable">$http_referer</span>" '</span></span><br><span class="line">        <span class="string">'"<span class="variable">$http_user_agent</span>" <span class="variable">$http_x_forwarded_for</span>'</span>;</span><br><span class="line">         </span><br><span class="line">        <span class="comment">#定义本虚拟主机的访问日志</span></span><br><span class="line">        <span class="attribute">access_log</span>  /usr/local/nginx/logs/host.access.log  main;</span><br><span class="line">        <span class="attribute">access_log</span>  /usr/local/nginx/logs/host.access.<span class="number">404</span>.log  log404;</span><br><span class="line">         </span><br><span class="line">        <span class="comment">#对 "/" 启用反向代理</span></span><br><span class="line">        <span class="attribute">location</span> / &#123;</span><br><span class="line">            <span class="attribute">proxy_pass</span> http://127.0.0.1:88;</span><br><span class="line">            <span class="attribute">proxy_redirect</span> <span class="literal">off</span>;</span><br><span class="line">            <span class="attribute">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">             </span><br><span class="line">            <span class="comment">#后端的Web服务器可以通过X-Forwarded-For获取用户真实IP</span></span><br><span class="line">            <span class="attribute">proxy_set_header</span> X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">             </span><br><span class="line">            <span class="comment">#以下是一些反向代理的配置，可选。</span></span><br><span class="line">            <span class="attribute">proxy_set_header</span> Host <span class="variable">$host</span>;</span><br><span class="line"></span><br><span class="line">            <span class="comment">#允许客户端请求的最大单文件字节数</span></span><br><span class="line">            <span class="attribute">client_max_body_size</span> <span class="number">10m</span>;</span><br><span class="line"></span><br><span class="line">            <span class="comment">#缓冲区代理缓冲用户端请求的最大字节数，</span></span><br><span class="line">            <span class="comment">#如果把它设置为比较大的数值，例如256k，那么，无论使用firefox还是IE浏览器，来提交任意小于256k的图片，都很正常。如果注释该指令，使用默认的client_body_buffer_size设置，也就是操作系统页面大小的两倍，8k或者16k，问题就出现了。</span></span><br><span class="line">            <span class="comment">#无论使用firefox4.0还是IE8.0，提交一个比较大，200k左右的图片，都返回500 Internal Server Error错误</span></span><br><span class="line">            <span class="attribute">client_body_buffer_size</span> <span class="number">128k</span>;</span><br><span class="line"></span><br><span class="line">            <span class="comment">#表示使nginx阻止HTTP应答代码为400或者更高的应答。</span></span><br><span class="line">            <span class="attribute">proxy_intercept_errors</span> <span class="literal">on</span>;</span><br><span class="line"></span><br><span class="line">            <span class="comment">#后端服务器连接的超时时间_发起握手等候响应超时时间</span></span><br><span class="line">            <span class="comment">#nginx跟后端服务器连接超时时间(代理连接超时)</span></span><br><span class="line">            <span class="attribute">proxy_connect_timeout</span> <span class="number">90</span>;</span><br><span class="line"></span><br><span class="line">            <span class="comment">#后端服务器数据回传时间(代理发送超时)</span></span><br><span class="line">            <span class="comment">#后端服务器数据回传时间_就是在规定时间之内后端服务器必须传完所有的数据</span></span><br><span class="line">            <span class="attribute">proxy_send_timeout</span> <span class="number">90</span>;</span><br><span class="line"></span><br><span class="line">            <span class="comment">#连接成功后，后端服务器响应时间(代理接收超时)</span></span><br><span class="line">            <span class="comment">#连接成功后_等候后端服务器响应时间_其实已经进入后端的排队之中等候处理（也可以说是后端服务器处理请求的时间）</span></span><br><span class="line">            <span class="attribute">proxy_read_timeout</span> <span class="number">90</span>;</span><br><span class="line"></span><br><span class="line">            <span class="comment">#设置代理服务器（nginx）保存用户头信息的缓冲区大小</span></span><br><span class="line">            <span class="comment">#设置从被代理服务器读取的第一部分应答的缓冲区大小，通常情况下这部分应答中包含一个小的应答头，默认情况下这个值的大小为指令proxy_buffers中指定的一个缓冲区的大小，不过可以将其设置为更小</span></span><br><span class="line">            <span class="attribute">proxy_buffer_size</span> <span class="number">4k</span>;</span><br><span class="line"></span><br><span class="line">            <span class="comment">#proxy_buffers缓冲区，网页平均在32k以下的设置</span></span><br><span class="line">            <span class="comment">#设置用于读取应答（来自被代理服务器）的缓冲区数目和大小，默认情况也为分页大小，根据操作系统的不同可能是4k或者8k</span></span><br><span class="line">            <span class="attribute">proxy_buffers</span> <span class="number">4</span> <span class="number">32k</span>;</span><br><span class="line"></span><br><span class="line">            <span class="comment">#高负荷下缓冲大小（proxy_buffers*2）</span></span><br><span class="line">            <span class="attribute">proxy_busy_buffers_size</span> <span class="number">64k</span>;</span><br><span class="line"></span><br><span class="line">            <span class="comment">#设置在写入proxy_temp_path时数据的大小，预防一个工作进程在传递文件时阻塞太长</span></span><br><span class="line">            <span class="comment">#设定缓存文件夹大小，大于这个值，将从upstream服务器传</span></span><br><span class="line">            <span class="attribute">proxy_temp_file_write_size</span> <span class="number">64k</span>;</span><br><span class="line">        &#125;</span><br><span class="line">         </span><br><span class="line">         </span><br><span class="line">        <span class="comment">#设定查看Nginx状态的地址</span></span><br><span class="line">        <span class="attribute">location</span> /NginxStatus &#123;</span><br><span class="line">            <span class="attribute">stub_status</span> <span class="literal">on</span>;</span><br><span class="line">            <span class="attribute">access_log</span> <span class="literal">on</span>;</span><br><span class="line">            <span class="attribute">auth_basic</span> <span class="string">"NginxStatus"</span>;</span><br><span class="line">            <span class="attribute">auth_basic_user_file</span> confpasswd;</span><br><span class="line">            <span class="comment">#htpasswd文件的内容可以用apache提供的htpasswd工具来产生。</span></span><br><span class="line">        &#125;</span><br><span class="line">         </span><br><span class="line">        <span class="comment">#本地动静分离反向代理配置</span></span><br><span class="line">        <span class="comment">#所有jsp的页面均交由tomcat或resin处理</span></span><br><span class="line">        <span class="attribute">location</span> <span class="regexp">~ .(jsp|jspx|do)?$</span> &#123;</span><br><span class="line">            <span class="attribute">proxy_set_header</span> Host <span class="variable">$host</span>;</span><br><span class="line">            <span class="attribute">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">            <span class="attribute">proxy_set_header</span> X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">            <span class="attribute">proxy_pass</span> http://127.0.0.1:8080;</span><br><span class="line">        &#125;</span><br><span class="line">         </span><br><span class="line">        <span class="comment">#所有静态文件由nginx直接读取不经过tomcat或resin</span></span><br><span class="line">        <span class="attribute">location</span> <span class="regexp">~ .*.(htm|html|gif|jpg|jpeg|png|bmp|swf|ioc|rar|zip|txt|flv|mid|doc|ppt|</span></span><br><span class="line"><span class="regexp"></span>        pdf|xls|mp3|wma)$</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attribute">expires</span> <span class="number">15d</span>; </span><br><span class="line">        &#125;</span><br><span class="line">         </span><br><span class="line">        <span class="attribute">location</span> <span class="regexp">~ .*.(js|css)?$</span></span><br><span class="line"><span class="regexp"></span>        &#123;</span><br><span class="line">            <span class="attribute">expires</span> <span class="number">1h</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/05/06/Nginx的accept_mutex配置/">Nginx工作原理</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/4/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-05-06T14:22:22.000Z" itemprop="datePublished">2018-05-06</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Nginx/">Nginx</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Nginx的accept-mutex配置"><a href="#Nginx的accept-mutex配置" class="headerlink" title="Nginx的accept_mutex配置"></a>Nginx的accept_mutex配置</h1><p>通常多数人不会注意Nginx的accept_mutex配置，不过实际上它对系统的吞吐量有一定的影响。</p>
-<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">events</span> &#123; </span><br><span class="line"><span class="attribute">accept_mutex</span> <span class="literal">off</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>当一个新连接到达时:<br>如果激活了accept_mutex，那么多个Worker将以串行方式来处理，其中有一个Worker会被唤醒，其他的Worker继续保持休眠状态；<br>如果没有激活accept_mutex，那么所有的Worker都会被唤醒，不过只有一个Worker能获取新连接，其它的Worker会重新进入休眠状态，这就是「惊群问题」。</p>
-<p>Nginx缺省激活了accept_mutex，也就是说不会有惊群问题，但真的有那么严重么？</p>
-<p>简单点说：Apache动辄就会启动成百上千的进程，如果发生惊群问题的话，影响相对较大；但是对Nginx而言，一般来说，worker_processes会设置成CPU个数，所以最多也就几十个，即便发生惊群问题的话，影响相对也较小。</p>
-<p>另：高版本的Linux中，accept不存在惊群问题，不过epoll_wait等操作还有。</p>
-<p>很形象： 假设你养了一百只小鸡，现在你有一粒粮食，那么有两种喂食方法：</p>
-<p>你把这粒粮食直接扔到小鸡中间，一百只小鸡一起上来抢，最终只有一只小鸡能得手，其它九十九只小鸡只能铩羽而归。这就相当于关闭了accept_mutex。<br>你主动抓一只小鸡过来，把这粒粮食塞到它嘴里，其它九十九只小鸡对此浑然不知，该睡觉睡觉。这就相当于激活了accept_mutex。<br>可以看到此场景下，激活accept_mutex相对更好一些，让我们修改一下问题的场景，我不再只有一粒粮食，而是一盆粮食，怎么办？</p>
-<p>此时如果仍然采用主动抓小鸡过来塞粮食的做法就太低效了，一盆粮食不知何年何月才能喂完，大家可以设想一下几十只小鸡排队等着喂食时那种翘首以盼的情景。此时更好的方法是把这盆粮食直接撒到小鸡中间，让它们自己去抢，虽然这可能会造成一定程度的混乱，但是整体的效率无疑大大增强了。</p>
-<p>accept_mutex会轮流来选择worker进程。Nginx默认开启了accept_mutex。<br>Nginx缺省激活了accept_mutex，是一种保守的选择。如果关闭了它，可能会引起一定程度的惊群问题，表现为上下文切换增多（sar -w）或者负载上升，但是如果你的网站访问量比较大，为了系统的吞吐量，我还是建议大家关闭它。</p>
-
-        
-    </section>
-</article>
-
-
 
 
 <nav class="page-nav">
-    <a class="extend prev" rel="prev" href="/page/3/">&laquo; 上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/5/">下一页 &raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/3/">&laquo; 上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/5/">下一页 &raquo;</a>
 </nav>
 
 

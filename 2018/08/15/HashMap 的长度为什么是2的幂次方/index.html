@@ -7,7 +7,7 @@
 
     
 
-    <title>我喜欢你喜欢我的歌</title>
+    <title>HashMap 的长度为什么是2的幂次方? | 我喜欢你喜欢我的歌</title>
     <meta name="author" content="Dick Zhong">
     <meta name="version" content="1.0.0">
     <meta name="keywords" content>
@@ -84,6 +84,30 @@
 
         <div id="content" class="content"><article class="article" itemscope itemprop="blogPost">
     
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            HashMap 的长度为什么是2的幂次方?
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/2018/08/15/HashMap 的长度为什么是2的幂次方/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-08-15T15:20:00.000Z" itemprop="datePublished">2018-08-15</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java容器/">Java容器</a>
+</div>
+
+
+        </div>
+    </header>
+    
     <section class="article-body markdown-body">
         
         <h1 id="HashMap-的长度为什么是2的幂次方"><a href="#HashMap-的长度为什么是2的幂次方" class="headerlink" title="HashMap 的长度为什么是2的幂次方?"></a>HashMap 的长度为什么是2的幂次方?</h1><p>为了能让 HashMap 存取高效，尽量较少碰撞，也就是要尽量把数据分配均匀。我们上面也讲到了过了，<br>Hash 值的范围值-2147483648到2147483647，前后加起来大概40亿的映射空间，只要哈希函数映射得比较均匀松散，<br>一般应用是很难出现碰撞的。但问题是一个40亿长度的数组，内存是放不下的。所以这个散列值是不能直接拿来用的。<br>用之前还要先做对数组的长度取模运算，得到的余数才能用来要存放的位置也就是对应的数组下标。</p>
@@ -112,11 +136,11 @@
         repo: "WXzhongwang.github.io",
         owner: "WXzhongwang",
         admin: ["WXzhongwang"],
-        id: "2019/08/22/HashMap 的长度为什么是2的幂次方",
+        id: "2018/08/15/HashMap 的长度为什么是2的幂次方",
         distractionFreeMode: true,
-        title: "",
-        body: "https://wxzhongwang.github.io/2019/08/22/HashMap 的长度为什么是2的幂次方/",
-        labels: []
+        title: "HashMap 的长度为什么是2的幂次方?",
+        body: "https://wxzhongwang.github.io/2018/08/15/HashMap 的长度为什么是2的幂次方/",
+        labels: ["Java容器"]
     }).render('comments');
     </script>
 </div>
