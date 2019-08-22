@@ -131,6 +131,44 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2017/02/12/动态属性ExpandoObject/">动态属性ExpandoObject</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/14/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-02-12T08:20:10.000Z" itemprop="datePublished">2017-02-12</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/NET/">NET</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>#动态属性ExpandoObject</p>
+<p>动态对象 ExpandoObject中添加动态属性？</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dynamic</span> obj = <span class="keyword">new</span> ExpandoObject();</span><br><span class="line">IDictionary&lt;<span class="keyword">string</span>, <span class="keyword">object</span>&gt; temp = <span class="keyword">new</span> Dictionary&lt;<span class="keyword">string</span>, <span class="keyword">object</span>&gt;();</span><br><span class="line">temp.Add(Key, Value);</span><br><span class="line"></span><br><span class="line"><span class="keyword">foreach</span> (KeyValuePair&lt;<span class="keyword">string</span>, <span class="keyword">object</span>&gt; item <span class="keyword">in</span> temp)</span><br><span class="line">&#123;</span><br><span class="line">    ((IDictionary&lt;<span class="keyword">string</span>, <span class="keyword">object</span>&gt;)obj).Add(item.Key, item.Value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因为不难发现ExpandObject继承自以下接口：<br>IDictionary&lt;string, object&gt;, ICollection&lt;KeyValuePair&lt;string, object&gt;&gt;, IEnumerable&lt;KeyValuePair&lt;string, object&gt;&gt;, IEnumerable</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2017/02/08/Java单例模式/">单例模式</a>
         </h1>
         

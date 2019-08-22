@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://wxzhongwang.github.io/"/>
-  <updated>2019-08-11T05:15:06.198Z</updated>
+  <updated>2019-08-22T14:08:44.064Z</updated>
   <id>https://wxzhongwang.github.io/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title></title>
+    <link href="https://wxzhongwang.github.io/2019/08/22/ConcurrentHashMap%20%E5%92%8C%20Hashtable%20%E7%9A%84%E5%8C%BA%E5%88%AB/"/>
+    <id>https://wxzhongwang.github.io/2019/08/22/ConcurrentHashMap 和 Hashtable 的区别/</id>
+    <published>2019-08-22T13:58:18.239Z</published>
+    <updated>2019-08-22T14:08:44.064Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="ConcurrentHashMap-和-Hashtable-的区别"><a href="#ConcurrentHashMap-和-Hashtable-的区别" class="headerlink" title="ConcurrentHashMap 和 Hashtable 的区别"></a>ConcurrentHashMap 和 Hashtable 的区别</h1><h2 id="底层数据结构"><a href="#底层数据结构" class="headerlink" title="底层数据结构"></a>底层数据结构</h2><h3 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h3><p>[JDK1.7]<br>ConcurrentHashMap 底层采用 分段的数组+链表 实现，<br>[JDK1.8]<br>ConcurrentHashMap 采用的数据结构跟HashMap1.8的结构一样，数组+链表/红黑二叉树。</p><h3 id="Hashtable"><a href="#Hashtable" class="headerlink" title="Hashtable"></a>Hashtable</h3><p>Hashtable 和 JDK1.8 之前的 HashMap 的底层数据结构类似都是采用 数组+链表 的形式，<br>数组是 HashMap 的主体，链表则是主要为了解决哈希冲突而存在的；</p><h2 id="实现线程安全的方式（重要）"><a href="#实现线程安全的方式（重要）" class="headerlink" title="实现线程安全的方式（重要）"></a>实现线程安全的方式（重要）</h2><h3 id="ConcurrentHashMap-1"><a href="#ConcurrentHashMap-1" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h3><p>[JDK1.7]<br>ConcurrentHashMap（分段锁） 对整个桶数组进行了分割分段(Segment)，每一把锁只锁容器其中一部分数据，多线程访问容器里不同数据段的数据，<br>就不会存在锁竞争，提高并发访问率。<br>[JDK1.8]<br>摒弃了Segment的概念，而是直接用 Node 数组 + 链表 + 红黑树 的数据结构来实现，并发控制使用 synchronized 和 CAS 来操作。<br>（JDK1.6以后 对 synchronized锁做了很多优化） 整个看起来就像是优化过且线程安全的 HashMap，<br>虽然在JDK1.8中还能看到 Segment 的数据结构，但是已经简化了属性，只是为了兼容旧版本；</p><h3 id="Hashtable-同一把锁"><a href="#Hashtable-同一把锁" class="headerlink" title="Hashtable(同一把锁)"></a>Hashtable(同一把锁)</h3><p>使用 synchronized 来保证线程安全，效率非常低下。当一个线程访问同步方法时，其他线程也访问同步方法，<br>可能会进入阻塞或轮询状态，如使用 put 添加元素，另一个线程不能使用 put 添加元素，也不能使用 get，<br>竞争会越来越激烈效率越低。HashTable性能差主要是由于所有操作需要竞争同一把锁，而如果容器中有多把锁，<br>每一把锁锁一段数据，这样在多线程访问时不同段的数据时，就不会存在锁竞争了，这样便可以有效地提高并发效率。<br>这就是ConcurrentHashMap所采用的”分段锁”思想。</p><p><strong>两者的对比图：</strong></p><p>图片来源：<a href="http://www.cnblogs.com/chengxiao/p/6842045.html" target="_blank" rel="noopener">http://www.cnblogs.com/chengxiao/p/6842045.html</a></p><p><strong>HashTable:</strong></p><p><img src="https://my-blog-to-use.oss-cn-beijing.aliyuncs.com/2019-6/HashTable全表锁.png" alt="HashTable全表锁"></p><p><strong>JDK1.7的ConcurrentHashMap：</strong></p><p><img src="https://my-blog-to-use.oss-cn-beijing.aliyuncs.com/2019-6/ConcurrentHashMap分段锁.jpg" alt="JDK1.7的ConcurrentHashMap"></p><p><strong>JDK1.8的ConcurrentHashMap（TreeBin: 红黑二叉树节点 Node: 链表节点）：</strong></p><p><img src="https://my-blog-to-use.oss-cn-beijing.aliyuncs.com/2019-6/JDK1.8-ConcurrentHashMap-Structure.jpg" alt="JDK1.8的ConcurrentHashMap"></p><h2 id="ConcurrentHashMap线程安全的具体实现方式-底层具体实现"><a href="#ConcurrentHashMap线程安全的具体实现方式-底层具体实现" class="headerlink" title="ConcurrentHashMap线程安全的具体实现方式/底层具体实现"></a>ConcurrentHashMap线程安全的具体实现方式/底层具体实现</h2><h3 id="JDK1-7（上面有示意图）"><a href="#JDK1-7（上面有示意图）" class="headerlink" title="JDK1.7（上面有示意图）"></a>JDK1.7（上面有示意图）</h3><p>首先将数据分为一段一段的存储，然后给每一段数据配一把锁，当一个线程占用锁访问其中一个段数据时，其他段的数据也能被其他线程访问。</p><p><strong>ConcurrentHashMap 是由 Segment 数组结构和 HashEntry 数组结构组成</strong>。</p><p>　　</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;ConcurrentHashMap-和-Hashtable-的区别&quot;&gt;&lt;a href=&quot;#ConcurrentHashMap-和-Hashtable-的区别&quot; class=&quot;headerlink&quot; title=&quot;ConcurrentHashMap 和 Hashta
+      
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>NOSQL</title>
@@ -344,6 +365,31 @@
   </entry>
   
   <entry>
+    <title>字符型常量和字符串常量的区别</title>
+    <link href="https://wxzhongwang.github.io/2019/03/01/%E5%AD%97%E7%AC%A6%E5%9E%8B%E5%B8%B8%E9%87%8F%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E7%9A%84%E5%8C%BA%E5%88%AB/"/>
+    <id>https://wxzhongwang.github.io/2019/03/01/字符型常量和字符串常量的区别/</id>
+    <published>2019-03-01T02:10:00.000Z</published>
+    <updated>2019-08-12T13:03:07.878Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="字符型常量和字符串常量的区别"><a href="#字符型常量和字符串常量的区别" class="headerlink" title="字符型常量和字符串常量的区别"></a>字符型常量和字符串常量的区别</h1><p>形式上: 字符常量是单引号引起的一个字符; 字符串常量是双引号引起的若干个字符</p><p>含义上: 字符常量相当于一个整型值( ASCII 值),可以参加表达式运算; 字符串常量代表一个地址值(该字符串在内存中存放位置)</p><p>占内存大小: 字符常量只占2个字节; 字符串常量占若干个字节(至少一个字符结束标志) (注意： char在Java中占两个字节)</p><p>数据类型     大小        包装器类型<br>boolean      -           Boolean<br>char       16bits        Character<br>byte        8bits        Byte<br>short      16bits        Short<br>int        32bits        Integer<br>long       64bits        Long<br>float      32bits        Float<br>double     64bits        Double</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;字符型常量和字符串常量的区别&quot;&gt;&lt;a href=&quot;#字符型常量和字符串常量的区别&quot; class=&quot;headerlink&quot; title=&quot;字符型常量和字符串常量的区别&quot;&gt;&lt;/a&gt;字符型常量和字符串常量的区别&lt;/h1&gt;&lt;p&gt;形式上: 字符常量是单引号引起的一个字符; 
+      
+    
+    </summary>
+    
+      <category term="Java" scheme="https://wxzhongwang.github.io/categories/Java/"/>
+    
+    
+      <category term="Java" scheme="https://wxzhongwang.github.io/tags/Java/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Java 并发基础常见面试题总结</title>
     <link href="https://wxzhongwang.github.io/2019/03/01/Java%20%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98%E6%80%BB%E7%BB%93/"/>
     <id>https://wxzhongwang.github.io/2019/03/01/Java 并发基础常见面试题总结/</id>
@@ -390,31 +436,6 @@
     
     
       <category term="多线程" scheme="https://wxzhongwang.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>字符型常量和字符串常量的区别</title>
-    <link href="https://wxzhongwang.github.io/2019/03/01/%E5%AD%97%E7%AC%A6%E5%9E%8B%E5%B8%B8%E9%87%8F%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E7%9A%84%E5%8C%BA%E5%88%AB/"/>
-    <id>https://wxzhongwang.github.io/2019/03/01/字符型常量和字符串常量的区别/</id>
-    <published>2019-03-01T02:10:00.000Z</published>
-    <updated>2019-08-12T13:03:07.878Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="字符型常量和字符串常量的区别"><a href="#字符型常量和字符串常量的区别" class="headerlink" title="字符型常量和字符串常量的区别"></a>字符型常量和字符串常量的区别</h1><p>形式上: 字符常量是单引号引起的一个字符; 字符串常量是双引号引起的若干个字符</p><p>含义上: 字符常量相当于一个整型值( ASCII 值),可以参加表达式运算; 字符串常量代表一个地址值(该字符串在内存中存放位置)</p><p>占内存大小: 字符常量只占2个字节; 字符串常量占若干个字节(至少一个字符结束标志) (注意： char在Java中占两个字节)</p><p>数据类型     大小        包装器类型<br>boolean      -           Boolean<br>char       16bits        Character<br>byte        8bits        Byte<br>short      16bits        Short<br>int        32bits        Integer<br>long       64bits        Long<br>float      32bits        Float<br>double     64bits        Double</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;字符型常量和字符串常量的区别&quot;&gt;&lt;a href=&quot;#字符型常量和字符串常量的区别&quot; class=&quot;headerlink&quot; title=&quot;字符型常量和字符串常量的区别&quot;&gt;&lt;/a&gt;字符型常量和字符串常量的区别&lt;/h1&gt;&lt;p&gt;形式上: 字符常量是单引号引起的一个字符; 
-      
-    
-    </summary>
-    
-      <category term="Java" scheme="https://wxzhongwang.github.io/categories/Java/"/>
-    
-    
-      <category term="Java" scheme="https://wxzhongwang.github.io/tags/Java/"/>
     
   </entry>
   
@@ -516,32 +537,6 @@
     
     
       <category term="Greenplum" scheme="https://wxzhongwang.github.io/tags/Greenplum/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>世界以痛吻我 我却报之以歌</title>
-    <link href="https://wxzhongwang.github.io/2019/01/29/%E4%B8%96%E7%95%8C%E4%BB%A5%E7%97%9B%E5%90%BB%E6%88%91%EF%BC%8C%E6%88%91%E5%8D%B4%E6%8A%A5%E4%B9%8B%E4%BB%A5%E6%AD%8C/"/>
-    <id>https://wxzhongwang.github.io/2019/01/29/世界以痛吻我，我却报之以歌/</id>
-    <published>2019-01-29T09:10:10.000Z</published>
-    <updated>2019-08-07T15:12:59.556Z</updated>
-    
-    <content type="html"><![CDATA[<p>今年发生不好的事，一切都显得不那么美好，就很多事情都不按大家的预想在发展。就一起都感觉不顺利，2018已经不够友好了，还记得刚刚过去的23岁生日，记得自己的愿望是希望，真挚希望所有的亲朋好友能够健康，健康就够了，钱多钱少不重要，就是健康就够了。。。</p><p>但是偏偏还是发生了。</p><h1 id="世界以痛吻我-我却报之以歌"><a href="#世界以痛吻我-我却报之以歌" class="headerlink" title="世界以痛吻我 我却报之以歌"></a>世界以痛吻我 我却报之以歌</h1><p>亲人已仙游，未呈儿孙福，幽魂于千里，如何度思量。</p><p>2018年06月14日早9：00点，在杭州，还在床上的我猛的收到了家人群的消息，早已患糖尿病多年的舅舅病逝。尽管心里有多不愿意接受，但是心里也算是做好了准备。在五一回家时间便已经被告知舅舅身体日渐消瘦，骨瘦如柴。我还趁着工作之余，抽空去看望了。当看到那一瞬间，我感觉我整个人就不好了，眼泪一下就出来了，整个人像楞住了一般，久久说不出话，手也不知道往哪里放。当舅舅看到我，一把把我拽住，死死捏着，这一幕到现在我也忘不了…</p><p>又是在杭州，2019年01月29日早8: 00点，同样的戏码，姨夫病逝，癌症晚期，距离收到通知，也就短短三个多月时间，大概一百多天，原本一个看上去健健康康的人，就突然离开，就像上帝给你的人生突然上了锁，然后把钥匙给扔掉了的感觉…</p><p>醒来又是一天，开始干活，累…</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;今年发生不好的事，一切都显得不那么美好，就很多事情都不按大家的预想在发展。就一起都感觉不顺利，2018已经不够友好了，还记得刚刚过去的23岁生日，记得自己的愿望是希望，真挚希望所有的亲朋好友能够健康，健康就够了，钱多钱少不重要，就是健康就够了。。。&lt;/p&gt;
-&lt;p&gt;但是偏偏还
-      
-    
-    </summary>
-    
-      <category term="个人" scheme="https://wxzhongwang.github.io/categories/%E4%B8%AA%E4%BA%BA/"/>
-    
-    
-      <category term="个人" scheme="https://wxzhongwang.github.io/tags/%E4%B8%AA%E4%BA%BA/"/>
     
   </entry>
   
