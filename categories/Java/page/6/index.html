@@ -131,6 +131,44 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/02/01/1.0 Java程序执行流程/">JVM 1.0</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-01T02:10:00.000Z" itemprop="datePublished">2018-02-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>1.Java程序执行流程</p>
+<p>Java技术的核心就是Java虚拟机，因为所有的Java程序都在虚拟机上运行。Java程序的运行需要Java虚拟机、Java API和Java Class文件的配合。Java虚拟机实例负责运行一个Java程序。当启动一个Java程序时，一个虚拟机实例就诞生了。当程序结束，这个虚拟机实例也就消亡。</p>
+<p><img src="https://www.javazhiyin.com/wp-content/uploads/2019/01/java3-1547432465.jpg" alt="image"></p>
+<p>分为编译时环境和运行时环境，很基础很重要。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/01/01/架构演变背景/">架构演变背景</a>
         </h1>
         
@@ -523,44 +561,10 @@ public void printStackTrace():在控制台上打印Throwable对象封装的异�
 </article>
 
 
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/04/01/判断字符串是否为空字符串/">判断字符串是否为空字符串</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-04-01T09:10:10.000Z" itemprop="datePublished">2017-04-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="判断字符串是否为空字符串"><a href="#判断字符串是否为空字符串" class="headerlink" title="判断字符串是否为空字符串"></a>判断字符串是否为空字符串</h1><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> class StringUtil &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 判断是否为空字符串最优代码</span></span><br><span class="line"><span class="comment">     * @param str</span></span><br><span class="line"><span class="comment">     * @return 如果为空，则返回true</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">boolean</span> isEmpty(<span class="keyword">String</span> <span class="built_in">str</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">str</span> == <span class="keyword">null</span> || <span class="built_in">str</span>.<span class="built_in">trim</span>().length() == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 判断字符串是否非空</span></span><br><span class="line"><span class="comment">     * @param str </span></span><br><span class="line"><span class="comment">     * @return 如果不为空，则返回true</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">boolean</span> isNotEmpty(<span class="keyword">String</span> <span class="built_in">str</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> !isEmpty(<span class="built_in">str</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-        
-    </section>
-</article>
-
-
 
 
 <nav class="page-nav">
-    <a class="extend prev" rel="prev" href="/categories/Java/page/5/">&laquo; 上一页</a><a class="page-number" href="/categories/Java/">1</a><span class="space">&hellip;</span><a class="page-number" href="/categories/Java/page/4/">4</a><a class="page-number" href="/categories/Java/page/5/">5</a><span class="page-number current">6</span>
+    <a class="extend prev" rel="prev" href="/categories/Java/page/5/">&laquo; 上一页</a><a class="page-number" href="/categories/Java/">1</a><span class="space">&hellip;</span><a class="page-number" href="/categories/Java/page/4/">4</a><a class="page-number" href="/categories/Java/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/categories/Java/page/7/">7</a><a class="extend next" rel="next" href="/categories/Java/page/7/">下一页 &raquo;</a>
 </nav>
 
 

@@ -217,6 +217,72 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2019/01/08/大数据相关技术（Hadoop体系）/">Hadoop技术体系</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/3/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-01-08T06:18:02.000Z" itemprop="datePublished">2019-01-08</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Hadoop/">Hadoop</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>Hadoop 里面包括几个组件<strong>HDFS</strong>、<strong>MapReduce</strong>、<strong>YARN</strong>和<strong>ZooKeeper</strong>等一系列技术，HDFS是存储数据的地方就像我们电脑的硬盘一样文件都存储在这个上面，MapReduce是对数据进行处理计算的，YARN是体现Hadoop平台概念的重要组件，有了它大数据生态体系的其它软件就能在hadoop上运行了，这样能更好的利用HDFS大存储的优势和节省更多的资源比如我们就不用再单独建一个spark的集群了，让它直接跑在现有的hadoop yarn上面就可以了。ZooKeeper本身是一个非常牢靠的记事本，用于记录一些概要信息。Hadoop依靠这个记事本来记录当前哪些节点正在用，哪些已掉线，哪些是备用等，以此来管理机群。</p>
+<h1 id="Hadoop技术体系"><a href="#Hadoop技术体系" class="headerlink" title="Hadoop技术体系"></a>Hadoop技术体系</h1><h2 id="Hadoop"><a href="#Hadoop" class="headerlink" title="Hadoop"></a>Hadoop</h2><p>Hadoop 里面包括几个组件<strong>HDFS</strong>、<strong>MapReduce</strong>、<strong>YARN</strong>和<strong>ZooKeeper</strong>等一系列技术，HDFS是存储数据的地方就像我们电脑的硬盘一样文件都存储在这个上面，MapReduce是对数据进行处理计算的，YARN是体现Hadoop平台概念的重要组件，有了它大数据生态体系的其它软件就能在hadoop上运行了，这样能更好的利用HDFS大存储的优势和节省更多的资源比如我们就不用再单独建一个spark的集群了，让它直接跑在现有的hadoop yarn上面就可以了。ZooKeeper本身是一个非常牢靠的记事本，用于记录一些概要信息。Hadoop依靠这个记事本来记录当前哪些节点正在用，哪些已掉线，哪些是备用等，以此来管理机群。</p>
+<h2 id="HDFS"><a href="#HDFS" class="headerlink" title="HDFS"></a>HDFS</h2><p>Hadoop Distributed File System，Hadoop 分布式文件系统<br>高度容错性的系统，适合部署在廉价的机器上，HDFS能提供高吞吐量的数据访问，适合那些有着超大数据集（large data set）的应用程序。</p>
+<h2 id="MapReduce"><a href="#MapReduce" class="headerlink" title="MapReduce"></a>MapReduce</h2><p>Mapreduce是一个计算框架，一个处理分布式海量数据的软件框架及计算集群。</p>
+<p>Map （映射） Reduce (简化)<br>举个例子：假设你的手机通话信息保存在一个HDFS的文件callList.txt中，你想找到你与同事A的所有通话记录并排序。因为HDFS会把callLst.txt分成几块分别存，比如说5块，那么对应的Map过程就是找到这5块所在的5个节点，让它们分别找自己存的那块中关于同事A的通话记录，对应的Reduce过程就是把5个节点过滤后的通话记录合并在一块并按时间排序。MapReduce的计算模型通常把HDFS作为数据来源，很少会用到其它数据来源比如HBase。</p>
+<h2 id="Hbase"><a href="#Hbase" class="headerlink" title="Hbase"></a>Hbase</h2><p>这是Hadoop生态体系中的NOSQL数据库，他的数据是按照key和value的形式存储的并且key是唯一的，所以它能用来做数据的排重，它与MYSQL相比能存储的数据量大很多。所以他常被用于大数据处理完成之后的存储目的地。</p>
+<blockquote>
+<p>HDFS和HBase是依靠外存（即硬盘）的分布式文件存储实现和分布式表存储实现。HDFS是一个分布式的“云存储”文件系统，它会把一个文件分块并分别保存，取用时分别再取出、合并。重要的是，这些分块通常会在3个节点（即集群内的服务器）上各有1个备份，因此即使出现少数节点的失效（如硬盘损坏、掉电等），文件也不会失效。如果说HDFS是文件级别的存储，那HBase则是表级别的存储。HBase是表模型，但比SQL数据库的表要简单的多，没有连接、聚集等功能。HBase的表是物理存储到HDFS的，比如把一个表分成4个HDFS文件并存储。由于HDFS级会做备份，所以HBase级不再备份。MapReduce则是一个计算模型，而不是存储模型；MapReduce通常与HDFS紧密配合。</p>
+</blockquote>
+<h2 id="Hive"><a href="#Hive" class="headerlink" title="Hive"></a>Hive</h2><p>Hive 是一种底层封装了Hadoop 的数据仓库处理工具，使用类SQL的HiveQL语言实现数据查询，所有Hive 的数据都存储在Hadoop 兼容的文件系统（如HDFS）中。Hive在加载数据过程中不会对数据进行任何的修改，只是将数据移动到HDFS中Hive设定的目录下，++因此，Hive不支持对数据的改写和添加，所有的数据都是在加载的时候确定的++。对于会SQL语法的来说就是神器，它能让你处理大数据变的很简单，不会再费劲的编写MapReduce程序。</p>
+<h2 id="Spark"><a href="#Spark" class="headerlink" title="Spark"></a>Spark</h2><p>它是用来弥补基于MapReduce处理数据速度上的缺点，它的特点是把数据装载到内存中计算而不是去读慢的要死进化还特别慢的硬盘。特别适合做迭代运算，所以算法流们特别稀饭它。它是用scala编写的。Java语言或者Scala都可以操作它，因为它们都是用JVM的。</p>
+<h1 id="其他相关技术"><a href="#其他相关技术" class="headerlink" title="其他相关技术"></a>其他相关技术</h1><h2 id="Sqoop"><a href="#Sqoop" class="headerlink" title="Sqoop"></a>Sqoop</h2><p>这个是用于把Mysql里的数据导入到Hadoop里的。当然你也可以不用这个，直接把Mysql数据表导出成文件再放到HDFS上也是一样的，当然生产环境中使用要注意Mysql的压力。</p>
+<h2 id="Flume"><a href="#Flume" class="headerlink" title="Flume"></a>Flume</h2><p> apache Flume 是一个从可以收集例如日志，事件等数据资源，并将这些数量庞大的数据从各项数据资源中集中起来存储的工具/服务，或者数集中机制。flume具有高可用，分布式，配置工具，其设计的原理也是基于数据流，如日志数据从各种网站服务器上汇集起来存储到HDFS，HBase等集中存储器中。</p>
+<h3 id="一般实时系统，所选用组件如下"><a href="#一般实时系统，所选用组件如下" class="headerlink" title="一般实时系统，所选用组件如下"></a>一般实时系统，所选用组件如下</h3><ul>
+<li>数据采集 ：负责从各节点上实时采集数据，选用Flume来实现  </li>
+<li>数据接入 ：由于采集数据的速度和数据处理的速度不一定同步，因此添加一个消息中间件来作为缓冲，选用apache的kafka  </li>
+<li>流式计算 ：对采集到的数据进行实时分析，选用apache的storm  </li>
+<li>数据输出 ：对分析后的结果持久化，暂定用mysql，另一方面是模块化之后，假如当Storm挂掉了之后，数据采集和数据接入还是继续在跑着，数据不会丢失，storm起来之后可以继续进行流式计算； </li>
+</ul>
+<h2 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h2><p>Kafka的整体架构非常简单，是显式分布式架构，producer、broker（kafka）和consumer都可以有多个。Producer，consumer实现Kafka注册的接口，数据从producer发送到broker，broker承担一个中间缓存和分发的作用。broker分发注册到系统中的consumer。broker的作用类似于缓存，即活跃的数据和离线处理系统之间的缓存。客户端和服务器端的通信，是基于简单，高性能，且与编程语言无关的TCP协议。</p>
+<p>Kafka是一种分布式的、基于发布/订阅的消息系统。在流式计算中，Kafka一般用来缓存数据，Storm通过消费Kafka的数据进行计算（KAFKA+STORM+REDIS）。</p>
+<p>特点：</p>
+<ul>
+<li>消息持久化：通过O(1)的磁盘数据结构提供数据的持久化</li>
+<li>高吞吐量：每秒百万级的消息读写</li>
+<li>分布式：扩展能力强</li>
+<li>多客户端支持：java、php、python、c++ ……</li>
+<li>实时性：生产者生产的message立即被消费者可见</li>
+<li>Kafka是一个分布式消息队列：生产者、消费者的功能。它提供了类似于JMS的特性，但是在设计实   现上完全不同，此外它并不是JMS规范的实现。</li>
+<li>Kafka对消息保存时根据Topic进行归类，发送消息者称为Producer,消息接受者称为Consumer</li>
+<li>无论是kafka集群，还是producer和consumer都依赖于zookeeper集群保存一些meta信息，来保证系统可用性</li>
+</ul>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2019/01/08/Hadoop/">Hadoop概念</a>
         </h1>
         
@@ -316,72 +382,6 @@
 
 复杂的批量数据处理，通常的时间跨度在几分钟到数小时之间
 </code></pre>
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2019/01/08/大数据相关技术（Hadoop体系）/">Hadoop技术体系</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/3/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2019-01-08T06:18:02.000Z" itemprop="datePublished">2019-01-08</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Hadoop/">Hadoop</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>Hadoop 里面包括几个组件<strong>HDFS</strong>、<strong>MapReduce</strong>、<strong>YARN</strong>和<strong>ZooKeeper</strong>等一系列技术，HDFS是存储数据的地方就像我们电脑的硬盘一样文件都存储在这个上面，MapReduce是对数据进行处理计算的，YARN是体现Hadoop平台概念的重要组件，有了它大数据生态体系的其它软件就能在hadoop上运行了，这样能更好的利用HDFS大存储的优势和节省更多的资源比如我们就不用再单独建一个spark的集群了，让它直接跑在现有的hadoop yarn上面就可以了。ZooKeeper本身是一个非常牢靠的记事本，用于记录一些概要信息。Hadoop依靠这个记事本来记录当前哪些节点正在用，哪些已掉线，哪些是备用等，以此来管理机群。</p>
-<h1 id="Hadoop技术体系"><a href="#Hadoop技术体系" class="headerlink" title="Hadoop技术体系"></a>Hadoop技术体系</h1><h2 id="Hadoop"><a href="#Hadoop" class="headerlink" title="Hadoop"></a>Hadoop</h2><p>Hadoop 里面包括几个组件<strong>HDFS</strong>、<strong>MapReduce</strong>、<strong>YARN</strong>和<strong>ZooKeeper</strong>等一系列技术，HDFS是存储数据的地方就像我们电脑的硬盘一样文件都存储在这个上面，MapReduce是对数据进行处理计算的，YARN是体现Hadoop平台概念的重要组件，有了它大数据生态体系的其它软件就能在hadoop上运行了，这样能更好的利用HDFS大存储的优势和节省更多的资源比如我们就不用再单独建一个spark的集群了，让它直接跑在现有的hadoop yarn上面就可以了。ZooKeeper本身是一个非常牢靠的记事本，用于记录一些概要信息。Hadoop依靠这个记事本来记录当前哪些节点正在用，哪些已掉线，哪些是备用等，以此来管理机群。</p>
-<h2 id="HDFS"><a href="#HDFS" class="headerlink" title="HDFS"></a>HDFS</h2><p>Hadoop Distributed File System，Hadoop 分布式文件系统<br>高度容错性的系统，适合部署在廉价的机器上，HDFS能提供高吞吐量的数据访问，适合那些有着超大数据集（large data set）的应用程序。</p>
-<h2 id="MapReduce"><a href="#MapReduce" class="headerlink" title="MapReduce"></a>MapReduce</h2><p>Mapreduce是一个计算框架，一个处理分布式海量数据的软件框架及计算集群。</p>
-<p>Map （映射） Reduce (简化)<br>举个例子：假设你的手机通话信息保存在一个HDFS的文件callList.txt中，你想找到你与同事A的所有通话记录并排序。因为HDFS会把callLst.txt分成几块分别存，比如说5块，那么对应的Map过程就是找到这5块所在的5个节点，让它们分别找自己存的那块中关于同事A的通话记录，对应的Reduce过程就是把5个节点过滤后的通话记录合并在一块并按时间排序。MapReduce的计算模型通常把HDFS作为数据来源，很少会用到其它数据来源比如HBase。</p>
-<h2 id="Hbase"><a href="#Hbase" class="headerlink" title="Hbase"></a>Hbase</h2><p>这是Hadoop生态体系中的NOSQL数据库，他的数据是按照key和value的形式存储的并且key是唯一的，所以它能用来做数据的排重，它与MYSQL相比能存储的数据量大很多。所以他常被用于大数据处理完成之后的存储目的地。</p>
-<blockquote>
-<p>HDFS和HBase是依靠外存（即硬盘）的分布式文件存储实现和分布式表存储实现。HDFS是一个分布式的“云存储”文件系统，它会把一个文件分块并分别保存，取用时分别再取出、合并。重要的是，这些分块通常会在3个节点（即集群内的服务器）上各有1个备份，因此即使出现少数节点的失效（如硬盘损坏、掉电等），文件也不会失效。如果说HDFS是文件级别的存储，那HBase则是表级别的存储。HBase是表模型，但比SQL数据库的表要简单的多，没有连接、聚集等功能。HBase的表是物理存储到HDFS的，比如把一个表分成4个HDFS文件并存储。由于HDFS级会做备份，所以HBase级不再备份。MapReduce则是一个计算模型，而不是存储模型；MapReduce通常与HDFS紧密配合。</p>
-</blockquote>
-<h2 id="Hive"><a href="#Hive" class="headerlink" title="Hive"></a>Hive</h2><p>Hive 是一种底层封装了Hadoop 的数据仓库处理工具，使用类SQL的HiveQL语言实现数据查询，所有Hive 的数据都存储在Hadoop 兼容的文件系统（如HDFS）中。Hive在加载数据过程中不会对数据进行任何的修改，只是将数据移动到HDFS中Hive设定的目录下，++因此，Hive不支持对数据的改写和添加，所有的数据都是在加载的时候确定的++。对于会SQL语法的来说就是神器，它能让你处理大数据变的很简单，不会再费劲的编写MapReduce程序。</p>
-<h2 id="Spark"><a href="#Spark" class="headerlink" title="Spark"></a>Spark</h2><p>它是用来弥补基于MapReduce处理数据速度上的缺点，它的特点是把数据装载到内存中计算而不是去读慢的要死进化还特别慢的硬盘。特别适合做迭代运算，所以算法流们特别稀饭它。它是用scala编写的。Java语言或者Scala都可以操作它，因为它们都是用JVM的。</p>
-<h1 id="其他相关技术"><a href="#其他相关技术" class="headerlink" title="其他相关技术"></a>其他相关技术</h1><h2 id="Sqoop"><a href="#Sqoop" class="headerlink" title="Sqoop"></a>Sqoop</h2><p>这个是用于把Mysql里的数据导入到Hadoop里的。当然你也可以不用这个，直接把Mysql数据表导出成文件再放到HDFS上也是一样的，当然生产环境中使用要注意Mysql的压力。</p>
-<h2 id="Flume"><a href="#Flume" class="headerlink" title="Flume"></a>Flume</h2><p> apache Flume 是一个从可以收集例如日志，事件等数据资源，并将这些数量庞大的数据从各项数据资源中集中起来存储的工具/服务，或者数集中机制。flume具有高可用，分布式，配置工具，其设计的原理也是基于数据流，如日志数据从各种网站服务器上汇集起来存储到HDFS，HBase等集中存储器中。</p>
-<h3 id="一般实时系统，所选用组件如下"><a href="#一般实时系统，所选用组件如下" class="headerlink" title="一般实时系统，所选用组件如下"></a>一般实时系统，所选用组件如下</h3><ul>
-<li>数据采集 ：负责从各节点上实时采集数据，选用Flume来实现  </li>
-<li>数据接入 ：由于采集数据的速度和数据处理的速度不一定同步，因此添加一个消息中间件来作为缓冲，选用apache的kafka  </li>
-<li>流式计算 ：对采集到的数据进行实时分析，选用apache的storm  </li>
-<li>数据输出 ：对分析后的结果持久化，暂定用mysql，另一方面是模块化之后，假如当Storm挂掉了之后，数据采集和数据接入还是继续在跑着，数据不会丢失，storm起来之后可以继续进行流式计算； </li>
-</ul>
-<h2 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h2><p>Kafka的整体架构非常简单，是显式分布式架构，producer、broker（kafka）和consumer都可以有多个。Producer，consumer实现Kafka注册的接口，数据从producer发送到broker，broker承担一个中间缓存和分发的作用。broker分发注册到系统中的consumer。broker的作用类似于缓存，即活跃的数据和离线处理系统之间的缓存。客户端和服务器端的通信，是基于简单，高性能，且与编程语言无关的TCP协议。</p>
-<p>Kafka是一种分布式的、基于发布/订阅的消息系统。在流式计算中，Kafka一般用来缓存数据，Storm通过消费Kafka的数据进行计算（KAFKA+STORM+REDIS）。</p>
-<p>特点：</p>
-<ul>
-<li>消息持久化：通过O(1)的磁盘数据结构提供数据的持久化</li>
-<li>高吞吐量：每秒百万级的消息读写</li>
-<li>分布式：扩展能力强</li>
-<li>多客户端支持：java、php、python、c++ ……</li>
-<li>实时性：生产者生产的message立即被消费者可见</li>
-<li>Kafka是一个分布式消息队列：生产者、消费者的功能。它提供了类似于JMS的特性，但是在设计实   现上完全不同，此外它并不是JMS规范的实现。</li>
-<li>Kafka对消息保存时根据Topic进行归类，发送消息者称为Producer,消息接受者称为Consumer</li>
-<li>无论是kafka集群，还是producer和consumer都依赖于zookeeper集群保存一些meta信息，来保证系统可用性</li>
-</ul>
-
         
     </section>
 </article>
@@ -559,7 +559,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/08/15/HashMap 和 HashTable的区别/">HashMap 和 HashTable的区别</a>
+            <a href="/2018/08/16/ConcurrentHashMap线程安全/">ConcurrentHashMap线程安全的具体实现方式/底层具体实现</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -567,7 +567,7 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-08-15T15:20:00.000Z" itemprop="datePublished">2018-08-15</time>
+    <time datetime="2018-08-15T18:20:00.000Z" itemprop="datePublished">2018-08-16</time>
 </a>
 
             
@@ -582,41 +582,16 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="HashMap-和-HashTable的区别"><a href="#HashMap-和-HashTable的区别" class="headerlink" title="HashMap 和 HashTable的区别"></a>HashMap 和 HashTable的区别</h1><h2 id="区别："><a href="#区别：" class="headerlink" title="区别："></a>区别：</h2><p>1）线程是否安全： </p>
-<p>HashMap 是非线程安全的，HashTable 是线程安全的；HashTable 内部的方法基本都经过synchronized 修饰。（如果你要保证线程安全的话就使用 ConcurrentHashMap 吧！）；</p>
-<p>2）效率： </p>
-<p>因为线程安全的问题，HashMap 要比 HashTable 效率高一点。另外，HashTable 基本被淘汰，不要在代码中使用它；</p>
-<p>3）对Null key 和Null value的支持：</p>
-<p>HashMap 中，null 可以作为键，这样的键只有一个，可以有一个或多个键所对应的值为 null。<br>但是在 HashTable 中 put 进的键值只要有一个 null，直接抛出 NullPointerException。</p>
-<p>4）初始容量大小和每次扩充容量大小的不同 ：</p>
-<p>①Hashtable 默认的初始大小为11，之后每次扩充，容量变为原来的2n+1。<br>HashMap 默认的初始化大小为16。之后每次扩充，容量变为原来的2倍。</p>
-<p>②创建时如果给定了容量初始值，那么 Hashtable 会直接使用你给定的大小。<br>而 HashMap 会将其扩充为2的幂次方大小（HashMap 中的tableSizeFor()方法保证）。8 16 32 64 …<br>也就是说 HashMap 总是使用2的幂作为哈希表的大小。</p>
-<p>5) 底层数据结构：</p>
-<p> JDK1.8 以后的 HashMap 在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为8）时，将链表转化为红黑树，以减少搜索时间。Hashtable 没有这样的机制。</p>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">HasMap 中带有初始容量的构造函数：</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity, <span class="keyword">float</span> loadFactor)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (initialCapacity &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Illegal initial capacity: "</span> +</span><br><span class="line">                                               initialCapacity);</span><br><span class="line">        <span class="keyword">if</span> (initialCapacity &gt; MAXIMUM_CAPACITY)</span><br><span class="line">            initialCapacity = MAXIMUM_CAPACITY;</span><br><span class="line">        <span class="keyword">if</span> (loadFactor &lt;= <span class="number">0</span> || Float.isNaN(loadFactor))</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Illegal load factor: "</span> +</span><br><span class="line">                                               loadFactor);</span><br><span class="line">        <span class="keyword">this</span>.loadFactor = loadFactor;</span><br><span class="line">        <span class="keyword">this</span>.threshold = tableSizeFor(initialCapacity);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(initialCapacity, DEFAULT_LOAD_FACTOR);</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">下面这个方法保证了 HashMap 总是使用<span class="number">2</span>的幂作为哈希表的大小。</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">static</span> <span class="keyword">final</span> <span class="function"><span class="keyword">int</span> <span class="title">tableSizeFor</span><span class="params">(<span class="keyword">int</span> cap)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = cap - <span class="number">1</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">2</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">4</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">8</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">16</span>;</span><br><span class="line">        <span class="keyword">return</span> (n &lt; <span class="number">0</span>) ? <span class="number">1</span> : (n &gt;= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<h2 id="HashMap-和-HashSet区别"><a href="#HashMap-和-HashSet区别" class="headerlink" title="HashMap 和 HashSet区别"></a>HashMap 和 HashSet区别</h2><p>如果你看过 HashSet 源码的话就应该知道：HashSet 底层就是基于 HashMap 实现的。（HashSet 的源码非常非常少，因为除了 clone()、writeObject()、readObject()是 HashSet 自己不得不实现之外，其他方法都是直接调用 HashMap 中的方法。</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">HashMap</th>
-<th style="text-align:center">HashSet</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">实现了Map接口</td>
-<td style="text-align:center">实现Set接口</td>
-</tr>
-<tr>
-<td style="text-align:center">存储键值对</td>
-<td style="text-align:center">仅存储对象</td>
-</tr>
-<tr>
-<td style="text-align:center">调用 <code>put（）</code>向map中添加元素</td>
-<td style="text-align:center">调用 <code>add（）</code>方法向Set中添加元素</td>
-</tr>
-</tbody>
-</table>
+        <h1 id="ConcurrentHashMap线程安全的具体实现方式-底层具体实现"><a href="#ConcurrentHashMap线程安全的具体实现方式-底层具体实现" class="headerlink" title="ConcurrentHashMap线程安全的具体实现方式/底层具体实现"></a>ConcurrentHashMap线程安全的具体实现方式/底层具体实现</h1><p><strong>JDK1.7的ConcurrentHashMap：</strong></p>
+<p><img src="https://my-blog-to-use.oss-cn-beijing.aliyuncs.com/2019-6/ConcurrentHashMap分段锁.jpg" alt="JDK1.7的ConcurrentHashMap"></p>
+<p><strong>JDK1.8的ConcurrentHashMap（TreeBin: 红黑二叉树节点 Node: 链表节点）：</strong></p>
+<p><img src="https://my-blog-to-use.oss-cn-beijing.aliyuncs.com/2019-6/JDK1.8-ConcurrentHashMap-Structure.jpg" alt="JDK1.8的ConcurrentHashMap"></p>
+<p>JDK1.7（上面有示意图）<br>首先将数据分为一段一段的存储，然后给每一段数据配一把锁，当一个线程占用锁访问其中一个段数据时，其他段的数据也能被其他线程访问。</p>
+<p>ConcurrentHashMap 是由 Segment 数组结构和 HashEntry 数组结构组成。</p>
+<p>Segment 实现了 ReentrantLock,所以 Segment 是一种可重入锁，扮演锁的角色。HashEntry 用于存储键值对数据。</p>
+<p>static class Segment&lt;K,V&gt; extends ReentrantLock implements Serializable {<br>}<br>一个 ConcurrentHashMap 里包含一个 Segment 数组。Segment 的结构和HashMap类似，是一种数组和链表结构，一个 Segment 包含一个 HashEntry 数组，每个 HashEntry 是一个链表结构的元素，每个 Segment 守护着一个HashEntry数组里的元素，当对 HashEntry 数组的数据进行修改时，必须首先获得对应的 Segment的锁。</p>
+<p>JDK1.8 （上面有示意图）<br>ConcurrentHashMap取消了Segment分段锁，采用CAS和synchronized来保证并发安全。数据结构跟HashMap1.8的结构类似，数组+链表/红黑二叉树。Java 8在链表长度超过一定阈值（8）时将链表（寻址时间复杂度为O(N)）转换为红黑树（寻址时间复杂度为O(log(N))）</p>
+<p>synchronized只锁定当前链表或红黑二叉树的首节点，这样只要hash不冲突，就不会产生并发，效率又提升N倍。</p>
 
         
     </section>
@@ -628,7 +603,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/08/15/Java容器（一）/">Java容器（一）</a>
+            <a href="/2018/08/15/HashMap 的长度为什么是2的幂次方/">HashMap 的长度为什么是2的幂次方?</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -651,40 +626,18 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="Java容器（一）"><a href="#Java容器（一）" class="headerlink" title="Java容器（一）"></a>Java容器（一）</h1><h2 id="说说List-Set-Map三者的区别？"><a href="#说说List-Set-Map三者的区别？" class="headerlink" title="说说List,Set,Map三者的区别？"></a>说说List,Set,Map三者的区别？</h2><ul>
-<li>List 有序</li>
-<li>Set  唯一</li>
-<li>Map  使用键值对存储。</li>
-</ul>
-<h2 id="Arraylist-与-LinkedList-区别"><a href="#Arraylist-与-LinkedList-区别" class="headerlink" title="Arraylist 与 LinkedList 区别?"></a>Arraylist 与 LinkedList 区别?</h2><ol>
-<li>是否保证线程安全</li>
-</ol>
-<p>ArrayList 和 LinkedList 都是不同步的，也就是不保证线程安全；</p>
-<ol start="2">
-<li>底层数据结构</li>
-</ol>
-<p>Arraylist 底层使用的是 Object 数组；LinkedList 底层使用的是 双向链表 数据结构 （JDK1.6还是双向循环链表）</p>
-<ol start="3">
-<li>插入和删除是否受元素位置的影响</li>
-</ol>
-<p>Arraylist插入和删除受元素所在的位置的影响。</p>
-<p>① ArrayList 采用数组存储，所以插入和删除元素的时间复杂度受元素位置的影响。<br>比如：执行add(E e)方法的时候， ArrayList 会默认在将指定的元素追加到此列表的末尾，这种情况时间复杂度就是O(1)。<br>但是如果要在指定位置 i 插入和删除元素的话（add(int index, E element)）时间复杂度就为 O(n-i)。因为在进行上述操作的时候集合中第 i 和第 i 个元素之后的(n-i)个元素都要执行向后位/向前移一位的操作。</p>
-<p>② LinkedList 采用链表存储，所以插入，删除元素时间复杂度不受元素位置的影响，都是近似 O（1）而数组为近似 O（n）。</p>
-<ol start="4">
-<li>是否支持快速随机访问</li>
-</ol>
-<p>基于数组结构的ArrayList是可以的。快速随机访问就是通过元素的序号快速获取元素对象(对应于get(int index)方法)。</p>
-<p>LinkedList 不支持高效的随机元素访问。</p>
-<ol start="5">
-<li>内存空间占用</li>
-</ol>
-<p>ArrayList的空间浪费主要体现在在list列表的结尾会预留一定的容量空间，而LinkedList的空间花费则体现在它的每一个元素都需要消耗比ArrayList更多的空间（因为要存放直接后继和直接前驱以及数据）。</p>
-<h2 id="快速随机访问接口：RandomAccess"><a href="#快速随机访问接口：RandomAccess" class="headerlink" title="快速随机访问接口：RandomAccess"></a>快速随机访问接口：RandomAccess</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">public<span class="built_in"> interface </span>RandomAccess &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>查看源码我们发现实际上 RandomAccess 接口中什么都没有定义。所以，在我看来 RandomAccess 接口不过是一个标识罢了。标识什么？ 标识实现这个接口的类具有随机访问功能。</p>
-<p>RandomAccess 接口只是标识，并不是说 ArrayList 实现 RandomAccess 接口才具有快速随机访问功能的！</p>
-<p>List遍历<br><figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">实现了 RandomAccess 接口的<span class="built_in">list</span>，优先选择普通 <span class="keyword">for</span> 循环 ，其次 <span class="keyword">foreach</span>,</span><br><span class="line">未实现 RandomAccess 接口的<span class="built_in">list</span>，优先选择iterator遍历（<span class="keyword">foreach</span>遍历底层也是通过iterator实现的,），大<span class="built_in">size</span>的数据，千万不要使用普通<span class="keyword">for</span>循环</span><br></pre></td></tr></table></figure></p>
-<h2 id="ArrayList-与-Vector-区别呢-为什么要用Arraylist取代Vector呢？"><a href="#ArrayList-与-Vector-区别呢-为什么要用Arraylist取代Vector呢？" class="headerlink" title="ArrayList 与 Vector 区别呢?为什么要用Arraylist取代Vector呢？"></a>ArrayList 与 Vector 区别呢?为什么要用Arraylist取代Vector呢？</h2><p>Vector类的所有方法都是同步的。可以由两个线程安全地访问一个Vector对象、但是一个线程访问Vector的话代码要在同步操作上耗费大量的时间。</p>
-<p>Arraylist不是同步的，所以在不需要保证线程安全时建议使用Arraylist。</p>
+        <h1 id="HashMap-的长度为什么是2的幂次方"><a href="#HashMap-的长度为什么是2的幂次方" class="headerlink" title="HashMap 的长度为什么是2的幂次方?"></a>HashMap 的长度为什么是2的幂次方?</h1><h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>为了能让 HashMap 存取高效，尽量较少碰撞，也就是要尽量把数据分配均匀。我们上面也讲到了过了，<br>Hash 值的范围值-2147483648到2147483647，前后加起来大概40亿的映射空间，只要哈希函数映射得比较均匀松散，<br>一般应用是很难出现碰撞的。但问题是一个40亿长度的数组，内存是放不下的。所以这个散列值是不能直接拿来用的。<br>用之前还要先做对数组的长度取模运算，得到的余数才能用来要存放的位置也就是对应的数组下标。</p>
+<h2 id="这个算法应该如何设计呢？"><a href="#这个算法应该如何设计呢？" class="headerlink" title="这个算法应该如何设计呢？"></a>这个算法应该如何设计呢？</h2><p>我们首先可能会想到采用%取余的操作来实现。重点来了：<br>“取余(%)操作中如果除数是2的幂次则等价于<br>与其除数减一的与(&amp;)操作（也就是说 hash%length==hash&amp;(length-1)的前提是 length 是2的 n 次方；）。”<br>并且采用二进制位操作 &amp;，相对于%能够提高运算效率，这就解释了 HashMap 的长度为什么是2的幂次方。</p>
+<h2 id="通俗版本"><a href="#通俗版本" class="headerlink" title="通俗版本"></a>通俗版本</h2><p>Hash值取值范围很大40亿，不可能用这么大的数组存Hash表。所以想到取模，将Hash值局限在一个小的数组中。<br>针对取模运算，有公式： hash % length  = hash &amp; (length - 1) 能够显著提高取模的效率问题。<br>前提是 length 必须是2的幂次方。可以解释这就解释了 HashMap 的长度为什么是2的幂次方。</p>
+<h2 id="HashMap的底层实现"><a href="#HashMap的底层实现" class="headerlink" title="HashMap的底层实现"></a>HashMap的底层实现</h2><p>JDK1.8 之前 HashMap底层是数组和链表 结合在一起使用也就是链表散列。<br>1)HashMap 通过 key 的 hashCode 经过扰动函数处理过后得到 hash 值，<br>2)然后通过 (n - 1) &amp; hash 判断当前元素存放的位置（这里的 n 指的是数组的长度），<br>3)如果当前位置存在元素的话，就判断该元素与要存入的元素的 hash 值以及 key 是否相同，如果相同的话，直接覆盖，<br>不相同就通过拉链法解决冲突。</p>
+<p>所谓扰动函数指的就是 HashMap 的 hash 方法。使用 hash 方法也就是扰动函数是为了防止一些实现比较差的 hashCode() 方法。<br>换句话说使用扰动函数之后可以减少碰撞。<br><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.8</span>：</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">final</span> <span class="built_in">int</span> hash(<span class="keyword">Object</span> <span class="built_in">key</span>) &#123;</span><br><span class="line">      <span class="built_in">int</span> h;</span><br><span class="line">      <span class="comment">// key.hashCode()：返回散列值也就是hashcode</span></span><br><span class="line">      <span class="comment">// ^ ：按位异或</span></span><br><span class="line">      <span class="comment">// &gt;&gt;&gt;:无符号右移，忽略符号位，空位都以0补齐</span></span><br><span class="line">      <span class="keyword">return</span> (<span class="built_in">key</span> == <span class="keyword">null</span>) ? <span class="number">0</span> : (h = <span class="built_in">key</span>.hashCode()) ^ (h &gt;&gt;&gt; <span class="number">16</span>);</span><br><span class="line">  &#125;</span><br><span class="line"> </span><br><span class="line"><span class="number">1.7</span>:</span><br><span class="line">	<span class="keyword">static</span> <span class="built_in">int</span> hash(<span class="built_in">int</span> h) &#123;</span><br><span class="line">		<span class="comment">// This function ensures that hashCodes that differ only by</span></span><br><span class="line">		<span class="comment">// constant multiples at each bit position have a bounded</span></span><br><span class="line">		<span class="comment">// number of collisions (approximately 8 at default load factor).</span></span><br><span class="line"></span><br><span class="line">		h ^= (h &gt;&gt;&gt; <span class="number">20</span>) ^ (h &gt;&gt;&gt; <span class="number">12</span>);</span><br><span class="line">		<span class="keyword">return</span> h ^ (h &gt;&gt;&gt; <span class="number">7</span>) ^ (h &gt;&gt;&gt; <span class="number">4</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">相比于 JDK1<span class="number">.8</span> 的 hash 方法 ，JDK <span class="number">1.7</span> 的 hash 方法的性能会稍差一点点，因为毕竟扰动了 <span class="number">4</span> 次。</span><br></pre></td></tr></table></figure></p>
+<p>所谓 <strong>“拉链法”</strong> 就是：将链表和数组相结合。也就是说创建一个链表数组，数组中每一格就是一个链表。若遇到哈希冲突，则将冲突的值加到链表中即可。</p>
+<p><img src="https://my-blog-to-use.oss-cn-beijing.aliyuncs.com/2019-6/jdk1.8之前的内部结构-HashMap.jpg" alt="jdk1.8之前的内部结构-HashMap"></p>
+<h3 id="JDK1-8之后"><a href="#JDK1-8之后" class="headerlink" title="JDK1.8之后"></a>JDK1.8之后</h3><p>相比于之前的版本， JDK1.8之后在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为8）时，将链表转化为红黑树，以减少搜索时间。</p>
+<p><img src="https://my-blog-to-use.oss-cn-beijing.aliyuncs.com/2019-6/JDK1.8之后的HashMap底层数据结构.jpg" alt="jdk1.8之后的内部结构-HashMap"></p>
+<blockquote>
+<p>TreeMap、TreeSet以及JDK1.8之后的HashMap底层都用到了红黑树。红黑树就是为了解决二叉查找树的缺陷，因为二叉查找树在某些情况下会退化成一个线性结构。</p>
+</blockquote>
 
         
     </section>

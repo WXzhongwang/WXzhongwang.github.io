@@ -131,6 +131,57 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/03/01/String StringBuffer 和 StringBuilder/">String StringBuffer 和 StringBuilder</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/5/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-03-01T02:10:00.000Z" itemprop="datePublished">2018-03-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java/">Java</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="String、StringBuffer-和-StringBuilder"><a href="#String、StringBuffer-和-StringBuilder" class="headerlink" title="String、StringBuffer 和 StringBuilder"></a>String、StringBuffer 和 StringBuilder</h1><h3 id="可变性"><a href="#可变性" class="headerlink" title="可变性"></a>可变性</h3><p>String:</p>
+<p>简单的来说：String 类中使用 final 关键字修饰字符数组来保存字符串，private　final　char　value[]，所以 String 对象是不可变的。</p>
+<p>StringBuilder 与 StringBuffer:</p>
+<p>而StringBuilder 与 StringBuffer 都继承自 AbstractStringBuilder 类，<br>在 AbstractStringBuilder 中也是使用字符数组保存字符串char[]value 但是没有用 final 关键字修饰，所以这两种对象都是可变的。</p>
+<h3 id="线程安全性"><a href="#线程安全性" class="headerlink" title="线程安全性"></a>线程安全性</h3><p>String 中的对象是不可变的，也就可以理解为常量，线程安全。</p>
+<p>AbstractStringBuilder 是 StringBuilder 与 StringBuffer 的公共父类，定义了一些字符串的基本操作，<br>如 expandCapacity、append、insert、indexOf 等公共方法。</p>
+<p>StringBuffer 对方法加了同步锁或者对调用的方法加了同步锁，所以是线程安全的。</p>
+<p>StringBuilder 并没有对方法进行加同步锁，所以是非线程安全的。　</p>
+<p>对于三者使用的总结：</p>
+<p>操作少量的数据: 适用String</p>
+<p>单线程操作字符串缓冲区下操作大量数据: 适用StringBuilder</p>
+<p>多线程操作字符串缓冲区下操作大量数据: 适用StringBuffer</p>
+<p>装箱与拆箱</p>
+<ul>
+<li>装箱：将基本类型用它们对应的引用类型包装起来；</li>
+<li>拆箱：将包装类型转换为基本数据类型；</li>
+</ul>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/02/24/3.0 Java虚拟机的内部体系结构/">JVM 3.0</a>
         </h1>
         
@@ -327,52 +378,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/02/08/Java多线程/">Java多线程相关问题</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/5/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-02-08T04:18:45.000Z" itemprop="datePublished">2018-02-08</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>Java多线程相关问题</p>
-<p>1.线程池的原理，为什么要创建线程池？创建线程池的方式？</p>
-<p>2.线程的生命周期？什么时候会出现僵死线程？</p>
-<ol start="3">
-<li><p>说说线程安全问题？什么是线程安全？如何实现线程安全？</p>
-</li>
-<li><p>创建线程池有哪几个核心参数？如何合理的配置线程池的大小？</p>
-</li>
-</ol>
-<p>5.volatile、ThreadLocal的使用场景和原理；</p>
-<p>6.ThreadLocal什么时候会出现OOM情况？为什么？</p>
-<p>7.sychronized、volatile区别？synchronized锁粒度、模拟死锁场景、原子性和可见性</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2018/02/08/IO复用技术/">IO复用技术</a>
         </h1>
         
@@ -416,6 +421,52 @@
 <blockquote>
 <p>内核（kernel）利用文件描述符（file descriptor）来访问文件。文件描述符是非负整数。打开现存文件或新建文件时，内核会返回一个文件描述符。读写文件也需要使用文件描述符来指定待读写的文件。</p>
 </blockquote>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/02/08/Java多线程/">Java多线程相关问题</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/5/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-08T04:18:45.000Z" itemprop="datePublished">2018-02-08</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>Java多线程相关问题</p>
+<p>1.线程池的原理，为什么要创建线程池？创建线程池的方式？</p>
+<p>2.线程的生命周期？什么时候会出现僵死线程？</p>
+<ol start="3">
+<li><p>说说线程安全问题？什么是线程安全？如何实现线程安全？</p>
+</li>
+<li><p>创建线程池有哪几个核心参数？如何合理的配置线程池的大小？</p>
+</li>
+</ol>
+<p>5.volatile、ThreadLocal的使用场景和原理；</p>
+<p>6.ThreadLocal什么时候会出现OOM情况？为什么？</p>
+<p>7.sychronized、volatile区别？synchronized锁粒度、模拟死锁场景、原子性和可见性</p>
 
         
     </section>
@@ -547,48 +598,10 @@
 </article>
 
 
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/02/01/1.0 Java程序执行流程/">JVM 1.0</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/5/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-02-01T02:10:00.000Z" itemprop="datePublished">2018-02-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>1.Java程序执行流程</p>
-<p>Java技术的核心就是Java虚拟机，因为所有的Java程序都在虚拟机上运行。Java程序的运行需要Java虚拟机、Java API和Java Class文件的配合。Java虚拟机实例负责运行一个Java程序。当启动一个Java程序时，一个虚拟机实例就诞生了。当程序结束，这个虚拟机实例也就消亡。</p>
-<p><img src="https://www.javazhiyin.com/wp-content/uploads/2019/01/java3-1547432465.jpg" alt="image"></p>
-<p>分为编译时环境和运行时环境，很基础很重要。</p>
-
-        
-    </section>
-</article>
-
-
 
 
 <nav class="page-nav">
-    <a class="extend prev" rel="prev" href="/categories/Java/page/4/">&laquo; 上一页</a><a class="page-number" href="/categories/Java/">1</a><span class="space">&hellip;</span><a class="page-number" href="/categories/Java/page/3/">3</a><a class="page-number" href="/categories/Java/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/categories/Java/page/6/">6</a><a class="extend next" rel="next" href="/categories/Java/page/6/">下一页 &raquo;</a>
+    <a class="extend prev" rel="prev" href="/categories/Java/page/4/">&laquo; 上一页</a><a class="page-number" href="/categories/Java/">1</a><span class="space">&hellip;</span><a class="page-number" href="/categories/Java/page/3/">3</a><a class="page-number" href="/categories/Java/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/categories/Java/page/6/">6</a><a class="page-number" href="/categories/Java/page/7/">7</a><a class="extend next" rel="next" href="/categories/Java/page/6/">下一页 &raquo;</a>
 </nav>
 
 
