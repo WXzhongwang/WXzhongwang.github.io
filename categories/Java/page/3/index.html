@@ -131,6 +131,44 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/05/01/为什么Java中只有值传递/">为什么 Java 中只有值传递？</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/3/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-05-01T15:10:00.000Z" itemprop="datePublished">2018-05-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java/">Java</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="为什么-Java-中只有值传递？"><a href="#为什么-Java-中只有值传递？" class="headerlink" title="为什么 Java 中只有值传递？"></a>为什么 Java 中只有值传递？</h1><p>首先回顾一下在程序设计语言中有关将参数传递给方法（或函数）的一些专业术语。<br>按值调用(call by value)表示方法接收的是调用者提供的值。<br>按引用调用（call by reference)表示方法接收的是调用者提供的变量地址。<br>一个方法可以修改传递引用所对应的变量值，而不能修改传递值调用所对应的变量值。<br>它用来描述各种程序设计语言（不只是Java)中方法参数传递方式。</p>
+<p>Java程序设计语言对对象采用的不是引用调用，实际上，对象引用是按值传递的。</p>
+<p>下面再总结一下Java中方法参数的使用情况：</p>
+<p>一个方法不能修改一个基本数据类型的参数（即数值型或布尔型）。<br>一个方法可以改变一个对象参数的状态。<br>一个方法不能让对象参数引用一个新的对象。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/04/20/tomcat源码解析/">tomcat源码解析</a>
         </h1>
         
@@ -548,46 +586,6 @@
 <p>一个类可以实现多个接口，但只能实现一个抽象类。接口自己本身可以通过extends关键字扩展多个接口。</p>
 <p>接口方法默认修饰符是public，抽象方法可以有public、protected和default这些修饰符（抽象方法就是为了被重写所以不能使用private关键字修饰！）。</p>
 <p>从设计层面来说，抽象是对类的抽象，是一种模板设计，而接口是对行为的抽象，是一种行为的规范。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/04/01/Thread sleep() 和  wait()/">Thread sleep() 和 wait()</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/3/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-04-01T02:10:00.000Z" itemprop="datePublished">2018-04-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Thread-sleep-和-wait"><a href="#Thread-sleep-和-wait" class="headerlink" title="Thread sleep() 和  wait()"></a>Thread sleep() 和  wait()</h1><p>sleep()方法是Thread类里面的，主要的意义就是让当前线程停止执行，让出CPU给其他的线程，但是不会释放对象锁资源以及监控的状态，当指定的时间到了之后又会自动恢复运行状态。</p>
-<p>wait()方法是Object类里面的，主要的意义就是让线程放弃当前的对象的锁，进入等待此对象的等待锁定池，只有针对此对象调动notify方法后本线程才能够进入对象锁定池准备获取对象锁进入运行状态。</p>
-<figure class="highlight d"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> ThreadSleepWait &#123;</span><br><span class="line">	<span class="comment">/** java中的sleep()和wait()的区别 */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args) &#123;</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Thread1()).start();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">        	System.<span class="keyword">out</span>.println(<span class="string">"主线程Sleep"</span>);</span><br><span class="line">        	Thread.sleep(<span class="number">5000</span>);</span><br><span class="line">         &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Thread2()).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> Thread1 implements Runnable&#123;</span><br><span class="line">        <span class="keyword">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> run()&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (ThreadSleepWait.<span class="keyword">class</span>) &#123;</span><br><span class="line">            	System.<span class="keyword">out</span>.println(<span class="string">"启动线程"</span> + Thread.currentThread().getName());    </span><br><span class="line">            	System.<span class="keyword">out</span>.println(<span class="string">"线程等待中..."</span>);</span><br><span class="line">	            <span class="keyword">try</span> &#123;</span><br><span class="line">	            	<span class="comment">//调用wait()方法，线程会放弃对象锁，进入等待此对象的等待锁定池</span></span><br><span class="line">	            	ThreadSleepWait.<span class="keyword">class</span>.wait();</span><br><span class="line">	             &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">	                e.printStackTrace();</span><br><span class="line">	            &#125;</span><br><span class="line">	            System.<span class="keyword">out</span>.println(<span class="string">"线程1继续"</span>);</span><br><span class="line">	            System.<span class="keyword">out</span>.println(<span class="string">"线程1结束"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">    	&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> Thread2 implements Runnable&#123;</span><br><span class="line">        <span class="keyword">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> run()&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (ThreadSleepWait.<span class="keyword">class</span>) &#123;</span><br><span class="line">            	System.<span class="keyword">out</span>.println(<span class="string">"启动线程"</span> + Thread.currentThread().getName());    </span><br><span class="line">            	System.<span class="keyword">out</span>.println(<span class="string">"线程等待中..."</span>);</span><br><span class="line">                <span class="comment">//只有针对此锁对象调用notify后</span></span><br><span class="line">            	<span class="comment">//本线程才进入对象锁定池准备获取对象锁进入运行状态。</span></span><br><span class="line">                ThreadSleepWait.<span class="keyword">class</span>.notify();</span><br><span class="line">                 </span><br><span class="line">				<span class="comment">//区别</span></span><br><span class="line">				<span class="comment">//如果我们把代码：ThreadSleepWait.class.notify给注释掉，</span></span><br><span class="line">				<span class="comment">//ThreadSleepWait.class调用了wait()方法但是没有调用notify()方法,</span></span><br><span class="line">				<span class="comment">//则线程1永远处于挂起状态。</span></span><br><span class="line">                 </span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">				<span class="comment">//Sleep方法导致了程序暂停执行指定的时间,让出cpu该其他线程，</span></span><br><span class="line">				<span class="comment">//但是他的监控状态依然保持者,当指定的时间过又会自动恢复运行状态。</span></span><br><span class="line">				<span class="comment">//在调用sleep方法的过程中，线程不会释放对象锁。</span></span><br><span class="line">                     Thread.sleep(<span class="number">5000</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                System.<span class="keyword">out</span>.println(<span class="string">"线程2继续"</span>);</span><br><span class="line">	            System.<span class="keyword">out</span>.println(<span class="string">"线程2结束"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>运行效果：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">主线程Sleep</span><br><span class="line">启动线程Thread<span class="number">-0</span></span><br><span class="line">线程等待中...</span><br><span class="line">启动线程Thread<span class="number">-1</span></span><br><span class="line">线程等待中...</span><br><span class="line">线程<span class="number">2</span>继续</span><br><span class="line">线程<span class="number">2</span>结束</span><br><span class="line">线程<span class="number">1</span>继续</span><br><span class="line">线程<span class="number">1</span>结束</span><br></pre></td></tr></table></figure></p>
-<p>如果注释掉代码，之后调用<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">ThreadSleepWait</span><span class="selector-class">.class</span><span class="selector-class">.notify</span>();</span><br></pre></td></tr></table></figure></p>
-<p>运行效果：<br><figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">主线程Sleep</span><br><span class="line">启动线程<span class="keyword">Thread</span><span class="number">-0</span></span><br><span class="line">线程等待中<span class="params">...</span></span><br><span class="line">启动线程<span class="keyword">Thread</span><span class="number">-1</span></span><br><span class="line">线程等待中<span class="params">...</span></span><br><span class="line">线程<span class="number">2</span>继续</span><br><span class="line">线程<span class="number">2</span>结束</span><br></pre></td></tr></table></figure></p>
 
         
     </section>

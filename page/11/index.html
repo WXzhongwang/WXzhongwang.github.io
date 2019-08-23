@@ -131,6 +131,139 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/02/01/JDK&JRE/">Java 字节码</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/11/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-01T04:10:00.000Z" itemprop="datePublished">2018-02-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java/">Java</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="JDK-和-JRE"><a href="#JDK-和-JRE" class="headerlink" title="JDK 和 JRE"></a>JDK 和 JRE</h1><p>JDK:</p>
+<p>JDK是Java Development Kit，它是功能齐全的Java SDK。它拥有JRE所拥有的一切，还有编译器（javac）和工具（如javadoc和jdb）。<br>它能够创建和编译程序。</p>
+<p>JRE:<br>Java运行时环境。它是运行已编译 Java 程序所需的所有内容的集合，包括 Java虚拟机（JVM），Java类库，java命令和其他的一些基础构件。<br>但是，它不能用于创建新程序。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/02/01/1.0 Java程序执行流程/">JVM 1.0</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/11/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-01T02:10:00.000Z" itemprop="datePublished">2018-02-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>1.Java程序执行流程</p>
+<p>Java技术的核心就是Java虚拟机，因为所有的Java程序都在虚拟机上运行。Java程序的运行需要Java虚拟机、Java API和Java Class文件的配合。Java虚拟机实例负责运行一个Java程序。当启动一个Java程序时，一个虚拟机实例就诞生了。当程序结束，这个虚拟机实例也就消亡。</p>
+<p><img src="https://www.javazhiyin.com/wp-content/uploads/2019/01/java3-1547432465.jpg" alt="image"></p>
+<p>分为编译时环境和运行时环境，很基础很重要。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/02/01/Git 基础 - 记录每次更新到仓库/">Git记录更新到仓库</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/11/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-01T02:10:00.000Z" itemprop="datePublished">2018-02-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Git/">Git</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="记录每次更新到仓库"><a href="#记录每次更新到仓库" class="headerlink" title="记录每次更新到仓库"></a>记录每次更新到仓库</h1><p>现在我们手上有了一个真实项目的 Git 仓库，并从这个仓库中取出了所有文件的工作拷贝。 接下来，对这些文件做些修改，在完成了一个阶段的目标之后，提交本次更新到仓库。</p>
+<blockquote>
+<p>请记住，你工作目录下的每一个文件都不外乎这两种状态：已跟踪或未跟踪。</p>
+</blockquote>
+<p>已跟踪的文件是指那些被纳入了版本控制的文件，在上一次快照中有它们的记录，在工作一段时间后，它们的状态可能处于未修改，已修改或已放入暂存区。 工作目录中除已跟踪文件以外的所有其它文件都属于未跟踪文件，它们既不存在于上次快照的记录中，也没有放入暂存区。 初次克隆某个仓库的时候，工作目录中的所有文件都属于已跟踪文件，并处于未修改状态。</p>
+<p>编辑过某些文件之后，由于自上次提交后你对它们做了修改，Git 将它们标记为已修改文件。 我们逐步将这些修改过的文件放入暂存区，然后提交所有暂存了的修改，如此反复。所以使用 Git 时文件的生命周期如下：</p>
+<p><img src="https://git-scm.com/book/en/v2/images/lifecycle.png" alt="image"></p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">检查当前文件状态:</span><br><span class="line">$ git status</span><br><span class="line">On branch <span class="literal">master</span></span><br><span class="line">nothing to commit, working directory clean</span><br></pre></td></tr></table></figure>
+<p>这说明你现在的工作目录相当干净。换句话说，所有已跟踪文件在上次提交后都未被更改过。 此外，上面的信息还表明，当前目录下没有出现任何处于未跟踪状态的新文件，否则 Git 会在这里列出来。 最后，该命令还显示了当前所在分支，并告诉你这个分支同远程服务器上对应的分支没有偏离。 现在，分支名是 “master”,这是默认的分支名。</p>
+<p>现在，让我们在项目下创建一个新的 README 文件。 如果之前并不存在这个文件，使用 git status 命令，你将看到一个新的未跟踪文件：<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="keyword">echo</span> <span class="string">'My Project'</span> &gt; README</span><br><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line">Untracked <span class="keyword">file</span><span class="variable">s:</span></span><br><span class="line">  (use <span class="string">"git add &lt;file&gt;..."</span> <span class="keyword">to</span> include in what will <span class="keyword">be</span> committed)</span><br><span class="line"></span><br><span class="line">    README</span><br><span class="line"></span><br><span class="line">nothing added <span class="keyword">to</span> commit but untracked <span class="keyword">files</span> present (use <span class="string">"git add"</span> <span class="keyword">to</span> track)</span><br></pre></td></tr></table></figure></p>
+<p>在状态报告中可以看到新建的 README 文件出现在 Untracked files 下面。 未跟踪的文件意味着 Git 在之前的快照（提交）中没有这些文件；Git 不会自动将之纳入跟踪范围，除非你明明白白地告诉它“我需要跟踪该文件”， 这样的处理让你不必担心将生成的二进制文件或其它不想被跟踪的文件包含进来。 不过现在的例子中，我们确实想要跟踪管理 README 这个文件。<br><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">使用命令 git <span class="keyword">add</span><span class="bash"> 开始跟踪一个文件。 所以，要跟踪 README 文件，运行：</span></span><br><span class="line">$ git <span class="keyword">add</span><span class="bash"> README</span></span><br></pre></td></tr></table></figure></p>
+<p>这时候我们在运行git status查看状态：<br><figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ git status</span><br><span class="line"><span class="keyword">On</span> branch master</span><br><span class="line">Changes <span class="keyword">to</span> be committed:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git reset HEAD &lt;file&gt;..."</span> <span class="keyword">to</span> unstage)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">new</span> <span class="keyword">file</span>:   README</span><br></pre></td></tr></table></figure></p>
+<p>文件已经处于被追踪的状态了，并处于暂存状态。</p>
+<p>现在我们来修改一个已被跟踪的文件。 如果你修改了一个名为 CONTRIBUTING.md 的已被跟踪的文件，然后运行 git status 命令，会看到下面内容：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line">Changes to be committed:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git reset HEAD &lt;file&gt;..."</span> <span class="keyword">to</span> unstage)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">new</span> <span class="keyword">file</span>:   README</span><br><span class="line"></span><br><span class="line">Changes <span class="keyword">not</span> staged <span class="keyword">for</span> <span class="keyword">commit</span>:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git add &lt;file&gt;..."</span> <span class="keyword">to</span> <span class="keyword">update</span> what will be committed)</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git checkout -- &lt;file&gt;..."</span> <span class="keyword">to</span> discard changes <span class="keyword">in</span> working <span class="keyword">directory</span>)</span><br><span class="line"></span><br><span class="line">    modified:   CONTRIBUTING.md</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>文件 CONTRIBUTING.md 出现在 Changes not staged for commit 这行下面，说明已跟踪文件的内容发生了变化，但还没有放到暂存区。 要暂存这次更新，需要运行 git add命令。</p>
+</blockquote>
+<h2 id="git-add"><a href="#git-add" class="headerlink" title="git add:"></a>git add:</h2><blockquote>
+<p>这是个多功能命令：可以用它开始跟踪新文件，或者把已跟踪的文件放到暂存区，还能用于合并时把有冲突的文件标记为已解决状态等。 将这个命令理解为“添加内容到下一次提交中”而不是“将一个文件添加到项目中”要更加合适。 现在让我们运行 git add 将”CONTRIBUTING.md”放到暂存区，然后再看看 git status 的输出：<br><figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ git add CONTRIBUTING.md</span><br><span class="line">$ git status</span><br><span class="line"><span class="keyword">On</span> branch master</span><br><span class="line">Changes <span class="keyword">to</span> be committed:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git reset HEAD &lt;file&gt;..."</span> <span class="keyword">to</span> unstage)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">new</span> <span class="keyword">file</span>:   README</span><br><span class="line">    modified:   CONTRIBUTING.md</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>现在两个文件都已暂存，下次提交时就会一并记录到仓库。 假设此时，你想要在 CONTRIBUTING.md 里再加条注释， 重新编辑存盘后，准备好提交。 不过且慢，再运行 git status 看看：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ vim CONTRIBUTING.md</span><br><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line">Changes to be committed:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git reset HEAD &lt;file&gt;..."</span> <span class="keyword">to</span> unstage)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">new</span> <span class="keyword">file</span>:   README</span><br><span class="line">    modified:   CONTRIBUTING.md</span><br><span class="line"></span><br><span class="line">Changes <span class="keyword">not</span> staged <span class="keyword">for</span> <span class="keyword">commit</span>:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git add &lt;file&gt;..."</span> <span class="keyword">to</span> <span class="keyword">update</span> what will be committed)</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git checkout -- &lt;file&gt;..."</span> <span class="keyword">to</span> discard changes <span class="keyword">in</span> working <span class="keyword">directory</span>)</span><br><span class="line"></span><br><span class="line">    modified:   CONTRIBUTING.md</span><br></pre></td></tr></table></figure></p>
+<p>怎么回事？ 现在 CONTRIBUTING.md 文件同时出现在暂存区和非暂存区。 这怎么可能呢？ 好吧，实际上 Git 只不过暂存了你运行 git add 命令时的版本， 如果你现在提交，CONTRIBUTING.md 的版本是你最后一次运行 git add 命令时的那个版本，而不是你运行 git commit 时，在工作目录中的当前版本。 所以，运行了 git add 之后又作了修订的文件，需要重新运行 git add 把最新版本重新暂存起来：<br><figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ git add CONTRIBUTING.md</span><br><span class="line">$ git status</span><br><span class="line"><span class="keyword">On</span> branch master</span><br><span class="line">Changes <span class="keyword">to</span> be committed:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git reset HEAD &lt;file&gt;..."</span> <span class="keyword">to</span> unstage)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">new</span> <span class="keyword">file</span>:   README</span><br><span class="line">    modified:   CONTRIBUTING.md</span><br></pre></td></tr></table></figure></p>
+<h2 id="git-status"><a href="#git-status" class="headerlink" title="git status"></a>git status</h2><p>git status 命令的输出十分详细，但其用语有些繁琐。 如果你使用 git status -s 命令或 git status –short 命令，你将得到一种更为紧凑的格式输出。 运行 git status -s ，状态报告输出如下：<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ git status -s</span><br><span class="line"> M README</span><br><span class="line">MM Rakefile</span><br><span class="line">A  <span class="class"><span class="keyword">lib</span>/<span class="title">git</span>.<span class="title">rb</span></span></span><br><span class="line">M  <span class="class"><span class="keyword">lib</span>/<span class="title">simplegit</span>.<span class="title">rb</span></span></span><br><span class="line">?? LICENSE.txt</span><br></pre></td></tr></table></figure></p>
+<p>新添加的未跟踪文件前面有 ?? 标记，新添加到暂存区中的文件前面有 A 标记，修改过的文件前面有 M 标记。 你可能注意到了 M 有两个可以出现的位置，出现在右边的 M 表示该文件被修改了但是还没放入暂存区，出现在靠左边的 M 表示该文件被修改了并放入了暂存区。 例如，上面的状态报告显示： README 文件在工作区被修改了但是还没有将修改后的文件放入暂存区,lib/simplegit.rb 文件被修改了并将修改后的文件放入了暂存区。 而 Rakefile 在工作区被修改并提交到暂存区后又在工作区中被修改了，所以在暂存区和工作区都有该文件被修改了的记录。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/01/14/Git 获取Git仓库/">Git Clone</a>
         </h1>
         
@@ -416,157 +549,6 @@
 <p>4.更新配置文件到内部jar包.(存在覆盖，不存在就新增)<br>jar uf client.jar BOOT-INF/classes/realtime/t_ivr_data_bj.json</p>
 <p>4.1更新内部jar包到jar文件<br>jar uf client.jar 内部jar包.jar</p>
 <p>5.可以查看验证是否已经更改<br>vim client.jar</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/09/12/Redis相关问题三/">Redis相关问题三</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/11/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-09-12T10:33:59.000Z" itemprop="datePublished">2017-09-12</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Redis-相关问题三"><a href="#Redis-相关问题三" class="headerlink" title="Redis 相关问题三"></a>Redis 相关问题三</h1><ol start="3">
-<li>Redis高并发会出现哪些问题？</li>
-</ol>
-<p>1) 如果redis宕机了，或者链接不上，怎么办？</p>
-<blockquote>
-<p>解决方法：</p>
-</blockquote>
-<p>①配置主从复制，配置哨兵模式（相当于古代门派的长老级别可以选择掌门人的权利），一旦发现主机宕机，让下一个从机当做主机。</p>
-<p>②如果最坏的情况，只能关闭Redis连接，去往数据库连接。但由于数据量大，这样SQL数据库也会宕掉的。</p>
-<p>2) 如果redis缓存在高峰期到期失效，在这个时刻请求会向雪崩一样，直接访问数据库如何处理？</p>
-<p>设置条件查询判断，判断redis缓存里是否有数据，如果没有，则去往数据库连接。当然要加分布式锁，利用redis的单线程+多路IO复用技术，原子性原理，让其它的线程请求等待，假若第一个线程进去获取到分布式锁在查询数据的途中宕掉了，不能让其它线程一直等待，设置等待一定时间判断是否取回数据，如果没有，递归调用自己的方法让第二个线程继续拿分布式锁查询数据库。当第二个锁从数据库拿到数据时，把数据值设置到redis数据库缓存中，设置失效时间，避免占内存，方便使用提高效率。</p>
-<p>3) 如果用户不停地查询一条不存在的数据，缓存没有，数据库也没有，那么会出现什么?</p>
-<p>如果数据不存在，缓存中没有，数据库也没有，当然如果不设置判断，会一直调用数据库，使数据库效率降低，访问量大时甚至会宕机。</p>
-<p>解决方案：从数据库查询，如果数据库没有，则返回值为Null，判断数据库返回的值，如果为Null，则自定义把标识的字段存到Redis中，用key,value的方法，jedis.setex(key,”empty”)，设置失效时间跟具体情况而定，然后调用String json=jedis.get(key),判断是否获取的值”empty”.equal(json),如果相等，则抛出自定义异常，给用户提示，或者直接return null。这样用户再次查询的时候由于先从reids缓存中查询，redis会有对应的Key获取之前设置的value值，这样就不会再次调用数据库，影响效率等问题。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/09/12/Redis相关问题四/">相关问题四</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/11/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-09-12T10:33:59.000Z" itemprop="datePublished">2017-09-12</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Redis-相关问题四"><a href="#Redis-相关问题四" class="headerlink" title="Redis 相关问题四"></a>Redis 相关问题四</h1><ol>
-<li><p>Redis跳跃表问题。</p>
-</li>
-<li><p>Redis单进程单线程的Redis如何能够高并发？</p>
-</li>
-<li><p>如何使用Redis实现分布式锁？</p>
-</li>
-<li><p>Redis分布式锁操作的原子性，Redis内部如何实现？</p>
-</li>
-</ol>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/09/12/Redis和Memcached比较/">Redis和Memcached比较</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/11/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-09-12T10:33:59.000Z" itemprop="datePublished">2017-09-12</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>Redis和Memcache都是将数据存放在内存中，都是内存数据库。本文介绍两者的区别。</p>
-<h1 id="Redis和Memcached比较"><a href="#Redis和Memcached比较" class="headerlink" title="Redis和Memcached比较"></a>Redis和Memcached比较</h1><ul>
-<li><p>Memcached是多线程，而Redis使用单线程.</p>
-</li>
-<li><p>Memcached使用预分配的内存池的方式，Redis使用现场申请内存的方式来存储数据，并且可以配置虚拟内存。</p>
-</li>
-<li><p>Redis可以实现持久化，主从复制，实现故障恢复。</p>
-</li>
-<li><p>Memcached只是简单的key与value,但是Redis支持数据类型比较多。</p>
-</li>
-</ul>
-<p>Redis的存储分为内存存储、磁盘存储 .从这一点，也说明了Redis与Memcached是有区别的。Redis 与Memcached一样，为了保证效率，数据都是缓存在内存中。区别的是redis会周期性的把更新的数据写入磁盘或者把修改 操作写入追加的记录文件，并且在此基础上实现了master-slave(主从)同步。</p>
-<p>Redis有两种存储方式(默认:snapshot)</p>
-<ol>
-<li>snapshot<blockquote>
-<p>实现方法是定时将内存的快照(snapshot)持久化到硬盘，<br>这种方法缺点是持久化之后如果出现crash则会丢失一段数据。<br>因此在完美主义者的推动下作者增加了aof方式。</p>
-</blockquote>
-</li>
-</ol>
-<ol start="2">
-<li>aof<blockquote>
-<p>即append only mode，在写入内存数据的同时将操作命令保存到日志文件，在一个并发更改上万的系统中，命令日志是一个非常庞大的数据，管理维护成本非常高，恢复重建时间会非常长，这样导致失去aof高可用性本意。另外更重要的是Redis是一个内存数据结构模型，所有的优势都是建立在对内存复杂数据结构高效的原子操作</p>
-</blockquote>
-</li>
-</ol>
 
         
     </section>

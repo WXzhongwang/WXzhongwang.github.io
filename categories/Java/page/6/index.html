@@ -131,6 +131,131 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/02/02/字节码/">Java 字节码</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-02T14:10:00.000Z" itemprop="datePublished">2018-02-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>在 Java 中，JVM可以理解的代码就叫做字节码（即扩展名为 .class 的文件），它不面向任何特定的处理器，只面向虚拟机。<br>Java 语言通过字节码的方式，在一定程度上解决了传统解释型语言执行效率低的问题，同时又保留了解释型语言可移植的特点。所以 Java 程序运行时比较高效，而且，由于字节码并不针对一种特定的机器，因此，Java程序无须重新编译便可在多种不同操作系统的计算机上运行。</p>
+<p>Java程序从源代码到运行一般一下三步：</p>
+<p>(1).java文件</p>
+<p>JDK中javac编译</p>
+<p>(2).class文件（JVM能理解的Java字节）</p>
+<p> JVM</p>
+<p>(3)机器可以执行的二进制文件</p>
+<p>需要格外注意的是 .class-&gt;机器码 这一步：<br>在这一步 JVM 类加载器首先加载字节码文件，然后通过解释器逐行解释执行，这种方式的执行速度会相对比较慢。<br>而且，有些方法和代码块是经常需要被调用的(也就是所谓的热点代码)，所以后面引进了 JIT 编译器，而JIT 属于运行时编译。<br>当 JIT 编译器完成第一次编译后，其会将字节码对应的机器码保存下来，下次可以直接使用。<br>而我们知道，机器码的运行效率肯定是高于 Java 解释器的。<br>这也解释了我们为什么经常会说 Java 是编译与解释共存的语言。</p>
+<p>总结：</p>
+<p>Java虚拟机（JVM）是运行 Java 字节码的虚拟机。JVM有针对不同系统的特定实现（Windows，Linux，macOS），目的是使用相同的字节码<br>，它们都会给出相同的结果。字节码和不同系统的 JVM 实现是 Java 语言“一次编译，随处可以运行”的关键所在。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/02/01/堆和栈/">堆和栈</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-01T08:20:10.000Z" itemprop="datePublished">2018-02-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="堆和栈"><a href="#堆和栈" class="headerlink" title="堆和栈"></a>堆和栈</h1><p>栈是运行时的单位，而堆是存储式的单位。</p>
+<p>栈解决程序运行的问题，解决程序如何运行的问题，如何处理数据。</p>
+<p>堆解决数据存储问题，数据存哪，怎么存。</p>
+<p>Java中，一个线程，就会有一个线程栈，不同的线程执行逻辑有所不同，因此需要一个独立的线程栈。<br>而堆，是所有线程共有的。栈，是运行单元，里面存的信息都是与当前程序（线程）相关的。包括局部变量，程序运行状态，方法返回值等。堆只负责存储对象信息。</p>
+<h2 id="为什么要把堆和栈区分出来呢？栈中不是也可以存储数据吗？"><a href="#为什么要把堆和栈区分出来呢？栈中不是也可以存储数据吗？" class="headerlink" title="为什么要把堆和栈区分出来呢？栈中不是也可以存储数据吗？"></a>为什么要把堆和栈区分出来呢？栈中不是也可以存储数据吗？</h2><p>第一，从软件设计的角度看，栈代表了处理逻辑，而堆代表了数据。这样分开，使得处理逻辑更为清晰。分而治之的思想。这种隔离、模块化的思想在软件设计的方方面面都有体现。</p>
+<p>第二，堆与栈的分离，使得堆中的内容可以被多个栈共享（也可以理解为多个线程访问同一个对象）。这种共享的收益是很多的。一方面这种共享提供了一种有效的数据交互方式(如：共享内存)，另一方面，堆中的共享常量和缓存可以被所有栈访问，节省了空间。</p>
+<p>第三，栈因为运行时的需要，比如保存系统运行的上下文，需要进行地址段的划分。由于栈只能向上增长，因此就会限制住栈存储内容的能力。而堆不同，堆中的对象是可以根据需要动态增长的，因此栈和堆的拆分，使得动态增长成为可能，相应栈中只需记录堆中的一个地址即可。</p>
+<p>第四，面向对象就是堆和栈的完美结合。其实，面向对象方式的程序与以前结构化的程序在执行上没有任何区别。但是，面向对象的引入，使得对待问题的思考方式发生了改变，而更接近于自然方式的思考。当我们把对象拆开，你会发现，对象的属性其实就是数据，存放在堆中；而对象的行为（方法），就是运行逻辑，放在栈中。我们在编写对象的时候，其实即编写了数据结构，也编写的处理数据的逻辑。</p>
+<p>堆和栈中，栈是程序运行最根本的东西。程序运行可以没有堆，但是不能没有栈。而堆是为栈进行数据存储服务，说白了堆就是一块共享的内存。不过，正是因为堆和栈的分离的思想，才使得Java的垃圾回收成为可能。</p>
+<p>栈溢出<br>Java中，栈的大小通过-Xss来设置，当栈中存储数据比较多时，需要适当调大这个值，否则会出现java.lang.StackOverflowError异常。常见的出现这个异常的是无法返回的递归，因为此时栈中保存的信息都是方法返回的记录点。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/02/01/JDK&JRE/">Java 字节码</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-01T04:10:00.000Z" itemprop="datePublished">2018-02-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java/">Java</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="JDK-和-JRE"><a href="#JDK-和-JRE" class="headerlink" title="JDK 和 JRE"></a>JDK 和 JRE</h1><p>JDK:</p>
+<p>JDK是Java Development Kit，它是功能齐全的Java SDK。它拥有JRE所拥有的一切，还有编译器（javac）和工具（如javadoc和jdb）。<br>它能够创建和编译程序。</p>
+<p>JRE:<br>Java运行时环境。它是运行已编译 Java 程序所需的所有内容的集合，包括 Java虚拟机（JVM），Java类库，java命令和其他的一些基础构件。<br>但是，它不能用于创建新程序。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/02/01/1.0 Java程序执行流程/">JVM 1.0</a>
         </h1>
         
@@ -425,137 +550,6 @@ public string toString():返回异常发生时的简要描述
 public string getLocalizedMessage():返回异常对象的本地化信息。使用Throwable的子类覆盖这个方法，可以声称本地化信息。如果子类没有覆盖该方法，则该方法返回的信息与getMessage（）返回的结果相同
 public void printStackTrace():在控制台上打印Throwable对象封装的异常信息                            
 </code></pre>
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/04/05/final关键字的一些总结/">关于 final 关键字的一些总结</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-04-05T07:30:00.000Z" itemprop="datePublished">2017-04-05</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>#关于 final 关键字的一些总结<br>final关键字主要用在三个地方：变量、方法、类。(初始化之后不能修改)</p>
-<p>1.对于一个final变量，如果是基本数据类型的变量，则其数值一旦在初始化之后便不能更改；<br>如果是引用类型的变量，则在对其初始化之后便不能再让其指向另一个对象。.</p>
-<p>2.当用final修饰一个类时，表明这个类不能被继承。final类中的所有成员方法都会被隐式地指定为final方法。</p>
-<p>3.使用final方法的原因有两个。<br>第一个原因是把方法锁定，以防任何继承类修改它的含义;<br>第二个原因是效率。在早期的Java实现版本中，会将final方法转为内嵌调用。<br>但是如果方法过于庞大，可能看不到内嵌调用带来的任何性能提升（现在的Java版本已经不需要使用final方法进行这些优化了）。<br>类中所有的private方法都隐式地指定为final。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/04/04/hashCode 与 equals/">hashCode 与 equals</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-04-04T05:30:00.000Z" itemprop="datePublished">2017-04-04</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="hashCode-与-equals"><a href="#hashCode-与-equals" class="headerlink" title="hashCode 与 equals"></a>hashCode 与 equals</h1><h2 id="hashCode（）介绍"><a href="#hashCode（）介绍" class="headerlink" title="hashCode（）介绍"></a>hashCode（）介绍</h2><p>hashCode() 的作用是获取哈希码，也称为散列码；它实际上是返回一个int整数。这个哈希码的作用是确定该对象在哈希表中的索引位置。</p>
-<p>hashCode() 定义在JDK的Object.java中，这就意味着Java中的任何类都包含有hashCode() 函数。</p>
-<p>散列表存储的是键值对(key-value)，它的特点是：能根据“键”快速的检索出对应的“值”。这其中就利用到了散列码！</p>
-<p>意义：可以快速找到所需要的对象。</p>
-<h2 id="为什么要有-hashCode？"><a href="#为什么要有-hashCode？" class="headerlink" title="为什么要有 hashCode？"></a>为什么要有 hashCode？</h2><p>我们先以“HashSet 如何检查重复”为例子来说明为什么要有 hashCode：</p>
-<p>当你把对象加入 HashSet 时，HashSet 会先计算对象的 hashcode 值来判断对象加入的位置，<br>同时也会与其他已经加入的对象的 hashcode 值作比较，如果没有相符的hashcode，HashSet会假设对象没有重复出现。<br>但是如果发现有相同 hashcode 值的对象，这时会调用 equals（）方法来检查 hashcode 相等的对象是否真的相同。<br>如果两者相同，HashSet 就不会让其加入操作成功。如果不同的话，就会重新散列到其他位置。<br>这样我们就大大减少了 equals 的次数，相应就大大提高了执行速度。</p>
-<p>通过我们可以看出：hashCode() 的作用就是获取哈希码，也称为散列码；它实际上是返回一个int整数。<br>这个哈希码的作用是确定该对象在哈希表中的索引位置。<br><strong>hashCode() 在散列表中才有用，在其它情况下没用。</strong><br>在散列表中hashCode() 的作用是获取对象的散列码，进而确定该对象在散列表中的位置。</p>
-<h2 id="hashCode（）与equals（）的相关规定"><a href="#hashCode（）与equals（）的相关规定" class="headerlink" title="hashCode（）与equals（）的相关规定"></a>hashCode（）与equals（）的相关规定</h2><ul>
-<li>如果两个对象相等，则hashcode一定也是相同的</li>
-<li>两个对象相等,对两个对象分别调用equals方法都返回true</li>
-<li>两个对象有相同的hashcode值，它们也不一定是相等的</li>
-<li>因此，equals 方法被覆盖过，则 hashCode 方法也必须被覆盖</li>
-</ul>
-<p>hashCode() 的默认行为是对堆上的对象产生独特值。如果没有重写 hashCode()，<br>则该 class 的两个对象无论如何都不会相等（即使这两个对象指向相同的数据）</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/04/04/== 与 equals/">== 与 equals</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-04-04T01:30:00.000Z" itemprop="datePublished">2017-04-04</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="与-equals"><a href="#与-equals" class="headerlink" title="== 与 equals"></a>== 与 equals</h1><p>== : 它的作用是判断两个对象的地址是不是相等。即，判断两个对象是不是同一个对象(基本数据类型==比较的是值，引用数据类型==比较的是内存地址)。</p>
-<p>equals() : 它的作用也是判断两个对象是否相等。但它一般有两种使用情况：</p>
-<p>情况1：类没有覆盖 equals() 方法。则通过 equals() 比较该类的两个对象时，等价于通过“==”比较这两个对象。</p>
-<p>情况2：类覆盖了 equals() 方法。一般，我们都覆盖 equals() 方法来比较两个对象的内容是否相等；若它们的内容相等，则返回 true<br>(即，认为这两个对象相等)。</p>
-<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> class test1 &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">        <span class="keyword">String</span> a = <span class="keyword">new</span> <span class="keyword">String</span>(<span class="string">"ab"</span>); <span class="comment">// a 为一个引用</span></span><br><span class="line">        <span class="keyword">String</span> b = <span class="keyword">new</span> <span class="keyword">String</span>(<span class="string">"ab"</span>); <span class="comment">// b为另一个引用,对象的内容一样</span></span><br><span class="line">        <span class="keyword">String</span> aa = <span class="string">"ab"</span>; <span class="comment">// 放在常量池中</span></span><br><span class="line">        <span class="keyword">String</span> bb = <span class="string">"ab"</span>; <span class="comment">// 从常量池中查找</span></span><br><span class="line">        <span class="built_in">if</span> (aa == bb) <span class="comment">// true</span></span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"aa==bb"</span>);</span><br><span class="line">        <span class="built_in">if</span> (a == b) <span class="comment">// false，非同一对象</span></span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"a==b"</span>);</span><br><span class="line">        <span class="built_in">if</span> (a.equals(b)) <span class="comment">// true</span></span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"aEQb"</span>);</span><br><span class="line">        <span class="built_in">if</span> (<span class="number">42</span> == <span class="number">42.0</span>) &#123; <span class="comment">// true</span></span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="string">"true"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>Notice:</p>
-<p>String 中的 equals 方法是被重写过的，因为 object 的 equals 方法是比较的对象的内存地址，<br>而 String 的 equals 方法比较的是对象的值。</p>
-<p>当创建 String 类型的对象时，虚拟机会在常量池中查找有没有已经存在的值和要创建的值相同的对象，<br>如果有就把它赋给当前引用。如果没有就在常量池中重新创建一个 String 对象。</p>
-<h2 id="正确使用-equals-方法"><a href="#正确使用-equals-方法" class="headerlink" title="正确使用 equals 方法"></a>正确使用 equals 方法</h2><figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不能使用一个值为null的引用类型变量来调用非静态方法，否则会抛出异常</span></span><br><span class="line"><span class="built_in">String</span> str = <span class="built_in">null</span>;</span><br><span class="line"><span class="keyword">if</span> (str.<span class="keyword">equals</span>(<span class="string">"dick"</span>)) &#123;</span><br><span class="line">  <span class="params">...</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  ..</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>运行上面的程序会抛出空指针异常，但是我们把第二行的条件判断语句改为下面这样的话，就不会抛出空指针异常，else 语句块得到执行。：<br><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"dick"</span><span class="string">.equals</span><span class="params">(str)</span>;<span class="string">//</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure></p>
-<p>不过更推荐使用 java.util.Objects#equals(JDK7 引入的工具类)。<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Objects.<span class="keyword">equals</span>(<span class="literal">null</span>,<span class="string">"SnailClimb"</span>);<span class="comment">// false</span></span><br><span class="line"></span><br><span class="line">源码：</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> boolean <span class="title">equals</span>(<span class="params">Object a, Object b</span>)</span> &#123;</span><br><span class="line">	<span class="comment">// 可以避免空指针异常。如果a==null的话此时a.equals(b)就不会得到执行，避免出现空指针异常。</span></span><br><span class="line">	<span class="keyword">return</span> (a == b) || (a != <span class="literal">null</span> &amp;&amp; a.<span class="keyword">equals</span>(b));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
         
     </section>
 </article>
