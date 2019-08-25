@@ -131,6 +131,258 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/02/24/3.0 Java虚拟机的内部体系结构/">JVM 3.0</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-24T02:10:00.000Z" itemprop="datePublished">2018-02-24</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Java虚拟机的内部体系结构"><a href="#Java虚拟机的内部体系结构" class="headerlink" title="Java虚拟机的内部体系结构"></a>Java虚拟机的内部体系结构</h1><p>在 Java虚拟机规范中，一个虚拟机实例的行为是分别按照子系统、内存区、数据类型和指令来描述的，这些组成部分一起展示了抽象的虚拟机内部体系结构。</p>
+<p><img src="https://www.javazhiyin.com/wp-content/uploads/2019/01/java3-1547432465-1.jpg" alt="image"></p>
+<h2 id="运行时数据区"><a href="#运行时数据区" class="headerlink" title="运行时数据区"></a>运行时数据区</h2><p>Java虚拟机在执行Java程序的时候会把它管理的内存划分为若干个不同的数据区域，这些区域有各自的用途以及创建和销毁的时机，有的区域随着虚拟机进程的启动而存在（线程共享），有的区域则随着用户线程的启动和结束而建立和销毁（线程私有）。Java虚拟机所管理的内存包括以下几个运行时数据区域。</p>
+<h3 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h3><p>对于一个运行中的Java程序而言，每一个线程都有它的程序计数器，也叫PC寄存器，可以看做当前线程所执行的字节码的行号指示器。在虚拟机的概念模型里，字节码解释器就是通过改变这个计数器的值来选取下一条需要执行的字节码指令，分支，循环，跳转，异常处理，线程恢复等都需要依赖这个计数器。</p>
+<p>程序计数器既能持有一个本地指针，也能持有一个returnAddress。当线程执行某个Java方法时，程序计数器的值总是下一条被执行指令的地址。这里的地址可以是一个本地指针，也可以是方法字节码中相对该方法起始指令的偏移量。如果该线程正在执行一个本地方法，那么此时程序计数器的值是“undefined”。</p>
+<p>程序计数器属于线程私有的内存，也就是说，每当创建一个线程，都将得到该线程自己的一个程序计数器。Java虚拟机的多线程是通过线程的轮换并且分配处理器的执行时间来实现的，在一个确定的时刻，一个处理器都只会执行一条线程中的指令，为了线程切换后能恢复到正确的执行位置，每条线程都需要有一个独立的程序计数器。</p>
+<h3 id="Java虚拟机栈（Java栈）"><a href="#Java虚拟机栈（Java栈）" class="headerlink" title="Java虚拟机栈（Java栈）"></a>Java虚拟机栈（Java栈）</h3><p>Java虚拟机栈也是线程私有的，它的生命周期和线程相同。Java虚拟机栈描述的是Java方法执行的内存模型，每个方法在执行时会创建一个栈帧，用于存放局部变量表，操作数栈，动态链接，方法出口等信息。一个Java方法从调用到执行结束的过程，相当于一个栈帧在Java虚拟机栈中从入栈到出栈的过程。<br>（1）局部变量表<br>局部变量表用于存放编译时期可知的各种基本数据类型，对象的引用（不等同于对象，可能是指向对象的起始地址的指针，也可能是指向一个代表对象的句柄）以及returnAddress类型（指向了一条字节码地址）。局部变量在方法执行时被创建，在方法执行结束时销毁。</p>
+<p>字节码指令通过从0开始的索引使用其中的数据。类型为int, float, reference和returnAddress的值在数组中占据一项，而类型为byte, short和char的值在存入数组前都被转换为int值，也占据一项。但类型为long和double的值在数组中却占据连续的两项。</p>
+<h3 id="操作数栈"><a href="#操作数栈" class="headerlink" title="操作数栈"></a>操作数栈</h3><p>和局部变量区一样，操作数栈也是被组织成一个以字长为单位的数组。它通过标准的栈操作访问–压栈和出栈。由于程序计数器无法被程序指令直接访问，Java虚拟机的指令是从操作数栈中取得操作数，所以它的运行方式是基于栈而不是基于寄存器。虚拟机把操作数栈作为它的工作区，因为大多数指令都要从这里弹出数据，执行运算，然后把结果压回操作数栈。</p>
+<h3 id="帧数据区"><a href="#帧数据区" class="headerlink" title="帧数据区"></a>帧数据区</h3><p>除了局部变量区和操作数栈，Java栈帧还需要帧数据区来支持常量池解析、正常方法返回以及异常派发机制。每当虚拟机要执行某个需要用到常量池数据的指令时，它会通过帧数据区中指向常量池的指针来访问它。除了常量池的解析外，帧数据区还要帮助虚拟机处理Java方法的正常结束或异常中止。如果通过return正常结束，虚拟机必须恢复发起调用的方法的栈帧，包括设置程序计数器指向发起调用方法的下一个指令；如果方法有返回值，虚拟机需要将它压入到发起调用的方法的操作数栈。为了处理Java方法执行期间的异常退出情况，帧数据区还保存一个对此方法异常表的引用。</p>
+<h2 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h2><p>任何本地方法接口都会使用某种本地方法栈，本地方法栈与Java虚拟机栈发挥的作用类似。当线程调用Java方法时，虚拟机会创建一个新的栈帧并压入Java栈。当它调用的是本地方法时，虚拟机会保持Java栈不变，不再在线程的Java栈中压入新的栈，虚拟机只是简单地动态连接并直接调用指定的本地方法。</p>
+<h2 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h2><p>Java程序在运行时创建的所有类实例或数组（数组在Java虚拟机中是一个真正的对象）都放在同一个堆中，堆是虚拟机管理的内存最大的一块，被所有线程所共享，在虚拟机启动的时候创建。堆内存的唯一目的就是存放对象实例，几乎所有的对象实例都在堆中分配内存。</p>
+<h2 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h2><p>方法区同Java堆一样，是各个线程共享的内存区域，用于存储已经被虚拟机加载的类信息，常量，静态变量以及及时编译器编译后的代码等信息。当虚拟机装载某个类型时，它使用类装载器定位相应的class文件，然后读入这个class文件并将它传输到虚拟机中，接着虚拟机提取其中的类型信息，并将这些信息存储到方法区。方法区也可以被垃圾回收器收集，因为虚拟机允许通过用户定义的类装载器来动态扩展Java程序。</p>
+<p>方法区中存放了以下信息：</p>
+<pre><code>• 这个类型的全限定名（如全限定名java.lang.Object）
+• 这个类型的直接超类的全限定名
+• 这个类型是类类型还是接口类型
+• 这个类型的访问修饰符（public, abstract, final的某个子集）
+• 任何直接超接口的全限定名的有序列表
+• 该类型的常量池，Class文件中除了有类的版本，字段，方法，接口等描述信息外，还有一项是常量池，用于存放编译时生成的各种字面量和符号引用，这部分内容将在类加载后进入方法区的运行时常量池中存放
+• 字段信息（字段名、类型、修饰符）
+• 方法信息（方法名、返回类型、参数数量和类型、修饰符）
+• 除了常量以外的所有类（静态）变量
+• 指向ClassLoader类的引用（每个类型被装载时，虚拟机必须跟踪它是由启动类装载器还是由用户自定义类装载器装载的）
+• 指向Class类的引用（对于每一个被装载的类型，虚拟机相应地为它创建一个java.lang.Class类的实例存于堆中。比如你有一个到java.lang.Integer类的对象的引用，那么只需要调用Integer对象引用的getClass()方法，就可以得到表示java.lang.Integer类的Class对象）
+</code></pre><h2 id="类加载子系统"><a href="#类加载子系统" class="headerlink" title="类加载子系统"></a>类加载子系统</h2><p>虚拟机把Java描述类的信息加载到内存，并对数据进行校验，转换解析和初始化，形成可以被Java虚拟机直接使用的Java类型，这就是Java虚拟机的类加载机制。类从加载到虚拟机开始，到卸载出内存为止，它的整个生命周期包括：</p>
+<blockquote>
+<p>加载，验证，准备，解析，初始化，使用和卸载7个阶段。</p>
+</blockquote>
+<p><img src="https://www.javazhiyin.com/wp-content/uploads/2019/01/java2-1547432466.png" alt="image"></p>
+<h3 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h3><p>加载是类加载的一个阶段，在该阶段，Java虚拟机主要完成以下三件事情：</p>
+<pre><code>• 根据此类的全限定名来确定该类的二进制字节流；
+• 将这个字节流所代表的静态数据存储结构转换为方法区的运行时数据结构；
+• 在堆内存中生成一个代表这个类的java.lang.Class对象，作为方法区这个类的各种数据的访问入口。
+</code></pre><h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><p>验证是连接的第一步，这一阶段的目的是为了确保Class文件的字节流中包含的信息是否符合该虚拟机的要求。</p>
+<h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><p>准备阶段正式为类变量在方法区中分配内存并且赋初始值，初始值一般为该类变量类型的零值。</p>
+<h3 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h3><p>解析阶段虚拟机将常量池内的符号引用替换为直接引用。<br>符号引用：以一组符号来描述所引用的目标，符号可以是任何形式的字面量，只要使用时能无歧义的定位到目标即可。<br>直接引用：是指能直接指向目标的指针，相对偏移量或是一个能间接定位到目标的句柄。</p>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>初始化是类加载过程的最后一个阶段，在前面的类加载过程中，除了在加载阶段用户可以自定义类加载器参与之外，其余动作完全由虚拟机主导和控制，到了初始化阶段，才真正开始执行类中定义的Java代码（字节码）。准备阶段为类变量分配内存并且赋初始值，赋值操作在初始化阶段执行。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/02/12/2.0 Java虚拟机/">JVM 2.0</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-12T02:10:00.000Z" itemprop="datePublished">2018-02-12</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>#Java虚拟机</p>
+<p>作用：</p>
+<blockquote>
+<p>Java虚拟机的主要任务是装载class文件并且执行其中的字节码。Java虚拟机包含一个类装载器（class loader），它可以从程序和API中装载class文件，Java API中只有程序执行时需要的类才会被装载，字节码由执行引擎来执行。</p>
+</blockquote>
+<p>当Java虚拟机由主机操作系统上的软件实现时，Java程序通过调用本地方法和主机进行交互。Java方法由Java语言编写，编译成字节码，存储在class文件中。本地方法由C/C++/汇编语言编写，编译成和处理器相关的机器代码，存储在动态链接库中，格式是各个平台专有。所以本地方法是联系Java程序和底层主机操作系统的连接方式。（跨平台）</p>
+<p><img src="https://www.javazhiyin.com/wp-content/uploads/2019/01/java8-1547432465.png" alt="image"></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/02/08/清除eclipse launch configuration/">清除eclipse launch configuration</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-08T06:18:02.000Z" itemprop="datePublished">2018-02-08</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java/">Java</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="清除eclipse-launch-configuration"><a href="#清除eclipse-launch-configuration" class="headerlink" title="清除eclipse launch configuration"></a>清除eclipse launch configuration</h1><p>eclipse里面export runnable jar之前要先run一下才行, 但是之后launch configuration里面的记录一直存在, 非常难看, 清除的方法是:<br>清空workspace文件夹下的里的内容。</p>
+<blockquote>
+<p>注意是删掉文件夹里面的内容, 而不是把文件夹删了</p>
+</blockquote>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.metadata/.plugins/org<span class="selector-class">.eclipse</span><span class="selector-class">.debug</span><span class="selector-class">.core</span>/.launches</span><br><span class="line"></span><br><span class="line">eg:</span><br><span class="line">E:\JavaWorkSpace\.metadata\.plugins\org<span class="selector-class">.eclipse</span><span class="selector-class">.debug</span><span class="selector-class">.core</span>\.launches</span><br></pre></td></tr></table></figure>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/02/08/IO复用技术/">IO复用技术</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-08T04:18:45.000Z" itemprop="datePublished">2018-02-08</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/IO/">IO</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="IO复用技术"><a href="#IO复用技术" class="headerlink" title="IO复用技术"></a>IO复用技术</h1><p>多进程方式实现的服务器端，一次创建多个工作子进程来给客户端提供服务。其实这种方式是存在问题的。</p>
+<p>可以打个比方：如果我们先前创建的几个进程承载不了目前快速发展的业务的话，是不是还得增加进程数？我们都知道系统创建进程是需要消耗大量资源的，所以这样就会导致系统资源不足的情况。</p>
+<p>那么有没有一种方式可以让一个进程同时为多个客户端端提供服务？</p>
+<p>接下来要讲的IO复用技术就是对于上述问题的最好解答。</p>
+<p>对于IO复用，我们可以通过一个例子来很好的理解它。（例子来自于《TCP/IP网络编程》）</p>
+<p>某教室有10名学生和1名老师，这些学生上课会不停的提问，所以一个老师处理不了这么多的问题。那么学校为每个学生都配一名老师，</p>
+<p>也就是这个教室目前有10名老师。此后，只要有新的转校生，那么就会为这个学生专门分配一个老师。</p>
+<p>如果把以上例子中的学生比作客户端，那么老师就是负责进行数据交换的服务端。则该例子可以比作是多进程的方式。</p>
+<p>后来有一天，来了一位具有超能力的老师，这位老师回答问题非常迅速，并且可以应对所有的问题。而这位老师采用的方式是学生提问前必须先举手，确认举手学生后在回答问题。则现在的情况就是IO复用。</p>
+<p>目前的常用的IO复用模型有三种：select，poll，epoll。</p>
+<h2 id="select模型"><a href="#select模型" class="headerlink" title="select模型"></a>select模型</h2><p>说的通俗一点就是各个客户端(连接的文件描述符)套接字，都被放到了一个集合中，调用select函数之后会一直监视这些文件描述符中有哪些可读，如果有可读的描述符那么我们的工作进程就去读取资源。</p>
+<h2 id="poll模型"><a href="#poll模型" class="headerlink" title="poll模型"></a>poll模型</h2><p>poll 和 select 的实现非常类似，本质上的区别就是存放 fd 集合的数据结构不一样。select 在一个进程内可以维持最多 1024 个连接，poll 在此基础上做了加强，可以维持任意数量的连接。</p>
+<p>但 select 和 poll 方式有一个很大的问题就是，我们不难看出来select是通过轮训的方式来查找是否可读或者可写，打个比方，如果同时有100万个连接都没有断开，而只有一个客户端发送了数据，所以这里它还是需要循环这么多次，造成资源浪费。所以后来出现了 epoll系统调用。</p>
+<h2 id="epoll模型"><a href="#epoll模型" class="headerlink" title="epoll模型"></a>epoll模型</h2><p>epoll是 select 和 poll 的增强版，epoll 同 poll 一样，文件描述符数量无限制。</p>
+<p>epoll是基于内核的反射机制，在有活跃的 socket 时，系统会调用我们提前设置的回调函数。而 poll 和 select 都是遍历。</p>
+<p>但是也并不是所有情况下 epoll 都比 select/poll 好，比如在如下场景：</p>
+<p>在大多数客户端都很活跃的情况下，系统会把所有的回调函数都唤醒，所以会导致负载较高。既然要处理这么多的连接，那倒不如 select 遍历简单有效。</p>
+<blockquote>
+<p>内核（kernel）利用文件描述符（file descriptor）来访问文件。文件描述符是非负整数。打开现存文件或新建文件时，内核会返回一个文件描述符。读写文件也需要使用文件描述符来指定待读写的文件。</p>
+</blockquote>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/02/08/Java多线程/">Java多线程相关问题</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-08T04:18:45.000Z" itemprop="datePublished">2018-02-08</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>Java多线程相关问题</p>
+<p>1.线程池的原理，为什么要创建线程池？创建线程池的方式？</p>
+<p>2.线程的生命周期？什么时候会出现僵死线程？</p>
+<ol start="3">
+<li><p>说说线程安全问题？什么是线程安全？如何实现线程安全？</p>
+</li>
+<li><p>创建线程池有哪几个核心参数？如何合理的配置线程池的大小？</p>
+</li>
+</ol>
+<p>5.volatile、ThreadLocal的使用场景和原理；</p>
+<p>6.ThreadLocal什么时候会出现OOM情况？为什么？</p>
+<p>7.sychronized、volatile区别？synchronized锁粒度、模拟死锁场景、原子性和可见性</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/02/02/字节码/">Java 字节码</a>
         </h1>
         
@@ -322,234 +574,6 @@
 <h2 id="分布式服务架构"><a href="#分布式服务架构" class="headerlink" title="分布式服务架构"></a>分布式服务架构</h2><p>当垂直应用越来越多，应用之间交互不可避免，将核心业务抽取出来，作为独立的服务，逐渐形成稳定的服务中心，使前端应用能更快速的响应多变的市场需求。此时，用于提高业务复用及整合的分布式服务框架(RPC)是关键。</p>
 <h2 id="流动计算架构"><a href="#流动计算架构" class="headerlink" title="流动计算架构"></a>流动计算架构</h2><p>当服务越来越多，容量的评估，小服务资源的浪费等问题逐渐显现，此时需增加一个调度中心基于访问压力实时管理集群容量，提高集群利用率。此时，用于提高机器利用率的资源调度和治理中心(SOA)是关键。</p>
 
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/12/01/修改jar包中的配置文件/">修改jar包中的配置文件</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-12-01T09:10:10.000Z" itemprop="datePublished">2017-12-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="修改jar包中的配置文件"><a href="#修改jar包中的配置文件" class="headerlink" title="修改jar包中的配置文件"></a>修改jar包中的配置文件</h1><h2 id="一-通过vim命令直接修改保存jar。超方便。"><a href="#一-通过vim命令直接修改保存jar。超方便。" class="headerlink" title="一    通过vim命令直接修改保存jar。超方便。"></a>一    通过vim命令直接修改保存jar。超方便。</h2><p>1.通过vim命令直接编辑jar<br>vim xxx.jar 该命令首先会列出全部文件，可以通过输入/abc来搜索，定位到对应的abc文件后回车进入配置文件内进行编辑，:wq保存。</p>
-<h2 id="二-通过jar命令替换jar包中的文件-也可新增"><a href="#二-通过jar命令替换jar包中的文件-也可新增" class="headerlink" title="二    通过jar命令替换jar包中的文件(也可新增)"></a>二    通过jar命令替换jar包中的文件(也可新增)</h2><p>1.列出jar包中的文件清单<br>jar tf client.jar</p>
-<p>2.提取出内部jar包的指定文件<br>jar xf client.jar BOOT-INF/classes/realtime/t_ivr_data_bj.json</p>
-<p>3.然后可以修改文件<br>vim BOOT-INF/classes/realtime/t_ivr_data_bj.json</p>
-<p>4.更新配置文件到内部jar包.(存在覆盖，不存在就新增)<br>jar uf client.jar BOOT-INF/classes/realtime/t_ivr_data_bj.json</p>
-<p>4.1更新内部jar包到jar文件<br>jar uf client.jar 内部jar包.jar</p>
-<p>5.可以查看验证是否已经更改<br>vim client.jar</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/05/11/数组实现栈/">Java 使用数组实现栈</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-05-11T15:30:00.000Z" itemprop="datePublished">2017-05-11</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/程序设计题/">程序设计题</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="使用数组实现栈"><a href="#使用数组实现栈" class="headerlink" title="使用数组实现栈"></a>使用数组实现栈</h1><figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">自己实现一个栈，要求这个栈具有push<span class="comment">()</span>、pop<span class="comment">()</span>（返回栈顶元素并出栈）、peek<span class="comment">()</span> （返回栈顶元素不出栈）、isEmpty<span class="comment">()</span>、size<span class="comment">()</span></span><br><span class="line">这些基本的方法。</span><br><span class="line"></span><br><span class="line">提示：每次入栈之前先判断栈的容量是否够用，如果不够用就用Arrays.copyOf<span class="comment">()</span>进行扩容；</span><br></pre></td></tr></table></figure>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">package</span> program;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> MyStack &#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * 使用数组实现栈： 自己实现一个栈，要求这个栈具有push()、pop()（返回栈顶元素并出栈）、peek()</span></span><br><span class="line"><span class="comment">	 * （返回栈顶元素不出栈）、isEmpty()、size()这些基本的方法。</span></span><br><span class="line"><span class="comment">	 * 提示：每次入栈之前先判断栈的容量是否够用，如果不够用就用Arrays.copyOf()进行扩容；</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * 存数据的数组</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span>[] storage;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * 容量</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> capacity;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * 元素个数</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> <span class="keyword">count</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * 每次以当前容量进行扩容</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> GROW_FACTOR = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// TODO：默认构造函数</span></span><br><span class="line">	<span class="keyword">public</span> MyStack() &#123;</span><br><span class="line">		<span class="keyword">this</span>.capacity = <span class="number">8</span>;</span><br><span class="line">		<span class="keyword">this</span>.<span class="keyword">count</span> = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">this</span>.storage = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">8</span>];</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// TODO：带初始容量的构造方法</span></span><br><span class="line">	<span class="keyword">public</span> MyStack(<span class="keyword">int</span> initialCapacity) &#123;</span><br><span class="line">		<span class="keyword">if</span> (initialCapacity &lt; <span class="number">1</span>)</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Capacity too small."</span>);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">this</span>.capacity = initialCapacity;</span><br><span class="line">		<span class="keyword">this</span>.storage = <span class="keyword">new</span> <span class="keyword">int</span>[initialCapacity];</span><br><span class="line">		<span class="keyword">this</span>.<span class="keyword">count</span> = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// TODO： 入栈</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="keyword">push</span>(<span class="keyword">int</span> value) &#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="keyword">count</span> == capacity) &#123;</span><br><span class="line">			scrollUpCapacity();</span><br><span class="line">		&#125;</span><br><span class="line">		storage[<span class="keyword">count</span>++] = value;		</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// <span class="doctag">TODO:</span> 扩容</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">void</span> scrollUpCapacity() &#123;</span><br><span class="line">		<span class="keyword">int</span> newCapacity = capacity * GROW_FACTOR;</span><br><span class="line">		storage = Arrays.copyOf(storage, newCapacity);</span><br><span class="line">		capacity = newCapacity;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// TODO： 返回栈顶元素(出栈)</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> <span class="keyword">pop</span>() &#123;</span><br><span class="line">		<span class="keyword">count</span>--;</span><br><span class="line">		<span class="keyword">if</span> (<span class="keyword">count</span> == -<span class="number">1</span>) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Stack is empty."</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> storage[<span class="keyword">count</span>];</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// TODO： 返回栈顶元素(不出栈)</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> peek() &#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="keyword">count</span> == <span class="number">0</span>) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Stack is empty."</span>);</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="keyword">return</span> storage[<span class="keyword">count</span> - <span class="number">1</span>];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// <span class="doctag">TODO:</span> 判断是否为空</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">boolean</span> isEmpty() &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">count</span> == <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// <span class="doctag">TODO:</span> 返回长度(元素个数)</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> <span class="keyword">size</span>() &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">count</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args) &#123;</span><br><span class="line">		MyStack myStack = <span class="keyword">new</span> MyStack(<span class="number">3</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">1</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">2</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">3</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">4</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">5</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">6</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">7</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">8</span>);</span><br><span class="line">		System.out.<span class="keyword">println</span>(myStack.peek());<span class="comment">// 8</span></span><br><span class="line">		System.out.<span class="keyword">println</span>(myStack.<span class="keyword">size</span>());<span class="comment">// 8</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++) &#123;</span><br><span class="line">			System.out.<span class="keyword">println</span>(myStack.<span class="keyword">pop</span>());</span><br><span class="line">		&#125;</span><br><span class="line">		System.out.<span class="keyword">println</span>(myStack.isEmpty());<span class="comment">// true</span></span><br><span class="line">		myStack.<span class="keyword">pop</span>();<span class="comment">// 报错：java.lang.IllegalArgumentException: Stack is empty.</span></span><br><span class="line"></span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">520</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/05/11/实现最小值函数/">Java 实现最小值函数</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-05-11T15:30:00.000Z" itemprop="datePublished">2017-05-11</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/程序设计题/">程序设计题</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="实现最小值函数"><a href="#实现最小值函数" class="headerlink" title="实现最小值函数"></a>实现最小值函数</h1><p>自己设计一个泛型的获取数组最小值的函数.并且这个方法只能接受Number的子类并且实现了Comparable接口。</p>
-<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//注意：Number并没有实现Comparable</span><br><span class="line">private static &lt;T extends Number &amp; Comparable&lt;? super T&gt;&gt; T <span class="built_in">min</span>(T[] <span class="built_in">values</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">values</span> == null || <span class="built_in">values</span>.<span class="built_in">length</span> == <span class="number">0</span>) <span class="built_in">return</span> null;</span><br><span class="line">    T <span class="built_in">min</span> = <span class="built_in">values</span>[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span> (int i = <span class="number">1</span>; i &lt; <span class="built_in">values</span>.<span class="built_in">length</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">min</span>.compareTo(<span class="built_in">values</span>[i]) &gt; <span class="number">0</span>) <span class="built_in">min</span> = <span class="built_in">values</span>[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">return</span> <span class="built_in">min</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>测试：<br><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> minInteger = <span class="built_in">min</span>(<span class="keyword">new</span> Integer[]&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;);<span class="comment">//result:1</span></span><br><span class="line"><span class="keyword">double</span> minDouble = <span class="built_in">min</span>(<span class="keyword">new</span> Double[]&#123;<span class="number">1.2</span>, <span class="number">2.2</span>, <span class="number">-1</span>d&#125;);<span class="comment">//result:-1d</span></span><br><span class="line"><span class="keyword">String</span> typeError = <span class="built_in">min</span>(<span class="keyword">new</span> <span class="keyword">String</span>[]&#123;<span class="string">"1"</span>,<span class="string">"3"</span>&#125;);<span class="comment">//报错</span></span><br></pre></td></tr></table></figure></p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/04/15/JavaIO/">Java IO</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-04-15T15:30:00.000Z" itemprop="datePublished">2017-04-15</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>#Java IO</p>
-<h2 id="Java-中-IO-流分为几种"><a href="#Java-中-IO-流分为几种" class="headerlink" title="Java 中 IO 流分为几种?"></a>Java 中 IO 流分为几种?</h2><p>java 中 IO 流分为几种?<br>按照流的流向分，可以分为输入流和输出流；<br>按照操作单元划分，可以划分为字节流和字符流；<br>按照流的角色划分为节点流和处理流。</p>
-<p>Java Io流共涉及40多个类，这些类看上去很杂乱，但实际上很有规则，而且彼此之间存在非常紧密的联系，<br>Java I0流的40多个类都是从如下4个抽象类基类中派生出来的。</p>
-<p>InputStream/Reader: 所有的输入流的基类，前者是字节输入流，后者是字符输入流。<br>OutputStream/Writer: 所有输出流的基类，前者是字节输出流，后者是字符输出流。</p>
-<p>字符： Reader/Writer<br>字节： InputStream/OutputStream</p>
-<h2 id="BIO-NIO-AIO-有什么区别"><a href="#BIO-NIO-AIO-有什么区别" class="headerlink" title="BIO,NIO,AIO 有什么区别?"></a>BIO,NIO,AIO 有什么区别?</h2><h3 id="BIO-Blocking-I-O"><a href="#BIO-Blocking-I-O" class="headerlink" title="BIO (Blocking I/O):"></a>BIO (Blocking I/O):</h3><p>同步阻塞I/O模式，数据的读取写入必须阻塞在一个线程内等待其完成。在活动连接数不是特别高（小于单机1000）的情况下，<br>这种模型是比较不错的，可以让每一个连接专注于自己的 I/O 并且编程模型简单，也不用过多考虑系统的过载、限流等问题。<br>线程池本身就是一个天然的漏斗，可以缓冲一些系统处理不了的连接或请求。但是，当面对十万甚至百万级连接的时候，<br>传统的 BIO 模型是无能为力的。因此，我们需要一种更高效的 I/O 处理模型来应对更高的并发量。</p>
-<h3 id="NIO-New-I-O"><a href="#NIO-New-I-O" class="headerlink" title="NIO (New I/O):"></a>NIO (New I/O):</h3><p>NIO是一种同步非阻塞的I/O模型，在Java 1.4 中引入了NIO框架，对应 java.nio 包，提供了 Channel , Selector，Buffer等抽象。<br>NIO中的N可以理解为Non-blocking，不单纯是New。它支持面向缓冲的，基于通道的I/O操作方法。 NIO提供了与传统BIO模型中的<br>Socket 和 ServerSocket 相对应的 SocketChannel 和 ServerSocketChannel 两种不同的套接字通道实现,两种通道都支持阻塞和<br>非阻塞两种模式。阻塞模式使用就像传统中的支持一样，比较简单，但是性能和可靠性都不好；非阻塞模式正好与之相反。<br>对于低负载、低并发的应用程序，可以使用同步阻塞I/O来提升开发速率和更好的维护性；<br>对于高负载、高并发的（网络）应用，应使用 NIO 的非阻塞模式来开发。</p>
-<h3 id="AIO-Asynchronous-I-O"><a href="#AIO-Asynchronous-I-O" class="headerlink" title="AIO (Asynchronous I/O):"></a>AIO (Asynchronous I/O):</h3><p>AIO 也就是 NIO 2。在 Java 7 中引入了 NIO 的改进版 NIO 2,它是异步非阻塞的IO模型。异步 IO 是基于事件和回调机制实现的，<br>也就是应用操作之后会直接返回，不会堵塞在那里，当后台处理完成，操作系统会通知相应的线程进行后续的操作。<br>AIO 是异步IO的缩写，虽然 NIO 在网络操作中，提供了非阻塞的方法，但是 NIO 的 IO 行为还是同步的。对于 NIO 来说，我们的<br>业务线程是在 IO 操作准备好时，得到通知，接着就由这个线程自行进行 IO 操作，IO操作本身是同步的。查阅网上相关资料，<br>我发现就目前来说 AIO 的应用还不是很广泛，Netty 之前也尝试使用过 AIO，不过又放弃了。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/04/10/异常处理/">异常处理</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-04-10T14:30:00.000Z" itemprop="datePublished">2017-04-10</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h1><p>分类：<br>                                                    ====StackOverFlowError(栈溢出)</p>
-<pre><code>                    ====VirtualMachineError
-
-                                            ====OutOfMemoryError  (内存溢出)
-==== Error
-
-                    ====AWTError
-</code></pre><p>Throwable    ======================================================       </p>
-<pre><code>                                            ====EOFException
-
-                    ====IOException
-
-                                            ====FileNoFoundException
-
-==== Exception   
-
-                                            ====ClassNoFoundException
-
-                                            ====NullPointerException
-
-                    ====RuntimeException   ====IllegalArgumentException
-
-                                            ====ArrayIndexOutOfBoundsException
-
-                                            ====UnknownTypeException
-
-                                            ====MissingResourceException
-
-                                            ====ArrithmeticException(除数为0的异常 ArrithmeticException,就是运行时异常)
-</code></pre><p>在 Java 中，所有的异常都有一个共同的祖先java.lang包中的 Throwable类。Throwable：<br>有两个重要的子类：Exception（异常） 和 Error（错误）<br>二者都是 Java 异常处理的重要子类，各自都包含大量子类。</p>
-<p>Error（错误）:是程序无法处理的错误，表示运行应用程序中较严重问题。大多数错误与代码编写者执行的操作无关，而表示代码运行时<br>JVM（Java 虚拟机）出现的问题。例如，Java虚拟机运行错误（Virtual MachineError），当 JVM 不再有继续执行操作所需的内存资源时<br>，将出现 OutOfMemoryError。这些异常发生时，Java虚拟机（JVM）一般会选择线程终止。</p>
-<p>这些错误表示故障发生于虚拟机自身、或者发生在虚拟机试图执行应用时，如Java虚拟机运行错误（Virtual MachineError）、类定义错误<br>（NoClassDefFoundError）等。这些错误是不可查的，因为它们在应用程序的控制和处理能力之外，而且绝大多数是程序运行时不允许<br>出现的状况。对于设计合理的应用程序来说，即使确实发生了错误，本质上也不应该试图去处理它所引起的异常状况。<br>在 Java中，错误通过Error的子类描述。</p>
-<p>Exception（异常）:是程序本身可以处理的异常。Exception 类有一个重要的子类 RuntimeException。RuntimeException 异常由<br>Java虚拟机抛出。NullPointerException（要访问的变量没有引用任何对象时，抛出该异常）、ArithmeticException（算术运算异常，<br>一个整数除以0时，抛出该异常）和 ArrayIndexOutOfBoundsException （下标越界异常）。                            </p>
-<p>注意：异常和错误的区别：异常能被程序本身可以处理，错误是无法处理。                            </p>
-<p>Throwable类常用方法</p>
-<pre><code>public string getMessage():返回异常发生时的详细信息
-public string toString():返回异常发生时的简要描述
-public string getLocalizedMessage():返回异常对象的本地化信息。使用Throwable的子类覆盖这个方法，可以声称本地化信息。如果子类没有覆盖该方法，则该方法返回的信息与getMessage（）返回的结果相同
-public void printStackTrace():在控制台上打印Throwable对象封装的异常信息                            
-</code></pre>
         
     </section>
 </article>

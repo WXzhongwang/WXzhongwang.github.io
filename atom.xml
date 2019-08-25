@@ -116,36 +116,6 @@
   </entry>
   
   <entry>
-    <title>Java基础面试题五</title>
-    <link href="https://wxzhongwang.github.io/2019/08/07/Java%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95%E9%A2%98%E4%BA%94/"/>
-    <id>https://wxzhongwang.github.io/2019/08/07/Java基础面试题五/</id>
-    <published>2019-08-07T14:37:25.985Z</published>
-    <updated>2019-08-11T05:16:10.202Z</updated>
-    
-    <content type="html"><![CDATA[<p>Java基础面试题五</p><blockquote><p>Q1: &amp; 和 &amp;&amp; 的区别</p></blockquote><p>&amp;是位运算符，表示按位与运算，&amp;&amp;是逻辑运算符，表示逻辑与（and）。</p><blockquote><p>Q2: final, finally, finalize的区别</p></blockquote><ul><li>final 用于声明属性，方法和类，分别表示属性不可变，方法不可覆盖，类不可继承。 </li><li>finally,异常处理语句结构的一部分，表示总是执行。 </li><li>finalize是Object类的一个方法，垃圾收集器执行的时候会调用被回收对象的此方法，可以覆盖此方法提供垃圾收集时的其他资源回收，例如关闭文件等。</li></ul><blockquote><p>Q3: sleep() 和 wait() 有什么区别? </p></blockquote><p>sleep是线程类（Thread）的方法，导致此线程暂停执行指定时间，给执行机会给其他线程，但是监控状态依然保持，到时后会自动恢复。调用sleep不会释放对象锁。 </p><p>wait是Object类的方法，对此对象调用wait方法导致本线程放弃对象锁，进入等待此对象的等待锁定池，只有针对此对象发出notify方法（或not ifyAll）后本线程才进入对象锁定池准备获得对象锁进入运行状态。</p><blockquote><p>Q4: error和exception有什么区别? </p></blockquote><ul><li>error:<br>表示恢复不是不可能但很困难的情况下的一种严重问题。比如说内存溢出。不可能指望程序能处理这样的情况。 </li><li>exception: 表示一种设计或实现问题。也就是说，它表示如果程序运行正常，从不会发生的情况。</li></ul><blockquote><p>Q5: GC是什么? 为什么要有GC? </p></blockquote><p>GC是垃圾收集的意思（Gabage Collection）,内存处理是编程人员容易出现问题的地方，忘记或者错误的内存回收会导致程序或系统的不稳定甚至崩溃，Java提供的GC功能可以自动监测对象是否超过作用域从而达到自动回收内存的目的，Java语言没有提供释放已分配内存的显示操作方法。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">要请求垃圾收集，可以调用下面的方法之一：  </span><br><span class="line"><span class="selector-tag">System</span><span class="selector-class">.gc</span>() </span><br><span class="line"><span class="selector-tag">Runtime</span><span class="selector-class">.getRuntime</span>()<span class="selector-class">.gc</span>()</span><br></pre></td></tr></table></figure></p><p>当然，如果需要，程序员可以在Java程序中显式地使用System.gc()来强制进行一次立即的内存清理。<br>因为显式声明是做堆内存全扫描，也就是FullGC，是需要停止所有的活动的（Stop The World Collection），你的应用能承受这个吗？而其显示调用System.gc()只是给虚拟机一个建议，不一定会执行，因为System.gc()在一个优先级很低的线程中执行。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;Java基础面试题五&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Q1: &amp;amp; 和 &amp;amp;&amp;amp; 的区别&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&amp;amp;是位运算符，表示按位与运算，&amp;amp;&amp;amp;是逻辑运算符，表示逻辑与（and）。&lt;/p&gt;
-&lt;block
-      
-    
-    </summary>
-    
-      <category term="Java" scheme="https://wxzhongwang.github.io/categories/Java/"/>
-    
-    
-      <category term="面试题" scheme="https://wxzhongwang.github.io/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/"/>
-    
-  </entry>
-  
-  <entry>
     <title>Java基础面试题四</title>
     <link href="https://wxzhongwang.github.io/2019/08/07/Java%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95%E9%A2%98%E5%9B%9B/"/>
     <id>https://wxzhongwang.github.io/2019/08/07/Java基础面试题四/</id>
@@ -165,6 +135,36 @@
 &lt;p&gt;垃圾回收的目的是识别并且丢弃应用不再使用的对象来释放和重用资源。&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;
+      
+    
+    </summary>
+    
+      <category term="Java" scheme="https://wxzhongwang.github.io/categories/Java/"/>
+    
+    
+      <category term="面试题" scheme="https://wxzhongwang.github.io/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java基础面试题五</title>
+    <link href="https://wxzhongwang.github.io/2019/08/07/Java%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95%E9%A2%98%E4%BA%94/"/>
+    <id>https://wxzhongwang.github.io/2019/08/07/Java基础面试题五/</id>
+    <published>2019-08-07T14:37:25.985Z</published>
+    <updated>2019-08-11T05:16:10.202Z</updated>
+    
+    <content type="html"><![CDATA[<p>Java基础面试题五</p><blockquote><p>Q1: &amp; 和 &amp;&amp; 的区别</p></blockquote><p>&amp;是位运算符，表示按位与运算，&amp;&amp;是逻辑运算符，表示逻辑与（and）。</p><blockquote><p>Q2: final, finally, finalize的区别</p></blockquote><ul><li>final 用于声明属性，方法和类，分别表示属性不可变，方法不可覆盖，类不可继承。 </li><li>finally,异常处理语句结构的一部分，表示总是执行。 </li><li>finalize是Object类的一个方法，垃圾收集器执行的时候会调用被回收对象的此方法，可以覆盖此方法提供垃圾收集时的其他资源回收，例如关闭文件等。</li></ul><blockquote><p>Q3: sleep() 和 wait() 有什么区别? </p></blockquote><p>sleep是线程类（Thread）的方法，导致此线程暂停执行指定时间，给执行机会给其他线程，但是监控状态依然保持，到时后会自动恢复。调用sleep不会释放对象锁。 </p><p>wait是Object类的方法，对此对象调用wait方法导致本线程放弃对象锁，进入等待此对象的等待锁定池，只有针对此对象发出notify方法（或not ifyAll）后本线程才进入对象锁定池准备获得对象锁进入运行状态。</p><blockquote><p>Q4: error和exception有什么区别? </p></blockquote><ul><li>error:<br>表示恢复不是不可能但很困难的情况下的一种严重问题。比如说内存溢出。不可能指望程序能处理这样的情况。 </li><li>exception: 表示一种设计或实现问题。也就是说，它表示如果程序运行正常，从不会发生的情况。</li></ul><blockquote><p>Q5: GC是什么? 为什么要有GC? </p></blockquote><p>GC是垃圾收集的意思（Gabage Collection）,内存处理是编程人员容易出现问题的地方，忘记或者错误的内存回收会导致程序或系统的不稳定甚至崩溃，Java提供的GC功能可以自动监测对象是否超过作用域从而达到自动回收内存的目的，Java语言没有提供释放已分配内存的显示操作方法。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">要请求垃圾收集，可以调用下面的方法之一：  </span><br><span class="line"><span class="selector-tag">System</span><span class="selector-class">.gc</span>() </span><br><span class="line"><span class="selector-tag">Runtime</span><span class="selector-class">.getRuntime</span>()<span class="selector-class">.gc</span>()</span><br></pre></td></tr></table></figure></p><p>当然，如果需要，程序员可以在Java程序中显式地使用System.gc()来强制进行一次立即的内存清理。<br>因为显式声明是做堆内存全扫描，也就是FullGC，是需要停止所有的活动的（Stop The World Collection），你的应用能承受这个吗？而其显示调用System.gc()只是给虚拟机一个建议，不一定会执行，因为System.gc()在一个优先级很低的线程中执行。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;Java基础面试题五&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Q1: &amp;amp; 和 &amp;amp;&amp;amp; 的区别&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&amp;amp;是位运算符，表示按位与运算，&amp;amp;&amp;amp;是逻辑运算符，表示逻辑与（and）。&lt;/p&gt;
+&lt;block
       
     
     </summary>
@@ -365,31 +365,6 @@
   </entry>
   
   <entry>
-    <title>字符型常量和字符串常量的区别</title>
-    <link href="https://wxzhongwang.github.io/2019/03/01/%E5%AD%97%E7%AC%A6%E5%9E%8B%E5%B8%B8%E9%87%8F%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E7%9A%84%E5%8C%BA%E5%88%AB/"/>
-    <id>https://wxzhongwang.github.io/2019/03/01/字符型常量和字符串常量的区别/</id>
-    <published>2019-03-01T02:10:00.000Z</published>
-    <updated>2019-08-12T13:03:07.878Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="字符型常量和字符串常量的区别"><a href="#字符型常量和字符串常量的区别" class="headerlink" title="字符型常量和字符串常量的区别"></a>字符型常量和字符串常量的区别</h1><p>形式上: 字符常量是单引号引起的一个字符; 字符串常量是双引号引起的若干个字符</p><p>含义上: 字符常量相当于一个整型值( ASCII 值),可以参加表达式运算; 字符串常量代表一个地址值(该字符串在内存中存放位置)</p><p>占内存大小: 字符常量只占2个字节; 字符串常量占若干个字节(至少一个字符结束标志) (注意： char在Java中占两个字节)</p><p>数据类型     大小        包装器类型<br>boolean      -           Boolean<br>char       16bits        Character<br>byte        8bits        Byte<br>short      16bits        Short<br>int        32bits        Integer<br>long       64bits        Long<br>float      32bits        Float<br>double     64bits        Double</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;字符型常量和字符串常量的区别&quot;&gt;&lt;a href=&quot;#字符型常量和字符串常量的区别&quot; class=&quot;headerlink&quot; title=&quot;字符型常量和字符串常量的区别&quot;&gt;&lt;/a&gt;字符型常量和字符串常量的区别&lt;/h1&gt;&lt;p&gt;形式上: 字符常量是单引号引起的一个字符; 
-      
-    
-    </summary>
-    
-      <category term="Java" scheme="https://wxzhongwang.github.io/categories/Java/"/>
-    
-    
-      <category term="Java" scheme="https://wxzhongwang.github.io/tags/Java/"/>
-    
-  </entry>
-  
-  <entry>
     <title>Java 并发进阶常见面试题总结</title>
     <link href="https://wxzhongwang.github.io/2019/03/01/Java%20%E5%B9%B6%E5%8F%91%E8%BF%9B%E9%98%B6%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98%E6%80%BB%E7%BB%93/"/>
     <id>https://wxzhongwang.github.io/2019/03/01/Java 并发进阶常见面试题总结/</id>
@@ -436,6 +411,31 @@
     
     
       <category term="多线程" scheme="https://wxzhongwang.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>字符型常量和字符串常量的区别</title>
+    <link href="https://wxzhongwang.github.io/2019/03/01/%E5%AD%97%E7%AC%A6%E5%9E%8B%E5%B8%B8%E9%87%8F%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E7%9A%84%E5%8C%BA%E5%88%AB/"/>
+    <id>https://wxzhongwang.github.io/2019/03/01/字符型常量和字符串常量的区别/</id>
+    <published>2019-03-01T02:10:00.000Z</published>
+    <updated>2019-08-12T13:03:07.878Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="字符型常量和字符串常量的区别"><a href="#字符型常量和字符串常量的区别" class="headerlink" title="字符型常量和字符串常量的区别"></a>字符型常量和字符串常量的区别</h1><p>形式上: 字符常量是单引号引起的一个字符; 字符串常量是双引号引起的若干个字符</p><p>含义上: 字符常量相当于一个整型值( ASCII 值),可以参加表达式运算; 字符串常量代表一个地址值(该字符串在内存中存放位置)</p><p>占内存大小: 字符常量只占2个字节; 字符串常量占若干个字节(至少一个字符结束标志) (注意： char在Java中占两个字节)</p><p>数据类型     大小        包装器类型<br>boolean      -           Boolean<br>char       16bits        Character<br>byte        8bits        Byte<br>short      16bits        Short<br>int        32bits        Integer<br>long       64bits        Long<br>float      32bits        Float<br>double     64bits        Double</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;字符型常量和字符串常量的区别&quot;&gt;&lt;a href=&quot;#字符型常量和字符串常量的区别&quot; class=&quot;headerlink&quot; title=&quot;字符型常量和字符串常量的区别&quot;&gt;&lt;/a&gt;字符型常量和字符串常量的区别&lt;/h1&gt;&lt;p&gt;形式上: 字符常量是单引号引起的一个字符; 
+      
+    
+    </summary>
+    
+      <category term="Java" scheme="https://wxzhongwang.github.io/categories/Java/"/>
+    
+    
+      <category term="Java" scheme="https://wxzhongwang.github.io/tags/Java/"/>
     
   </entry>
   

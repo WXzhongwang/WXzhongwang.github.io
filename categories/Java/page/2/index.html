@@ -131,7 +131,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/08/15/Map中的hash理解/">Map中的hash理解</a>
+            <a href="/2018/09/13/JVM课程二/">JVM课程二</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -139,13 +139,13 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-08-15T15:20:00.000Z" itemprop="datePublished">2018-08-15</time>
+    <time datetime="2018-09-13T07:55:00.000Z" itemprop="datePublished">2018-09-13</time>
 </a>
 
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java容器/">Java容器</a>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
 </div>
 
 
@@ -154,29 +154,20 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="Map中的hash理解"><a href="#Map中的hash理解" class="headerlink" title="Map中的hash理解"></a>Map中的hash理解</h1><h2 id="哈希-散列"><a href="#哈希-散列" class="headerlink" title="哈希(散列)"></a>哈希(散列)</h2><p>Hash，一般翻译做“散列”，也有直接音译为“哈希”的。</p>
-<p>就是把任意长度的输入，通过散列算法，变换成固定长度的输出，该输出就是散列值。这种转换是一种压缩映射，也就是，散列值的空间通常远小于输入的空间。<br>不同的输入可能会散列成相同的输出，所以不可能从散列值来唯一的确定输入值。简单的说就是一种将任意长度的消息压缩到某一固定长度的消息摘要的函数。</p>
-<p>所有散列函数都有如下一个基本特性：</p>
-<p>根据同一散列函数计算出的散列值如果不同，那么输入值肯定也不同。<br>但是，根据同一散列函数计算出的散列值如果相同，输入值不一定相同。</p>
-<h2 id="碰撞"><a href="#碰撞" class="headerlink" title="碰撞"></a>碰撞</h2><p>输入不同，散列值相同的现象。</p>
-<h2 id="常见的Hash函数有以下几个"><a href="#常见的Hash函数有以下几个" class="headerlink" title="常见的Hash函数有以下几个"></a>常见的Hash函数有以下几个</h2><p>直接定址法：直接以关键字k或者k加上某个常数（k+c）作为哈希地址。</p>
-<p>数字分析法：提取关键字中取值比较均匀的数字作为哈希地址。</p>
-<p>除留余数法：用关键字k除以某个不大于哈希表长度m的数p，将所得余数作为哈希表地址。</p>
-<p>分段叠加法：按照哈希表地址位数将关键字分成位数相等的几部分，其中最后一部分可以比较短。然后将这几部分相加，舍弃最高进位后的结果就是该关键字的哈希地址。</p>
-<p>平方取中法：如果关键字各个部分分布都不均匀的话，可以先求出它的平方值，然后按照需求取中间的几位作为哈希地址。</p>
-<p>伪随机数法：采用一个伪随机数当作哈希函数。</p>
+        <h2 id="类加载器子系统和方法区："><a href="#类加载器子系统和方法区：" class="headerlink" title="类加载器子系统和方法区："></a>类加载器子系统和方法区：</h2><p>从文件系统中加载class文件，加载类信息。加载的信息存放于一个叫做方法区的内存空间。</p>
 <blockquote>
-<p>衡量一个哈希函数的好坏的重要指标就是发生碰撞的概率以及发生碰撞的解决方案。</p>
+<p>方法区中包括： 类信息，常量池（字符串字面量和数字常量）</p>
 </blockquote>
-<p>常见的解决碰撞的方法有以下几种：</p>
-<p>开放定址法：</p>
-<p>开放定址法就是一旦发生了冲突，就去寻找下一个空的散列地址，只要散列表足够大，空的散列地址总能找到，并将记录存入。</p>
-<p>链地址法: </p>
-<p>将哈希表的每个单元作为链表的头结点，所有哈希地址为i的元素构成一个同义词链表。即发生冲突时就把该关键字链在以该单元为头结点的链表的尾部。</p>
-<p>再哈希法:</p>
-<p>当哈希地址发生冲突用其他的函数计算另一个哈希函数地址，直到冲突不再产生为止。</p>
-<p>建立公共溢出区:</p>
-<p>将哈希表分为基本表和溢出表两部分，发生冲突的元素都放入溢出表中。</p>
+<h2 id="堆："><a href="#堆：" class="headerlink" title="堆："></a>堆：</h2><p>主要内存空间。存放对象的实例。线程共享</p>
+<h2 id="直接内存："><a href="#直接内存：" class="headerlink" title="直接内存："></a>直接内存：</h2><p>NIO允许Java程序直接访问直接内存。</p>
+<p>不受JVM内存 -Xmx 最大堆大小限制。不属于堆内存。直接内存速率高于堆内存。</p>
+<p>读写频繁的场合可能会用到直接内存，与系统内存挂钩。</p>
+<h2 id="垃圾回收系统"><a href="#垃圾回收系统" class="headerlink" title="垃圾回收系统"></a>垃圾回收系统</h2><p>回收java堆，方法区，直接内存都可以回收。java所有的对象的释放都是隐式的。<br>垃圾回收系统后台默默运行，标示和释放对象，实现全自动化管理。</p>
+<h2 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h2><p>每一个虚拟机线程都有一个私有的栈，栈在线程创建的时候被创建。栈保存着帧信息。</p>
+<p>栈中保存方法中的局部变量，方法参数，和程序的调用，返回相关。</p>
+<h2 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h2><p>本地方法栈和虚拟机栈类似，虚拟机栈用于方法的调用。本地方法栈则用于本地方法（Native API）的调用。</p>
+<p>Java虚拟机的重要拓展之一，不同的操作系统本地方法的API也不一样。</p>
+<h2 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h2><p>线程私有，字节码解释器工作时通过改变这个计数器的值来选取下一条需要执行的字节码指令，<br>分支、循环、跳转、异常处理、线程恢复等功能都需要依赖这个计数器来完。</p>
 
         
     </section>
@@ -188,7 +179,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/08/15/HashMap 和 HashTable的区别/">HashMap 和 HashTable的区别</a>
+            <a href="/2018/09/12/JVM课程三/">JVM课程三</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -196,7 +187,98 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-08-15T15:20:00.000Z" itemprop="datePublished">2018-08-15</time>
+    <time datetime="2018-09-12T14:55:00.000Z" itemprop="datePublished">2018-09-12</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="JVM内存分代策略"><a href="#JVM内存分代策略" class="headerlink" title="JVM内存分代策略"></a>JVM内存分代策略</h1><p>堆内存一般分为几块：新生代，老年代和永久代。是垃圾回收最频繁的区域。</p>
+<h2 id="分代的意义"><a href="#分代的意义" class="headerlink" title="分代的意义?"></a>分代的意义?</h2><p>给堆内存分代为了提高对象分配内存和垃圾回收的效率。    </p>
+<p>如果堆内存没有划分区域，所有新创建的对象需要和生命周期很长的对象放在一起，（内存地址是连续的）。<br>随着程序的运行，堆内存需要频繁的进行垃圾收集，每次回收都需要遍历所有的对象，遍历花费的时间代价过大，<br>严重影响GC效率。</p>
+<ul>
+<li>新生代： 新创建的对象 频繁GC</li>
+<li>老年代： 经过多次回收仍存活下来的对象 （GC频率低）</li>
+<li>永久代： 静态属性、类信息等 （一般不回收）</li>
+</ul>
+<p>根据不同的区域（代），采用不同的垃圾回收算法。分代收集大大提升了收集效率。</p>
+<blockquote>
+<p>永久代是HotSpot中的概念。</p>
+</blockquote>
+<pre><code>    young             old         permanent
+      |
+Eden   From   To
+伊甸园  |     |
+           Survivor Spaces（幸存空间）
+
+`
+</code></pre>
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/09/12/JVM课程一/">JVM课程一</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/2/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-09-12T14:55:00.000Z" itemprop="datePublished">2018-09-12</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>JDK 编译Java文件为Class文件<br>Class文件由JVM解释为Native Code</p>
+<p>Java HotSpot:<br>热点代码，（类似于缓存）避免jvm频繁将class文件转换为cpu可以直接理解的代码（native code 本地代码）。</p>
+<p>Client VM 是默认启用的版本，更适合C/S 在为客户端环境中启动减少启动时间而优化<br>Server VM 在内存分配上更大，更适合于B/S 在为服务端环境中最大化程序执行速度而优化</p>
+<p>-client KNOWN<br>-server KNOWN</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/08/16/ConcurrentHashMap线程安全/">ConcurrentHashMap线程安全的具体实现方式/底层具体实现</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/2/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-08-15T18:20:00.000Z" itemprop="datePublished">2018-08-16</time>
 </a>
 
             
@@ -211,41 +293,16 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="HashMap-和-HashTable的区别"><a href="#HashMap-和-HashTable的区别" class="headerlink" title="HashMap 和 HashTable的区别"></a>HashMap 和 HashTable的区别</h1><h2 id="区别："><a href="#区别：" class="headerlink" title="区别："></a>区别：</h2><p>1）线程是否安全： </p>
-<p>HashMap 是非线程安全的，HashTable 是线程安全的；HashTable 内部的方法基本都经过synchronized 修饰。（如果你要保证线程安全的话就使用 ConcurrentHashMap 吧！）；</p>
-<p>2）效率： </p>
-<p>因为线程安全的问题，HashMap 要比 HashTable 效率高一点。另外，HashTable 基本被淘汰，不要在代码中使用它；</p>
-<p>3）对Null key 和Null value的支持：</p>
-<p>HashMap 中，null 可以作为键，这样的键只有一个，可以有一个或多个键所对应的值为 null。<br>但是在 HashTable 中 put 进的键值只要有一个 null，直接抛出 NullPointerException。</p>
-<p>4）初始容量大小和每次扩充容量大小的不同 ：</p>
-<p>①Hashtable 默认的初始大小为11，之后每次扩充，容量变为原来的2n+1。<br>HashMap 默认的初始化大小为16。之后每次扩充，容量变为原来的2倍。</p>
-<p>②创建时如果给定了容量初始值，那么 Hashtable 会直接使用你给定的大小。<br>而 HashMap 会将其扩充为2的幂次方大小（HashMap 中的tableSizeFor()方法保证）。8 16 32 64 …<br>也就是说 HashMap 总是使用2的幂作为哈希表的大小。</p>
-<p>5) 底层数据结构：</p>
-<p> JDK1.8 以后的 HashMap 在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为8）时，将链表转化为红黑树，以减少搜索时间。Hashtable 没有这样的机制。</p>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">HasMap 中带有初始容量的构造函数：</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity, <span class="keyword">float</span> loadFactor)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (initialCapacity &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Illegal initial capacity: "</span> +</span><br><span class="line">                                               initialCapacity);</span><br><span class="line">        <span class="keyword">if</span> (initialCapacity &gt; MAXIMUM_CAPACITY)</span><br><span class="line">            initialCapacity = MAXIMUM_CAPACITY;</span><br><span class="line">        <span class="keyword">if</span> (loadFactor &lt;= <span class="number">0</span> || Float.isNaN(loadFactor))</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Illegal load factor: "</span> +</span><br><span class="line">                                               loadFactor);</span><br><span class="line">        <span class="keyword">this</span>.loadFactor = loadFactor;</span><br><span class="line">        <span class="keyword">this</span>.threshold = tableSizeFor(initialCapacity);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(initialCapacity, DEFAULT_LOAD_FACTOR);</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">下面这个方法保证了 HashMap 总是使用<span class="number">2</span>的幂作为哈希表的大小。</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">static</span> <span class="keyword">final</span> <span class="function"><span class="keyword">int</span> <span class="title">tableSizeFor</span><span class="params">(<span class="keyword">int</span> cap)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = cap - <span class="number">1</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">2</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">4</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">8</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">16</span>;</span><br><span class="line">        <span class="keyword">return</span> (n &lt; <span class="number">0</span>) ? <span class="number">1</span> : (n &gt;= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<h2 id="HashMap-和-HashSet区别"><a href="#HashMap-和-HashSet区别" class="headerlink" title="HashMap 和 HashSet区别"></a>HashMap 和 HashSet区别</h2><p>如果你看过 HashSet 源码的话就应该知道：HashSet 底层就是基于 HashMap 实现的。（HashSet 的源码非常非常少，因为除了 clone()、writeObject()、readObject()是 HashSet 自己不得不实现之外，其他方法都是直接调用 HashMap 中的方法。</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">HashMap</th>
-<th style="text-align:center">HashSet</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">实现了Map接口</td>
-<td style="text-align:center">实现Set接口</td>
-</tr>
-<tr>
-<td style="text-align:center">存储键值对</td>
-<td style="text-align:center">仅存储对象</td>
-</tr>
-<tr>
-<td style="text-align:center">调用 <code>put（）</code>向map中添加元素</td>
-<td style="text-align:center">调用 <code>add（）</code>方法向Set中添加元素</td>
-</tr>
-</tbody>
-</table>
+        <h1 id="ConcurrentHashMap线程安全的具体实现方式-底层具体实现"><a href="#ConcurrentHashMap线程安全的具体实现方式-底层具体实现" class="headerlink" title="ConcurrentHashMap线程安全的具体实现方式/底层具体实现"></a>ConcurrentHashMap线程安全的具体实现方式/底层具体实现</h1><p><strong>JDK1.7的ConcurrentHashMap：</strong></p>
+<p><img src="https://my-blog-to-use.oss-cn-beijing.aliyuncs.com/2019-6/ConcurrentHashMap分段锁.jpg" alt="JDK1.7的ConcurrentHashMap"></p>
+<p><strong>JDK1.8的ConcurrentHashMap（TreeBin: 红黑二叉树节点 Node: 链表节点）：</strong></p>
+<p><img src="https://my-blog-to-use.oss-cn-beijing.aliyuncs.com/2019-6/JDK1.8-ConcurrentHashMap-Structure.jpg" alt="JDK1.8的ConcurrentHashMap"></p>
+<p>JDK1.7（上面有示意图）<br>首先将数据分为一段一段的存储，然后给每一段数据配一把锁，当一个线程占用锁访问其中一个段数据时，其他段的数据也能被其他线程访问。</p>
+<p>ConcurrentHashMap 是由 Segment 数组结构和 HashEntry 数组结构组成。</p>
+<p>Segment 实现了 ReentrantLock,所以 Segment 是一种可重入锁，扮演锁的角色。HashEntry 用于存储键值对数据。</p>
+<p>static class Segment&lt;K,V&gt; extends ReentrantLock implements Serializable {<br>}<br>一个 ConcurrentHashMap 里包含一个 Segment 数组。Segment 的结构和HashMap类似，是一种数组和链表结构，一个 Segment 包含一个 HashEntry 数组，每个 HashEntry 是一个链表结构的元素，每个 Segment 守护着一个HashEntry数组里的元素，当对 HashEntry 数组的数据进行修改时，必须首先获得对应的 Segment的锁。</p>
+<p>JDK1.8 （上面有示意图）<br>ConcurrentHashMap取消了Segment分段锁，采用CAS和synchronized来保证并发安全。数据结构跟HashMap1.8的结构类似，数组+链表/红黑二叉树。Java 8在链表长度超过一定阈值（8）时将链表（寻址时间复杂度为O(N)）转换为红黑树（寻址时间复杂度为O(log(N))）</p>
+<p>synchronized只锁定当前链表或红黑二叉树的首节点，这样只要hash不冲突，就不会产生并发，效率又提升N倍。</p>
 
         
     </section>
@@ -375,6 +432,178 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/08/15/HashMap 和 HashTable的区别/">HashMap 和 HashTable的区别</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/2/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-08-15T15:20:00.000Z" itemprop="datePublished">2018-08-15</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java容器/">Java容器</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="HashMap-和-HashTable的区别"><a href="#HashMap-和-HashTable的区别" class="headerlink" title="HashMap 和 HashTable的区别"></a>HashMap 和 HashTable的区别</h1><h2 id="区别："><a href="#区别：" class="headerlink" title="区别："></a>区别：</h2><p>1）线程是否安全： </p>
+<p>HashMap 是非线程安全的，HashTable 是线程安全的；HashTable 内部的方法基本都经过synchronized 修饰。（如果你要保证线程安全的话就使用 ConcurrentHashMap 吧！）；</p>
+<p>2）效率： </p>
+<p>因为线程安全的问题，HashMap 要比 HashTable 效率高一点。另外，HashTable 基本被淘汰，不要在代码中使用它；</p>
+<p>3）对Null key 和Null value的支持：</p>
+<p>HashMap 中，null 可以作为键，这样的键只有一个，可以有一个或多个键所对应的值为 null。<br>但是在 HashTable 中 put 进的键值只要有一个 null，直接抛出 NullPointerException。</p>
+<p>4）初始容量大小和每次扩充容量大小的不同 ：</p>
+<p>①Hashtable 默认的初始大小为11，之后每次扩充，容量变为原来的2n+1。<br>HashMap 默认的初始化大小为16。之后每次扩充，容量变为原来的2倍。</p>
+<p>②创建时如果给定了容量初始值，那么 Hashtable 会直接使用你给定的大小。<br>而 HashMap 会将其扩充为2的幂次方大小（HashMap 中的tableSizeFor()方法保证）。8 16 32 64 …<br>也就是说 HashMap 总是使用2的幂作为哈希表的大小。</p>
+<p>5) 底层数据结构：</p>
+<p> JDK1.8 以后的 HashMap 在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为8）时，将链表转化为红黑树，以减少搜索时间。Hashtable 没有这样的机制。</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">HasMap 中带有初始容量的构造函数：</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity, <span class="keyword">float</span> loadFactor)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (initialCapacity &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Illegal initial capacity: "</span> +</span><br><span class="line">                                               initialCapacity);</span><br><span class="line">        <span class="keyword">if</span> (initialCapacity &gt; MAXIMUM_CAPACITY)</span><br><span class="line">            initialCapacity = MAXIMUM_CAPACITY;</span><br><span class="line">        <span class="keyword">if</span> (loadFactor &lt;= <span class="number">0</span> || Float.isNaN(loadFactor))</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Illegal load factor: "</span> +</span><br><span class="line">                                               loadFactor);</span><br><span class="line">        <span class="keyword">this</span>.loadFactor = loadFactor;</span><br><span class="line">        <span class="keyword">this</span>.threshold = tableSizeFor(initialCapacity);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(initialCapacity, DEFAULT_LOAD_FACTOR);</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">下面这个方法保证了 HashMap 总是使用<span class="number">2</span>的幂作为哈希表的大小。</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">static</span> <span class="keyword">final</span> <span class="function"><span class="keyword">int</span> <span class="title">tableSizeFor</span><span class="params">(<span class="keyword">int</span> cap)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = cap - <span class="number">1</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">2</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">4</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">8</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">16</span>;</span><br><span class="line">        <span class="keyword">return</span> (n &lt; <span class="number">0</span>) ? <span class="number">1</span> : (n &gt;= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="HashMap-和-HashSet区别"><a href="#HashMap-和-HashSet区别" class="headerlink" title="HashMap 和 HashSet区别"></a>HashMap 和 HashSet区别</h2><p>如果你看过 HashSet 源码的话就应该知道：HashSet 底层就是基于 HashMap 实现的。（HashSet 的源码非常非常少，因为除了 clone()、writeObject()、readObject()是 HashSet 自己不得不实现之外，其他方法都是直接调用 HashMap 中的方法。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">HashMap</th>
+<th style="text-align:center">HashSet</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">实现了Map接口</td>
+<td style="text-align:center">实现Set接口</td>
+</tr>
+<tr>
+<td style="text-align:center">存储键值对</td>
+<td style="text-align:center">仅存储对象</td>
+</tr>
+<tr>
+<td style="text-align:center">调用 <code>put（）</code>向map中添加元素</td>
+<td style="text-align:center">调用 <code>add（）</code>方法向Set中添加元素</td>
+</tr>
+</tbody>
+</table>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/08/15/Map中的hash理解/">Map中的hash理解</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/2/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-08-15T15:20:00.000Z" itemprop="datePublished">2018-08-15</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java容器/">Java容器</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Map中的hash理解"><a href="#Map中的hash理解" class="headerlink" title="Map中的hash理解"></a>Map中的hash理解</h1><h2 id="哈希-散列"><a href="#哈希-散列" class="headerlink" title="哈希(散列)"></a>哈希(散列)</h2><p>Hash，一般翻译做“散列”，也有直接音译为“哈希”的。</p>
+<p>就是把任意长度的输入，通过散列算法，变换成固定长度的输出，该输出就是散列值。这种转换是一种压缩映射，也就是，散列值的空间通常远小于输入的空间。<br>不同的输入可能会散列成相同的输出，所以不可能从散列值来唯一的确定输入值。简单的说就是一种将任意长度的消息压缩到某一固定长度的消息摘要的函数。</p>
+<p>所有散列函数都有如下一个基本特性：</p>
+<p>根据同一散列函数计算出的散列值如果不同，那么输入值肯定也不同。<br>但是，根据同一散列函数计算出的散列值如果相同，输入值不一定相同。</p>
+<h2 id="碰撞"><a href="#碰撞" class="headerlink" title="碰撞"></a>碰撞</h2><p>输入不同，散列值相同的现象。</p>
+<h2 id="常见的Hash函数有以下几个"><a href="#常见的Hash函数有以下几个" class="headerlink" title="常见的Hash函数有以下几个"></a>常见的Hash函数有以下几个</h2><p>直接定址法：直接以关键字k或者k加上某个常数（k+c）作为哈希地址。</p>
+<p>数字分析法：提取关键字中取值比较均匀的数字作为哈希地址。</p>
+<p>除留余数法：用关键字k除以某个不大于哈希表长度m的数p，将所得余数作为哈希表地址。</p>
+<p>分段叠加法：按照哈希表地址位数将关键字分成位数相等的几部分，其中最后一部分可以比较短。然后将这几部分相加，舍弃最高进位后的结果就是该关键字的哈希地址。</p>
+<p>平方取中法：如果关键字各个部分分布都不均匀的话，可以先求出它的平方值，然后按照需求取中间的几位作为哈希地址。</p>
+<p>伪随机数法：采用一个伪随机数当作哈希函数。</p>
+<blockquote>
+<p>衡量一个哈希函数的好坏的重要指标就是发生碰撞的概率以及发生碰撞的解决方案。</p>
+</blockquote>
+<p>常见的解决碰撞的方法有以下几种：</p>
+<p>开放定址法：</p>
+<p>开放定址法就是一旦发生了冲突，就去寻找下一个空的散列地址，只要散列表足够大，空的散列地址总能找到，并将记录存入。</p>
+<p>链地址法: </p>
+<p>将哈希表的每个单元作为链表的头结点，所有哈希地址为i的元素构成一个同义词链表。即发生冲突时就把该关键字链在以该单元为头结点的链表的尾部。</p>
+<p>再哈希法:</p>
+<p>当哈希地址发生冲突用其他的函数计算另一个哈希函数地址，直到冲突不再产生为止。</p>
+<p>建立公共溢出区:</p>
+<p>将哈希表分为基本表和溢出表两部分，发生冲突的元素都放入溢出表中。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/08/15/HashMap 的长度为什么是2的幂次方/">HashMap 的长度为什么是2的幂次方?</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/2/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-08-15T15:20:00.000Z" itemprop="datePublished">2018-08-15</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java容器/">Java容器</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="HashMap-的长度为什么是2的幂次方"><a href="#HashMap-的长度为什么是2的幂次方" class="headerlink" title="HashMap 的长度为什么是2的幂次方?"></a>HashMap 的长度为什么是2的幂次方?</h1><h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>为了能让 HashMap 存取高效，尽量较少碰撞，也就是要尽量把数据分配均匀。我们上面也讲到了过了，<br>Hash 值的范围值-2147483648到2147483647，前后加起来大概40亿的映射空间，只要哈希函数映射得比较均匀松散，<br>一般应用是很难出现碰撞的。但问题是一个40亿长度的数组，内存是放不下的。所以这个散列值是不能直接拿来用的。<br>用之前还要先做对数组的长度取模运算，得到的余数才能用来要存放的位置也就是对应的数组下标。</p>
+<h2 id="这个算法应该如何设计呢？"><a href="#这个算法应该如何设计呢？" class="headerlink" title="这个算法应该如何设计呢？"></a>这个算法应该如何设计呢？</h2><p>我们首先可能会想到采用%取余的操作来实现。重点来了：<br>“取余(%)操作中如果除数是2的幂次则等价于<br>与其除数减一的与(&amp;)操作（也就是说 hash%length==hash&amp;(length-1)的前提是 length 是2的 n 次方；）。”<br>并且采用二进制位操作 &amp;，相对于%能够提高运算效率，这就解释了 HashMap 的长度为什么是2的幂次方。</p>
+<h2 id="通俗版本"><a href="#通俗版本" class="headerlink" title="通俗版本"></a>通俗版本</h2><p>Hash值取值范围很大40亿，不可能用这么大的数组存Hash表。所以想到取模，将Hash值局限在一个小的数组中。<br>针对取模运算，有公式： hash % length  = hash &amp; (length - 1) 能够显著提高取模的效率问题。<br>前提是 length 必须是2的幂次方。可以解释这就解释了 HashMap 的长度为什么是2的幂次方。</p>
+<h2 id="HashMap的底层实现"><a href="#HashMap的底层实现" class="headerlink" title="HashMap的底层实现"></a>HashMap的底层实现</h2><p>JDK1.8 之前 HashMap底层是数组和链表 结合在一起使用也就是链表散列。<br>1)HashMap 通过 key 的 hashCode 经过扰动函数处理过后得到 hash 值，<br>2)然后通过 (n - 1) &amp; hash 判断当前元素存放的位置（这里的 n 指的是数组的长度），<br>3)如果当前位置存在元素的话，就判断该元素与要存入的元素的 hash 值以及 key 是否相同，如果相同的话，直接覆盖，<br>不相同就通过拉链法解决冲突。</p>
+<p>所谓扰动函数指的就是 HashMap 的 hash 方法。使用 hash 方法也就是扰动函数是为了防止一些实现比较差的 hashCode() 方法。<br>换句话说使用扰动函数之后可以减少碰撞。<br><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.8</span>：</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">final</span> <span class="built_in">int</span> hash(<span class="keyword">Object</span> <span class="built_in">key</span>) &#123;</span><br><span class="line">      <span class="built_in">int</span> h;</span><br><span class="line">      <span class="comment">// key.hashCode()：返回散列值也就是hashcode</span></span><br><span class="line">      <span class="comment">// ^ ：按位异或</span></span><br><span class="line">      <span class="comment">// &gt;&gt;&gt;:无符号右移，忽略符号位，空位都以0补齐</span></span><br><span class="line">      <span class="keyword">return</span> (<span class="built_in">key</span> == <span class="keyword">null</span>) ? <span class="number">0</span> : (h = <span class="built_in">key</span>.hashCode()) ^ (h &gt;&gt;&gt; <span class="number">16</span>);</span><br><span class="line">  &#125;</span><br><span class="line"> </span><br><span class="line"><span class="number">1.7</span>:</span><br><span class="line">	<span class="keyword">static</span> <span class="built_in">int</span> hash(<span class="built_in">int</span> h) &#123;</span><br><span class="line">		<span class="comment">// This function ensures that hashCodes that differ only by</span></span><br><span class="line">		<span class="comment">// constant multiples at each bit position have a bounded</span></span><br><span class="line">		<span class="comment">// number of collisions (approximately 8 at default load factor).</span></span><br><span class="line"></span><br><span class="line">		h ^= (h &gt;&gt;&gt; <span class="number">20</span>) ^ (h &gt;&gt;&gt; <span class="number">12</span>);</span><br><span class="line">		<span class="keyword">return</span> h ^ (h &gt;&gt;&gt; <span class="number">7</span>) ^ (h &gt;&gt;&gt; <span class="number">4</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">相比于 JDK1<span class="number">.8</span> 的 hash 方法 ，JDK <span class="number">1.7</span> 的 hash 方法的性能会稍差一点点，因为毕竟扰动了 <span class="number">4</span> 次。</span><br></pre></td></tr></table></figure></p>
+<p>所谓 <strong>“拉链法”</strong> 就是：将链表和数组相结合。也就是说创建一个链表数组，数组中每一格就是一个链表。若遇到哈希冲突，则将冲突的值加到链表中即可。</p>
+<p><img src="https://my-blog-to-use.oss-cn-beijing.aliyuncs.com/2019-6/jdk1.8之前的内部结构-HashMap.jpg" alt="jdk1.8之前的内部结构-HashMap"></p>
+<h3 id="JDK1-8之后"><a href="#JDK1-8之后" class="headerlink" title="JDK1.8之后"></a>JDK1.8之后</h3><p>相比于之前的版本， JDK1.8之后在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为8）时，将链表转化为红黑树，以减少搜索时间。</p>
+<p><img src="https://my-blog-to-use.oss-cn-beijing.aliyuncs.com/2019-6/JDK1.8之后的HashMap底层数据结构.jpg" alt="jdk1.8之后的内部结构-HashMap"></p>
+<blockquote>
+<p>TreeMap、TreeSet以及JDK1.8之后的HashMap底层都用到了红黑树。红黑树就是为了解决二叉查找树的缺陷，因为二叉查找树在某些情况下会退化成一个线性结构。</p>
+</blockquote>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/08/15/HashMap 的三个问题/">HashMap 的三个问题</a>
         </h1>
         
@@ -411,260 +640,6 @@
 
 java8中，HashMap 每个桶中当链表长度超过8之后，会将链表转换成红黑树，从而提升增删改查的速度。
 </code></pre>
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/06/08/JVM相关/">JVM 相关问题</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/2/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-06-08T04:22:30.000Z" itemprop="datePublished">2018-06-08</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>JVM相关问题</p>
-<p>1.JVM内存模型，GC机制和原理。</p>
-<p>2.GC分两种，Minor GC和 Full GC有什么区别？什么时候会触发Full GC?分别采用什么算法？</p>
-<p>3.JVM里有几种classloader,为什么会有多种？</p>
-<p>4.什么是双亲委派机制？介绍一些运作过程，双亲委派模式的好处？</p>
-<p>5.什么情况下我们需要破坏双亲委派模型？</p>
-<p>6.常见的JVM调优有哪些？可以具体到那个参数，调成什么值？</p>
-<p>7.JVM虚拟机内存划分、类加载器、垃圾收集算法、垃圾收集器、class文件结构是如何解析的？</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/06/06/BIO NIO AIO 总结/">BIO,NIO,AIO 总结</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/2/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-06-05T16:30:00.000Z" itemprop="datePublished">2018-06-06</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="BIO-NIO-AIO-总结"><a href="#BIO-NIO-AIO-总结" class="headerlink" title="BIO,NIO,AIO 总结"></a>BIO,NIO,AIO 总结</h1><p>Java 中的 BIO、NIO和 AIO 理解为是 Java 语言对操作系统的各种 IO 模型的封装。<br>程序员在使用这些 API 的时候，不需要关心操作系统层面的知识，也不需要根据不同操作系统编写不同的代码。<br>只需要使用Java的API就可以了。</p>
-<h2 id="同步与异步"><a href="#同步与异步" class="headerlink" title="同步与异步"></a>同步与异步</h2><p>同步： </p>
-<p>同步就是发起一个调用后，被调用者未处理完请求之前，调用不返回。</p>
-<p>异步： </p>
-<p>异步就是发起一个调用后，立刻得到被调用者的回应表示已接收到请求，但是被调用者并没有返回结果，此时我们可以处理其他的请求，<br>被调用者通常依靠事件，回调等机制来通知调用者其返回结果。</p>
-<p>同步和异步的区别最大在于异步的话调用者不需要等待处理结果，被调用者会通过回调等机制来通知调用者其返回结果。</p>
-<h2 id="阻塞和非阻塞"><a href="#阻塞和非阻塞" class="headerlink" title="阻塞和非阻塞"></a>阻塞和非阻塞</h2><p>阻塞： </p>
-<p>阻塞就是发起一个请求，调用者一直等待请求结果返回，也就是当前线程会被挂起，无法从事其他任务，只有当条件就绪才能继续。</p>
-<p>非阻塞： </p>
-<p>非阻塞就是发起一个请求，调用者不用一直等着结果返回，可以先去干其他事情。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">举个生活中简单的例子，你妈妈让你烧水，</span><br><span class="line"></span><br><span class="line">小时候你比较笨啊，在那里傻等着水开（同步阻塞）。</span><br><span class="line">等你稍微再长大一点，你知道每次烧水的空隙可以去干点其他事，然后只需要时不时来看看水开了没有（同步非阻塞）。</span><br><span class="line">后来，你们家用上了水开了会发出声音的壶，这样你就只需要听到响声后就知道水开了，在这期间你可以随便干自己的事情，你需要去倒水了（异步非阻塞）。</span><br></pre></td></tr></table></figure>
-<h2 id="BIO-Blocking-I-O"><a href="#BIO-Blocking-I-O" class="headerlink" title="BIO (Blocking I/O)"></a>BIO (Blocking I/O)</h2><p>同步阻塞I/O模式，数据的读取写入必须阻塞在一个线程内等待其完成。</p>
-<h3 id="传统-BIO"><a href="#传统-BIO" class="headerlink" title="传统 BIO"></a>传统 BIO</h3><p>BIO通信（一请求一应答）</p>
-<p>采用 BIO 通信模型 的服务端，通常由一个独立的 Acceptor 线程负责监听客户端的连接。<br>我们一般通过在while(true) 循环中服务端会调用 accept() 方法等待接收客户端的连接的方式监听请求，<br>请求一旦接收到一个连接请求，就可以建立通信套接字在这个通信套接字上进行读写操作，此时不能再接收其他客户端连接请求，<br>只能等待同当前连接的客户端的操作执行完成， 不过可以通过多线程来支持多个客户端的连接</p>
-<p>如果要让 BIO 通信模型能够同时处理多个客户端请求，就必须使用多线程<br>（主要原因是socket.accept()、socket.read()、socket.write() 涉及的三个主要函数都是同步阻塞的），<br>也就是说它在接收到客户端连接请求之后为每个客户端创建一个新的线程进行链路处理，处理完成之后，<br>通过输出流返回应答给客户端，线程销毁。这就是典型的 一请求一应答通信模型 。<br>我们可以设想一下如果这个连接不做任何事情的话就会造成不必要的线程开销，不过可以通过线程池机制改善，<br>线程池还可以让线程的创建和回收成本相对较低。使用FixedThreadPool 可以有效的控制了线程的最大数量，<br>保证了系统有限的资源的控制，实现了N(客户端请求数量):M(处理客户端请求的线程数量)的伪异步I/O模型（N 可以远远大于 M）</p>
-<p>我们再设想一下当客户端并发访问量增加后这种模型会出现什么问题？<br><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">在 <span class="keyword">Java </span>虚拟机中，线程是宝贵的资源，线程的创建和销毁成本很高，除此之外，线程的切换成本也是很高的。</span><br><span class="line">尤其在 Linux 这样的操作系统中，线程本质上就是一个进程，创建和销毁线程都是重量级的系统函数。</span><br><span class="line">如果并发访问量增加会导致线程数急剧膨胀可能会导致线程堆栈溢出、创建新线程失败等问题，最终导致进程宕机或者僵死，</span><br><span class="line">不能对外提供服务。</span><br></pre></td></tr></table></figure></p>
-<p>Demo:</p>
-<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">IOClient</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> void main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">    <span class="comment">// TODO 创建多个线程，模拟多个客户端连接服务端</span></span><br><span class="line">    <span class="keyword">new</span> <span class="type">Thread</span>(() -&gt; &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        Socket socket = <span class="keyword">new</span> <span class="type">Socket</span>(<span class="string">"127.0.0.1"</span>, <span class="number">3333</span>);</span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">          <span class="keyword">try</span> &#123;</span><br><span class="line">            socket.getOutputStream().write((<span class="keyword">new</span> <span class="type">Date</span>() + <span class="string">": hello world"</span>).getBytes());</span><br><span class="line">            Thread.sleep(<span class="number">2000</span>);</span><br><span class="line">          &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;).start();</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">IOServer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> void main(<span class="keyword">String</span>[] args) throws IOException &#123;</span><br><span class="line">    <span class="comment">// TODO 服务端处理客户端连接请求</span></span><br><span class="line">    ServerSocket serverSocket = <span class="keyword">new</span> <span class="type">ServerSocket</span>(<span class="number">3333</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 接收到客户端连接请求之后为每个客户端创建一个新的线程进行链路处理</span></span><br><span class="line">    <span class="keyword">new</span> <span class="type">Thread</span>(() -&gt; &#123;</span><br><span class="line">      <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="comment">// 阻塞方法获取新的连接</span></span><br><span class="line">          Socket socket = serverSocket.accept();</span><br><span class="line"></span><br><span class="line">          <span class="comment">// 每一个新的连接都创建一个线程，负责读取数据</span></span><br><span class="line">          <span class="keyword">new</span> <span class="type">Thread</span>(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">              int len;</span><br><span class="line">              byte[] data = <span class="keyword">new</span> <span class="type">byte</span>[<span class="number">1024</span>];</span><br><span class="line">              InputStream inputStream = socket.getInputStream();</span><br><span class="line">              <span class="comment">// 按字节流方式读取数据</span></span><br><span class="line">              <span class="keyword">while</span> ((len = inputStream.read(data)) != <span class="number">-1</span>) &#123;</span><br><span class="line">                System.out.println(<span class="keyword">new</span> <span class="type">String</span>(data, <span class="number">0</span>, len));</span><br><span class="line">              &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;).start();</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;).start();</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="伪异步-IO"><a href="#伪异步-IO" class="headerlink" title="伪异步 IO"></a>伪异步 IO</h3><p>为了解决同步阻塞I/O面临的一个链路需要一个线程处理的问题，后来有人对它的线程模型进行了优化一一一<br>后端通过一个线程池来处理多个客户端的请求接入，<br>形成客户端个数M：线程池最大线程数N的比例关系，其中M可以远远大于N.<br>通过线程池可以灵活地调配线程资源，设置线程的最大值，防止由于海量并发接入导致线程耗尽。</p>
-<p>采用线程池和任务队列可以实现一种叫做伪异步的 I/O 通信框架</p>
-<p>当有新的客户端接入时，将客户端的 Socket 封装成一个Task（该任务实现java.lang.Runnable接口）投递到后端的线程池中<br>进行处理，JDK 的线程池维护一个消息队列和 N 个活跃线程，对消息队列中的任务进行处理。由于线程池可以设置消息队列的大小<br>和最大线程数，因此，它的资源占用是可控的，无论多少个客户端并发访问，都不会导致资源的耗尽和宕机。</p>
-<p>伪异步I/O通信框架采用了线程池实现，因此避免了为每个请求都创建一个独立线程造成的线程资源耗尽问题。<br>不过因为它的底层仍然是同步阻塞的BIO模型，因此无法从根本上解决问题。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在活动连接数不是特别高（小于单机1000）的情况下，这种模型是比较不错的，可以让每一个连接专注于自己的 I/O<br>并且编程模型简单，也不用过多考虑系统的过载、限流等问题。线程池本身就是一个天然的漏斗，可以缓冲一些系统处理不了的<br>连接或请求。但是，当面对十万甚至百万级连接的时候，传统的 BIO 模型是无能为力的。因此，我们需要一种更高效的 I/O<br>处理模型来应对更高的并发量。</p>
-<h2 id="NIO-New-I-O"><a href="#NIO-New-I-O" class="headerlink" title="NIO (New I/O)"></a>NIO (New I/O)</h2><p>NIO是一种同步非阻塞的I/O模型，对应 java.nio 包，提供了 Channel , Selector，Buffer等抽象。</p>
-<p>NIO中的N可以理解为Non-blocking，不单纯是New。它支持面向缓冲的，基于通道的I/O操作方法。<br>NIO提供了与传统BIO模型中的 Socket 和 ServerSocket 相对应的 SocketChannel 和 ServerSocketChannel 两种不同的套接字通道<br>实现,两种通道都支持阻塞和非阻塞两种模式。</p>
-<p>阻塞模式使用就像传统中的支持一样，比较简单，但是性能和可靠性都不好；<br>非阻塞模式正好与之相反。</p>
-<p>对于低负载、低并发的应用程序，可以使用同步阻塞I/O来提升开发速率和更好的维护性；<br>对于高负载、高并发的（网络）应用，应使用 NIO 的非阻塞模式来开发。</p>
-<p>区别：（关键）</p>
-<p>1） Non-blocking IO（非阻塞IO）<br>Java IO流：<br>阻塞的。这意味着，当一个线程调用 read() 或 write() 时，该线程被阻塞，<br>直到有一些数据被读取，或数据完全写入。该线程在此期间不能再干任何事情了。</p>
-<p>NIO流：<br>不阻塞的。Java NIO使我们可以进行非阻塞IO操作。<br>比如说，单线程中从通道读取数据到buffer，同时可以继续做别的事情，当数据读取到buffer中后，<br>线程再继续处理数据。写数据也是一样的。另外，非阻塞写也是如此。一个线程请求写入一些数据到某通道，<br>但不需要等待它完全写入，这个线程同时可以去做别的事情。</p>
-<p>2）Buffer(缓冲区)<br>IO 面向流(Stream oriented)，而 NIO 面向缓冲区(Buffer oriented)。<br>Buffer是一个对象，它包含一些要写入或者要读出的数据。在NIO类库中加入Buffer对象，体现了新库与原I/O的一个重要区别。<br>Java NIO Buffers用于和NIO Channel交互。 我们从Channel中读取数据到buffers里，从Buffer把数据写入到Channels；<br>Buffer本质上就是一块内存区；</p>
-<p>一个Buffer有三个属性是必须掌握的，分别是：capacity容量、position位置、limit限制。</p>
-<p>IO:<br>在面向流的I/O中·可以将数据直接写入或者将数据直接读到 Stream 对象中。<br>虽然 Stream 中也有 Buffer 开头的扩展类，但只是流的包装类，还是从流读到缓冲区，<br>而 NIO 却是直接读到 Buffer 中进行操作。</p>
-<p>NIO流：<br>在NIO厍中，所有数据都是用缓冲区处理的。在读取数据时，它是直接读到缓冲区中的;<br>在写入数据时，写入到缓冲区中。任何时候访问NIO中的数据，都是通过缓冲区进行操作。<br>最常用的缓冲区是 ByteBuffer,一个 ByteBuffer 提供了一组功能用于操作 byte 数组。<br>除了ByteBuffer,还有其他的一些缓冲区，事实上，每一种Java基本类型（除了Boolean类型）都对应有一种缓冲区。</p>
-<p>3)Channel (通道)<br>NIO 通过Channel（通道） 进行读写。</p>
-<p>通道是双向的，可读也可写，而流的读写是单向的。无论读写，通道只能和Buffer交互。因为 Buffer，通道可以异步地读写。</p>
-<p>4)Selector (选择器)<br>NIO有选择器，而IO没有。</p>
-<p>选择器用于使用单个线程处理多个通道。因此，它需要较少的线程来处理这些通道。线程之间的切换对于操作系统来说是昂贵的。<br>因此，为了提高系统效率选择器是有用的。</p>
-<p>NIO 包含下面几个核心的组件：</p>
-<p>Channel (通道)<br>Buffer  (缓冲区)<br>Selector(选择器)</p>
-<h2 id="AIO-Asynchronous-I-O"><a href="#AIO-Asynchronous-I-O" class="headerlink" title="AIO (Asynchronous I/O)"></a>AIO (Asynchronous I/O)</h2><p>AIO 也就是 NIO 2。在 Java 7 中引入了 NIO 的改进版 NIO 2,它是异步非阻塞的IO模型。<br>异步 IO 是基于事件和回调机制实现的，也就是应用操作之后会直接返回，不会堵塞在那里，当后台处理完成，<br>操作系统会通知相应的线程进行后续的操作。</p>
-<p>AIO 是异步IO的缩写，虽然 NIO 在网络操作中，提供了非阻塞的方法，但是 NIO 的 IO 行为还是同步的。<br>对于 NIO 来说，我们的业务线程是在 IO 操作准备好时，得到通知，接着就由这个线程自行进行 IO 操作，IO操作本身是同步的。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/06/03/Spring源码/">Spring源码</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/2/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-06-03T04:00:00.000Z" itemprop="datePublished">2018-06-03</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Spring/">Spring</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>#Spring源码</p>
-<h2 id="spring-jcl日志源码分析"><a href="#spring-jcl日志源码分析" class="headerlink" title="spring-jcl日志源码分析"></a>spring-jcl日志源码分析</h2><p>1.spring的基本应用和spring源码的编译</p>
-<p>2.java混乱的日志系统，JUL,JCL,log4j,slf4j</p>
-<h2 id="spring-aop源码分析"><a href="#spring-aop源码分析" class="headerlink" title="spring aop源码分析"></a>spring aop源码分析</h2><p>1.AspectJ和spring AOP, aspectj的静态织入</p>
-<p>2.JDK动态代理的源码分析，JDK如何操作字节码</p>
-<p>3.spring通过cglib完成AOP,cglib如何完成方法拦截</p>
-<p>4.AnnotationAwareAspectJAutoProxyCreator是如何实现代理织入的</p>
-<h2 id="spring-IOC、AOP、MVC源码分析"><a href="#spring-IOC、AOP、MVC源码分析" class="headerlink" title="spring IOC、AOP、MVC源码分析"></a>spring IOC、AOP、MVC源码分析</h2><p>1.BeanDefinition作用，如何改变bean的行为</p>
-<p>2.BeanDefinitionRegistry的作用，源码分析</p>
-<p>3.BeanNameGenerator如何改变beanName的生成策略</p>
-<p>4.BeanPostProcessor在bean实例化过程中可以做什么？经典应用场景有哪些？</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/06/03/Spring Boot/">Spring Boot 介绍</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/2/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-06-03T04:00:00.000Z" itemprop="datePublished">2018-06-03</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Spring/">Spring</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h2 id="Spring-Boot-介绍"><a href="#Spring-Boot-介绍" class="headerlink" title="Spring Boot 介绍"></a>Spring Boot 介绍</h2><p>Spring Boot 提供了一组工具只需要极少的配置就可以快速的构建并启动基于 Spring 的应用程序。解决了传统 Spring 开发需要配置大量配置文件的痛点，同时 Spring Boot 对于第三方库设置了合理的默认值，可以快速的构建起应用程序。当然 Spring Boot 也可以轻松的自定义各种配置，无论是在开发的初始阶段还是投入生成的后期阶段。</p>
-<h2 id="Spring-Boot-优点"><a href="#Spring-Boot-优点" class="headerlink" title="Spring Boot 优点"></a>Spring Boot 优点</h2><p>1.快速的创建可以独立运行的 Spring 项目以及与主流框架的集成。</p>
-<p>2.使用嵌入式的 Servlet 容器，用于不需要打成war包。</p>
-<p>3.使用很多的启动器（Starters）自动依赖与版本控制。</p>
-<p>4.大量的自动化配置，简化了开发，当然，我们也可以修改默认值。</p>
-<p>5.不需要配置 XML 文件，无代码生成，开箱即用。</p>
-<p>6.准生产环境的运行时应用监控。</p>
-<p>7.与云计算的天然集成。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/05/08/JVM/">JVM相关问题</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/2/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-05-08T04:22:30.000Z" itemprop="datePublished">2018-05-08</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>JVM,什么是JVM?</p>
-<p>Java语言虚拟机后，Java语言在不同平台上运行时不需要重新编译。Java语言使用Java虚拟机屏蔽了与具体平台相关的信息，使得Java语言编译程序只需生成在Java虚拟机上运行的目标代码（字节码），就可以在多种平台上不加修改地运行。</p>
-<p>Java虚拟机在软件层层面屏蔽了底层硬件、底层指令的细节。<br>跨平台：程序可以运行基于不同平台版本的jvm就可以了。</p>
-<p>数据类型<br>Java虚拟机中，数据类型可以分为两类：基本类型和引用类型。基本类型的变量保存原始值，即：他代表的值就是数值本身；而引用类型的变量保存引用值。“引用值”代表了某个对象的引用，而不是对象本身，对象本身存放在这个引用值所表示的地址的位置。</p>
-<p>基本类型包括：byte,short,int,long,char,float,double,Boolean</p>
-<p>引用类型包括：类类型，接口类型和数组。</p>
-<p>App.java  源码</p>
-<p>编译时环境（jdk）</p>
-<p>App.class 字节码</p>
-<p>JVM<br>Java虚拟机：在软件层层面屏蔽了底层硬件、底层指令的细节。 运行时环境 (jre) </p>
-<p>操作系统可以运行的文件 机器码</p>
-<p>类加载器 ClassLoader  JVM将class文件加载至内存模块。<br>运行时数据区 Runtime Data Area</p>
-<pre><code>线程共享区：  Heap堆， Method Area方法区
-线程独占区：  程序计数器，虚拟机栈，本地方法栈
-</code></pre><p>程序最小单元：线程</p>
-
         
     </section>
 </article>

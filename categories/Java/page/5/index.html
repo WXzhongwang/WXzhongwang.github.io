@@ -131,6 +131,252 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/04/01/多线程上下文切换/">Java 多线程上下文切换</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/5/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-04-01T02:10:00.000Z" itemprop="datePublished">2018-04-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="多线程上下文切换"><a href="#多线程上下文切换" class="headerlink" title="多线程上下文切换"></a>多线程上下文切换</h1><p>对于单核CPU来说（对于多核CPU，此处就理解为一个核），CPU在一个时刻只能运行一个线程，当在运行一个线程的过程中转去运行另外一个线程，这个叫做线程上下文切换（对于进程也是类似）。</p>
+<p>由于可能当前线程的任务并没有执行完毕，所以在切换时需要保存线程的运行状态，以便下次重新切换回来时能够继续切换之前的状态运行。举个简单的例子：比如一个线程A正在读取一个文件的内容，正读到文件的一半，此时需要暂停线程A，转去执行线程B，当再次切换回来执行线程A的时候，我们不希望线程A又从文件的开头来读取。</p>
+<p>因此需要记录线程A的运行状态，那么会记录哪些数据呢？因为下次恢复时需要知道在这之前当前线程已经执行到哪条指令了，所以需要记录程序计数器的值，另外比如说线程正在进行某个计算的时候被挂起了，那么下次继续执行的时候需要知道之前挂起时变量的值时多少，因此需要记录CPU寄存器的状态。所以一般来说，线程上下文切换过程中会记录程序计数器、CPU寄存器状态等数据。</p>
+<p>说简单点的：对于线程的上下文切换实际上就是 存储和恢复CPU状态的过程，它使得线程执行能够从中断点恢复执行。</p>
+<p>虽然多线程可以使得任务执行的效率得到提升，但是由于在线程切换时同样会带来一定的开销代价，并且多个线程会导致系统资源占用的增加，所以在进行多线程编程时要注意这些因素。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/04/01/Thread实现多线程二/">Thread实现多线程二</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/5/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-04-01T02:10:00.000Z" itemprop="datePublished">2018-04-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Thread实现多线程二"><a href="#Thread实现多线程二" class="headerlink" title="Thread实现多线程二"></a>Thread实现多线程二</h1><p>接上文，关系到线程运行状态的几个方法：</p>
+<p>4）yield方法</p>
+<p>调用yield方法会让当前线程交出CPU权限，让CPU去执行其他的线程。它跟sleep方法类似，同样不会释放锁。但是yield不能控制具体的交出CPU的时间，另外，yield方法只能让拥有相同优先级的线程有获取CPU执行时间的机会。</p>
+<p>注意，调用yield方法并不会让线程进入阻塞状态，而是让线程重回就绪状态，它只需要等待重新获取CPU执行时间，这一点是和sleep方法不一样的。</p>
+<p>5）join方法</p>
+<p>join方法有三个重载版本：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">join</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">join</span><span class="params">(long millis)</span></span>     <span class="comment">//参数为毫秒</span></span><br><span class="line"><span class="function"><span class="title">join</span><span class="params">(long millis,int nanoseconds)</span></span>    <span class="comment">//第一参数为毫秒，第二个参数为纳秒</span></span><br></pre></td></tr></table></figure></p>
+<p>假如在main线程中，调用thread.join方法，则main方法会等待thread线程执行完毕或者等待一定的时间。如果调用的是无参join方法，则等待thread执行完毕，如果调用的是指定了时间参数的join方法，则等待一定的事件。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.<span class="type">IOException</span>;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">ThreadJoin</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	 public static void main(<span class="type">String</span>[] args) <span class="keyword">throws</span> <span class="type">IOException</span>  &#123;</span><br><span class="line">	        <span class="type">System</span>.out.println(<span class="string">"进入线程"</span> + <span class="type">Thread</span>.currentThread().getName());</span><br><span class="line">	        <span class="type">ThreadJoin</span> test = <span class="keyword">new</span> <span class="type">ThreadJoin</span>();</span><br><span class="line">	        <span class="type">MyThread</span> thread1 = test.<span class="keyword">new</span> <span class="type">MyThread</span>();</span><br><span class="line">	        <span class="comment">//线程开始</span></span><br><span class="line">	        thread1.start();</span><br><span class="line">	        <span class="keyword">try</span> &#123;</span><br><span class="line">	            <span class="type">System</span>.out.println(<span class="string">"线程 "</span> + <span class="type">Thread</span>.currentThread().getName() + <span class="string">"等待"</span>);</span><br><span class="line">	            thread1.join();<span class="comment">//使主线程进入等待，其他线程执行完毕</span></span><br><span class="line">	            <span class="type">System</span>.out.println(<span class="string">"线程"</span> + <span class="type">Thread</span>.currentThread().getName() + <span class="string">"继续执行"</span>);</span><br><span class="line">	        &#125; <span class="keyword">catch</span> (<span class="type">InterruptedException</span> e) &#123;</span><br><span class="line">	            <span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">	            e.printStackTrace();</span><br><span class="line">	        &#125;</span><br><span class="line">    &#125; </span><br><span class="line">	     </span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        public void run() &#123;</span><br><span class="line">            <span class="type">System</span>.out.println(<span class="string">"进入线程"</span> + <span class="type">Thread</span>.currentThread().getName());</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="type">Thread</span>.currentThread().sleep(<span class="number">5000</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (<span class="type">InterruptedException</span> e) &#123;</span><br><span class="line">                <span class="comment">// <span class="doctag">TODO:</span> handle exception</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="type">System</span>.out.println(<span class="string">"线程"</span> + <span class="type">Thread</span>.currentThread().getName()+<span class="string">"执行完毕"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>执行结果 ：<br><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">进入线程main</span><br><span class="line">线程 main等待</span><br><span class="line">进入线程<span class="keyword">Thread</span>-<span class="number">0</span></span><br><span class="line">线程<span class="keyword">Thread</span>-<span class="number">0</span>执行完毕</span><br><span class="line">线程main继续执行</span><br></pre></td></tr></table></figure></p>
+<p>可以看出，当调用thread1.join()方法后，main线程会进入等待，然后等待thread1执行完之后再继续执行。</p>
+<p>实际上调用join方法是调用了Object的wait方法 。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/04/01/Thread线程属性/">Java 线程属性</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/5/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-04-01T02:10:00.000Z" itemprop="datePublished">2018-04-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>#线程属性</p>
+<p>以下是关系到线程属性的几个方法：</p>
+<p>1）getId</p>
+<p>用来得到线程ID</p>
+<p>2）getName和setName</p>
+<p>用来得到或者设置线程名称。</p>
+<p>3）getPriority和setPriority</p>
+<p>用来获取和设置线程优先级。</p>
+<p>4）setDaemon和isDaemon</p>
+<p>用来设置线程是否成为守护线程和判断线程是否是守护线程。</p>
+<p>守护线程和用户线程的区别在于：守护线程依赖于创建它的线程，而用户线程则不依赖。举个简单的例子：如果在main线程中创建了一个守护线程，当main方法运行完毕之后，守护线程也会随着消亡。而用户线程则不会，用户线程会一直运行直到其运行完毕。在JVM中，像垃圾收集器线程就是守护线程。</p>
+<p>Thread类有一个比较常用的静态方法currentThread()用来获取当前线程。</p>
+<p>在上面已经说到了Thread类中的大部分方法，那么Thread类中的方法调用到底会引起线程状态发生怎样的变化呢？<br><img src="https://images2015.cnblogs.com/blog/682616/201611/682616-20161115184256092-1439402886.jpg" alt="image"></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/04/01/死锁问题/">死锁问题</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/5/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-04-01T02:10:00.000Z" itemprop="datePublished">2018-04-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="死锁问题"><a href="#死锁问题" class="headerlink" title="死锁问题"></a>死锁问题</h1><figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">DeadLockDemo</span> &#123;</span></span><br><span class="line">    private static Object resource1 = <span class="keyword">new</span> Object();<span class="regexp">//资源 1</span></span><br><span class="line"><span class="regexp">    private static Object resource2 = new Object();//</span>资源 <span class="number">2</span></span><br><span class="line"></span><br><span class="line">    public static <span class="literal">void</span> main(String[] args) &#123;</span><br><span class="line">        <span class="keyword">new</span> Thread<span class="function"><span class="params">(() -&gt; &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">            synchronized (resource1) &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                System.out.println(Thread.currentThread() + <span class="string">"get resource1"</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">try</span> &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                    Thread.sleep(<span class="number">1000</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                    e.printStackTrace();</span></span></span><br><span class="line"><span class="function"><span class="params">                &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">                System.out.println(Thread.currentThread() + <span class="string">"waiting get resource2"</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                synchronized (resource2) &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                    System.out.println(Thread.currentThread() + <span class="string">"get resource2"</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">            &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">        &#125;, <span class="string">"线程 1"</span>)</span>.<span class="title">start</span><span class="params">()</span>;</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">        <span class="title">new</span> <span class="title">Thread</span><span class="params">(() -&gt; &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">            synchronized (resource2) &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                System.out.println(Thread.currentThread() + <span class="string">"get resource2"</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">try</span> &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                    Thread.sleep(<span class="number">1000</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                    e.printStackTrace();</span></span></span><br><span class="line"><span class="function"><span class="params">                &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">                System.out.println(Thread.currentThread() + <span class="string">"waiting get resource1"</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                synchronized (resource1) &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">                    System.out.println(Thread.currentThread() + <span class="string">"get resource1"</span>);</span></span></span><br><span class="line"><span class="function"><span class="params">                &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">            &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">        &#125;, <span class="string">"线程 2"</span>)</span>.<span class="title">start</span><span class="params">()</span>;</span></span><br><span class="line"><span class="function">    &#125;</span></span><br><span class="line"><span class="function">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>产生死锁必须具备以下四个条件：</p>
+<ul>
+<li>互斥条件：该资源任意一个时刻只由一个线程占用</li>
+<li>请求与保持条件：一个进程因请求资源而阻塞时，对已获得的资源保持不放</li>
+<li>不剥夺条件:线程已获得的资源在末使用完之前不能被其他线程强行剥夺，只有自己使用完毕后才释放资源</li>
+<li>循环等待条件:若干进程之间形成一种头尾相接的循环等待资源关系</li>
+</ul>
+<h2 id="如何避免线程死锁"><a href="#如何避免线程死锁" class="headerlink" title="如何避免线程死锁?"></a>如何避免线程死锁?</h2><p>我们只要破坏产生死锁的四个条件中的其中一个就可以了。</p>
+<p>破坏互斥条件</p>
+<p>这个条件我们没有办法破坏，因为我们用锁本来就是想让他们互斥的（临界资源需要互斥访问）。</p>
+<p>破坏请求与保持条件</p>
+<p>一次性申请所有的资源。</p>
+<p>破坏不剥夺条件</p>
+<p>占用部分资源的线程进一步申请其他资源时，如果申请不到，可以主动释放它占有的资源。</p>
+<p>破坏循环等待条件</p>
+<p>靠按序申请资源来预防。按某一顺序申请资源，释放资源则反序释放。破坏循环等待条件。</p>
+<blockquote>
+<p>使用多线程的时候，一种非常简单的避免死锁的方式就是：指定获取锁的顺序，并强制线程按照指定的顺序获取锁。因此，如果所有的线程都是以同样的顺序加锁和释放锁，就不会出现死锁了。</p>
+</blockquote>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/03/25/乐观锁常见的两种实现方式/">乐观锁常见的两种实现方式</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/5/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-03-25T06:10:00.000Z" itemprop="datePublished">2018-03-25</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/锁/">锁</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>#乐观锁常见的两种实现方式</p>
+<blockquote>
+<p>乐观锁一般会使用版本号机制或CAS算法实现。</p>
+</blockquote>
+<ol>
+<li>版本号机制</li>
+</ol>
+<p>一般是在数据表中加上一个数据版本号version字段，表示数据被修改的次数，当数据被修改时，version值会加一。<br>当线程A要更新数据值时，在读取数据的同时也会读取version值，在提交更新时，若刚才读取到的version值为当前数据库中的version值相等时才更新，否则重试更新操作，直到更新成功。</p>
+<p>举一个简单的例子： </p>
+<p>假设数据库中帐户信息表中有一个 version 字段，当前值为 1 ；而当前帐户余额字段（ balance ）为 $100 。</p>
+<ol>
+<li>操作员 A 此时将其读出（ version = 1 ），并从其帐户余额中扣除 $50（ $100 - $50 ）。</li>
+<li>在操作员 A 操作的过程中，操作员B 也读入此用户信息（ version = 1 ），并从其帐户余额中扣除 $20 （ $100 - $20 ）。</li>
+<li><p>操作员 A 完成了修改工作，将数据版本号加一（ version = 2 ），连同帐户扣除后余额（ balance = $50 ），提交至数据库更新，<br>此时由于提交数据版本大于数据库记录当前版本，数据被更新，数据库记录 version 更新为 2 。</p>
+</li>
+<li><p>操作员 B 完成了操作，也将版本号加一（ version = 2 ）试图向数据库提交数据（ balance = $80 ），但此时比对数据库记录版本时发现，操作员 B 提交的数据版本号为 2 ，数据库记录当前版本也为 2 ，<br>不满足 “ 提交版本必须大于记录当前版本才能执行更新 “ 的乐观锁策略，因此，操作员 B 的提交被驳回。</p>
+</li>
+</ol>
+<ol start="2">
+<li>CAS算法</li>
+</ol>
+<p>即compare and swap（比较与交换），是一种有名的无锁算法。<br>无锁编程，即不使用锁的情况下实现多线程之间的变量同步，也就是在没有线程被阻塞的情况下实现变量的同步，所以也叫非阻塞同步（Non-blocking Synchronization）。<br>CAS算法涉及到三个操作数：</p>
+<ul>
+<li>需要读写的内存值 V</li>
+<li>进行比较的值 A</li>
+<li>拟写入的新值 B</li>
+</ul>
+<p>三个参数，一个当前内存值V、旧的预期值A、即将更新的值B，当且仅当预期值A和内存值V相同时，将内存值修改为B并返回true，否则什么都不做，并返回false。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/03/24/悲观锁和乐观锁/">悲观锁和乐观锁</a>
         </h1>
         
@@ -299,78 +545,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/02/24/3.0 Java虚拟机的内部体系结构/">JVM 3.0</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/5/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-02-24T02:10:00.000Z" itemprop="datePublished">2018-02-24</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Java虚拟机的内部体系结构"><a href="#Java虚拟机的内部体系结构" class="headerlink" title="Java虚拟机的内部体系结构"></a>Java虚拟机的内部体系结构</h1><p>在 Java虚拟机规范中，一个虚拟机实例的行为是分别按照子系统、内存区、数据类型和指令来描述的，这些组成部分一起展示了抽象的虚拟机内部体系结构。</p>
-<p><img src="https://www.javazhiyin.com/wp-content/uploads/2019/01/java3-1547432465-1.jpg" alt="image"></p>
-<h2 id="运行时数据区"><a href="#运行时数据区" class="headerlink" title="运行时数据区"></a>运行时数据区</h2><p>Java虚拟机在执行Java程序的时候会把它管理的内存划分为若干个不同的数据区域，这些区域有各自的用途以及创建和销毁的时机，有的区域随着虚拟机进程的启动而存在（线程共享），有的区域则随着用户线程的启动和结束而建立和销毁（线程私有）。Java虚拟机所管理的内存包括以下几个运行时数据区域。</p>
-<h3 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h3><p>对于一个运行中的Java程序而言，每一个线程都有它的程序计数器，也叫PC寄存器，可以看做当前线程所执行的字节码的行号指示器。在虚拟机的概念模型里，字节码解释器就是通过改变这个计数器的值来选取下一条需要执行的字节码指令，分支，循环，跳转，异常处理，线程恢复等都需要依赖这个计数器。</p>
-<p>程序计数器既能持有一个本地指针，也能持有一个returnAddress。当线程执行某个Java方法时，程序计数器的值总是下一条被执行指令的地址。这里的地址可以是一个本地指针，也可以是方法字节码中相对该方法起始指令的偏移量。如果该线程正在执行一个本地方法，那么此时程序计数器的值是“undefined”。</p>
-<p>程序计数器属于线程私有的内存，也就是说，每当创建一个线程，都将得到该线程自己的一个程序计数器。Java虚拟机的多线程是通过线程的轮换并且分配处理器的执行时间来实现的，在一个确定的时刻，一个处理器都只会执行一条线程中的指令，为了线程切换后能恢复到正确的执行位置，每条线程都需要有一个独立的程序计数器。</p>
-<h3 id="Java虚拟机栈（Java栈）"><a href="#Java虚拟机栈（Java栈）" class="headerlink" title="Java虚拟机栈（Java栈）"></a>Java虚拟机栈（Java栈）</h3><p>Java虚拟机栈也是线程私有的，它的生命周期和线程相同。Java虚拟机栈描述的是Java方法执行的内存模型，每个方法在执行时会创建一个栈帧，用于存放局部变量表，操作数栈，动态链接，方法出口等信息。一个Java方法从调用到执行结束的过程，相当于一个栈帧在Java虚拟机栈中从入栈到出栈的过程。<br>（1）局部变量表<br>局部变量表用于存放编译时期可知的各种基本数据类型，对象的引用（不等同于对象，可能是指向对象的起始地址的指针，也可能是指向一个代表对象的句柄）以及returnAddress类型（指向了一条字节码地址）。局部变量在方法执行时被创建，在方法执行结束时销毁。</p>
-<p>字节码指令通过从0开始的索引使用其中的数据。类型为int, float, reference和returnAddress的值在数组中占据一项，而类型为byte, short和char的值在存入数组前都被转换为int值，也占据一项。但类型为long和double的值在数组中却占据连续的两项。</p>
-<h3 id="操作数栈"><a href="#操作数栈" class="headerlink" title="操作数栈"></a>操作数栈</h3><p>和局部变量区一样，操作数栈也是被组织成一个以字长为单位的数组。它通过标准的栈操作访问–压栈和出栈。由于程序计数器无法被程序指令直接访问，Java虚拟机的指令是从操作数栈中取得操作数，所以它的运行方式是基于栈而不是基于寄存器。虚拟机把操作数栈作为它的工作区，因为大多数指令都要从这里弹出数据，执行运算，然后把结果压回操作数栈。</p>
-<h3 id="帧数据区"><a href="#帧数据区" class="headerlink" title="帧数据区"></a>帧数据区</h3><p>除了局部变量区和操作数栈，Java栈帧还需要帧数据区来支持常量池解析、正常方法返回以及异常派发机制。每当虚拟机要执行某个需要用到常量池数据的指令时，它会通过帧数据区中指向常量池的指针来访问它。除了常量池的解析外，帧数据区还要帮助虚拟机处理Java方法的正常结束或异常中止。如果通过return正常结束，虚拟机必须恢复发起调用的方法的栈帧，包括设置程序计数器指向发起调用方法的下一个指令；如果方法有返回值，虚拟机需要将它压入到发起调用的方法的操作数栈。为了处理Java方法执行期间的异常退出情况，帧数据区还保存一个对此方法异常表的引用。</p>
-<h2 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h2><p>任何本地方法接口都会使用某种本地方法栈，本地方法栈与Java虚拟机栈发挥的作用类似。当线程调用Java方法时，虚拟机会创建一个新的栈帧并压入Java栈。当它调用的是本地方法时，虚拟机会保持Java栈不变，不再在线程的Java栈中压入新的栈，虚拟机只是简单地动态连接并直接调用指定的本地方法。</p>
-<h2 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h2><p>Java程序在运行时创建的所有类实例或数组（数组在Java虚拟机中是一个真正的对象）都放在同一个堆中，堆是虚拟机管理的内存最大的一块，被所有线程所共享，在虚拟机启动的时候创建。堆内存的唯一目的就是存放对象实例，几乎所有的对象实例都在堆中分配内存。</p>
-<h2 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h2><p>方法区同Java堆一样，是各个线程共享的内存区域，用于存储已经被虚拟机加载的类信息，常量，静态变量以及及时编译器编译后的代码等信息。当虚拟机装载某个类型时，它使用类装载器定位相应的class文件，然后读入这个class文件并将它传输到虚拟机中，接着虚拟机提取其中的类型信息，并将这些信息存储到方法区。方法区也可以被垃圾回收器收集，因为虚拟机允许通过用户定义的类装载器来动态扩展Java程序。</p>
-<p>方法区中存放了以下信息：</p>
-<pre><code>• 这个类型的全限定名（如全限定名java.lang.Object）
-• 这个类型的直接超类的全限定名
-• 这个类型是类类型还是接口类型
-• 这个类型的访问修饰符（public, abstract, final的某个子集）
-• 任何直接超接口的全限定名的有序列表
-• 该类型的常量池，Class文件中除了有类的版本，字段，方法，接口等描述信息外，还有一项是常量池，用于存放编译时生成的各种字面量和符号引用，这部分内容将在类加载后进入方法区的运行时常量池中存放
-• 字段信息（字段名、类型、修饰符）
-• 方法信息（方法名、返回类型、参数数量和类型、修饰符）
-• 除了常量以外的所有类（静态）变量
-• 指向ClassLoader类的引用（每个类型被装载时，虚拟机必须跟踪它是由启动类装载器还是由用户自定义类装载器装载的）
-• 指向Class类的引用（对于每一个被装载的类型，虚拟机相应地为它创建一个java.lang.Class类的实例存于堆中。比如你有一个到java.lang.Integer类的对象的引用，那么只需要调用Integer对象引用的getClass()方法，就可以得到表示java.lang.Integer类的Class对象）
-</code></pre><h2 id="类加载子系统"><a href="#类加载子系统" class="headerlink" title="类加载子系统"></a>类加载子系统</h2><p>虚拟机把Java描述类的信息加载到内存，并对数据进行校验，转换解析和初始化，形成可以被Java虚拟机直接使用的Java类型，这就是Java虚拟机的类加载机制。类从加载到虚拟机开始，到卸载出内存为止，它的整个生命周期包括：</p>
-<blockquote>
-<p>加载，验证，准备，解析，初始化，使用和卸载7个阶段。</p>
-</blockquote>
-<p><img src="https://www.javazhiyin.com/wp-content/uploads/2019/01/java2-1547432466.png" alt="image"></p>
-<h3 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h3><p>加载是类加载的一个阶段，在该阶段，Java虚拟机主要完成以下三件事情：</p>
-<pre><code>• 根据此类的全限定名来确定该类的二进制字节流；
-• 将这个字节流所代表的静态数据存储结构转换为方法区的运行时数据结构；
-• 在堆内存中生成一个代表这个类的java.lang.Class对象，作为方法区这个类的各种数据的访问入口。
-</code></pre><h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><p>验证是连接的第一步，这一阶段的目的是为了确保Class文件的字节流中包含的信息是否符合该虚拟机的要求。</p>
-<h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><p>准备阶段正式为类变量在方法区中分配内存并且赋初始值，初始值一般为该类变量类型的零值。</p>
-<h3 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h3><p>解析阶段虚拟机将常量池内的符号引用替换为直接引用。<br>符号引用：以一组符号来描述所引用的目标，符号可以是任何形式的字面量，只要使用时能无歧义的定位到目标即可。<br>直接引用：是指能直接指向目标的指针，相对偏移量或是一个能间接定位到目标的句柄。</p>
-<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>初始化是类加载过程的最后一个阶段，在前面的类加载过程中，除了在加载阶段用户可以自定义类加载器参与之外，其余动作完全由虚拟机主导和控制，到了初始化阶段，才真正开始执行类中定义的Java代码（字节码）。准备阶段为类变量分配内存并且赋初始值，赋值操作在初始化阶段执行。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2018/02/24/4.0 Class文件/">JVM 4.0</a>
         </h1>
         
@@ -404,186 +578,6 @@
 <li>符号引用：类和接口的全限定名；字段的名称和描述符；方法的名称和描述符。</li>
 <li>类索引，父类索引，接口索引：用来确定类的继承关系。</li>
 </ul>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/02/12/2.0 Java虚拟机/">JVM 2.0</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/5/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-02-12T02:10:00.000Z" itemprop="datePublished">2018-02-12</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>#Java虚拟机</p>
-<p>作用：</p>
-<blockquote>
-<p>Java虚拟机的主要任务是装载class文件并且执行其中的字节码。Java虚拟机包含一个类装载器（class loader），它可以从程序和API中装载class文件，Java API中只有程序执行时需要的类才会被装载，字节码由执行引擎来执行。</p>
-</blockquote>
-<p>当Java虚拟机由主机操作系统上的软件实现时，Java程序通过调用本地方法和主机进行交互。Java方法由Java语言编写，编译成字节码，存储在class文件中。本地方法由C/C++/汇编语言编写，编译成和处理器相关的机器代码，存储在动态链接库中，格式是各个平台专有。所以本地方法是联系Java程序和底层主机操作系统的连接方式。（跨平台）</p>
-<p><img src="https://www.javazhiyin.com/wp-content/uploads/2019/01/java8-1547432465.png" alt="image"></p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/02/08/清除eclipse launch configuration/">清除eclipse launch configuration</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/5/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-02-08T06:18:02.000Z" itemprop="datePublished">2018-02-08</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="清除eclipse-launch-configuration"><a href="#清除eclipse-launch-configuration" class="headerlink" title="清除eclipse launch configuration"></a>清除eclipse launch configuration</h1><p>eclipse里面export runnable jar之前要先run一下才行, 但是之后launch configuration里面的记录一直存在, 非常难看, 清除的方法是:<br>清空workspace文件夹下的里的内容。</p>
-<blockquote>
-<p>注意是删掉文件夹里面的内容, 而不是把文件夹删了</p>
-</blockquote>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.metadata/.plugins/org<span class="selector-class">.eclipse</span><span class="selector-class">.debug</span><span class="selector-class">.core</span>/.launches</span><br><span class="line"></span><br><span class="line">eg:</span><br><span class="line">E:\JavaWorkSpace\.metadata\.plugins\org<span class="selector-class">.eclipse</span><span class="selector-class">.debug</span><span class="selector-class">.core</span>\.launches</span><br></pre></td></tr></table></figure>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/02/08/IO复用技术/">IO复用技术</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/5/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-02-08T04:18:45.000Z" itemprop="datePublished">2018-02-08</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/IO/">IO</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="IO复用技术"><a href="#IO复用技术" class="headerlink" title="IO复用技术"></a>IO复用技术</h1><p>多进程方式实现的服务器端，一次创建多个工作子进程来给客户端提供服务。其实这种方式是存在问题的。</p>
-<p>可以打个比方：如果我们先前创建的几个进程承载不了目前快速发展的业务的话，是不是还得增加进程数？我们都知道系统创建进程是需要消耗大量资源的，所以这样就会导致系统资源不足的情况。</p>
-<p>那么有没有一种方式可以让一个进程同时为多个客户端端提供服务？</p>
-<p>接下来要讲的IO复用技术就是对于上述问题的最好解答。</p>
-<p>对于IO复用，我们可以通过一个例子来很好的理解它。（例子来自于《TCP/IP网络编程》）</p>
-<p>某教室有10名学生和1名老师，这些学生上课会不停的提问，所以一个老师处理不了这么多的问题。那么学校为每个学生都配一名老师，</p>
-<p>也就是这个教室目前有10名老师。此后，只要有新的转校生，那么就会为这个学生专门分配一个老师。</p>
-<p>如果把以上例子中的学生比作客户端，那么老师就是负责进行数据交换的服务端。则该例子可以比作是多进程的方式。</p>
-<p>后来有一天，来了一位具有超能力的老师，这位老师回答问题非常迅速，并且可以应对所有的问题。而这位老师采用的方式是学生提问前必须先举手，确认举手学生后在回答问题。则现在的情况就是IO复用。</p>
-<p>目前的常用的IO复用模型有三种：select，poll，epoll。</p>
-<h2 id="select模型"><a href="#select模型" class="headerlink" title="select模型"></a>select模型</h2><p>说的通俗一点就是各个客户端(连接的文件描述符)套接字，都被放到了一个集合中，调用select函数之后会一直监视这些文件描述符中有哪些可读，如果有可读的描述符那么我们的工作进程就去读取资源。</p>
-<h2 id="poll模型"><a href="#poll模型" class="headerlink" title="poll模型"></a>poll模型</h2><p>poll 和 select 的实现非常类似，本质上的区别就是存放 fd 集合的数据结构不一样。select 在一个进程内可以维持最多 1024 个连接，poll 在此基础上做了加强，可以维持任意数量的连接。</p>
-<p>但 select 和 poll 方式有一个很大的问题就是，我们不难看出来select是通过轮训的方式来查找是否可读或者可写，打个比方，如果同时有100万个连接都没有断开，而只有一个客户端发送了数据，所以这里它还是需要循环这么多次，造成资源浪费。所以后来出现了 epoll系统调用。</p>
-<h2 id="epoll模型"><a href="#epoll模型" class="headerlink" title="epoll模型"></a>epoll模型</h2><p>epoll是 select 和 poll 的增强版，epoll 同 poll 一样，文件描述符数量无限制。</p>
-<p>epoll是基于内核的反射机制，在有活跃的 socket 时，系统会调用我们提前设置的回调函数。而 poll 和 select 都是遍历。</p>
-<p>但是也并不是所有情况下 epoll 都比 select/poll 好，比如在如下场景：</p>
-<p>在大多数客户端都很活跃的情况下，系统会把所有的回调函数都唤醒，所以会导致负载较高。既然要处理这么多的连接，那倒不如 select 遍历简单有效。</p>
-<blockquote>
-<p>内核（kernel）利用文件描述符（file descriptor）来访问文件。文件描述符是非负整数。打开现存文件或新建文件时，内核会返回一个文件描述符。读写文件也需要使用文件描述符来指定待读写的文件。</p>
-</blockquote>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/02/08/Java多线程/">Java多线程相关问题</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/5/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-02-08T04:18:45.000Z" itemprop="datePublished">2018-02-08</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>Java多线程相关问题</p>
-<p>1.线程池的原理，为什么要创建线程池？创建线程池的方式？</p>
-<p>2.线程的生命周期？什么时候会出现僵死线程？</p>
-<ol start="3">
-<li><p>说说线程安全问题？什么是线程安全？如何实现线程安全？</p>
-</li>
-<li><p>创建线程池有哪几个核心参数？如何合理的配置线程池的大小？</p>
-</li>
-</ol>
-<p>5.volatile、ThreadLocal的使用场景和原理；</p>
-<p>6.ThreadLocal什么时候会出现OOM情况？为什么？</p>
-<p>7.sychronized、volatile区别？synchronized锁粒度、模拟死锁场景、原子性和可见性</p>
 
         
     </section>
