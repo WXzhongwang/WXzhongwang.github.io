@@ -131,48 +131,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2017/09/12/Redis相关问题二/">Redis相关问题二</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-09-12T10:33:59.000Z" itemprop="datePublished">2017-09-12</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Redis-相关问题二"><a href="#Redis-相关问题二" class="headerlink" title="Redis 相关问题二"></a>Redis 相关问题二</h1><ol start="2">
-<li>Redis采用多线程会有哪些问题？</li>
-</ol>
-<p>公司某个项目使用了redis进行数据的快速写入与查询,但在测试中发现它的查询速度完全不敌MySQL.经过代码分析发现,我们的架构师来了个奇葩操作.Redis与MySQL的关联,也就是先从Redis中查出相关数据在循环查询MySQL来获取完整数据,对于这种操作只能认为架构的脑袋被电梯夹了,在没有什么借口可以解释。好多人都是这样,对新技术有点皮毛了解就想”大显身手”,结果就闹得很是尴尬。</p>
-<p>大家知道Redis是非关系型数据库,特点就是”快”,那我们直接把想要的数据全部存入Redis中,不做任何关联。</p>
-<p>这个问题解决之后又发现了一个新问题,Redis在多线程高并发下出现数据错乱,也就是A的数据给了B,B的数据给到了C….</p>
-<p>分析:程序是多线程并且高并发情况,而Redis是单线程,也就是程序在Redis驱动返回结果时发生了张冠李戴的现象.</p>
-<p>解决方法:Redis操作方法添加线程锁(lock),让其他线程排队.</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2017/09/12/Redis相关问题三/">Redis相关问题三</a>
         </h1>
         
@@ -210,6 +168,102 @@
 <p>3) 如果用户不停地查询一条不存在的数据，缓存没有，数据库也没有，那么会出现什么?</p>
 <p>如果数据不存在，缓存中没有，数据库也没有，当然如果不设置判断，会一直调用数据库，使数据库效率降低，访问量大时甚至会宕机。</p>
 <p>解决方案：从数据库查询，如果数据库没有，则返回值为Null，判断数据库返回的值，如果为Null，则自定义把标识的字段存到Redis中，用key,value的方法，jedis.setex(key,”empty”)，设置失效时间跟具体情况而定，然后调用String json=jedis.get(key),判断是否获取的值”empty”.equal(json),如果相等，则抛出自定义异常，给用户提示，或者直接return null。这样用户再次查询的时候由于先从reids缓存中查询，redis会有对应的Key获取之前设置的value值，这样就不会再次调用数据库，影响效率等问题。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2017/09/12/Redis相关问题一/">Redis相关问题一</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-09-12T10:33:59.000Z" itemprop="datePublished">2017-09-12</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Redis-相关问题一"><a href="#Redis-相关问题一" class="headerlink" title="Redis 相关问题一"></a>Redis 相关问题一</h1><ol>
+<li>Redis为什么那么快?</li>
+</ol>
+<blockquote>
+<p>完全基于内存，绝大部分请求是纯粹的内存操作，非常快速。数据存在内存中，类似于HashMap，HashMap的优势就是查找和操作的时间复杂度都是O(1)；</p>
+</blockquote>
+<blockquote>
+<p>数据结构简单，对数据操作也简单，Redis中的数据结构是专门进行设计的；</p>
+</blockquote>
+<blockquote>
+<p>采用单线程，避免了不必要的上下文切换和竞争条件，也不存在多进程或者多线程导致的切换而消耗 CPU，不用去考虑各种锁的问题，不存在加锁释放锁操作，没有因为可能出现死锁而导致的性能消耗；</p>
+</blockquote>
+<blockquote>
+<p>使用多路I/O复用模型，非阻塞IO；</p>
+</blockquote>
+<blockquote>
+<p>使用底层模型不同，它们之间底层实现方式以及与客户端之间通信的应用协议不一样，Redis直接自己构建了VM 机制，因为一般的系统调用系统函数的话，会浪费一定的时间去移动和请求；</p>
+</blockquote>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2017/09/12/Redis相关问题四/">相关问题四</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-09-12T10:33:59.000Z" itemprop="datePublished">2017-09-12</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Redis-相关问题四"><a href="#Redis-相关问题四" class="headerlink" title="Redis 相关问题四"></a>Redis 相关问题四</h1><ol>
+<li><p>Redis跳跃表问题。</p>
+</li>
+<li><p>Redis单进程单线程的Redis如何能够高并发？</p>
+</li>
+<li><p>如何使用Redis实现分布式锁？</p>
+</li>
+<li><p>Redis分布式锁操作的原子性，Redis内部如何实现？</p>
+</li>
+</ol>
 
         
     </section>
@@ -274,59 +328,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2017/09/12/Redis相关问题一/">Redis相关问题一</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-09-12T10:33:59.000Z" itemprop="datePublished">2017-09-12</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Redis-相关问题一"><a href="#Redis-相关问题一" class="headerlink" title="Redis 相关问题一"></a>Redis 相关问题一</h1><ol>
-<li>Redis为什么那么快?</li>
-</ol>
-<blockquote>
-<p>完全基于内存，绝大部分请求是纯粹的内存操作，非常快速。数据存在内存中，类似于HashMap，HashMap的优势就是查找和操作的时间复杂度都是O(1)；</p>
-</blockquote>
-<blockquote>
-<p>数据结构简单，对数据操作也简单，Redis中的数据结构是专门进行设计的；</p>
-</blockquote>
-<blockquote>
-<p>采用单线程，避免了不必要的上下文切换和竞争条件，也不存在多进程或者多线程导致的切换而消耗 CPU，不用去考虑各种锁的问题，不存在加锁释放锁操作，没有因为可能出现死锁而导致的性能消耗；</p>
-</blockquote>
-<blockquote>
-<p>使用多路I/O复用模型，非阻塞IO；</p>
-</blockquote>
-<blockquote>
-<p>使用底层模型不同，它们之间底层实现方式以及与客户端之间通信的应用协议不一样，Redis直接自己构建了VM 机制，因为一般的系统调用系统函数的话，会浪费一定的时间去移动和请求；</p>
-</blockquote>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/06/01/Linux 绝对路径 、 相对路径/">Linux绝对路径 、 相对路径</a>
+            <a href="/2017/06/01/Linux 更改文件属性/">Linux更改文件属性</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -349,10 +351,59 @@
     
     <section class="article-body markdown-body">
         
-        <h2 id="Linux绝对路径-、-相对路径"><a href="#Linux绝对路径-、-相对路径" class="headerlink" title="Linux绝对路径 、 相对路径"></a>Linux绝对路径 、 相对路径</h2><p>Linux的目录结构为树状结构，最顶级的目录为根目录 /。</p>
-<p>其他目录通过挂载可以将它们添加到树中，通过解除挂载可以移除它们。</p>
-<p>绝对路径：<br>路径的写法，由根目录 / 写起，例如： /usr/share/doc 这个目录。</p>
-<p>相对路径：<br>路径的写法，不是由 / 写起，例如由 /usr/share/doc 要切换到 /usr/share/man 底下时，可以写成： cd ../man 这就是相对路径。</p>
+        <h2 id="Linux-更改文件属性"><a href="#Linux-更改文件属性" class="headerlink" title="Linux 更改文件属性"></a>Linux 更改文件属性</h2><p>1、chgrp：改属组 change group</p>
+<p>语法：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chgrp <span class="string">[-R]</span> 属组名 文件名</span><br></pre></td></tr></table></figure></p>
+<p>参数选项 [-R]: 递归更改文件属组，就是在更改某个目录文件的属组时，如果加上-R的参数，那么该目录下的所有文件的属组都会更改。</p>
+<p>2、chown：改属主，也可以同时更改属组  change owner</p>
+<p>语法：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chown <span class="string">[–R]</span> 属主名 文件名</span><br><span class="line">chown <span class="string">[-R]</span> 属主名：属组名 文件名</span><br></pre></td></tr></table></figure></p>
+<p>进入 /root 目录（~）将install.log的拥有者改为bin这个账号：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@www ~] cd ~</span><br><span class="line">[root@www ~]# chown bin install.log</span><br><span class="line">[root@www ~]# ls -l</span><br><span class="line">-rw-r--r--  1 bin <span class="built_in"> users </span>68495 Jun 25 08:53 install.log</span><br></pre></td></tr></table></figure></p>
+<p>3、chmod：更改文件9个属性</p>
+<p>Linux文件的基本权限就有九个，分别是owner/group/others三种身份各有自己的read/write/execute权限。</p>
+<p>例如：文件的权限字符为：『-rwxrwxrwx』， 可以使用数字来代表各个权限，各权限的分数对照表如下：</p>
+<ul>
+<li>r:4</li>
+<li>w:2</li>
+<li>x:1</li>
+</ul>
+<p>每种身份(owner/group/others)各自的三个权限(r/w/x)分数是需要累加的，例如当权限为： [-rwxrwx—] 结果：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">owner = rwx = <span class="number">4</span>+<span class="number">2</span>+<span class="number">1</span> = <span class="number">7</span></span><br><span class="line">group = rwx = <span class="number">4</span>+<span class="number">2</span>+<span class="number">1</span> = <span class="number">7</span></span><br><span class="line">others= --- = <span class="number">0</span>+<span class="number">0</span>+<span class="number">0</span> = <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>设定权限变更为：770</p>
+<p>语法<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod <span class="string">[-R]</span> xyz 文件或目录</span><br></pre></td></tr></table></figure></p>
+<p>参数 xyz : 就是刚刚提到的数字类型的权限属性，为 rwx 属性数值的相加。eg: 770</p>
+<p>Example: 将.bashrc这个文件所有的权限都设定启用<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">ls</span> <span class="selector-tag">-al</span> <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-tag">-rw-r--r--</span>  1 <span class="selector-tag">root</span> <span class="selector-tag">root</span> 395 <span class="selector-tag">Jul</span>  4 11<span class="selector-pseudo">:45</span> <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">chmod</span> 777 <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">ls</span> <span class="selector-tag">-al</span> <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-tag">-rwxrwxrwx</span>  1 <span class="selector-tag">root</span> <span class="selector-tag">root</span> 395 <span class="selector-tag">Jul</span>  4 11<span class="selector-pseudo">:45</span> <span class="selector-class">.bashrc</span></span><br></pre></td></tr></table></figure></p>
+<p>那如果要将权限变成 -rwxr-xr– 呢？那么权限的分数就成为 [4+2+1][4+0+1][4+0+0]=754。</p>
+<h2 id="符号类型改变文件权限"><a href="#符号类型改变文件权限" class="headerlink" title="符号类型改变文件权限"></a>符号类型改变文件权限</h2><p>另一种改权限的方式。针对user,group,others设置权限。</p>
+<ol>
+<li>user</li>
+<li>group</li>
+<li>others</li>
+</ol>
+<p>那么我们就可以使用 u, g, o 来代表三种身份的权限。</p>
+<p>可选 ：</p>
+<ul>
+<li>u</li>
+<li>g</li>
+<li>o</li>
+<li>a (指所有，即全部的身份)</li>
+</ul>
+<p>操作符： </p>
+<ul>
+<li><ul>
+<li>加入</li>
+</ul>
+</li>
+<li><ul>
+<li>除去</li>
+</ul>
+</li>
+<li>=    设定<br>权限：</li>
+<li>r</li>
+<li>w</li>
+<li>x</li>
+</ul>
+<p>可以使用以下语法来设定:<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod <span class="attribute">u</span>=rwx,g=rwx,o=rwx 文件名</span><br></pre></td></tr></table></figure></p>
+<p>Example：将文件权限设置为 -rwxr-xr– ，<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#  touch <span class="keyword">test</span>    <span class="comment">// 创建文件</span></span><br><span class="line"># <span class="keyword">ls</span> -al <span class="keyword">test</span>    <span class="comment">// 查看默认权限</span></span><br><span class="line">-rw-r--r-- 1 root root 0 Nov 15 10:32 <span class="keyword">test</span></span><br><span class="line"># chmod <span class="keyword">u</span>=rwx,<span class="keyword">g</span>=rx,o=r  <span class="keyword">test</span>    <span class="comment">// 修改权限</span></span><br><span class="line"># <span class="keyword">ls</span> -al <span class="keyword">test</span></span><br><span class="line">-rwxr-xr-- 1 root root 0 Nov 15 10:32 <span class="keyword">test</span></span><br></pre></td></tr></table></figure></p>
+<p>而如果是要将权限去掉而不改变其他已存在的权限呢？<br>例如要拿掉全部人的可执行权限，则：<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#  chmod  a-x test1</span></span><br><span class="line"><span class="comment"># ls -al test1</span></span><br><span class="line">-rw-r--r--<span class="number"> 1 </span>root root<span class="number"> 0 </span>Nov<span class="number"> 15 </span>10:32 test1</span><br></pre></td></tr></table></figure></p>
 
         
     </section>
@@ -590,7 +641,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2017/06/01/Linux 更改文件属性/">Linux更改文件属性</a>
+            <a href="/2017/06/01/Linux 绝对路径 、 相对路径/">Linux绝对路径 、 相对路径</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -613,59 +664,10 @@
     
     <section class="article-body markdown-body">
         
-        <h2 id="Linux-更改文件属性"><a href="#Linux-更改文件属性" class="headerlink" title="Linux 更改文件属性"></a>Linux 更改文件属性</h2><p>1、chgrp：改属组 change group</p>
-<p>语法：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chgrp <span class="string">[-R]</span> 属组名 文件名</span><br></pre></td></tr></table></figure></p>
-<p>参数选项 [-R]: 递归更改文件属组，就是在更改某个目录文件的属组时，如果加上-R的参数，那么该目录下的所有文件的属组都会更改。</p>
-<p>2、chown：改属主，也可以同时更改属组  change owner</p>
-<p>语法：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chown <span class="string">[–R]</span> 属主名 文件名</span><br><span class="line">chown <span class="string">[-R]</span> 属主名：属组名 文件名</span><br></pre></td></tr></table></figure></p>
-<p>进入 /root 目录（~）将install.log的拥有者改为bin这个账号：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@www ~] cd ~</span><br><span class="line">[root@www ~]# chown bin install.log</span><br><span class="line">[root@www ~]# ls -l</span><br><span class="line">-rw-r--r--  1 bin <span class="built_in"> users </span>68495 Jun 25 08:53 install.log</span><br></pre></td></tr></table></figure></p>
-<p>3、chmod：更改文件9个属性</p>
-<p>Linux文件的基本权限就有九个，分别是owner/group/others三种身份各有自己的read/write/execute权限。</p>
-<p>例如：文件的权限字符为：『-rwxrwxrwx』， 可以使用数字来代表各个权限，各权限的分数对照表如下：</p>
-<ul>
-<li>r:4</li>
-<li>w:2</li>
-<li>x:1</li>
-</ul>
-<p>每种身份(owner/group/others)各自的三个权限(r/w/x)分数是需要累加的，例如当权限为： [-rwxrwx—] 结果：</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">owner = rwx = <span class="number">4</span>+<span class="number">2</span>+<span class="number">1</span> = <span class="number">7</span></span><br><span class="line">group = rwx = <span class="number">4</span>+<span class="number">2</span>+<span class="number">1</span> = <span class="number">7</span></span><br><span class="line">others= --- = <span class="number">0</span>+<span class="number">0</span>+<span class="number">0</span> = <span class="number">0</span></span><br></pre></td></tr></table></figure>
-<p>设定权限变更为：770</p>
-<p>语法<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod <span class="string">[-R]</span> xyz 文件或目录</span><br></pre></td></tr></table></figure></p>
-<p>参数 xyz : 就是刚刚提到的数字类型的权限属性，为 rwx 属性数值的相加。eg: 770</p>
-<p>Example: 将.bashrc这个文件所有的权限都设定启用<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">ls</span> <span class="selector-tag">-al</span> <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-tag">-rw-r--r--</span>  1 <span class="selector-tag">root</span> <span class="selector-tag">root</span> 395 <span class="selector-tag">Jul</span>  4 11<span class="selector-pseudo">:45</span> <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">chmod</span> 777 <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">ls</span> <span class="selector-tag">-al</span> <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-tag">-rwxrwxrwx</span>  1 <span class="selector-tag">root</span> <span class="selector-tag">root</span> 395 <span class="selector-tag">Jul</span>  4 11<span class="selector-pseudo">:45</span> <span class="selector-class">.bashrc</span></span><br></pre></td></tr></table></figure></p>
-<p>那如果要将权限变成 -rwxr-xr– 呢？那么权限的分数就成为 [4+2+1][4+0+1][4+0+0]=754。</p>
-<h2 id="符号类型改变文件权限"><a href="#符号类型改变文件权限" class="headerlink" title="符号类型改变文件权限"></a>符号类型改变文件权限</h2><p>另一种改权限的方式。针对user,group,others设置权限。</p>
-<ol>
-<li>user</li>
-<li>group</li>
-<li>others</li>
-</ol>
-<p>那么我们就可以使用 u, g, o 来代表三种身份的权限。</p>
-<p>可选 ：</p>
-<ul>
-<li>u</li>
-<li>g</li>
-<li>o</li>
-<li>a (指所有，即全部的身份)</li>
-</ul>
-<p>操作符： </p>
-<ul>
-<li><ul>
-<li>加入</li>
-</ul>
-</li>
-<li><ul>
-<li>除去</li>
-</ul>
-</li>
-<li>=    设定<br>权限：</li>
-<li>r</li>
-<li>w</li>
-<li>x</li>
-</ul>
-<p>可以使用以下语法来设定:<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod <span class="attribute">u</span>=rwx,g=rwx,o=rwx 文件名</span><br></pre></td></tr></table></figure></p>
-<p>Example：将文件权限设置为 -rwxr-xr– ，<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#  touch <span class="keyword">test</span>    <span class="comment">// 创建文件</span></span><br><span class="line"># <span class="keyword">ls</span> -al <span class="keyword">test</span>    <span class="comment">// 查看默认权限</span></span><br><span class="line">-rw-r--r-- 1 root root 0 Nov 15 10:32 <span class="keyword">test</span></span><br><span class="line"># chmod <span class="keyword">u</span>=rwx,<span class="keyword">g</span>=rx,o=r  <span class="keyword">test</span>    <span class="comment">// 修改权限</span></span><br><span class="line"># <span class="keyword">ls</span> -al <span class="keyword">test</span></span><br><span class="line">-rwxr-xr-- 1 root root 0 Nov 15 10:32 <span class="keyword">test</span></span><br></pre></td></tr></table></figure></p>
-<p>而如果是要将权限去掉而不改变其他已存在的权限呢？<br>例如要拿掉全部人的可执行权限，则：<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#  chmod  a-x test1</span></span><br><span class="line"><span class="comment"># ls -al test1</span></span><br><span class="line">-rw-r--r--<span class="number"> 1 </span>root root<span class="number"> 0 </span>Nov<span class="number"> 15 </span>10:32 test1</span><br></pre></td></tr></table></figure></p>
+        <h2 id="Linux绝对路径-、-相对路径"><a href="#Linux绝对路径-、-相对路径" class="headerlink" title="Linux绝对路径 、 相对路径"></a>Linux绝对路径 、 相对路径</h2><p>Linux的目录结构为树状结构，最顶级的目录为根目录 /。</p>
+<p>其他目录通过挂载可以将它们添加到树中，通过解除挂载可以移除它们。</p>
+<p>绝对路径：<br>路径的写法，由根目录 / 写起，例如： /usr/share/doc 这个目录。</p>
+<p>相对路径：<br>路径的写法，不是由 / 写起，例如由 /usr/share/doc 要切换到 /usr/share/man 底下时，可以写成： cd ../man 这就是相对路径。</p>
 
         
     </section>
@@ -677,7 +679,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2017/05/11/数组实现栈/">Java 使用数组实现栈</a>
+            <a href="/2017/05/11/实现最小值函数/">Java 实现最小值函数</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -700,8 +702,10 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="使用数组实现栈"><a href="#使用数组实现栈" class="headerlink" title="使用数组实现栈"></a>使用数组实现栈</h1><figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">自己实现一个栈，要求这个栈具有push<span class="comment">()</span>、pop<span class="comment">()</span>（返回栈顶元素并出栈）、peek<span class="comment">()</span> （返回栈顶元素不出栈）、isEmpty<span class="comment">()</span>、size<span class="comment">()</span></span><br><span class="line">这些基本的方法。</span><br><span class="line"></span><br><span class="line">提示：每次入栈之前先判断栈的容量是否够用，如果不够用就用Arrays.copyOf<span class="comment">()</span>进行扩容；</span><br></pre></td></tr></table></figure>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">package</span> program;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> MyStack &#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * 使用数组实现栈： 自己实现一个栈，要求这个栈具有push()、pop()（返回栈顶元素并出栈）、peek()</span></span><br><span class="line"><span class="comment">	 * （返回栈顶元素不出栈）、isEmpty()、size()这些基本的方法。</span></span><br><span class="line"><span class="comment">	 * 提示：每次入栈之前先判断栈的容量是否够用，如果不够用就用Arrays.copyOf()进行扩容；</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * 存数据的数组</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span>[] storage;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * 容量</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> capacity;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * 元素个数</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> <span class="keyword">count</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * 每次以当前容量进行扩容</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> GROW_FACTOR = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// TODO：默认构造函数</span></span><br><span class="line">	<span class="keyword">public</span> MyStack() &#123;</span><br><span class="line">		<span class="keyword">this</span>.capacity = <span class="number">8</span>;</span><br><span class="line">		<span class="keyword">this</span>.<span class="keyword">count</span> = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">this</span>.storage = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">8</span>];</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// TODO：带初始容量的构造方法</span></span><br><span class="line">	<span class="keyword">public</span> MyStack(<span class="keyword">int</span> initialCapacity) &#123;</span><br><span class="line">		<span class="keyword">if</span> (initialCapacity &lt; <span class="number">1</span>)</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Capacity too small."</span>);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">this</span>.capacity = initialCapacity;</span><br><span class="line">		<span class="keyword">this</span>.storage = <span class="keyword">new</span> <span class="keyword">int</span>[initialCapacity];</span><br><span class="line">		<span class="keyword">this</span>.<span class="keyword">count</span> = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// TODO： 入栈</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="keyword">push</span>(<span class="keyword">int</span> value) &#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="keyword">count</span> == capacity) &#123;</span><br><span class="line">			scrollUpCapacity();</span><br><span class="line">		&#125;</span><br><span class="line">		storage[<span class="keyword">count</span>++] = value;		</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// <span class="doctag">TODO:</span> 扩容</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">void</span> scrollUpCapacity() &#123;</span><br><span class="line">		<span class="keyword">int</span> newCapacity = capacity * GROW_FACTOR;</span><br><span class="line">		storage = Arrays.copyOf(storage, newCapacity);</span><br><span class="line">		capacity = newCapacity;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// TODO： 返回栈顶元素(出栈)</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> <span class="keyword">pop</span>() &#123;</span><br><span class="line">		<span class="keyword">count</span>--;</span><br><span class="line">		<span class="keyword">if</span> (<span class="keyword">count</span> == -<span class="number">1</span>) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Stack is empty."</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> storage[<span class="keyword">count</span>];</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// TODO： 返回栈顶元素(不出栈)</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> peek() &#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="keyword">count</span> == <span class="number">0</span>) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Stack is empty."</span>);</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="keyword">return</span> storage[<span class="keyword">count</span> - <span class="number">1</span>];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// <span class="doctag">TODO:</span> 判断是否为空</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">boolean</span> isEmpty() &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">count</span> == <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// <span class="doctag">TODO:</span> 返回长度(元素个数)</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> <span class="keyword">size</span>() &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">count</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args) &#123;</span><br><span class="line">		MyStack myStack = <span class="keyword">new</span> MyStack(<span class="number">3</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">1</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">2</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">3</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">4</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">5</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">6</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">7</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">8</span>);</span><br><span class="line">		System.out.<span class="keyword">println</span>(myStack.peek());<span class="comment">// 8</span></span><br><span class="line">		System.out.<span class="keyword">println</span>(myStack.<span class="keyword">size</span>());<span class="comment">// 8</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++) &#123;</span><br><span class="line">			System.out.<span class="keyword">println</span>(myStack.<span class="keyword">pop</span>());</span><br><span class="line">		&#125;</span><br><span class="line">		System.out.<span class="keyword">println</span>(myStack.isEmpty());<span class="comment">// true</span></span><br><span class="line">		myStack.<span class="keyword">pop</span>();<span class="comment">// 报错：java.lang.IllegalArgumentException: Stack is empty.</span></span><br><span class="line"></span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">520</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <h1 id="实现最小值函数"><a href="#实现最小值函数" class="headerlink" title="实现最小值函数"></a>实现最小值函数</h1><p>自己设计一个泛型的获取数组最小值的函数.并且这个方法只能接受Number的子类并且实现了Comparable接口。</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//注意：Number并没有实现Comparable</span><br><span class="line">private static &lt;T extends Number &amp; Comparable&lt;? super T&gt;&gt; T <span class="built_in">min</span>(T[] <span class="built_in">values</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">values</span> == null || <span class="built_in">values</span>.<span class="built_in">length</span> == <span class="number">0</span>) <span class="built_in">return</span> null;</span><br><span class="line">    T <span class="built_in">min</span> = <span class="built_in">values</span>[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span> (int i = <span class="number">1</span>; i &lt; <span class="built_in">values</span>.<span class="built_in">length</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">min</span>.compareTo(<span class="built_in">values</span>[i]) &gt; <span class="number">0</span>) <span class="built_in">min</span> = <span class="built_in">values</span>[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">return</span> <span class="built_in">min</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试：<br><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> minInteger = <span class="built_in">min</span>(<span class="keyword">new</span> Integer[]&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;);<span class="comment">//result:1</span></span><br><span class="line"><span class="keyword">double</span> minDouble = <span class="built_in">min</span>(<span class="keyword">new</span> Double[]&#123;<span class="number">1.2</span>, <span class="number">2.2</span>, <span class="number">-1</span>d&#125;);<span class="comment">//result:-1d</span></span><br><span class="line"><span class="keyword">String</span> typeError = <span class="built_in">min</span>(<span class="keyword">new</span> <span class="keyword">String</span>[]&#123;<span class="string">"1"</span>,<span class="string">"3"</span>&#125;);<span class="comment">//报错</span></span><br></pre></td></tr></table></figure></p>
+
         
     </section>
 </article>

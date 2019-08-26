@@ -131,7 +131,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/02/08/HttpStatusCode/">HttpStatusCode</a>
+            <a href="/2018/02/08/IO复用技术/">IO复用技术</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -145,7 +145,7 @@
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Web/">Web</a>, <a class="article-tag-link" href="/tags/前端/">前端</a>
+    <a class="article-tag-link" href="/tags/IO/">IO</a>
 </div>
 
 
@@ -154,253 +154,26 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="HttpStatusCode"><a href="#HttpStatusCode" class="headerlink" title="HttpStatusCode"></a>HttpStatusCode</h1><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"> <span class="comment">/*</span></span><br><span class="line"><span class="comment">    1xx：相关信息</span></span><br><span class="line"><span class="comment">    2xx：操作成功</span></span><br><span class="line"><span class="comment">    3xx：重定向</span></span><br><span class="line"><span class="comment">    4xx：客户端错误</span></span><br><span class="line"><span class="comment">    5xx：服务器错误</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">字段</th>
-<th style="text-align:left">状态码</th>
-<th style="text-align:left">说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">Continue</td>
-<td style="text-align:left">100</td>
-<td style="text-align:left">指示客户端可能继续其请求。</td>
-</tr>
-<tr>
-<td style="text-align:center">SwitchingProtocols</td>
-<td style="text-align:left">100</td>
-<td style="text-align:left">指示正在更改协议版本或协议。</td>
-</tr>
-<tr>
-<td style="text-align:center">OK</td>
-<td style="text-align:left">200</td>
-<td style="text-align:left">指示请求成功，且请求的信息包含在响应中。</td>
-</tr>
-<tr>
-<td style="text-align:center">Created</td>
-<td style="text-align:left">201</td>
-<td style="text-align:left">指示请求导致在响应被发送前创建新资源。</td>
-</tr>
-<tr>
-<td style="text-align:center">Accepted</td>
-<td style="text-align:left">202</td>
-<td style="text-align:left">指示请求已被接受做进一步处理。</td>
-</tr>
-<tr>
-<td style="text-align:center">NonAuthoritativeInformation</td>
-<td style="text-align:left">202</td>
-<td style="text-align:left">指示返回的元信息来自缓存副本而不是原始服务器，因此可能不正确。</td>
-</tr>
-<tr>
-<td style="text-align:center">NoContent</td>
-<td style="text-align:left">204</td>
-<td style="text-align:left">指示请求成功，指示已成功处理请求并且响应已被设定为无内容。</td>
-</tr>
-<tr>
-<td style="text-align:center">ResetContent</td>
-<td style="text-align:left">205</td>
-<td style="text-align:left">指示客户端应重置（或重新加载）当前资源。</td>
-</tr>
-<tr>
-<td style="text-align:center">PartialContent</td>
-<td style="text-align:left">206</td>
-<td style="text-align:left">指示响应是包括字节范围的 GET 请求所请求的部分响应。</td>
-</tr>
-<tr>
-<td style="text-align:center">MultipleChoices</td>
-<td style="text-align:left">300</td>
-<td style="text-align:left">指示请求的信息有多种表示形式，默认操作是将此状态视为重定向，并遵循与此响应关联的 Location 头的内容。</td>
-</tr>
-<tr>
-<td style="text-align:center">Ambiguous</td>
-<td style="text-align:left">300</td>
-<td style="text-align:left">指示请求的信息有多种表示形式。默认操作是将此状态视为重定向，并遵循与此响应关联的 Location 头的内容。</td>
-</tr>
-<tr>
-<td style="text-align:center">MovedPermanently</td>
-<td style="text-align:left">301</td>
-<td style="text-align:left">指示请求的信息已移到 Location 头中指定的 URI 处。接收到此状态时的默认操作为遵循与响应关联的 Location 头。</td>
-</tr>
-<tr>
-<td style="text-align:center">Moved</td>
-<td style="text-align:left">301</td>
-<td style="text-align:left">指示请求的信息已移到 Location 头中指定的 URI 处。接收到此状态时的默认操作为遵循与响应关联的 Location 头。原始请求方法为 POST 时，重定向的请求将使用 GET 方法。</td>
-</tr>
-<tr>
-<td style="text-align:center">Found</td>
-<td style="text-align:left">302</td>
-<td style="text-align:left">指示请求的信息位于 Location 头中指定的 URI 处。接收到此状态时的默认操作为遵循与响应关联的 Location 头。原始请求方法为 POST 时，重定向的请求将使用 GET 方法。</td>
-</tr>
-<tr>
-<td style="text-align:center">Redirect</td>
-<td style="text-align:left">302</td>
-<td style="text-align:left">指示请求的信息位于 Location 头中指定的 URI 处。接收到此状态时的默认操作为遵循与响应关联的 Location 头。原始请求方法为 POST 时，重定向的请求将使用 GET 方法。</td>
-</tr>
-<tr>
-<td style="text-align:center">SeeOther</td>
-<td style="text-align:left">303</td>
-<td style="text-align:left">作为 POST 的结果，SeeOther 将客户端自动重定向到 Location 头中指定的 URI。用 GET 生成对 Location 头所指定的资源的请求。</td>
-</tr>
-<tr>
-<td style="text-align:center">RedirectMethod</td>
-<td style="text-align:left">303</td>
-<td style="text-align:left">作为 POST 的结果，RedirectMethod 将客户端自动重定向到 Location 头中指定的 URI。用 GET 生成对 Location 头所指定的资源的请求。</td>
-</tr>
-<tr>
-<td style="text-align:center">NotModified</td>
-<td style="text-align:left">304</td>
-<td style="text-align:left">指示客户端的缓存副本是最新的。未传输此资源的内容。</td>
-</tr>
-<tr>
-<td style="text-align:center">UseProxy</td>
-<td style="text-align:left">305</td>
-<td style="text-align:left">指示请求应使用位于 Location 头中指定的 URI 的代理服务器。</td>
-</tr>
-<tr>
-<td style="text-align:center">Unused</td>
-<td style="text-align:left">306</td>
-<td style="text-align:left">是未完全指定的 HTTP/1.1 规范的建议扩展。</td>
-</tr>
-<tr>
-<td style="text-align:center">TemporaryRedirect</td>
-<td style="text-align:left">307</td>
-<td style="text-align:left">指示请求信息位于 Location 头中指定的 URI 处。接收到此状态时的默认操作为遵循与响应关联的 Location 头。原始请求方法为 POST 时，重定向的请求还将使用 POST 方法。</td>
-</tr>
-<tr>
-<td style="text-align:center">RedirectKeepVerb</td>
-<td style="text-align:left">307</td>
-<td style="text-align:left">指示请求信息位于 Location 头中指定的 URI 处。接收到此状态时的默认操作为遵循与响应关联的 Location 头。原始请求方法为 POST 时，重定向的请求还将使用 POST 方法。</td>
-</tr>
-<tr>
-<td style="text-align:center">BadRequest</td>
-<td style="text-align:left">400</td>
-<td style="text-align:left">指示服务器未能识别请求。如果没有其他适用的错误，或者如果不知道准确的错误或错误没有自己的错误代码，则发送 BadRequest。</td>
-</tr>
-<tr>
-<td style="text-align:center">Unauthorized</td>
-<td style="text-align:left">401</td>
-<td style="text-align:left">指示请求的资源要求身份验证。WWW-Authenticate头包含如何执行身份验证的详细信息。</td>
-</tr>
-<tr>
-<td style="text-align:center">PaymentRequired</td>
-<td style="text-align:left">402</td>
-<td style="text-align:left">保留 PaymentRequired 以供将来使用。</td>
-</tr>
-<tr>
-<td style="text-align:center">Forbidden</td>
-<td style="text-align:left">403</td>
-<td style="text-align:left">指示服务器拒绝满足请求。</td>
-</tr>
-<tr>
-<td style="text-align:center">NotFound</td>
-<td style="text-align:left">404</td>
-<td style="text-align:left">指示请求的资源不在服务器上。</td>
-</tr>
-<tr>
-<td style="text-align:center">MethodNotAllowed</td>
-<td style="text-align:left">405</td>
-<td style="text-align:left">指示请求的资源上不允许请求方法（POST 或 GET）。</td>
-</tr>
-<tr>
-<td style="text-align:center">NotAcceptable</td>
-<td style="text-align:left">406</td>
-<td style="text-align:left">指示客户端已用 Accept 头指示将不接受资源的任何可用表示形式。</td>
-</tr>
-<tr>
-<td style="text-align:center">ProxyAuthenticationRequired</td>
-<td style="text-align:left">407</td>
-<td style="text-align:left">指示请求的代理要求身份验证。Proxy-authenticate 头包含如何执行身份验证的详细信息。</td>
-</tr>
-<tr>
-<td style="text-align:center">RequestTimeout</td>
-<td style="text-align:left">408</td>
-<td style="text-align:left">指示客户端没有在服务器期望请求的时间内发送请求。</td>
-</tr>
-<tr>
-<td style="text-align:center">Conflict</td>
-<td style="text-align:left">409</td>
-<td style="text-align:left">指示由于服务器上的冲突而未能执行请求。</td>
-</tr>
-<tr>
-<td style="text-align:center">Gone</td>
-<td style="text-align:left">410</td>
-<td style="text-align:left">指示请求的资源不再可用。</td>
-</tr>
-<tr>
-<td style="text-align:center">LengthRequired</td>
-<td style="text-align:left">411</td>
-<td style="text-align:left">指示缺少必需的 Content-length 头。</td>
-</tr>
-<tr>
-<td style="text-align:center">PreconditionFailed</td>
-<td style="text-align:left">412</td>
-<td style="text-align:left">指示为此请求设置的条件失败，且无法执行此请求。条件是用条件请求标头（如 If-Match、If-None-Match 或 If-Unmodified-Since）设置的。</td>
-</tr>
-<tr>
-<td style="text-align:center">RequestEntityTooLarge</td>
-<td style="text-align:left">413</td>
-<td style="text-align:left">指示请求太大，服务器无法处理。</td>
-</tr>
-<tr>
-<td style="text-align:center">RequestUriTooLong</td>
-<td style="text-align:left">414</td>
-<td style="text-align:left">指示 URI 太长。</td>
-</tr>
-<tr>
-<td style="text-align:center">UnsupportedMediaType</td>
-<td style="text-align:left">415</td>
-<td style="text-align:left">指示请求是不支持的类型。</td>
-</tr>
-<tr>
-<td style="text-align:center">RequestedRangeNotSatisfiable</td>
-<td style="text-align:left">416</td>
-<td style="text-align:left">RequestedRangeNotSatisfiable指示无法返回从资源请求的数据范围，因为范围的开头在资源的开头之前，或因为范围的结尾在资源的结尾之后。</td>
-</tr>
-<tr>
-<td style="text-align:center">ExpectationFailed</td>
-<td style="text-align:left">417</td>
-<td style="text-align:left">指示服务器未能符合 Expect 头中给定的预期值。</td>
-</tr>
-<tr>
-<td style="text-align:center">UpgradeRequired</td>
-<td style="text-align:left">426</td>
-<td style="text-align:left">客户端应当切换到TLS/1.0</td>
-</tr>
-<tr>
-<td style="text-align:center">InternalServerError</td>
-<td style="text-align:left">500</td>
-<td style="text-align:left">指示服务器上发生了一般错误。</td>
-</tr>
-<tr>
-<td style="text-align:center">NotImplemented</td>
-<td style="text-align:left">501</td>
-<td style="text-align:left">指示服务器不支持请求的函数。</td>
-</tr>
-<tr>
-<td style="text-align:center">BadGateway</td>
-<td style="text-align:left">502</td>
-<td style="text-align:left">指示中间代理服务器从另一代理或原始服务器接收到错误响应。</td>
-</tr>
-<tr>
-<td style="text-align:center">ServiceUnavailable</td>
-<td style="text-align:left">503</td>
-<td style="text-align:left">指示服务器暂时不可用，通常是由于过多加载或维护。</td>
-</tr>
-<tr>
-<td style="text-align:center">GatewayTimeout</td>
-<td style="text-align:left">504</td>
-<td style="text-align:left">指示中间代理服务器在等待来自另一个代理或原始服务器的响应时已超时。</td>
-</tr>
-<tr>
-<td style="text-align:center">HttpVersionNotSupported</td>
-<td style="text-align:left">505</td>
-<td style="text-align:left">指示服务器不支持请求的 HTTP 版本。</td>
-</tr>
-</tbody>
-</table>
+        <h1 id="IO复用技术"><a href="#IO复用技术" class="headerlink" title="IO复用技术"></a>IO复用技术</h1><p>多进程方式实现的服务器端，一次创建多个工作子进程来给客户端提供服务。其实这种方式是存在问题的。</p>
+<p>可以打个比方：如果我们先前创建的几个进程承载不了目前快速发展的业务的话，是不是还得增加进程数？我们都知道系统创建进程是需要消耗大量资源的，所以这样就会导致系统资源不足的情况。</p>
+<p>那么有没有一种方式可以让一个进程同时为多个客户端端提供服务？</p>
+<p>接下来要讲的IO复用技术就是对于上述问题的最好解答。</p>
+<p>对于IO复用，我们可以通过一个例子来很好的理解它。（例子来自于《TCP/IP网络编程》）</p>
+<p>某教室有10名学生和1名老师，这些学生上课会不停的提问，所以一个老师处理不了这么多的问题。那么学校为每个学生都配一名老师，</p>
+<p>也就是这个教室目前有10名老师。此后，只要有新的转校生，那么就会为这个学生专门分配一个老师。</p>
+<p>如果把以上例子中的学生比作客户端，那么老师就是负责进行数据交换的服务端。则该例子可以比作是多进程的方式。</p>
+<p>后来有一天，来了一位具有超能力的老师，这位老师回答问题非常迅速，并且可以应对所有的问题。而这位老师采用的方式是学生提问前必须先举手，确认举手学生后在回答问题。则现在的情况就是IO复用。</p>
+<p>目前的常用的IO复用模型有三种：select，poll，epoll。</p>
+<h2 id="select模型"><a href="#select模型" class="headerlink" title="select模型"></a>select模型</h2><p>说的通俗一点就是各个客户端(连接的文件描述符)套接字，都被放到了一个集合中，调用select函数之后会一直监视这些文件描述符中有哪些可读，如果有可读的描述符那么我们的工作进程就去读取资源。</p>
+<h2 id="poll模型"><a href="#poll模型" class="headerlink" title="poll模型"></a>poll模型</h2><p>poll 和 select 的实现非常类似，本质上的区别就是存放 fd 集合的数据结构不一样。select 在一个进程内可以维持最多 1024 个连接，poll 在此基础上做了加强，可以维持任意数量的连接。</p>
+<p>但 select 和 poll 方式有一个很大的问题就是，我们不难看出来select是通过轮训的方式来查找是否可读或者可写，打个比方，如果同时有100万个连接都没有断开，而只有一个客户端发送了数据，所以这里它还是需要循环这么多次，造成资源浪费。所以后来出现了 epoll系统调用。</p>
+<h2 id="epoll模型"><a href="#epoll模型" class="headerlink" title="epoll模型"></a>epoll模型</h2><p>epoll是 select 和 poll 的增强版，epoll 同 poll 一样，文件描述符数量无限制。</p>
+<p>epoll是基于内核的反射机制，在有活跃的 socket 时，系统会调用我们提前设置的回调函数。而 poll 和 select 都是遍历。</p>
+<p>但是也并不是所有情况下 epoll 都比 select/poll 好，比如在如下场景：</p>
+<p>在大多数客户端都很活跃的情况下，系统会把所有的回调函数都唤醒，所以会导致负载较高。既然要处理这么多的连接，那倒不如 select 遍历简单有效。</p>
+<blockquote>
+<p>内核（kernel）利用文件描述符（file descriptor）来访问文件。文件描述符是非负整数。打开现存文件或新建文件时，内核会返回一个文件描述符。读写文件也需要使用文件描述符来指定待读写的文件。</p>
+</blockquote>
 
         
     </section>
@@ -412,7 +185,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/02/07/Git Commit/">Git提交</a>
+            <a href="/2018/02/07/Docker基本命令/">Docker初探 1.0</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -426,7 +199,7 @@
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Git/">Git</a>
+    <a class="article-tag-link" href="/tags/Docker/">Docker</a>
 </div>
 
 
@@ -435,17 +208,12 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="Git-Commit"><a href="#Git-Commit" class="headerlink" title="Git Commit"></a>Git Commit</h1><p>现在的暂存区域已经准备妥当可以提交了。 在此之前，请一定要确认还有什么修改过的或新建的文件还没有 git add 过，否则提交的时候不会记录这些还没暂存起来的变化。 这些修改过的文件只保留在本地磁盘。 所以，每次准备提交前，先用 git status 看下，是不是都已暂存起来了， 然后再运行提交命令 git commit：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>git commit</span><br></pre></td></tr></table></figure></p>
-<p>你也可以在 commit 命令后添加 -m 选项，将提交信息与命令放在同一行。</p>
-<blockquote>
-<p>请在每次提交时添加comment<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="keyword">commit</span> -m <span class="string">"Story 182: Fix benchmarks for speed"</span></span><br><span class="line">[<span class="keyword">master</span> <span class="number">463</span>dc4f] Story <span class="number">182</span>: Fix benchmarks <span class="keyword">for</span> speed</span><br><span class="line"> <span class="number">2</span> files <span class="keyword">changed</span>, <span class="number">2</span> insertions(+)</span><br><span class="line"> <span class="keyword">create</span> <span class="keyword">mode</span> <span class="number">100644</span> README</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<p>好，现在你已经创建了第一个提交！ 可以看到，提交后它会告诉你，当前是在哪个分支（master）提交的，本次提交的完整 SHA-1 校验和是什么（463dc4f），以及在本次提交中，有多少文件修订过，多少行添加和删改过。</p>
-<blockquote>
-<p>请记住，提交时记录的是放在暂存区域的快照。 任何还未暂存的仍然保持已修改状态，可以在下次提交时纳入版本管理。 每一次运行提交操作，都是对你项目作一次快照，以后可以回到这个状态，或者进行比较。</p>
-</blockquote>
-<h2 id="跳过使用暂存区域"><a href="#跳过使用暂存区域" class="headerlink" title="跳过使用暂存区域"></a>跳过使用暂存区域</h2><p>尽管使用暂存区域的方式可以精心准备要提交的细节，但有时候这么做略显繁琐。 Git 提供了一个跳过使用暂存区域的方式， 只要在提交的时候，给 git commit 加上 -a 选项，Git 就会自动把所有已经跟踪过的文件暂存起来一并提交，从而跳过 git add 步骤：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line">Changes not staged for <span class="keyword">commit</span>:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git add &lt;file&gt;..."</span> <span class="keyword">to</span> <span class="keyword">update</span> what will be committed)</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git checkout -- &lt;file&gt;..."</span> <span class="keyword">to</span> discard changes <span class="keyword">in</span> working <span class="keyword">directory</span>)</span><br><span class="line"></span><br><span class="line">    modified:   CONTRIBUTING.md</span><br><span class="line"></span><br><span class="line"><span class="keyword">no</span> changes added <span class="keyword">to</span> <span class="keyword">commit</span> (<span class="keyword">use</span> <span class="string">"git add"</span> <span class="keyword">and</span>/<span class="keyword">or</span> <span class="string">"git commit -a"</span>)</span><br><span class="line">$ git <span class="keyword">commit</span> -a -m <span class="string">'added new benchmarks'</span></span><br><span class="line">[<span class="keyword">master</span> <span class="number">83e38</span>c7] added <span class="keyword">new</span> benchmarks</span><br><span class="line"> <span class="number">1</span> <span class="keyword">file</span> <span class="keyword">changed</span>, <span class="number">5</span> insertions(+), <span class="number">0</span> deletions(-)</span><br></pre></td></tr></table></figure></p>
-<p>此时，提交之前不再需要 git add 文件“CONTRIBUTING.md”了。个人觉得不推荐。</p>
+        <h1 id="Docker命令"><a href="#Docker命令" class="headerlink" title="Docker命令"></a>Docker命令</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">从公网拉取一个镜像</span><br><span class="line">docker pull images_name</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">查看已有的docker镜像</span><br><span class="line">docker images</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">查看帮助</span><br><span class="line">docker <span class="built_in">command</span> --<span class="built_in">help</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">看容器的端口映射情况</span><br><span class="line">docker<span class="built_in"> port </span>con_id</span><br></pre></td></tr></table></figure>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">查看正在运行的容器</span><br><span class="line">docker <span class="keyword">ps</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">查看所有的容器</span><br><span class="line">docker ps -<span class="keyword">a</span></span><br></pre></td></tr></table></figure>
 
         
     </section>
@@ -457,7 +225,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/02/07/Git 查看提交历史/">Git查看历史提交</a>
+            <a href="/2018/02/07/Git查看提交历史/">Git查看历史提交</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -669,7 +437,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/02/07/Docker基本命令/">Docker初探 1.0</a>
+            <a href="/2018/02/07/Git Commit/">Git提交</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -683,7 +451,7 @@
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Docker/">Docker</a>
+    <a class="article-tag-link" href="/tags/Git/">Git</a>
 </div>
 
 
@@ -692,12 +460,17 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="Docker命令"><a href="#Docker命令" class="headerlink" title="Docker命令"></a>Docker命令</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">从公网拉取一个镜像</span><br><span class="line">docker pull images_name</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">查看已有的docker镜像</span><br><span class="line">docker images</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">查看帮助</span><br><span class="line">docker <span class="built_in">command</span> --<span class="built_in">help</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">看容器的端口映射情况</span><br><span class="line">docker<span class="built_in"> port </span>con_id</span><br></pre></td></tr></table></figure>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">查看正在运行的容器</span><br><span class="line">docker <span class="keyword">ps</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">查看所有的容器</span><br><span class="line">docker ps -<span class="keyword">a</span></span><br></pre></td></tr></table></figure>
+        <h1 id="Git-Commit"><a href="#Git-Commit" class="headerlink" title="Git Commit"></a>Git Commit</h1><p>现在的暂存区域已经准备妥当可以提交了。 在此之前，请一定要确认还有什么修改过的或新建的文件还没有 git add 过，否则提交的时候不会记录这些还没暂存起来的变化。 这些修改过的文件只保留在本地磁盘。 所以，每次准备提交前，先用 git status 看下，是不是都已暂存起来了， 然后再运行提交命令 git commit：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>git commit</span><br></pre></td></tr></table></figure></p>
+<p>你也可以在 commit 命令后添加 -m 选项，将提交信息与命令放在同一行。</p>
+<blockquote>
+<p>请在每次提交时添加comment<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="keyword">commit</span> -m <span class="string">"Story 182: Fix benchmarks for speed"</span></span><br><span class="line">[<span class="keyword">master</span> <span class="number">463</span>dc4f] Story <span class="number">182</span>: Fix benchmarks <span class="keyword">for</span> speed</span><br><span class="line"> <span class="number">2</span> files <span class="keyword">changed</span>, <span class="number">2</span> insertions(+)</span><br><span class="line"> <span class="keyword">create</span> <span class="keyword">mode</span> <span class="number">100644</span> README</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>好，现在你已经创建了第一个提交！ 可以看到，提交后它会告诉你，当前是在哪个分支（master）提交的，本次提交的完整 SHA-1 校验和是什么（463dc4f），以及在本次提交中，有多少文件修订过，多少行添加和删改过。</p>
+<blockquote>
+<p>请记住，提交时记录的是放在暂存区域的快照。 任何还未暂存的仍然保持已修改状态，可以在下次提交时纳入版本管理。 每一次运行提交操作，都是对你项目作一次快照，以后可以回到这个状态，或者进行比较。</p>
+</blockquote>
+<h2 id="跳过使用暂存区域"><a href="#跳过使用暂存区域" class="headerlink" title="跳过使用暂存区域"></a>跳过使用暂存区域</h2><p>尽管使用暂存区域的方式可以精心准备要提交的细节，但有时候这么做略显繁琐。 Git 提供了一个跳过使用暂存区域的方式， 只要在提交的时候，给 git commit 加上 -a 选项，Git 就会自动把所有已经跟踪过的文件暂存起来一并提交，从而跳过 git add 步骤：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line">Changes not staged for <span class="keyword">commit</span>:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git add &lt;file&gt;..."</span> <span class="keyword">to</span> <span class="keyword">update</span> what will be committed)</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git checkout -- &lt;file&gt;..."</span> <span class="keyword">to</span> discard changes <span class="keyword">in</span> working <span class="keyword">directory</span>)</span><br><span class="line"></span><br><span class="line">    modified:   CONTRIBUTING.md</span><br><span class="line"></span><br><span class="line"><span class="keyword">no</span> changes added <span class="keyword">to</span> <span class="keyword">commit</span> (<span class="keyword">use</span> <span class="string">"git add"</span> <span class="keyword">and</span>/<span class="keyword">or</span> <span class="string">"git commit -a"</span>)</span><br><span class="line">$ git <span class="keyword">commit</span> -a -m <span class="string">'added new benchmarks'</span></span><br><span class="line">[<span class="keyword">master</span> <span class="number">83e38</span>c7] added <span class="keyword">new</span> benchmarks</span><br><span class="line"> <span class="number">1</span> <span class="keyword">file</span> <span class="keyword">changed</span>, <span class="number">5</span> insertions(+), <span class="number">0</span> deletions(-)</span><br></pre></td></tr></table></figure></p>
+<p>此时，提交之前不再需要 git add 文件“CONTRIBUTING.md”了。个人觉得不推荐。</p>
 
         
     </section>
@@ -923,7 +696,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/02/01/Git 基础 - 记录每次更新到仓库/">Git记录更新到仓库</a>
+            <a href="/2018/02/01/1.0 Java程序执行流程/">JVM 1.0</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -937,7 +710,7 @@
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Git/">Git</a>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
 </div>
 
 
@@ -946,30 +719,10 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="记录每次更新到仓库"><a href="#记录每次更新到仓库" class="headerlink" title="记录每次更新到仓库"></a>记录每次更新到仓库</h1><p>现在我们手上有了一个真实项目的 Git 仓库，并从这个仓库中取出了所有文件的工作拷贝。 接下来，对这些文件做些修改，在完成了一个阶段的目标之后，提交本次更新到仓库。</p>
-<blockquote>
-<p>请记住，你工作目录下的每一个文件都不外乎这两种状态：已跟踪或未跟踪。</p>
-</blockquote>
-<p>已跟踪的文件是指那些被纳入了版本控制的文件，在上一次快照中有它们的记录，在工作一段时间后，它们的状态可能处于未修改，已修改或已放入暂存区。 工作目录中除已跟踪文件以外的所有其它文件都属于未跟踪文件，它们既不存在于上次快照的记录中，也没有放入暂存区。 初次克隆某个仓库的时候，工作目录中的所有文件都属于已跟踪文件，并处于未修改状态。</p>
-<p>编辑过某些文件之后，由于自上次提交后你对它们做了修改，Git 将它们标记为已修改文件。 我们逐步将这些修改过的文件放入暂存区，然后提交所有暂存了的修改，如此反复。所以使用 Git 时文件的生命周期如下：</p>
-<p><img src="https://git-scm.com/book/en/v2/images/lifecycle.png" alt="image"></p>
-<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">检查当前文件状态:</span><br><span class="line">$ git status</span><br><span class="line">On branch <span class="literal">master</span></span><br><span class="line">nothing to commit, working directory clean</span><br></pre></td></tr></table></figure>
-<p>这说明你现在的工作目录相当干净。换句话说，所有已跟踪文件在上次提交后都未被更改过。 此外，上面的信息还表明，当前目录下没有出现任何处于未跟踪状态的新文件，否则 Git 会在这里列出来。 最后，该命令还显示了当前所在分支，并告诉你这个分支同远程服务器上对应的分支没有偏离。 现在，分支名是 “master”,这是默认的分支名。</p>
-<p>现在，让我们在项目下创建一个新的 README 文件。 如果之前并不存在这个文件，使用 git status 命令，你将看到一个新的未跟踪文件：<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="keyword">echo</span> <span class="string">'My Project'</span> &gt; README</span><br><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line">Untracked <span class="keyword">file</span><span class="variable">s:</span></span><br><span class="line">  (use <span class="string">"git add &lt;file&gt;..."</span> <span class="keyword">to</span> include in what will <span class="keyword">be</span> committed)</span><br><span class="line"></span><br><span class="line">    README</span><br><span class="line"></span><br><span class="line">nothing added <span class="keyword">to</span> commit but untracked <span class="keyword">files</span> present (use <span class="string">"git add"</span> <span class="keyword">to</span> track)</span><br></pre></td></tr></table></figure></p>
-<p>在状态报告中可以看到新建的 README 文件出现在 Untracked files 下面。 未跟踪的文件意味着 Git 在之前的快照（提交）中没有这些文件；Git 不会自动将之纳入跟踪范围，除非你明明白白地告诉它“我需要跟踪该文件”， 这样的处理让你不必担心将生成的二进制文件或其它不想被跟踪的文件包含进来。 不过现在的例子中，我们确实想要跟踪管理 README 这个文件。<br><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">使用命令 git <span class="keyword">add</span><span class="bash"> 开始跟踪一个文件。 所以，要跟踪 README 文件，运行：</span></span><br><span class="line">$ git <span class="keyword">add</span><span class="bash"> README</span></span><br></pre></td></tr></table></figure></p>
-<p>这时候我们在运行git status查看状态：<br><figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ git status</span><br><span class="line"><span class="keyword">On</span> branch master</span><br><span class="line">Changes <span class="keyword">to</span> be committed:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git reset HEAD &lt;file&gt;..."</span> <span class="keyword">to</span> unstage)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">new</span> <span class="keyword">file</span>:   README</span><br></pre></td></tr></table></figure></p>
-<p>文件已经处于被追踪的状态了，并处于暂存状态。</p>
-<p>现在我们来修改一个已被跟踪的文件。 如果你修改了一个名为 CONTRIBUTING.md 的已被跟踪的文件，然后运行 git status 命令，会看到下面内容：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line">Changes to be committed:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git reset HEAD &lt;file&gt;..."</span> <span class="keyword">to</span> unstage)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">new</span> <span class="keyword">file</span>:   README</span><br><span class="line"></span><br><span class="line">Changes <span class="keyword">not</span> staged <span class="keyword">for</span> <span class="keyword">commit</span>:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git add &lt;file&gt;..."</span> <span class="keyword">to</span> <span class="keyword">update</span> what will be committed)</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git checkout -- &lt;file&gt;..."</span> <span class="keyword">to</span> discard changes <span class="keyword">in</span> working <span class="keyword">directory</span>)</span><br><span class="line"></span><br><span class="line">    modified:   CONTRIBUTING.md</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>文件 CONTRIBUTING.md 出现在 Changes not staged for commit 这行下面，说明已跟踪文件的内容发生了变化，但还没有放到暂存区。 要暂存这次更新，需要运行 git add命令。</p>
-</blockquote>
-<h2 id="git-add"><a href="#git-add" class="headerlink" title="git add:"></a>git add:</h2><blockquote>
-<p>这是个多功能命令：可以用它开始跟踪新文件，或者把已跟踪的文件放到暂存区，还能用于合并时把有冲突的文件标记为已解决状态等。 将这个命令理解为“添加内容到下一次提交中”而不是“将一个文件添加到项目中”要更加合适。 现在让我们运行 git add 将”CONTRIBUTING.md”放到暂存区，然后再看看 git status 的输出：<br><figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ git add CONTRIBUTING.md</span><br><span class="line">$ git status</span><br><span class="line"><span class="keyword">On</span> branch master</span><br><span class="line">Changes <span class="keyword">to</span> be committed:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git reset HEAD &lt;file&gt;..."</span> <span class="keyword">to</span> unstage)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">new</span> <span class="keyword">file</span>:   README</span><br><span class="line">    modified:   CONTRIBUTING.md</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<p>现在两个文件都已暂存，下次提交时就会一并记录到仓库。 假设此时，你想要在 CONTRIBUTING.md 里再加条注释， 重新编辑存盘后，准备好提交。 不过且慢，再运行 git status 看看：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ vim CONTRIBUTING.md</span><br><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line">Changes to be committed:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git reset HEAD &lt;file&gt;..."</span> <span class="keyword">to</span> unstage)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">new</span> <span class="keyword">file</span>:   README</span><br><span class="line">    modified:   CONTRIBUTING.md</span><br><span class="line"></span><br><span class="line">Changes <span class="keyword">not</span> staged <span class="keyword">for</span> <span class="keyword">commit</span>:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git add &lt;file&gt;..."</span> <span class="keyword">to</span> <span class="keyword">update</span> what will be committed)</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git checkout -- &lt;file&gt;..."</span> <span class="keyword">to</span> discard changes <span class="keyword">in</span> working <span class="keyword">directory</span>)</span><br><span class="line"></span><br><span class="line">    modified:   CONTRIBUTING.md</span><br></pre></td></tr></table></figure></p>
-<p>怎么回事？ 现在 CONTRIBUTING.md 文件同时出现在暂存区和非暂存区。 这怎么可能呢？ 好吧，实际上 Git 只不过暂存了你运行 git add 命令时的版本， 如果你现在提交，CONTRIBUTING.md 的版本是你最后一次运行 git add 命令时的那个版本，而不是你运行 git commit 时，在工作目录中的当前版本。 所以，运行了 git add 之后又作了修订的文件，需要重新运行 git add 把最新版本重新暂存起来：<br><figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ git add CONTRIBUTING.md</span><br><span class="line">$ git status</span><br><span class="line"><span class="keyword">On</span> branch master</span><br><span class="line">Changes <span class="keyword">to</span> be committed:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git reset HEAD &lt;file&gt;..."</span> <span class="keyword">to</span> unstage)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">new</span> <span class="keyword">file</span>:   README</span><br><span class="line">    modified:   CONTRIBUTING.md</span><br></pre></td></tr></table></figure></p>
-<h2 id="git-status"><a href="#git-status" class="headerlink" title="git status"></a>git status</h2><p>git status 命令的输出十分详细，但其用语有些繁琐。 如果你使用 git status -s 命令或 git status –short 命令，你将得到一种更为紧凑的格式输出。 运行 git status -s ，状态报告输出如下：<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ git status -s</span><br><span class="line"> M README</span><br><span class="line">MM Rakefile</span><br><span class="line">A  <span class="class"><span class="keyword">lib</span>/<span class="title">git</span>.<span class="title">rb</span></span></span><br><span class="line">M  <span class="class"><span class="keyword">lib</span>/<span class="title">simplegit</span>.<span class="title">rb</span></span></span><br><span class="line">?? LICENSE.txt</span><br></pre></td></tr></table></figure></p>
-<p>新添加的未跟踪文件前面有 ?? 标记，新添加到暂存区中的文件前面有 A 标记，修改过的文件前面有 M 标记。 你可能注意到了 M 有两个可以出现的位置，出现在右边的 M 表示该文件被修改了但是还没放入暂存区，出现在靠左边的 M 表示该文件被修改了并放入了暂存区。 例如，上面的状态报告显示： README 文件在工作区被修改了但是还没有将修改后的文件放入暂存区,lib/simplegit.rb 文件被修改了并将修改后的文件放入了暂存区。 而 Rakefile 在工作区被修改并提交到暂存区后又在工作区中被修改了，所以在暂存区和工作区都有该文件被修改了的记录。</p>
+        <p>1.Java程序执行流程</p>
+<p>Java技术的核心就是Java虚拟机，因为所有的Java程序都在虚拟机上运行。Java程序的运行需要Java虚拟机、Java API和Java Class文件的配合。Java虚拟机实例负责运行一个Java程序。当启动一个Java程序时，一个虚拟机实例就诞生了。当程序结束，这个虚拟机实例也就消亡。</p>
+<p><img src="https://www.javazhiyin.com/wp-content/uploads/2019/01/java3-1547432465.jpg" alt="image"></p>
+<p>分为编译时环境和运行时环境，很基础很重要。</p>
 
         
     </section>

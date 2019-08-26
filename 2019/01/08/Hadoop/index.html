@@ -113,8 +113,11 @@
         <p>Hadoop是一个开源的框架，可编写和运行分布式应用处理大规模数据，是专为离线和大规模数据分析而设计的，并不适合那种对几个记录随机读写的在线事务处理模式。</p>
 <h1 id="Hadoop"><a href="#Hadoop" class="headerlink" title="Hadoop"></a>Hadoop</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ul>
 <li>Hadoop是一个开源的框架，可编写和运行分布式应用处理大规模数据，是专为离线和大规模数据分析而设计的，并不适合那种对几个记录随机读写的在线事务处理模式。 ==不是为了大数据而大数据==</li>
-<li>Hadoop 是以一种可靠、高效、可伸缩的方式进行处理的。Hadoop 是可靠的，因为它假设计算元素和存储会失败，因此它维护多个工作数据副本，确保能够针对失败的节点重新分布处理。Hadoop 是高效的，因为它以并行的方式工作，通过并行处理加快处理速度。Hadoop 还是可伸缩的，能够处理 PB 级数据。<h2 id="核心"><a href="#核心" class="headerlink" title="核心"></a>核心</h2>Hadoop的核心就是==HDFS==和==MapReduce===，Hadoop旗下有很多经典子项目，比如HBase、Hive等，这些都是基于HDFS和MapReduce发展出来的。要想了解Hadoop，就必须知道HDFS和MapReduce是什么。<h3 id="HDFS"><a href="#HDFS" class="headerlink" title="HDFS"></a>HDFS</h3>Hadoop Distributed File System，Hadoop 分布式文件系统<br>高度容错性的系统，适合部署在廉价的机器上，HDFS能提供高吞吐量的数据访问，适合那些有着超大数据集（large data set）的应用程序。<h3 id="MapReduce"><a href="#MapReduce" class="headerlink" title="MapReduce"></a>MapReduce</h3>Mapreduce是一个计算框架，一个处理分布式海量数据的软件框架及计算集群。</li>
+<li>Hadoop 是以一种可靠、高效、可伸缩的方式进行处理的。Hadoop 是可靠的，因为它假设计算元素和存储会失败，因此它维护多个工作数据副本，确保能够针对失败的节点重新分布处理。Hadoop 是高效的，因为它以并行的方式工作，通过并行处理加快处理速度。Hadoop 还是可伸缩的，能够处理 PB 级数据。</li>
 </ul>
+<h2 id="核心"><a href="#核心" class="headerlink" title="核心"></a>核心</h2><p>Hadoop的核心就是==HDFS==和==MapReduce===，Hadoop旗下有很多经典子项目，比如HBase、Hive等，这些都是基于HDFS和MapReduce发展出来的。要想了解Hadoop，就必须知道HDFS和MapReduce是什么。</p>
+<h3 id="HDFS"><a href="#HDFS" class="headerlink" title="HDFS"></a>HDFS</h3><p>Hadoop Distributed File System，Hadoop 分布式文件系统<br>高度容错性的系统，适合部署在廉价的机器上，HDFS能提供高吞吐量的数据访问，<br>适合那些有着超大数据集（large data set）的应用程序。</p>
+<h3 id="MapReduce"><a href="#MapReduce" class="headerlink" title="MapReduce"></a>MapReduce</h3><p>Mapreduce是一个计算框架，一个处理分布式海量数据的软件框架及计算集群。</p>
 <h2 id="用处"><a href="#用处" class="headerlink" title="用处"></a>用处</h2><ul>
 <li>搜索引擎 - 设计Hadoop的初衷，为了针对大规模的网页快速建立索引）</li>
 <li>大数据存储 - 利用Hadoop的分布式存储能力，例如数据备份、数据仓库等。</li>
@@ -125,9 +128,9 @@
 <p>==高扩展性==<br>Hadoop是在可用的计算机集簇间分配数据并完成计算任务的，这些集簇可以方便地扩展到数以千计的节点中。</p>
 <p>==高效性==<br>Hadoop能够在节点之间动态地移动数据，并保证各个节点的动态平衡，因此处理速度非常快。</p>
 <p>==高容错性==<br>Hadoop能够自动保存数据的多个副本，并且能够自动将失败的任务重新分配。</p>
-<p>==低成本==<br>与一体机、商用数据仓库以及QlikView、Yonghong Z-Suite等数据集市相比，hadoop是开源的，项目的软件成本因此会大大降低。</p>
+<p>==低成本==<br>与一体机、商用数据仓库以及QlikView、Yonghong Z-Suite等数据集市相比，hadoop是开源的，<br>项目的软件成本因此会大大降低。</p>
 <blockquote>
-<p>Hadoop设计对硬件需求比较低，只须运行在低廉的商用硬件集群上，而无需昂贵的高可用性机器上。廉价的商用机也就意味着大型集群中出现节点故障情况的概率非常高。这就要求设计HDFS时要充分考虑数据的可靠性，安全性及高可用性。</p>
+<p>Hadoop设计对硬件需求比较低，只须运行在低廉的商用硬件集群上，而无需昂贵的高可用性机器上。<br>廉价的商用机也就意味着大型集群中出现节点故障情况的概率非常高。这就要求设计HDFS时要充分考虑数据的可靠性，<br>安全性及高可用性。</p>
 </blockquote>
 <h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><p>==不适合低延迟数据访问==</p>
 <blockquote>
