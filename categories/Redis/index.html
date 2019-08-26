@@ -344,6 +344,48 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2017/09/12/Redis相关问题二/">Redis相关问题二</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Redis/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-09-12T10:33:59.000Z" itemprop="datePublished">2017-09-12</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Redis-相关问题二"><a href="#Redis-相关问题二" class="headerlink" title="Redis 相关问题二"></a>Redis 相关问题二</h1><ol start="2">
+<li>Redis采用多线程会有哪些问题？</li>
+</ol>
+<p>公司某个项目使用了redis进行数据的快速写入与查询,但在测试中发现它的查询速度完全不敌MySQL.经过代码分析发现,我们的架构师来了个奇葩操作.Redis与MySQL的关联,也就是先从Redis中查出相关数据在循环查询MySQL来获取完整数据,对于这种操作只能认为架构的脑袋被电梯夹了,在没有什么借口可以解释。好多人都是这样,对新技术有点皮毛了解就想”大显身手”,结果就闹得很是尴尬。</p>
+<p>大家知道Redis是非关系型数据库,特点就是”快”,那我们直接把想要的数据全部存入Redis中,不做任何关联。</p>
+<p>这个问题解决之后又发现了一个新问题,Redis在多线程高并发下出现数据错乱,也就是A的数据给了B,B的数据给到了C….</p>
+<p>分析:程序是多线程并且高并发情况,而Redis是单线程,也就是程序在Redis驱动返回结果时发生了张冠李戴的现象.</p>
+<p>解决方法:Redis操作方法添加线程锁(lock),让其他线程排队.</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2017/09/12/Redis相关问题四/">相关问题四</a>
         </h1>
         
@@ -377,48 +419,6 @@
 <li><p>Redis分布式锁操作的原子性，Redis内部如何实现？</p>
 </li>
 </ol>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/09/12/Redis相关问题二/">Redis相关问题二</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Redis/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-09-12T10:33:59.000Z" itemprop="datePublished">2017-09-12</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Redis-相关问题二"><a href="#Redis-相关问题二" class="headerlink" title="Redis 相关问题二"></a>Redis 相关问题二</h1><ol start="2">
-<li>Redis采用多线程会有哪些问题？</li>
-</ol>
-<p>公司某个项目使用了redis进行数据的快速写入与查询,但在测试中发现它的查询速度完全不敌MySQL.经过代码分析发现,我们的架构师来了个奇葩操作.Redis与MySQL的关联,也就是先从Redis中查出相关数据在循环查询MySQL来获取完整数据,对于这种操作只能认为架构的脑袋被电梯夹了,在没有什么借口可以解释。好多人都是这样,对新技术有点皮毛了解就想”大显身手”,结果就闹得很是尴尬。</p>
-<p>大家知道Redis是非关系型数据库,特点就是”快”,那我们直接把想要的数据全部存入Redis中,不做任何关联。</p>
-<p>这个问题解决之后又发现了一个新问题,Redis在多线程高并发下出现数据错乱,也就是A的数据给了B,B的数据给到了C….</p>
-<p>分析:程序是多线程并且高并发情况,而Redis是单线程,也就是程序在Redis驱动返回结果时发生了张冠李戴的现象.</p>
-<p>解决方法:Redis操作方法添加线程锁(lock),让其他线程排队.</p>
 
         
     </section>

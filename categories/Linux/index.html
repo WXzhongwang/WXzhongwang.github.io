@@ -510,6 +510,44 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2017/06/01/Linux 绝对路径 、 相对路径/">Linux绝对路径 、 相对路径</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Linux/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-06-01T08:18:02.000Z" itemprop="datePublished">2017-06-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h2 id="Linux绝对路径-、-相对路径"><a href="#Linux绝对路径-、-相对路径" class="headerlink" title="Linux绝对路径 、 相对路径"></a>Linux绝对路径 、 相对路径</h2><p>Linux的目录结构为树状结构，最顶级的目录为根目录 /。</p>
+<p>其他目录通过挂载可以将它们添加到树中，通过解除挂载可以移除它们。</p>
+<p>绝对路径：<br>路径的写法，由根目录 / 写起，例如： /usr/share/doc 这个目录。</p>
+<p>相对路径：<br>路径的写法，不是由 / 写起，例如由 /usr/share/doc 要切换到 /usr/share/man 底下时，可以写成： cd ../man 这就是相对路径。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2017/06/01/Linux 更改文件属性/">Linux更改文件属性</a>
         </h1>
         
@@ -586,44 +624,6 @@
 <p>可以使用以下语法来设定:<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod <span class="attribute">u</span>=rwx,g=rwx,o=rwx 文件名</span><br></pre></td></tr></table></figure></p>
 <p>Example：将文件权限设置为 -rwxr-xr– ，<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#  touch <span class="keyword">test</span>    <span class="comment">// 创建文件</span></span><br><span class="line"># <span class="keyword">ls</span> -al <span class="keyword">test</span>    <span class="comment">// 查看默认权限</span></span><br><span class="line">-rw-r--r-- 1 root root 0 Nov 15 10:32 <span class="keyword">test</span></span><br><span class="line"># chmod <span class="keyword">u</span>=rwx,<span class="keyword">g</span>=rx,o=r  <span class="keyword">test</span>    <span class="comment">// 修改权限</span></span><br><span class="line"># <span class="keyword">ls</span> -al <span class="keyword">test</span></span><br><span class="line">-rwxr-xr-- 1 root root 0 Nov 15 10:32 <span class="keyword">test</span></span><br></pre></td></tr></table></figure></p>
 <p>而如果是要将权限去掉而不改变其他已存在的权限呢？<br>例如要拿掉全部人的可执行权限，则：<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#  chmod  a-x test1</span></span><br><span class="line"><span class="comment"># ls -al test1</span></span><br><span class="line">-rw-r--r--<span class="number"> 1 </span>root root<span class="number"> 0 </span>Nov<span class="number"> 15 </span>10:32 test1</span><br></pre></td></tr></table></figure></p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/06/01/Linux 绝对路径 、 相对路径/">Linux绝对路径 、 相对路径</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Linux/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-06-01T08:18:02.000Z" itemprop="datePublished">2017-06-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h2 id="Linux绝对路径-、-相对路径"><a href="#Linux绝对路径-、-相对路径" class="headerlink" title="Linux绝对路径 、 相对路径"></a>Linux绝对路径 、 相对路径</h2><p>Linux的目录结构为树状结构，最顶级的目录为根目录 /。</p>
-<p>其他目录通过挂载可以将它们添加到树中，通过解除挂载可以移除它们。</p>
-<p>绝对路径：<br>路径的写法，由根目录 / 写起，例如： /usr/share/doc 这个目录。</p>
-<p>相对路径：<br>路径的写法，不是由 / 写起，例如由 /usr/share/doc 要切换到 /usr/share/man 底下时，可以写成： cd ../man 这就是相对路径。</p>
 
         
     </section>
