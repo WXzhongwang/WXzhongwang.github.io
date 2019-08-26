@@ -131,70 +131,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/08/07/Java基础面试题五/">Java基础面试题五</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2019-08-07T14:37:25.985Z" itemprop="datePublished">2019-08-07</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/面试题/">面试题</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>Java基础面试题五</p>
-<blockquote>
-<p>Q1: &amp; 和 &amp;&amp; 的区别</p>
-</blockquote>
-<p>&amp;是位运算符，表示按位与运算，&amp;&amp;是逻辑运算符，表示逻辑与（and）。</p>
-<blockquote>
-<p>Q2: final, finally, finalize的区别</p>
-</blockquote>
-<ul>
-<li>final 用于声明属性，方法和类，分别表示属性不可变，方法不可覆盖，类不可继承。 </li>
-<li>finally,异常处理语句结构的一部分，表示总是执行。 </li>
-<li>finalize是Object类的一个方法，垃圾收集器执行的时候会调用被回收对象的此方法，可以覆盖此方法提供垃圾收集时的其他资源回收，例如关闭文件等。</li>
-</ul>
-<blockquote>
-<p>Q3: sleep() 和 wait() 有什么区别? </p>
-</blockquote>
-<p>sleep是线程类（Thread）的方法，导致此线程暂停执行指定时间，给执行机会给其他线程，但是监控状态依然保持，到时后会自动恢复。调用sleep不会释放对象锁。 </p>
-<p>wait是Object类的方法，对此对象调用wait方法导致本线程放弃对象锁，进入等待此对象的等待锁定池，只有针对此对象发出notify方法（或not ifyAll）后本线程才进入对象锁定池准备获得对象锁进入运行状态。</p>
-<blockquote>
-<p>Q4: error和exception有什么区别? </p>
-</blockquote>
-<ul>
-<li>error:<br>表示恢复不是不可能但很困难的情况下的一种严重问题。比如说内存溢出。不可能指望程序能处理这样的情况。 </li>
-<li>exception: 表示一种设计或实现问题。也就是说，它表示如果程序运行正常，从不会发生的情况。</li>
-</ul>
-<blockquote>
-<p>Q5: GC是什么? 为什么要有GC? </p>
-</blockquote>
-<p>GC是垃圾收集的意思（Gabage Collection）,内存处理是编程人员容易出现问题的地方，忘记或者错误的内存回收会导致程序或系统的不稳定甚至崩溃，Java提供的GC功能可以自动监测对象是否超过作用域从而达到自动回收内存的目的，Java语言没有提供释放已分配内存的显示操作方法。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">要请求垃圾收集，可以调用下面的方法之一：  </span><br><span class="line"><span class="selector-tag">System</span><span class="selector-class">.gc</span>() </span><br><span class="line"><span class="selector-tag">Runtime</span><span class="selector-class">.getRuntime</span>()<span class="selector-class">.gc</span>()</span><br></pre></td></tr></table></figure></p>
-<p>当然，如果需要，程序员可以在Java程序中显式地使用System.gc()来强制进行一次立即的内存清理。<br>因为显式声明是做堆内存全扫描，也就是FullGC，是需要停止所有的活动的（Stop The World Collection），你的应用能承受这个吗？而其显示调用System.gc()只是给虚拟机一个建议，不一定会执行，因为System.gc()在一个优先级很低的线程中执行。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2019/08/07/Java基础面试题四/">Java基础面试题四</a>
         </h1>
         
@@ -270,7 +206,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/08/07/Java基础面试题二/">Java基础面试题二</a>
+            <a href="/2019/08/07/Java基础面试题五/">Java基础面试题五</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -278,7 +214,7 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2019-08-07T14:37:25.984Z" itemprop="datePublished">2019-08-07</time>
+    <time datetime="2019-08-07T14:37:25.985Z" itemprop="datePublished">2019-08-07</time>
 </a>
 
             
@@ -293,13 +229,36 @@
     
     <section class="article-body markdown-body">
         
-        <p>Java基础面试题二</p>
+        <p>Java基础面试题五</p>
 <blockquote>
-<p>Q1: 什么是死锁(deadlock)？ </p>
+<p>Q1: &amp; 和 &amp;&amp; 的区别</p>
 </blockquote>
-<p>两个进程都在等待对方执行完毕才能继续往下执行的时候就发生了死锁。结果就是两个进程都陷入了无限的等待中。<br>代码表示：<br><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLockDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> void main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">    DieLock dl1 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">true</span>);</span><br><span class="line">    DieLock dl2 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">false</span>);</span><br><span class="line">    dl1.start();</span><br><span class="line">    dl2.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>理想状态下dl1线程为true从if执行先打出”if objA”然后再接着打出”if objB”之后释放A、B的锁对象，之后dl2线程执行else语句打出”else objB”，”else objA”。<br>非理想状态下dl1先打出”if objA”，之后线程dl2执行打出”else objB”，然后1、2线程的锁对象A和B都处于被锁的状态，两个线程争夺锁对象发生死锁现象。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLock</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> flag;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DieLock</span><span class="params">(<span class="keyword">boolean</span> flag)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.flag = flag;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (flag) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                System.out.println(<span class="string">"if objA"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"if objB"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                System.out.println(<span class="string">"else objB"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"else objA"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>&amp;是位运算符，表示按位与运算，&amp;&amp;是逻辑运算符，表示逻辑与（and）。</p>
+<blockquote>
+<p>Q2: final, finally, finalize的区别</p>
+</blockquote>
+<ul>
+<li>final 用于声明属性，方法和类，分别表示属性不可变，方法不可覆盖，类不可继承。 </li>
+<li>finally,异常处理语句结构的一部分，表示总是执行。 </li>
+<li>finalize是Object类的一个方法，垃圾收集器执行的时候会调用被回收对象的此方法，可以覆盖此方法提供垃圾收集时的其他资源回收，例如关闭文件等。</li>
+</ul>
+<blockquote>
+<p>Q3: sleep() 和 wait() 有什么区别? </p>
+</blockquote>
+<p>sleep是线程类（Thread）的方法，导致此线程暂停执行指定时间，给执行机会给其他线程，但是监控状态依然保持，到时后会自动恢复。调用sleep不会释放对象锁。 </p>
+<p>wait是Object类的方法，对此对象调用wait方法导致本线程放弃对象锁，进入等待此对象的等待锁定池，只有针对此对象发出notify方法（或not ifyAll）后本线程才进入对象锁定池准备获得对象锁进入运行状态。</p>
+<blockquote>
+<p>Q4: error和exception有什么区别? </p>
+</blockquote>
+<ul>
+<li>error:<br>表示恢复不是不可能但很困难的情况下的一种严重问题。比如说内存溢出。不可能指望程序能处理这样的情况。 </li>
+<li>exception: 表示一种设计或实现问题。也就是说，它表示如果程序运行正常，从不会发生的情况。</li>
+</ul>
+<blockquote>
+<p>Q5: GC是什么? 为什么要有GC? </p>
+</blockquote>
+<p>GC是垃圾收集的意思（Gabage Collection）,内存处理是编程人员容易出现问题的地方，忘记或者错误的内存回收会导致程序或系统的不稳定甚至崩溃，Java提供的GC功能可以自动监测对象是否超过作用域从而达到自动回收内存的目的，Java语言没有提供释放已分配内存的显示操作方法。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">要请求垃圾收集，可以调用下面的方法之一：  </span><br><span class="line"><span class="selector-tag">System</span><span class="selector-class">.gc</span>() </span><br><span class="line"><span class="selector-tag">Runtime</span><span class="selector-class">.getRuntime</span>()<span class="selector-class">.gc</span>()</span><br></pre></td></tr></table></figure></p>
+<p>当然，如果需要，程序员可以在Java程序中显式地使用System.gc()来强制进行一次立即的内存清理。<br>因为显式声明是做堆内存全扫描，也就是FullGC，是需要停止所有的活动的（Stop The World Collection），你的应用能承受这个吗？而其显示调用System.gc()只是给虚拟机一个建议，不一定会执行，因为System.gc()在一个优先级很低的线程中执行。</p>
 
         
     </section>
@@ -404,6 +363,47 @@
 </blockquote>
 <p>HashSet是由一个hash表来实现的，因此，它的元素是无序的。add()，remove()，contains()方法的时间复杂度是O(1)。 </p>
 <p>TreeSet是由一个树形的结构来实现的，它里面的元素是有序的。因此，add()，remove()，contains()方法的时间复杂度是O(logn)。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2019/08/07/Java基础面试题二/">Java基础面试题二</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-08-07T14:37:25.984Z" itemprop="datePublished">2019-08-07</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/面试题/">面试题</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>Java基础面试题二</p>
+<blockquote>
+<p>Q1: 什么是死锁(deadlock)？ </p>
+</blockquote>
+<p>两个进程都在等待对方执行完毕才能继续往下执行的时候就发生了死锁。结果就是两个进程都陷入了无限的等待中。<br>代码表示：<br><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLockDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> void main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">    DieLock dl1 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">true</span>);</span><br><span class="line">    DieLock dl2 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">false</span>);</span><br><span class="line">    dl1.start();</span><br><span class="line">    dl2.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>理想状态下dl1线程为true从if执行先打出”if objA”然后再接着打出”if objB”之后释放A、B的锁对象，之后dl2线程执行else语句打出”else objB”，”else objA”。<br>非理想状态下dl1先打出”if objA”，之后线程dl2执行打出”else objB”，然后1、2线程的锁对象A和B都处于被锁的状态，两个线程争夺锁对象发生死锁现象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLock</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> flag;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DieLock</span><span class="params">(<span class="keyword">boolean</span> flag)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.flag = flag;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (flag) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                System.out.println(<span class="string">"if objA"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"if objB"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                System.out.println(<span class="string">"else objB"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"else objA"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
         
     </section>
@@ -522,57 +522,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/03/01/Java 并发进阶常见面试题总结/">Java 并发进阶常见面试题总结</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2019-03-01T02:10:00.000Z" itemprop="datePublished">2019-03-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Java-并发进阶常见面试题总结"><a href="#Java-并发进阶常见面试题总结" class="headerlink" title="Java 并发进阶常见面试题总结"></a>Java 并发进阶常见面试题总结</h1><h2 id="synchronized-关键字"><a href="#synchronized-关键字" class="headerlink" title="synchronized 关键字"></a>synchronized 关键字</h2><p>synchronized关键字解决的是多个线程之间访问资源的同步性，synchronized关键字可以保证被它修饰的方法或者代码块在任意时刻只能有一个线程执行。<br>(后半句) 任意时刻只有一个线程在访问</p>
-<p>在 Java 早期版本中，synchronized属于重量级锁，效率低下，因为监视器锁（monitor）是依赖于底层的操作系统的 Mutex Lock 来实现的，Java 的线程是映射到操作系统的原生线程之上的。如果要挂起或者唤醒一个线程，都需要操作系统帮忙完成，而操作系统实现线程之间的切换时需要从用户态转换到内核态，这个状态之间的转换需要相对比较长的时间，时间成本相对较高，这也是为什么早期的 synchronized 效率低的原因。庆幸的是在 Java 6 之后 Java 官方对从JVM层面对synchronized较大优化，所以现在的 synchronized 锁效率也优化得很不错了。JDK1.6对锁的实现引入了大量的优化，如自旋锁、适应性自旋锁、锁消除、锁粗化、偏向锁、轻量级锁等技术来减少锁操作的开销。</p>
-<h2 id="项目中怎么使用-synchronized-关键字"><a href="#项目中怎么使用-synchronized-关键字" class="headerlink" title="项目中怎么使用 synchronized 关键字"></a>项目中怎么使用 synchronized 关键字</h2><p>synchronized关键字最主要的三种使用方式：</p>
-<p>修饰实例方法:<br>作用于当前对象实例加锁，进入同步代码前要获得当前对象实例的锁</p>
-<p>修饰静态方法: 也就是给当前类加锁，会作用于类的所有对象实例，因为静态成员不属于任何一个实例对象，是类成员（ static 表明这是该类的一个静态资源，不管new了多少个对象，只有一份）。所以如果一个线程A调用一个实例对象的非静态 synchronized 方法，而线程B需要调用这个实例对象所属类的静态 synchronized 方法，是允许的，不会发生互斥现象，因为访问静态 synchronized 方法占用的锁是当前类的锁，而访问非静态 synchronized 方法占用的锁是当前实例对象锁。</p>
-<p>修饰代码块: 指定加锁对象，对给定对象加锁，进入同步代码块前要获得给定对象的锁。</p>
-<p>比如以下的：双重校验锁实现单例<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> Singleton uniqueInstance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getUniqueInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="comment">//先判断对象是否已经实例过，没有实例化过才进入加锁代码</span></span><br><span class="line">        <span class="keyword">if</span> (uniqueInstance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">//类对象加锁</span></span><br><span class="line">            <span class="keyword">synchronized</span> (Singleton.class) &#123;</span><br><span class="line">                <span class="keyword">if</span> (uniqueInstance == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    uniqueInstance = <span class="keyword">new</span> Singleton();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> uniqueInstance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<hr>
-<p>另外，需要注意 uniqueInstance 采用 volatile 关键字修饰也是很有必要。</p>
-<p>uniqueInstance 采用 volatile 关键字修饰也是很有必要的， uniqueInstance = new Singleton(); 这段代码其实是分为三步执行：</p>
-<ul>
-<li>为 uniqueInstance 分配内存空间</li>
-<li>初始化 uniqueInstance</li>
-<li>将 uniqueInstance 指向分配的内存地址</li>
-</ul>
-<p>但是由于 JVM 具有指令重排的特性，执行顺序有可能变成 1-&gt;3-&gt;2。指令重排在单线程环境下不会出先问题，但是在多线程环境下会导致一个线程获得还没有初始化的实例。例如，线程 T1 执行了 1 和 3，此时 T2 调用 getUniqueInstance() 后发现 uniqueInstance 不为空，因此返回 uniqueInstance，但此时 uniqueInstance 还未被初始化。</p>
-<p>使用 volatile 可以禁止 JVM 的指令重排，保证在多线程环境下也能正常运行。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2019/03/01/Java 并发基础常见面试题总结/">Java 并发基础常见面试题总结</a>
         </h1>
         
@@ -640,6 +589,57 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2019/03/01/Java 并发进阶常见面试题总结/">Java 并发进阶常见面试题总结</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-03-01T02:10:00.000Z" itemprop="datePublished">2019-03-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Java-并发进阶常见面试题总结"><a href="#Java-并发进阶常见面试题总结" class="headerlink" title="Java 并发进阶常见面试题总结"></a>Java 并发进阶常见面试题总结</h1><h2 id="synchronized-关键字"><a href="#synchronized-关键字" class="headerlink" title="synchronized 关键字"></a>synchronized 关键字</h2><p>synchronized关键字解决的是多个线程之间访问资源的同步性，synchronized关键字可以保证被它修饰的方法或者代码块在任意时刻只能有一个线程执行。<br>(后半句) 任意时刻只有一个线程在访问</p>
+<p>在 Java 早期版本中，synchronized属于重量级锁，效率低下，因为监视器锁（monitor）是依赖于底层的操作系统的 Mutex Lock 来实现的，Java 的线程是映射到操作系统的原生线程之上的。如果要挂起或者唤醒一个线程，都需要操作系统帮忙完成，而操作系统实现线程之间的切换时需要从用户态转换到内核态，这个状态之间的转换需要相对比较长的时间，时间成本相对较高，这也是为什么早期的 synchronized 效率低的原因。庆幸的是在 Java 6 之后 Java 官方对从JVM层面对synchronized较大优化，所以现在的 synchronized 锁效率也优化得很不错了。JDK1.6对锁的实现引入了大量的优化，如自旋锁、适应性自旋锁、锁消除、锁粗化、偏向锁、轻量级锁等技术来减少锁操作的开销。</p>
+<h2 id="项目中怎么使用-synchronized-关键字"><a href="#项目中怎么使用-synchronized-关键字" class="headerlink" title="项目中怎么使用 synchronized 关键字"></a>项目中怎么使用 synchronized 关键字</h2><p>synchronized关键字最主要的三种使用方式：</p>
+<p>修饰实例方法:<br>作用于当前对象实例加锁，进入同步代码前要获得当前对象实例的锁</p>
+<p>修饰静态方法: 也就是给当前类加锁，会作用于类的所有对象实例，因为静态成员不属于任何一个实例对象，是类成员（ static 表明这是该类的一个静态资源，不管new了多少个对象，只有一份）。所以如果一个线程A调用一个实例对象的非静态 synchronized 方法，而线程B需要调用这个实例对象所属类的静态 synchronized 方法，是允许的，不会发生互斥现象，因为访问静态 synchronized 方法占用的锁是当前类的锁，而访问非静态 synchronized 方法占用的锁是当前实例对象锁。</p>
+<p>修饰代码块: 指定加锁对象，对给定对象加锁，进入同步代码块前要获得给定对象的锁。</p>
+<p>比如以下的：双重校验锁实现单例<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> Singleton uniqueInstance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getUniqueInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="comment">//先判断对象是否已经实例过，没有实例化过才进入加锁代码</span></span><br><span class="line">        <span class="keyword">if</span> (uniqueInstance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">//类对象加锁</span></span><br><span class="line">            <span class="keyword">synchronized</span> (Singleton.class) &#123;</span><br><span class="line">                <span class="keyword">if</span> (uniqueInstance == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    uniqueInstance = <span class="keyword">new</span> Singleton();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> uniqueInstance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>另外，需要注意 uniqueInstance 采用 volatile 关键字修饰也是很有必要。</p>
+<p>uniqueInstance 采用 volatile 关键字修饰也是很有必要的， uniqueInstance = new Singleton(); 这段代码其实是分为三步执行：</p>
+<ul>
+<li>为 uniqueInstance 分配内存空间</li>
+<li>初始化 uniqueInstance</li>
+<li>将 uniqueInstance 指向分配的内存地址</li>
+</ul>
+<p>但是由于 JVM 具有指令重排的特性，执行顺序有可能变成 1-&gt;3-&gt;2。指令重排在单线程环境下不会出先问题，但是在多线程环境下会导致一个线程获得还没有初始化的实例。例如，线程 T1 执行了 1 和 3，此时 T2 调用 getUniqueInstance() 后发现 uniqueInstance 不为空，因此返回 uniqueInstance，但此时 uniqueInstance 还未被初始化。</p>
+<p>使用 volatile 可以禁止 JVM 的指令重排，保证在多线程环境下也能正常运行。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2019/03/01/字符型常量和字符串常量的区别/">字符型常量和字符串常量的区别</a>
         </h1>
         
@@ -678,7 +678,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/09/15/JVM课程五/">JVM课程四</a>
+            <a href="/2018/10/01/JVM课程七/">JVM课程七</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -686,7 +686,7 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-09-15T02:55:00.000Z" itemprop="datePublished">2018-09-15</time>
+    <time datetime="2018-10-01T14:22:22.000Z" itemprop="datePublished">2018-10-01</time>
 </a>
 
             
@@ -701,10 +701,46 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="垃圾回收算法和收集器"><a href="#垃圾回收算法和收集器" class="headerlink" title="垃圾回收算法和收集器"></a>垃圾回收算法和收集器</h1><h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><h3 id="引用计数（reference-counting）"><a href="#引用计数（reference-counting）" class="headerlink" title="引用计数（reference counting）"></a>引用计数（reference counting）</h3><p>古老的算法。此对象有一个引用，增加一个计数，删除一个引用减少一个引用。垃圾回收时，只用收集为0的对象。<br>致命问题是无法解决循环引用的问题。</p>
-<h3 id="复制（copying）"><a href="#复制（copying）" class="headerlink" title="复制（copying）"></a>复制（copying）</h3><p>eg：survivor from to<br>此算法将内存空间分为两份。每次使用其中一个区域。（占用空间）<br>垃圾回收时，遍历当前使用的区域，把正在使用中的对象复制到另一个区域中。</p>
-<h3 id="标记清楚（Mark-Sweep）"><a href="#标记清楚（Mark-Sweep）" class="headerlink" title="标记清楚（Mark-Sweep）"></a>标记清楚（Mark-Sweep）</h3><p>执行分为两阶段。<br>第一阶段：从对象根节点开始标记所有被引用的对象。<br>第二阶段：遍历整个堆，把未标记的对象清除，此算法需要暂停整个应用(Stop the world)。<br>同时会产生内存碎片。<br>缺点：<br>1）未使用的内存空间不连续，浪费。<br>2）暂停整个应用。</p>
-<h3 id="标记整理（Mark-Compact）"><a href="#标记整理（Mark-Compact）" class="headerlink" title="标记整理（Mark-Compact）"></a>标记整理（Mark-Compact）</h3><p>执行分为两阶段。<br>第一阶段：从对象根节点开始标记所有被引用的对象。<br>第二阶段：遍历整个堆，把未标记的对象清除，同时把存活的对象压缩到一块，顺序排放，避免碎片问题。<br>避免了复制算法的空间问题。</p>
+        <h2 id="分代收集器"><a href="#分代收集器" class="headerlink" title="分代收集器"></a>分代收集器</h2><p>一起七个 3 + 3 + 1</p>
+<p>在收集器使用的时候都是：新老搭配的。</p>
+<p>新生代收集器：</p>
+<ul>
+<li>Serial</li>
+<li>ParNew</li>
+<li>Parallel Scavenge</li>
+</ul>
+<p>老年代收集器：</p>
+<ul>
+<li>CMS(Concurrent Mark Sweep)</li>
+<li>Serial Old </li>
+<li>Parallel Old</li>
+</ul>
+<p>新老通吃：<br>G1: Garbadge First</p>
+<h2 id="新生代收集器"><a href="#新生代收集器" class="headerlink" title="新生代收集器"></a>新生代收集器</h2><h3 id="Serial-GC-串行"><a href="#Serial-GC-串行" class="headerlink" title="Serial GC(串行)"></a>Serial GC(串行)</h3><p>HotSpot运行在client模式下的默认新生代收集器。只用一个CPU/一个收集器线程去完成GC。<br>“Stop The World” -XX:+UseSerialGC</p>
+<ol>
+<li>启动回收</li>
+<li>暂停其他所有工作线程。新生代回收采用<strong>复制</strong>算法。</li>
+<li>暂停其他所有工作线程。老年代回收采用<strong>标记整理算法</strong>。单线程收集，但是简单高效。<br>在内存占用不大的应用中，效率很高。</li>
+</ol>
+<h3 id="ParNew-并行"><a href="#ParNew-并行" class="headerlink" title="ParNew(并行)"></a>ParNew(并行)</h3><p>其本质是Serial的多线程版本，目的是缩短垃圾收集的时间，也就是占用工作线程时间的问题。单CPU甚至不如Serial，但是在多核CPU配合多线程效果明显。多核CPU + 超线程技术。<br>若VM启用老年代使用CMS(concurrent mark sweep)时候，<br>参数： -XX:+UseConcMarkSweepGC<br>新生代次收集器默认为ParNew。<br>多核CPU时候一般配置为CPU核数。-XX:ParallelGCThreads=<n> 参数控制GC线程数。</n></p>
+<ol>
+<li>启动回收</li>
+<li>暂停其他所有工作线程。新生代回收采用<strong>复制</strong>算法。 (GC线程多个同时工作，并行执行)</li>
+<li>暂停其他所有工作线程。老年代回收采用<strong>标记整理算法</strong>。</li>
+</ol>
+<h3 id="Parallel-Scavenge"><a href="#Parallel-Scavenge" class="headerlink" title="Parallel Scavenge"></a>Parallel Scavenge</h3><p>并行多线程，复制算法。关注点与ParNew不同，关注的是系统吞吐量。</p>
+<p>系统吞吐量 = 运行用户代码时间 /（运行用户代码时间 + 垃圾回收时间）</p>
+<p>停顿时间越短就越适用于用户交互的程序。良好的响应速度提升用户体验。<br>而高吞吐则适用于后台计算而不需要太多交互的任务，可以最高效率的利用CPU时间，<br>尽快的完成程序的运算任务。</p>
+<h2 id="老年代收集器"><a href="#老年代收集器" class="headerlink" title="老年代收集器"></a>老年代收集器</h2><h3 id="Serial-Old"><a href="#Serial-Old" class="headerlink" title="Serial Old"></a>Serial Old</h3><ol>
+<li>启动回收</li>
+<li>暂停其他所有工作线程。新生代回收采用复制算法。</li>
+<li>暂停其他所有工作线程。老年代回收采用标记整理算法。单线程收集，但是简单高效。<br>在内存占用不大的应用中，效率很高。</li>
+</ol>
+<p>可以与任意的新生代收集器配置使用</p>
+<h3 id="Parallel-Old"><a href="#Parallel-Old" class="headerlink" title="Parallel Old"></a>Parallel Old</h3><p>只能配合Parallel Scavenge收集器一起使用。</p>
+<h3 id="CMS-并发"><a href="#CMS-并发" class="headerlink" title="CMS (并发)"></a>CMS (并发)</h3><p>Concurrent Mark Sweep,可以和用户线程同时工作。是一款并发收集器。<br>虽然有理论上表现更好的G1收集器，主流的仍然是CMS收集器。<br>能用于server模式下的JVM优化。能结合新生代的Serial 和 ParNew一起使用。</p>
+<h2 id="G1"><a href="#G1" class="headerlink" title="G1"></a>G1</h2><p>Garbage-First。可以运用在新生代和老年代的直接分区收集。面向服务端的垃圾收集器。 –XX:+UseG1GC<br>将Java堆划分为多个相等的独立区域Region，保留新生代和老年代的概念。但是不再是物理隔离。</p>
+<p>优化方式：<br>1.选择JVM版本<br>2.对于堆区大小的分配<br>3.垃圾回收的方式</p>
 
         
     </section>
@@ -716,7 +752,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/09/15/JVM课程四/">JVM课程四</a>
+            <a href="/2018/09/20/JVM课程八/">JVM课程八</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -724,7 +760,7 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-09-15T02:55:00.000Z" itemprop="datePublished">2018-09-15</time>
+    <time datetime="2018-09-20T06:55:00.000Z" itemprop="datePublished">2018-09-20</time>
 </a>
 
             
@@ -739,19 +775,25 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="JVM分代策略"><a href="#JVM分代策略" class="headerlink" title="JVM分代策略"></a>JVM分代策略</h1><h2 id="新生代"><a href="#新生代" class="headerlink" title="新生代"></a>新生代</h2><p>三个区的默认存放空间是Eden : From : To = 8: 1: 1</p>
-<p>目的是因为HotSpot采用复制算法来回收新生代，设置这个比例是为了充分利用空间。</p>
-<p>新生成的对象优先存放在新生代中，在新生代中，常规应用采取一次垃圾收集可以回收70%-90%。</p>
-<p>新生成的对象在Eden区中分配（大对象除外，直接老年代）。</p>
-<p>当Eden没有足够空间，虚拟机发起一次Minor GC。（只会收集一次Eden区）</p>
-<p>GC开始时，对象只会存在于Eden区和From Suvivor区，To Survivor为空。用于复制</p>
-<p>GC进行时，Eden区中所有存活的对象会被复制到To Survivor(连续存储)，<br>而在From Survivor区中仍存活的对象，会根据年龄决定去向。<br>阈值为15，每熬过一次GC,年龄就加1，GC分代年龄值存在对象的header中，<br>大于15，移至老年代中，没有达到15的复制到To Survivor。<br>之后，From和To交换角色。From被清空，变成下一次GC的To区， 而To区成为下一次GC的From区。</p>
-<p>无论如何，保证To区域在下一轮GC中为空的。</p>
-<blockquote>
-<p>note: 当TO区域用于复制From中的对象时，出现空间不足的时候，需要依赖老年代分配内存进行存放。</p>
-</blockquote>
-<h2 id="老年代"><a href="#老年代" class="headerlink" title="老年代"></a>老年代</h2><p>在新生代中经历了多次的GC后存活下来的对象会进入老年代。<br>老年代的对象生命周期较长，存活率比较高，在老年代中进行GC的频率较低，效率也较低。</p>
-<h2 id="永久代"><a href="#永久代" class="headerlink" title="永久代"></a>永久代</h2><p>永久代中存放类信息，常量，静态变量，即时编译器编译后的代码等数据。<br>对此区域，Java虚拟机规范指出可以不进行垃圾收集。一般而言不会进行垃圾回收。</p>
+        <h1 id="JVM性能监测工具"><a href="#JVM性能监测工具" class="headerlink" title="JVM性能监测工具"></a>JVM性能监测工具</h1><p><strong>jps</strong><br>      查询运行于jvm的线程jps -l</p>
+<p><strong>jstat</strong><br>        查看HotSpot VM运行的信息<br>        jstat -gc pid 毫秒数 次数</p>
+<pre><code>From Created
+From Used
+To Created 
+To Used
+Eden Created
+Eden Used
+Old Created
+Old Used
+Permanent Created
+Permanent Used
+Young GC 次收集器收集次数
+Young GC Time 次收集器时间
+Full GC  全收集次数
+Full GC Time 全收集时间
+GC Time 收集总时间
+S0C S1C S0U S1U EC EU OC OU PC PU YGC YGCT FGC FGCT GCT
+</code></pre><p><strong>jvisualvm</strong><br>        可视化工具<br>        jvisualvm</p>
 
         
     </section>
@@ -761,7 +803,7 @@
 
 
 <nav class="page-nav">
-    <span class="page-number current">1</span><a class="page-number" href="/categories/Java/page/2/">2</a><a class="page-number" href="/categories/Java/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/categories/Java/page/7/">7</a><a class="extend next" rel="next" href="/categories/Java/page/2/">下一页 &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/categories/Java/page/2/">2</a><a class="page-number" href="/categories/Java/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/categories/Java/page/8/">8</a><a class="extend next" rel="next" href="/categories/Java/page/2/">下一页 &raquo;</a>
 </nav>
 
 

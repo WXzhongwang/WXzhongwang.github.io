@@ -131,6 +131,246 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/08/15/HashMap 和 HashTable的区别/">HashMap 和 HashTable的区别</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/5/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-08-15T15:20:00.000Z" itemprop="datePublished">2018-08-15</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java容器/">Java容器</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="HashMap-和-HashTable的区别"><a href="#HashMap-和-HashTable的区别" class="headerlink" title="HashMap 和 HashTable的区别"></a>HashMap 和 HashTable的区别</h1><h2 id="区别："><a href="#区别：" class="headerlink" title="区别："></a>区别：</h2><p>1）线程是否安全： </p>
+<p>HashMap 是非线程安全的，HashTable 是线程安全的；HashTable 内部的方法基本都经过synchronized 修饰。（如果你要保证线程安全的话就使用 ConcurrentHashMap 吧！）；</p>
+<p>2）效率： </p>
+<p>因为线程安全的问题，HashMap 要比 HashTable 效率高一点。另外，HashTable 基本被淘汰，不要在代码中使用它；</p>
+<p>3）对Null key 和Null value的支持：</p>
+<p>HashMap 中，null 可以作为键，这样的键只有一个，可以有一个或多个键所对应的值为 null。<br>但是在 HashTable 中 put 进的键值只要有一个 null，直接抛出 NullPointerException。</p>
+<p>4）初始容量大小和每次扩充容量大小的不同 ：</p>
+<p>①Hashtable 默认的初始大小为11，之后每次扩充，容量变为原来的2n+1。<br>HashMap 默认的初始化大小为16。之后每次扩充，容量变为原来的2倍。</p>
+<p>②创建时如果给定了容量初始值，那么 Hashtable 会直接使用你给定的大小。<br>而 HashMap 会将其扩充为2的幂次方大小（HashMap 中的tableSizeFor()方法保证）。8 16 32 64 …<br>也就是说 HashMap 总是使用2的幂作为哈希表的大小。</p>
+<p>5) 底层数据结构：</p>
+<p> JDK1.8 以后的 HashMap 在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为8）时，将链表转化为红黑树，以减少搜索时间。Hashtable 没有这样的机制。</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">HasMap 中带有初始容量的构造函数：</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity, <span class="keyword">float</span> loadFactor)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (initialCapacity &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Illegal initial capacity: "</span> +</span><br><span class="line">                                               initialCapacity);</span><br><span class="line">        <span class="keyword">if</span> (initialCapacity &gt; MAXIMUM_CAPACITY)</span><br><span class="line">            initialCapacity = MAXIMUM_CAPACITY;</span><br><span class="line">        <span class="keyword">if</span> (loadFactor &lt;= <span class="number">0</span> || Float.isNaN(loadFactor))</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Illegal load factor: "</span> +</span><br><span class="line">                                               loadFactor);</span><br><span class="line">        <span class="keyword">this</span>.loadFactor = loadFactor;</span><br><span class="line">        <span class="keyword">this</span>.threshold = tableSizeFor(initialCapacity);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(initialCapacity, DEFAULT_LOAD_FACTOR);</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">下面这个方法保证了 HashMap 总是使用<span class="number">2</span>的幂作为哈希表的大小。</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">static</span> <span class="keyword">final</span> <span class="function"><span class="keyword">int</span> <span class="title">tableSizeFor</span><span class="params">(<span class="keyword">int</span> cap)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = cap - <span class="number">1</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">2</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">4</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">8</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">16</span>;</span><br><span class="line">        <span class="keyword">return</span> (n &lt; <span class="number">0</span>) ? <span class="number">1</span> : (n &gt;= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="HashMap-和-HashSet区别"><a href="#HashMap-和-HashSet区别" class="headerlink" title="HashMap 和 HashSet区别"></a>HashMap 和 HashSet区别</h2><p>如果你看过 HashSet 源码的话就应该知道：HashSet 底层就是基于 HashMap 实现的。（HashSet 的源码非常非常少，因为除了 clone()、writeObject()、readObject()是 HashSet 自己不得不实现之外，其他方法都是直接调用 HashMap 中的方法。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">HashMap</th>
+<th style="text-align:center">HashSet</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">实现了Map接口</td>
+<td style="text-align:center">实现Set接口</td>
+</tr>
+<tr>
+<td style="text-align:center">存储键值对</td>
+<td style="text-align:center">仅存储对象</td>
+</tr>
+<tr>
+<td style="text-align:center">调用 <code>put（）</code>向map中添加元素</td>
+<td style="text-align:center">调用 <code>add（）</code>方法向Set中添加元素</td>
+</tr>
+</tbody>
+</table>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/08/15/Java容器（一）/">Java容器（一）</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/5/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-08-15T15:20:00.000Z" itemprop="datePublished">2018-08-15</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java容器/">Java容器</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Java容器（一）"><a href="#Java容器（一）" class="headerlink" title="Java容器（一）"></a>Java容器（一）</h1><h2 id="说说List-Set-Map三者的区别？"><a href="#说说List-Set-Map三者的区别？" class="headerlink" title="说说List,Set,Map三者的区别？"></a>说说List,Set,Map三者的区别？</h2><ul>
+<li>List 有序</li>
+<li>Set  唯一</li>
+<li>Map  使用键值对存储。</li>
+</ul>
+<h2 id="Arraylist-与-LinkedList-区别"><a href="#Arraylist-与-LinkedList-区别" class="headerlink" title="Arraylist 与 LinkedList 区别?"></a>Arraylist 与 LinkedList 区别?</h2><ol>
+<li>是否保证线程安全</li>
+</ol>
+<p>ArrayList 和 LinkedList 都是不同步的，也就是不保证线程安全；</p>
+<ol start="2">
+<li>底层数据结构</li>
+</ol>
+<p>Arraylist 底层使用的是 Object 数组；LinkedList 底层使用的是 双向链表 数据结构 （JDK1.6还是双向循环链表）</p>
+<ol start="3">
+<li>插入和删除是否受元素位置的影响</li>
+</ol>
+<p>Arraylist插入和删除受元素所在的位置的影响。</p>
+<p>① ArrayList 采用数组存储，所以插入和删除元素的时间复杂度受元素位置的影响。<br>比如：执行add(E e)方法的时候， ArrayList 会默认在将指定的元素追加到此列表的末尾，这种情况时间复杂度就是O(1)。<br>但是如果要在指定位置 i 插入和删除元素的话（add(int index, E element)）时间复杂度就为 O(n-i)。因为在进行上述操作的时候集合中第 i 和第 i 个元素之后的(n-i)个元素都要执行向后位/向前移一位的操作。</p>
+<p>② LinkedList 采用链表存储，所以插入，删除元素时间复杂度不受元素位置的影响，都是近似 O（1）而数组为近似 O（n）。</p>
+<ol start="4">
+<li>是否支持快速随机访问</li>
+</ol>
+<p>基于数组结构的ArrayList是可以的。快速随机访问就是通过元素的序号快速获取元素对象(对应于get(int index)方法)。</p>
+<p>LinkedList 不支持高效的随机元素访问。</p>
+<ol start="5">
+<li>内存空间占用</li>
+</ol>
+<p>ArrayList的空间浪费主要体现在在list列表的结尾会预留一定的容量空间，而LinkedList的空间花费则体现在它的每一个元素都需要消耗比ArrayList更多的空间（因为要存放直接后继和直接前驱以及数据）。</p>
+<h2 id="快速随机访问接口：RandomAccess"><a href="#快速随机访问接口：RandomAccess" class="headerlink" title="快速随机访问接口：RandomAccess"></a>快速随机访问接口：RandomAccess</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">public<span class="built_in"> interface </span>RandomAccess &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>查看源码我们发现实际上 RandomAccess 接口中什么都没有定义。所以，在我看来 RandomAccess 接口不过是一个标识罢了。标识什么？ 标识实现这个接口的类具有随机访问功能。</p>
+<p>RandomAccess 接口只是标识，并不是说 ArrayList 实现 RandomAccess 接口才具有快速随机访问功能的！</p>
+<p>List遍历<br><figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">实现了 RandomAccess 接口的<span class="built_in">list</span>，优先选择普通 <span class="keyword">for</span> 循环 ，其次 <span class="keyword">foreach</span>,</span><br><span class="line">未实现 RandomAccess 接口的<span class="built_in">list</span>，优先选择iterator遍历（<span class="keyword">foreach</span>遍历底层也是通过iterator实现的,），大<span class="built_in">size</span>的数据，千万不要使用普通<span class="keyword">for</span>循环</span><br></pre></td></tr></table></figure></p>
+<h2 id="ArrayList-与-Vector-区别呢-为什么要用Arraylist取代Vector呢？"><a href="#ArrayList-与-Vector-区别呢-为什么要用Arraylist取代Vector呢？" class="headerlink" title="ArrayList 与 Vector 区别呢?为什么要用Arraylist取代Vector呢？"></a>ArrayList 与 Vector 区别呢?为什么要用Arraylist取代Vector呢？</h2><p>Vector类的所有方法都是同步的。可以由两个线程安全地访问一个Vector对象、但是一个线程访问Vector的话代码要在同步操作上耗费大量的时间。</p>
+<p>Arraylist不是同步的，所以在不需要保证线程安全时建议使用Arraylist。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/08/15/HashMap 的三个问题/">HashMap 的三个问题</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/5/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-08-15T15:00:00.000Z" itemprop="datePublished">2018-08-15</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java容器/">Java容器</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="HashMap-的三个问题"><a href="#HashMap-的三个问题" class="headerlink" title="HashMap 的三个问题"></a>HashMap 的三个问题</h1><p>##问题1：HashM安排的初始长度，为什么？</p>
+<pre><code>初始长度是 16，每次扩展或者是手动初始化，长度必须是 2的幂。
+
+因为： index = HashCode(Key) &amp; (length - 1)， 如果 length是 2的 幂的话，则 length - 1就是 全是 1的二进制数，比如  16 - 1 = 1111，这样相当于是 坐落在长度为 length的hashMap上的位置只和 HashCode的后四位有关，这只要给出的HashCode算法本身分布均匀，算出的index就是分布均匀的。
+</code></pre><p>　　因为HashMap的key是int类型，所以最大值是2^31次方，但是查看源码，当到达 2^30次方，即 </p>
+<pre><code>MAXIMUM_CAPACITY,之后，便不再进行扩容。
+</code></pre><h2 id="问题2：高并发情况下，为什么HashMap出现死锁？"><a href="#问题2：高并发情况下，为什么HashMap出现死锁？" class="headerlink" title="问题2：高并发情况下，为什么HashMap出现死锁？"></a>问题2：高并发情况下，为什么HashMap出现死锁？</h2><pre><code>我们看到默认HashMap的初始长度是16，比较小，每一次push的时候，都会检查当前容量是否超过 预定的 threshold，如果超过，扩大HashMap容量一倍，整个表里的所有元素都需要按照新的hash算法被算一遍，这个代价较大。提到死锁，对于 HashMap来说，貌似只能和链表操作有关。
+
+正常ReHash过程，可以看到，每个元素重新算hash值，将链表翻转（目的遍历每个bucket上的链表还是用的是头插法，时间复杂度最低），放到对应的bucket上的链表中
+</code></pre><h3 id="问题3：java8对hashMap做了什么优化？"><a href="#问题3：java8对hashMap做了什么优化？" class="headerlink" title="问题3：java8对hashMap做了什么优化？"></a>问题3：java8对hashMap做了什么优化？</h3><pre><code>简单说： java7中 hashMap每个桶中放置的是链表，这样当hash碰撞严重时，会导致个别位置链表长度过长，从而影响性能。
+
+java8中，HashMap 每个桶中当链表长度超过8之后，会将链表转换成红黑树，从而提升增删改查的速度。
+</code></pre>
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/08/10/计算机网络相关问题/">计算机网络相关问题</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/5/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-08-10T14:55:00.000Z" itemprop="datePublished">2018-08-10</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/计算机网络/">计算机网络</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="计算机网络相关问题"><a href="#计算机网络相关问题" class="headerlink" title="计算机网络相关问题"></a>计算机网络相关问题</h1><h2 id="①TCP三次握手和四次挥手"><a href="#①TCP三次握手和四次挥手" class="headerlink" title="①TCP三次握手和四次挥手"></a>①TCP三次握手和四次挥手</h2><h3 id="三次握手（创建）"><a href="#三次握手（创建）" class="headerlink" title="三次握手（创建）"></a>三次握手（创建）</h3><p>1）客户端–发送带有SYN标志的数据包–一次握手–服务端<br>2）服务端–发送带有SYN/ACK标志的数据包–二次握手–客户端<br>3）客户端–发送带有带有ACK标志的数据包–三次握手–服务端</p>
+<p>第二次握手中，服务端为何要传回SYN（发起一个新链接）？</p>
+<blockquote>
+<p>接收端传回发送端所发送的SYN是为了告诉发送端，我接收到的信息确实就是你所发送的信号了。</p>
+</blockquote>
+<p>双方通信无误必须是两者互相发送信息都无误。传了SYN，证明发送方到接收方的通道没有问题，但是接收方到发送方的通道还需要ACK信号来进行验证。</p>
+<h3 id="四次挥手（断开）"><a href="#四次挥手（断开）" class="headerlink" title="四次挥手（断开）"></a>四次挥手（断开）</h3><p>1）客户端-发送一个FIN，用来关闭客户端到服务器的数据传送<br>2）服务器-收到这个FIN，发回一个ACK，确认序号为收到的序号加1。和SYN一样，一个FIN将占用一个序号<br>3）服务器-关闭与客户端的连接，发送一个FIN给客户端<br>4）客户端-发回ACK报文确认，并将确认序号设置为收到序号加1</p>
+<h2 id="②在浏览器中输入url地址-gt-gt-显示主页的过程-完整描述"><a href="#②在浏览器中输入url地址-gt-gt-显示主页的过程-完整描述" class="headerlink" title="②在浏览器中输入url地址-&gt;&gt;显示主页的过程(完整描述)"></a>②在浏览器中输入url地址-&gt;&gt;显示主页的过程(完整描述)</h2><p>域名解析 –&gt; 发起TCP的3次握手 –&gt; 建立TCP连接后发起http请求 –&gt; 服务器响应http请求，浏览器得到html代码 –&gt; 浏览器解析html代码，并请求html代码中的资源（如js、css、图片等） –&gt; 浏览器对页面进行渲染呈现给用户</p>
+<h2 id="③HTTP和HTTPS的区别"><a href="#③HTTP和HTTPS的区别" class="headerlink" title="③HTTP和HTTPS的区别"></a>③HTTP和HTTPS的区别</h2><h2 id="④TCP、UDP协议的区别"><a href="#④TCP、UDP协议的区别" class="headerlink" title="④TCP、UDP协议的区别"></a>④TCP、UDP协议的区别</h2><p>UDP:</p>
+<blockquote>
+<p>UDP在传送数据之前不需要先建立连接，远地主机在收到UDP报文后，不需要给出任何确认。虽然UDP不提供可靠交付，但在某些情况下UDP确是一种最有效的工作方式（一般用于即时通信），比如： QQ语音 QQ视频 、直播等等</p>
+</blockquote>
+<p>1）无连接<br>2）尽力交付，不保证可靠<br>3）面向报文<br>4）没有拥塞控制（网络出现拥塞不会使源主机的发送速率降低，对实时应用很有用）<br>5）支持一对一，一对多，多对多交互通信<br>6）UDP的首部开销小，只有8个字节，比TCP的20个字节的首部要短。</p>
+<p>TCP:</p>
+<blockquote>
+<p>TCP提供面向连接的服务。在传送数据之前必须先建立连接，数据传送结束后要释放连接。TCP不提供广播或多播服务。由于TCP要提供可靠的，面向连接的运输服务（TCP的可靠体现在TCP在传递数据之前，会有三次握手来建立连接，而且在数据传递时，有确认、窗口、重传、拥塞控制机制，在数据传完后，还会断开连接，四次挥手，用来节约系统资源），这一难以避免增加了许多开销，如确认，流量控制，计时器以及连接管理等。这不仅使协议数据单元的首部增大很多，还要占用许多处理机资源。TCP一般用于文件传输、发送和接收邮件、远程登录等场景。</p>
+</blockquote>
+<p>1)面向连接（就好像打电话一样，通话前需要先拨号建立连接，通话结束后要挂机释放连接）<br>2)TCP连接只能是点对点的（一对一）<br>3)可靠(通过TCP连接传送的数据，无差错、不丢失、不重复、并且按序到达)<br>4)TCP提供全双工通信。TCP允许通信双方的应用进程在任何时候都能发送数据。TCP连接的两端都设有发送缓存和接收缓存，用来临时存放双方通信的数据<br>5)面向字节流。TCP中的“流”（stream）指的是流入进程或从进程流出的字节序列。“面向字节流”的含义是：虽然应用程序和TCP的交互是一次一个数据块（大小不等），但TCP把应用程序交下来的数据仅仅看成是一连串的无结构的字节流。</p>
+<h2 id="⑤常见的状态码"><a href="#⑤常见的状态码" class="headerlink" title="⑤常见的状态码"></a>⑤常见的状态码</h2><p>1XX informational（信息性状态码） 请求正在处理</p>
+<p>2XX Success(成功状态码) 请求正常处理完毕</p>
+<p>3XX Redirection(重定向状态码) 需要进行附加操作才能完成请求</p>
+<p>4XX Client Error(客户端错误状态码) 服务无法处理请求</p>
+<p>5XX Server Error（服务端错误状态码） 服务端处理请求出错</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/08/10/计算机网络知识回顾/">计算机网络知识回顾</a>
         </h1>
         
@@ -207,63 +447,6 @@
 <h2 id="物理层"><a href="#物理层" class="headerlink" title="物理层"></a>物理层</h2><blockquote>
 <p>在物理层上所传送的数据单位是比特。实现相邻计算机节点之间比特流的透明传送，尽可能屏蔽掉具体传输介质和物理设备的差异。</p>
 </blockquote>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/08/10/计算机网络相关问题/">计算机网络相关问题</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/5/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-08-10T14:55:00.000Z" itemprop="datePublished">2018-08-10</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/计算机网络/">计算机网络</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="计算机网络相关问题"><a href="#计算机网络相关问题" class="headerlink" title="计算机网络相关问题"></a>计算机网络相关问题</h1><h2 id="①TCP三次握手和四次挥手"><a href="#①TCP三次握手和四次挥手" class="headerlink" title="①TCP三次握手和四次挥手"></a>①TCP三次握手和四次挥手</h2><h3 id="三次握手（创建）"><a href="#三次握手（创建）" class="headerlink" title="三次握手（创建）"></a>三次握手（创建）</h3><p>1）客户端–发送带有SYN标志的数据包–一次握手–服务端<br>2）服务端–发送带有SYN/ACK标志的数据包–二次握手–客户端<br>3）客户端–发送带有带有ACK标志的数据包–三次握手–服务端</p>
-<p>第二次握手中，服务端为何要传回SYN（发起一个新链接）？</p>
-<blockquote>
-<p>接收端传回发送端所发送的SYN是为了告诉发送端，我接收到的信息确实就是你所发送的信号了。</p>
-</blockquote>
-<p>双方通信无误必须是两者互相发送信息都无误。传了SYN，证明发送方到接收方的通道没有问题，但是接收方到发送方的通道还需要ACK信号来进行验证。</p>
-<h3 id="四次挥手（断开）"><a href="#四次挥手（断开）" class="headerlink" title="四次挥手（断开）"></a>四次挥手（断开）</h3><p>1）客户端-发送一个FIN，用来关闭客户端到服务器的数据传送<br>2）服务器-收到这个FIN，发回一个ACK，确认序号为收到的序号加1。和SYN一样，一个FIN将占用一个序号<br>3）服务器-关闭与客户端的连接，发送一个FIN给客户端<br>4）客户端-发回ACK报文确认，并将确认序号设置为收到序号加1</p>
-<h2 id="②在浏览器中输入url地址-gt-gt-显示主页的过程-完整描述"><a href="#②在浏览器中输入url地址-gt-gt-显示主页的过程-完整描述" class="headerlink" title="②在浏览器中输入url地址-&gt;&gt;显示主页的过程(完整描述)"></a>②在浏览器中输入url地址-&gt;&gt;显示主页的过程(完整描述)</h2><p>域名解析 –&gt; 发起TCP的3次握手 –&gt; 建立TCP连接后发起http请求 –&gt; 服务器响应http请求，浏览器得到html代码 –&gt; 浏览器解析html代码，并请求html代码中的资源（如js、css、图片等） –&gt; 浏览器对页面进行渲染呈现给用户</p>
-<h2 id="③HTTP和HTTPS的区别"><a href="#③HTTP和HTTPS的区别" class="headerlink" title="③HTTP和HTTPS的区别"></a>③HTTP和HTTPS的区别</h2><h2 id="④TCP、UDP协议的区别"><a href="#④TCP、UDP协议的区别" class="headerlink" title="④TCP、UDP协议的区别"></a>④TCP、UDP协议的区别</h2><p>UDP:</p>
-<blockquote>
-<p>UDP在传送数据之前不需要先建立连接，远地主机在收到UDP报文后，不需要给出任何确认。虽然UDP不提供可靠交付，但在某些情况下UDP确是一种最有效的工作方式（一般用于即时通信），比如： QQ语音 QQ视频 、直播等等</p>
-</blockquote>
-<p>1）无连接<br>2）尽力交付，不保证可靠<br>3）面向报文<br>4）没有拥塞控制（网络出现拥塞不会使源主机的发送速率降低，对实时应用很有用）<br>5）支持一对一，一对多，多对多交互通信<br>6）UDP的首部开销小，只有8个字节，比TCP的20个字节的首部要短。</p>
-<p>TCP:</p>
-<blockquote>
-<p>TCP提供面向连接的服务。在传送数据之前必须先建立连接，数据传送结束后要释放连接。TCP不提供广播或多播服务。由于TCP要提供可靠的，面向连接的运输服务（TCP的可靠体现在TCP在传递数据之前，会有三次握手来建立连接，而且在数据传递时，有确认、窗口、重传、拥塞控制机制，在数据传完后，还会断开连接，四次挥手，用来节约系统资源），这一难以避免增加了许多开销，如确认，流量控制，计时器以及连接管理等。这不仅使协议数据单元的首部增大很多，还要占用许多处理机资源。TCP一般用于文件传输、发送和接收邮件、远程登录等场景。</p>
-</blockquote>
-<p>1)面向连接（就好像打电话一样，通话前需要先拨号建立连接，通话结束后要挂机释放连接）<br>2)TCP连接只能是点对点的（一对一）<br>3)可靠(通过TCP连接传送的数据，无差错、不丢失、不重复、并且按序到达)<br>4)TCP提供全双工通信。TCP允许通信双方的应用进程在任何时候都能发送数据。TCP连接的两端都设有发送缓存和接收缓存，用来临时存放双方通信的数据<br>5)面向字节流。TCP中的“流”（stream）指的是流入进程或从进程流出的字节序列。“面向字节流”的含义是：虽然应用程序和TCP的交互是一次一个数据块（大小不等），但TCP把应用程序交下来的数据仅仅看成是一连串的无结构的字节流。</p>
-<h2 id="⑤常见的状态码"><a href="#⑤常见的状态码" class="headerlink" title="⑤常见的状态码"></a>⑤常见的状态码</h2><p>1XX informational（信息性状态码） 请求正在处理</p>
-<p>2XX Success(成功状态码) 请求正常处理完毕</p>
-<p>3XX Redirection(重定向状态码) 需要进行附加操作才能完成请求</p>
-<p>4XX Client Error(客户端错误状态码) 服务无法处理请求</p>
-<p>5XX Server Error（服务端错误状态码） 服务端处理请求出错</p>
 
         
     </section>
@@ -549,142 +732,6 @@
 <p>zoo.cfg文件修改，2888端口，添加集群机器<br>server.1=196.128.3.1:2888:3888<br>server.2=196.128.3.2:2888:3888<br>server.3=196.128.3.3:2888:3888</p>
 <p>选举模式 ==&gt; 过半选举（过半原则）<br>Mode: leader<br>Mode: follower</p>
 <p>查看状态：<br>sh zkServer.sh status</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/06/03/Spring Boot/">Spring Boot 介绍</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/5/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-06-03T04:00:00.000Z" itemprop="datePublished">2018-06-03</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Spring/">Spring</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h2 id="Spring-Boot-介绍"><a href="#Spring-Boot-介绍" class="headerlink" title="Spring Boot 介绍"></a>Spring Boot 介绍</h2><p>Spring Boot 提供了一组工具只需要极少的配置就可以快速的构建并启动基于 Spring 的应用程序。解决了传统 Spring 开发需要配置大量配置文件的痛点，同时 Spring Boot 对于第三方库设置了合理的默认值，可以快速的构建起应用程序。当然 Spring Boot 也可以轻松的自定义各种配置，无论是在开发的初始阶段还是投入生成的后期阶段。</p>
-<h2 id="Spring-Boot-优点"><a href="#Spring-Boot-优点" class="headerlink" title="Spring Boot 优点"></a>Spring Boot 优点</h2><p>1.快速的创建可以独立运行的 Spring 项目以及与主流框架的集成。</p>
-<p>2.使用嵌入式的 Servlet 容器，用于不需要打成war包。</p>
-<p>3.使用很多的启动器（Starters）自动依赖与版本控制。</p>
-<p>4.大量的自动化配置，简化了开发，当然，我们也可以修改默认值。</p>
-<p>5.不需要配置 XML 文件，无代码生成，开箱即用。</p>
-<p>6.准生产环境的运行时应用监控。</p>
-<p>7.与云计算的天然集成。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/06/03/Spring源码/">Spring源码</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/5/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-06-03T04:00:00.000Z" itemprop="datePublished">2018-06-03</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Spring/">Spring</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>#Spring源码</p>
-<h2 id="spring-jcl日志源码分析"><a href="#spring-jcl日志源码分析" class="headerlink" title="spring-jcl日志源码分析"></a>spring-jcl日志源码分析</h2><p>1.spring的基本应用和spring源码的编译</p>
-<p>2.java混乱的日志系统，JUL,JCL,log4j,slf4j</p>
-<h2 id="spring-aop源码分析"><a href="#spring-aop源码分析" class="headerlink" title="spring aop源码分析"></a>spring aop源码分析</h2><p>1.AspectJ和spring AOP, aspectj的静态织入</p>
-<p>2.JDK动态代理的源码分析，JDK如何操作字节码</p>
-<p>3.spring通过cglib完成AOP,cglib如何完成方法拦截</p>
-<p>4.AnnotationAwareAspectJAutoProxyCreator是如何实现代理织入的</p>
-<h2 id="spring-IOC、AOP、MVC源码分析"><a href="#spring-IOC、AOP、MVC源码分析" class="headerlink" title="spring IOC、AOP、MVC源码分析"></a>spring IOC、AOP、MVC源码分析</h2><p>1.BeanDefinition作用，如何改变bean的行为</p>
-<p>2.BeanDefinitionRegistry的作用，源码分析</p>
-<p>3.BeanNameGenerator如何改变beanName的生成策略</p>
-<p>4.BeanPostProcessor在bean实例化过程中可以做什么？经典应用场景有哪些？</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/05/08/JVM/">JVM相关问题</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/5/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-05-08T04:22:30.000Z" itemprop="datePublished">2018-05-08</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>JVM,什么是JVM?</p>
-<p>Java语言虚拟机后，Java语言在不同平台上运行时不需要重新编译。Java语言使用Java虚拟机屏蔽了与具体平台相关的信息，使得Java语言编译程序只需生成在Java虚拟机上运行的目标代码（字节码），就可以在多种平台上不加修改地运行。</p>
-<p>Java虚拟机在软件层层面屏蔽了底层硬件、底层指令的细节。<br>跨平台：程序可以运行基于不同平台版本的jvm就可以了。</p>
-<p>数据类型<br>Java虚拟机中，数据类型可以分为两类：基本类型和引用类型。基本类型的变量保存原始值，即：他代表的值就是数值本身；而引用类型的变量保存引用值。“引用值”代表了某个对象的引用，而不是对象本身，对象本身存放在这个引用值所表示的地址的位置。</p>
-<p>基本类型包括：byte,short,int,long,char,float,double,Boolean</p>
-<p>引用类型包括：类类型，接口类型和数组。</p>
-<p>App.java  源码</p>
-<p>编译时环境（jdk）</p>
-<p>App.class 字节码</p>
-<p>JVM<br>Java虚拟机：在软件层层面屏蔽了底层硬件、底层指令的细节。 运行时环境 (jre) </p>
-<p>操作系统可以运行的文件 机器码</p>
-<p>类加载器 ClassLoader  JVM将class文件加载至内存模块。<br>运行时数据区 Runtime Data Area</p>
-<pre><code>线程共享区：  Heap堆， Method Area方法区
-线程独占区：  程序计数器，虚拟机栈，本地方法栈
-</code></pre><p>程序最小单元：线程</p>
 
         
     </section>

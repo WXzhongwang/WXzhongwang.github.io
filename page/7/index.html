@@ -131,7 +131,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/04/07/Dubbo/">Dubbo</a>
+            <a href="/2018/04/08/Mockjs/">Mock.js</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -139,13 +139,13 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-04-07T02:10:00.000Z" itemprop="datePublished">2018-04-07</time>
+    <time datetime="2018-04-08T05:22:02.000Z" itemprop="datePublished">2018-04-08</time>
 </a>
 
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Dubbo/">Dubbo</a>
+    <a class="article-tag-link" href="/tags/Web/">Web</a>
 </div>
 
 
@@ -154,15 +154,149 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="Dubbo"><a href="#Dubbo" class="headerlink" title="Dubbo"></a>Dubbo</h1><p>高性能Java RPC框架.Apache Dubbo |ˈdʌbəʊ| 是一款高性能、轻量级的开源Java RPC框架，它提供了三大核心能力：面向接口的远程方法调用，智能容错和负载均衡，以及服务自动注册和发现。</p>
-<p>远程过程调用（英语：Remote Procedure Call，缩写为 RPC）是一个计算机通信协议。该协议允许运行于一台计算机的程序调用另一台计算机的子程序，而程序员无需额外地为这个交互作用编程。RPC协议假定某些传输协议的存在，如TCP或UDP，为通信程序之间携带信息数据。在OSI网络通信模型中，RPC跨越了传输层和应用层。RPC使得开发包括网络分布式多程序在内的应用程序更加容易。</p>
-<p>HTTP/TCP 都属于RPC</p>
-<h2 id="特性一览"><a href="#特性一览" class="headerlink" title="特性一览"></a>特性一览</h2><h3 id="面向接口代理的高性能RPC调用"><a href="#面向接口代理的高性能RPC调用" class="headerlink" title="面向接口代理的高性能RPC调用"></a>面向接口代理的高性能RPC调用</h3><p>提供高性能的基于代理的远程调用能力，服务以接口为粒度，为开发者屏蔽远程调用底层细节。</p>
-<h3 id="智能负载均衡"><a href="#智能负载均衡" class="headerlink" title="智能负载均衡"></a>智能负载均衡</h3><p>内置多种负载均衡策略，智能感知下游节点健康状况，显著减少调用延迟，提高系统吞吐量。</p>
-<h3 id="服务自动注册与发现"><a href="#服务自动注册与发现" class="headerlink" title="服务自动注册与发现"></a>服务自动注册与发现</h3><p>支持多种注册中心服务，服务实例上下线实时感知。</p>
-<h3 id="高度可扩展能力"><a href="#高度可扩展能力" class="headerlink" title="高度可扩展能力"></a>高度可扩展能力</h3><p>遵循微内核+插件的设计原则，所有核心能力如Protocol、Transport、Serialization被设计为扩展点，平等对待内置实现和第三方实现。</p>
-<h3 id="运行期流量调度"><a href="#运行期流量调度" class="headerlink" title="运行期流量调度"></a>运行期流量调度</h3><p>内置条件、脚本等路由策略，通过配置不同的路由规则，轻松实现灰度发布，同机房优先等功能。</p>
-<h3 id="可视化的服务治理与运维"><a href="#可视化的服务治理与运维" class="headerlink" title="可视化的服务治理与运维"></a>可视化的服务治理与运维</h3><p>提供丰富服务治理、运维工具：随时查询服务元数据、服务健康状态及调用统计，实时下发路由策略、调整配置参数。</p>
+        <p>目前的大部分公司的项目都是采用的前后端分离, 后端接口的开发和前端人员是同时进行的. 那么这个时候就会存在一个问题, 在页面需要使用大量数据进行渲染生成前, 后端开发人员的接口也许并没有写完, 作为前端的我们也就没有办法获取数据. 所以 前端工程师就需要自己按照接口文档模拟后端人员提供的数据, 以此进行页面的开发.<br>这个时候, Mock.js的作用就体现出来了, 在数据量较大的情况下, 我们不用一个一个的编写数据, 只需要根据接口文档将数据的格式填入,Mock.js就能够自动的按需生成大量的模拟数据. 且Mock.js提供了大量的数据类型, 包括文本, 数字, 布尔值, 日期, 邮箱, 链接, 图片, 颜色等.</p>
+<h1 id="Mock-js"><a href="#Mock-js" class="headerlink" title="Mock.js"></a>Mock.js</h1><h2 id="Mockjs是什么"><a href="#Mockjs是什么" class="headerlink" title="Mockjs是什么?"></a>Mockjs是什么?</h2><p>目前的大部分公司的项目都是采用的前后端分离, 后端接口的开发和前端人员是同时进行的. 那么这个时候就会存在一个问题, 在页面需要使用大量数据进行渲染生成前, 后端开发人员的接口也许并没有写完, 作为前端的我们也就没有办法获取数据. 所以 前端工程师就需要自己按照接口文档模拟后端人员提供的数据, 以此进行页面的开发.<br>这个时候, Mock.js的作用就体现出来了, 在数据量较大的情况下, 我们不用一个一个的编写数据, 只需要根据接口文档将数据的格式填入,Mock.js就能够自动的按需生成大量的模拟数据. 且Mock.js提供了大量的数据类型, 包括文本, 数字, 布尔值, 日期, 邮箱, 链接, 图片, 颜色等.</p>
+<h2 id="安装Mockjs"><a href="#安装Mockjs" class="headerlink" title="安装Mockjs"></a>安装Mockjs</h2><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm <span class="keyword">install</span> mockjs -S </span><br><span class="line"><span class="keyword">or</span> </span><br><span class="line">npm <span class="keyword">install</span> mockjs -D</span><br></pre></td></tr></table></figure>
+<h2 id="引用Mockjs"><a href="#引用Mockjs" class="headerlink" title="引用Mockjs"></a>引用Mockjs</h2><p>Mock.js暴露了一个全局的Mock对象, 我们只需要将Mock对象引入到文件中, 调用Mock对象的方法即可</p>
+<ul>
+<li>CommonJS的引入方式</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//CommonJS引入</span></span><br><span class="line"><span class="keyword">let</span> Mock = require(<span class="symbol">'mockjs</span>)</span><br><span class="line"> </span><br><span class="line"><span class="comment">//调用Mock.mock()方法模拟数据</span></span><br><span class="line"><span class="keyword">let</span> data = Mock.mock(&#123;</span><br><span class="line"><span class="symbol">'list</span>|<span class="number">1</span>-<span class="number">10</span>': [&#123;</span><br><span class="line">  <span class="symbol">'id</span>|+<span class="number">1</span>': <span class="number">1</span></span><br><span class="line">&#125;]</span><br><span class="line">&#125;);</span><br><span class="line">console.log(data);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>ES6的引入方式</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//ES6的引入方式</span></span><br><span class="line"><span class="keyword">import</span> Mock <span class="keyword">from</span> <span class="string">'mockjs'</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">let</span> data = Mock.mock(&#123;</span><br><span class="line"><span class="string">'list|1-10'</span>: [&#123;</span><br><span class="line">  <span class="string">'id|+1'</span>: <span class="number">1</span></span><br><span class="line">&#125;]</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(data);</span><br></pre></td></tr></table></figure>
+<h2 id="简单用法"><a href="#简单用法" class="headerlink" title="简单用法"></a>简单用法</h2><p>Mock对象提供了4个方法, 分别是</p>
+<ul>
+<li>Mock.mock()</li>
+<li>Mock.setup()</li>
+<li>Mock.valid</li>
+<li>Mock.toJSONSchema()</li>
+</ul>
+<p>以及一个工具库 Mock.Random. 其中我们经常使用到的就是Mock.mock()和Mock.Random.</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/04/08/Java对象的大小/">Java对象的大小</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-04-08T04:18:45.000Z" itemprop="datePublished">2018-04-08</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Java对象的大小"><a href="#Java对象的大小" class="headerlink" title="Java对象的大小"></a>Java对象的大小</h1><p>基本数据的类型的大小是固定的，这里就不多说了。对于非基本类型的Java对象，其大小就值得商榷。</p>
+<p>在Java中，一个空Object对象的大小是8byte，这个大小只是保存堆中一个没有任何属性的对象的大小。看下面语句：</p>
+<p>基本类型包括：byte, short, int, long, char, float, double, Boolean</p>
+<p>引用类型包括：类类型，接口类型和数组。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span> ob = <span class="keyword">new</span> <span class="built_in">Object</span>();</span><br></pre></td></tr></table></figure>
+<p>这样在程序中完成了一个Java对象的生命，但是它所占的空间为：4byte+8byte。4byte是因为在程序中，创建一个对象，Java栈中保存引用的所需要的空间。而那8byte则是Java堆中对象的信息。因为所有的Java非基本类型的对象都需要默认继承Object对象，因此不论什么样的Java对象，其大小都必须是大于8byte。</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Class</span> NewObject &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> <span class="keyword">count</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">boolean</span> flag;</span><br><span class="line"></span><br><span class="line">    Object ob;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">其大小为：空对象大小(<span class="number">8</span><span class="keyword">byte</span>)+<span class="keyword">int</span>大小(<span class="number">4</span><span class="keyword">byte</span>)+<span class="keyword">Boolean</span>大小(<span class="number">1</span><span class="keyword">byte</span>)+空Object引用的大小(<span class="number">4</span><span class="keyword">byte</span>)=<span class="number">17</span><span class="keyword">byte</span>。但是因为Java在对对象内存分配时都是以<span class="number">8</span>的整数倍来分，因此大于<span class="number">17</span><span class="keyword">byte</span>的最接近<span class="number">8</span>的整数倍的是<span class="number">24</span>，因此此对象的大小为<span class="number">24</span><span class="keyword">byte</span>。</span><br></pre></td></tr></table></figure>
+<p>这里需要注意一下基本类型的包装类型的大小。因为这种包装类型已经成为对象了，因此需要把他们作为对象来看待。包装类型的大小至少是12byte（声明一个空Object至少需要的空间），而且12byte没有包含任何有效信息，同时，因为Java对象大小是8的整数倍，因此一个基本类型包装类的大小至少是16byte。这个内存占用是很恐怖的，它是使用基本类型的N倍（N&gt;2），有些类型的内存占用更是夸张（随便想下就知道了）。因此，可能的话应尽量少使用包装类。在JDK5.0以后，因为加入了自动类型装换，因此，Java虚拟机会在存储方面进行相应的优化。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/04/08/Java线程池工作原理/">Java线程池工作原理</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-04-08T04:18:45.000Z" itemprop="datePublished">2018-04-08</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Java线程池工作原理"><a href="#Java线程池工作原理" class="headerlink" title="Java线程池工作原理"></a>Java线程池工作原理</h1><p>Java中的线程池是运用场景最多的并发框架，几乎所有需要异步或并发执行任务的程序都可以使用线程池，所以我们就要认识并弄懂线程池，以便于更好为业务场景服务。<br>(异步与并发)</p>
+<h2 id="一、线程池的好处"><a href="#一、线程池的好处" class="headerlink" title="一、线程池的好处"></a>一、线程池的好处</h2><p>在开发过程中，合理地使用线程池大致有3个好处：</p>
+<ul>
+<li>第一：降低资源消耗。通过重复利用已创建的线程降低线程创建和销毁造成的消耗。</li>
+<li>第二：提高响应速度。当任务到达时，任务可以不需要等到线程创建就能立即执行。</li>
+<li>第三：提高线程的可管理性。线程是稀缺资源，如果无限制地创建，不仅会消耗系统资源，还会降低系统的稳定性，使用线程池可以进行统一分配、调优和监控。</li>
+</ul>
+<p>但是，要做到合理利用线程池，必须对其实现原理了如指掌。</p>
+<h2 id="二、线程池工作流程"><a href="#二、线程池工作流程" class="headerlink" title="二、线程池工作流程"></a>二、线程池工作流程</h2><p>1）当提交一个新任务到线程池时，线程池判断corePoolSize线程池是否都在执行任务，如果有空闲线程，则创建一个新的工作线程来执行任务，直到当前线程数等于corePoolSize；</p>
+<p>2）如果当前线程数为corePoolSize，继续提交的任务被保存到阻塞队列中，等待被执行；</p>
+<p>3）如果阻塞队列满了，那就创建新的线程执行当前任务，直到线程池中的线程数达到maxPoolSize，这时再有任务来，由饱和策略来处理提交的任务。</p>
+<h2 id="三、线程池参数"><a href="#三、线程池参数" class="headerlink" title="三、线程池参数"></a>三、线程池参数</h2><p>下面是ThreadPoolExecutor类的构造方法传参数<br><figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> ThreadPoolExecutor(</span><br><span class="line"><span class="keyword">int</span> corePoolSize, <span class="meta">#核心线程数</span></span><br><span class="line"><span class="keyword">int</span> maximumPoolSize, <span class="meta">#最大线程数</span></span><br><span class="line"><span class="keyword">long</span> keepAliveTime, <span class="meta">#达到最大线程数数时候，线程池的工作线程空闲后，保持存活的时间</span></span><br><span class="line">TimeUnit unit, <span class="meta">#keepAliveTime单位</span></span><br><span class="line">BlockingQueue&lt;Runnable&gt; workQueue <span class="meta">#阻塞队列</span></span><br><span class="line">RejectedExecutionHandler handler <span class="meta">#饱和策略</span></span><br><span class="line"></span><br><span class="line">) &#123;</span><br><span class="line">    <span class="keyword">this</span>(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,</span><br><span class="line">    Executors.defaultThreadFactory(), handler);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> ThreadPoolExecutor(<span class="number">6</span> ,<span class="number">12</span>, <span class="number">5</span>L, TimeUnit.SECONDS,<span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;(<span class="number">10</span>),<span class="keyword">new</span> ThreadPoolExecutor.CallerRunsPolicy());</span><br></pre></td></tr></table></figure></p>
+<p>比如corePoolSize为6，maximumPoolSize为12，keepAliveTime为5秒，队列长度为10；提交任务数达到核心线程数6时候，新来的任务就会被放入LinkedBlockingQueue阻塞队列。<br>当队列任务数达到10个时候，就会创建新线程执行任务，直到达到maximumPoolSize数量12。如果还有新来的任务，由策略来处理提交的任务；如果没有，线程池空闲时候，超过5秒，创建的maximumPoolSize，就会被销毁。</p>
+<h2 id="四、阻塞队列"><a href="#四、阻塞队列" class="headerlink" title="四、阻塞队列"></a>四、阻塞队列</h2><p>阻塞队列BlockingQueue接口，从jdk1.5开始，有四个实现类，jdk8亦是如此</p>
+<ul>
+<li><p>ArrayBlockingQueue：是一个基于数组结构的有界阻塞队列，此队列按FIFO（先进先出）原则对元素进行排序。</p>
+</li>
+<li><p>LinkedBlockingQueue：一个基于链表结构的阻塞队列，此队列按FIFO排序元素，吞吐量通常要高于ArrayBlockingQueue，静态工厂方法Executors.newFixedThreadPool()使用了这个队列。</p>
+</li>
+<li><p>SynchronousQueue：一个不存储元素的阻塞队列。每个插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态，吞吐量通常要高于LinkedBlockingQueue，静态工厂方法Executors.newCachedThreadPool使用了这个列。</p>
+</li>
+<li><p>PriorityBlockingQueue：一个具有优先级的无限阻塞队列。</p>
+</li>
+</ul>
+<h2 id="五、饱和策略"><a href="#五、饱和策略" class="headerlink" title="五、饱和策略"></a>五、饱和策略</h2><p>当队列和线程池都满了，说明线程池处于饱和状态，那么必须采取一种策略处理提交的新任务。这个策略默认情况下是AbortPolicy，表示无法处理新任务时抛出异常。在JDK 1.5中Java线程池框架提供了以下4种策略。</p>
+<ul>
+<li>AbortPolicy：直接抛出异常。</li>
+<li>CallerRunsPolicy：只用调用者所在线程来运行任务。</li>
+<li>DiscardOldestPolicy：丢弃队列里最近的一个任务，并执行当前任务。</li>
+<li>DiscardPolicy：不处理，丢弃掉。</li>
+</ul>
+<p>当然，也可以根据应用场景需要来实现RejectedExecutionHandler接口自定义策略。如记录日志或持久化存储不能处理的任务。</p>
+<h2 id="六、向线程池提交任务"><a href="#六、向线程池提交任务" class="headerlink" title="六、向线程池提交任务"></a>六、向线程池提交任务</h2><p>可以使用两个方法向线程池提交任务，分别为execute()和submit()方法</p>
+<ul>
+<li>1、execute()方法用于提交不需要返回值的任务，所以无法判断任务是否被线程池执行成功</li>
+<li>2、submit()方法用于提交需要返回值的任务。</li>
+</ul>
+<p>线程池会返回一个future类型的对象，通过这个future对象可以判断任务是否执行成功，并且可以通过future的get()方法来获取返回值，get()方法会阻塞当前线程直到任务完成，而使用get(long timeout，TimeUnit unit)，在指定的时间内会等待任务执行，超时则抛出超时异常，等待时候会阻塞当前线程</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line">package com.mine.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ExecutionException;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.Future;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.LinkedBlockingQueue;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ThreadPoolExecutor;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeoutException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> class ThreadPoolTest &#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 新建线程池</span></span><br><span class="line">		ThreadPoolExecutor threadPoolExecutor = <span class="keyword">new</span> ThreadPoolExecutor(<span class="number">6</span>, <span class="comment">// 核心线程数</span></span><br><span class="line">				<span class="number">12</span>, <span class="comment">// 最大线程数</span></span><br><span class="line">				<span class="number">5</span>L, <span class="comment">// KeepAlive Time long</span></span><br><span class="line">				TimeUnit.SECONDS, <span class="comment">// TimeOut</span></span><br><span class="line">				<span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;(<span class="number">10</span>), <span class="comment">// 阻塞队列</span></span><br><span class="line">				<span class="keyword">new</span> ThreadPoolExecutor.CallerRunsPolicy()<span class="comment">// 饱和策略</span></span><br><span class="line">		);</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 向线程池提交任务</span></span><br><span class="line">		<span class="comment">// 1、execute()方法用于提交不需要返回值的任务，所以无法判断任务是否被线程池执行成功</span></span><br><span class="line"></span><br><span class="line">		threadPoolExecutor.execute(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">			@Override</span><br><span class="line">			<span class="keyword">public</span> <span class="keyword">void</span> <span class="built_in">run</span>() &#123;</span><br><span class="line">				<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">				System.out.<span class="built_in">println</span>(</span><br><span class="line">						<span class="string">"执行当前线程体,线程名：  "</span> + Thread.currentThread().getName() + <span class="string">"当前:"</span> + System.currentTimeMillis());</span><br><span class="line">				<span class="built_in">try</span> &#123;</span><br><span class="line">					Thread.sleep(<span class="number">2000</span>);</span><br><span class="line">				&#125; <span class="built_in">catch</span> (InterruptedException e) &#123;</span><br><span class="line">					<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">					e.printStackTrace();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line"></span><br><span class="line">		Future&lt;?&gt; future = threadPoolExecutor.submit(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">			@Override</span><br><span class="line">			<span class="keyword">public</span> <span class="keyword">void</span> <span class="built_in">run</span>() &#123;</span><br><span class="line">				<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">				System.out.<span class="built_in">println</span>(<span class="string">"执行当前线程体,线程名：  "</span> + Thread.currentThread().getName());</span><br><span class="line">				<span class="built_in">try</span> &#123;</span><br><span class="line">					Thread.sleep(<span class="number">2000</span>);</span><br><span class="line">				&#125; <span class="built_in">catch</span> (InterruptedException e) &#123;</span><br><span class="line">					<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">					e.printStackTrace();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line"></span><br><span class="line">		<span class="comment">/**</span></span><br><span class="line"><span class="comment">		 * 线程池会返回一个future类型的对象，通过这个future对象可以判断任务是否执行成功，并且可以通过future的get()方法来获取返回值，</span></span><br><span class="line"><span class="comment">		 * get()方法会阻塞当前线程直到任务完成， 而使用get(long timeout，TimeUnit</span></span><br><span class="line"><span class="comment">		 * unit)，在指定的时间内会等待任务执行，超时则抛出超时异常，等待时候会阻塞当前线程</span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line">		<span class="built_in">try</span> &#123;</span><br><span class="line">			<span class="comment">// 阻塞当前线程，直到任务完成</span></span><br><span class="line">			Object obj = future.<span class="built_in">get</span>();</span><br><span class="line">			<span class="comment">// 当前线程等待执行结果的返回值，延迟2s</span></span><br><span class="line">			Object obj2 = future.<span class="built_in">get</span>(<span class="number">10</span>, TimeUnit.MINUTES);</span><br><span class="line"></span><br><span class="line">		&#125; <span class="built_in">catch</span> (InterruptedException e) &#123;</span><br><span class="line">			<span class="comment">// 处理中断异常</span></span><br><span class="line">			<span class="comment">// <span class="doctag">TODO:</span> handle exception</span></span><br><span class="line">		&#125; <span class="built_in">catch</span> (ExecutionException e) &#123;</span><br><span class="line">			<span class="comment">// 处理执行异常</span></span><br><span class="line">			<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125; <span class="built_in">catch</span> (TimeoutException e) &#123;</span><br><span class="line">			<span class="comment">// 处理超时异常</span></span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125; finally &#123;<span class="comment">// 关闭线程池</span></span><br><span class="line">			threadPoolExecutor.<span class="built_in">shutdown</span>();</span><br><span class="line">		&#125;</span><br><span class="line">		threadPoolExecutor.<span class="built_in">shutdown</span>();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="七、关闭线程池"><a href="#七、关闭线程池" class="headerlink" title="七、关闭线程池"></a>七、关闭线程池</h2><p>ThreadPoolExecutor提供了两个方法，用于线程池的关闭，分别是shutdown()和shutdownNow()，它们的原理是遍历线程池中的工作线程，然后逐个调用线程的interrupt方法来中断线程</p>
+<p>shutdown()：不会立即终止线程池，而是要等所有任务缓存队列中的任务都执行完后才终止，但再也不会接受新的任务。</p>
+<p>shutdownNow()：立即终止线程池，并尝试打断正在执行的任务，并且清空任务缓存队列，返回尚未执行的任务。</p>
+<p>只要调用了这两个关闭方法中的任意一个，isShutdown方法就会返回true。当所有的任务<br>都已关闭后，才表示线程池关闭成功，这时调用isTerminaed方法会返回true。</p>
+<p>因此，判断线程池所有线程是否执行完成，可以这样写：<br><figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(true)&#123;<span class="comment">//死循环</span></span><br><span class="line">	<span class="keyword">if</span>(threadPool.<span class="built_in">isTerminated</span>()) &#123;</span><br><span class="line">			<span class="comment">//执行自己的操作</span></span><br><span class="line">			<span class="keyword">break</span>;<span class="comment">//true停止</span></span><br><span class="line">	&#125;</span><br><span class="line">	Thread.sleep(<span class="number">500</span>);<span class="comment">//休眠500继续循环</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>shutdown，只是将线程池的状态设置成SHUTDOWN状态，然后中断所有没有正在执行任务的线程，等待执行任务的线程完成。</p>
+<p>shutdownNow首先将线程池的状态设置成STOP，然后尝试停止所有的正在执行或暂停任务的线程，并返回等待执行任务的列表。</p>
+<h2 id="八、线程池状态"><a href="#八、线程池状态" class="headerlink" title="八、线程池状态"></a>八、线程池状态</h2><p>线程池有五种运行状态：<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">1</span>、<span class="selector-tag">RUNNING</span></span><br><span class="line"></span><br><span class="line">(<span class="number">1</span>) 状态说明：线程池处在<span class="selector-tag">RUNNING</span>状态时，能够接收新任务，以及对已添加的任务进行处理。</span><br><span class="line">(<span class="number">2</span>) 状态切换：线程池的初始化状态是<span class="selector-tag">RUNNING</span>。线程池被一旦被创建，</span><br><span class="line">就处于<span class="selector-tag">RUNNING</span>状态，且线程池中的任务数为<span class="selector-tag">0</span></span><br><span class="line"></span><br><span class="line"><span class="selector-tag">2</span>、 <span class="selector-tag">SHUTDOWN</span></span><br><span class="line"></span><br><span class="line">(<span class="number">1</span>) 状态说明：线程池处在<span class="selector-tag">SHUTDOWN</span>状态时，不接收新任务，但能处理已添加的任务。</span><br><span class="line">(<span class="number">2</span>) 状态切换：调用线程池的<span class="selector-tag">shutdown</span>()接口时，线程池由<span class="selector-tag">RUNNING</span> <span class="selector-tag">-</span>&gt; <span class="selector-tag">SHUTDOWN</span>。</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">3</span>、<span class="selector-tag">STOP</span></span><br><span class="line"></span><br><span class="line">(<span class="number">1</span>) 状态说明：线程池处在<span class="selector-tag">STOP</span>状态时，不接收新任务，不处理已添加的任务，并且会中断正在处理的任务。</span><br><span class="line">(<span class="number">2</span>) 状态切换：调用线程池的<span class="selector-tag">shutdownNow</span>()接口时，线程池由(RUNNING or SHUTDOWN ) <span class="selector-tag">-</span>&gt; <span class="selector-tag">STOP</span>。</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">4</span>、<span class="selector-tag">TIDYING</span></span><br><span class="line"></span><br><span class="line">(<span class="number">1</span>) 状态说明：当所有的任务已终止，<span class="selector-tag">ctl</span>记录的”任务数量”为<span class="selector-tag">0</span>，线程池会变为</span><br><span class="line"><span class="selector-tag">TIDYING</span>状态。当线程池变为<span class="selector-tag">TIDYING</span>状态时，会执行钩子函数<span class="selector-tag">terminated</span>()。</span><br><span class="line"><span class="selector-tag">terminated</span>()在<span class="selector-tag">ThreadPoolExecutor</span>类中是空的，若用户想在线程池变为<span class="selector-tag">TIDYING</span>时，</span><br><span class="line">进行相应的处理；可以通过重载<span class="selector-tag">terminated</span>()函数来实现。</span><br><span class="line">(<span class="number">2</span>) 状态切换：当线程池在<span class="selector-tag">SHUTDOWN</span>状态下，阻塞队列为空并且线程池中执行的任务</span><br><span class="line">也为空时，就会由 <span class="selector-tag">SHUTDOWN-</span>&gt;<span class="selector-tag">TIDYING</span>。当线程池在<span class="selector-tag">STOP</span>状态下，线程池中执行的任务</span><br><span class="line">为空时，就会由<span class="selector-tag">STOP</span> <span class="selector-tag">-</span>&gt; <span class="selector-tag">TIDYING</span>。</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">5</span>、 <span class="selector-tag">TERMINATED</span></span><br><span class="line"></span><br><span class="line">(<span class="number">1</span>) 状态说明：线程池彻底终止，就变成<span class="selector-tag">TERMINATED</span>状态。</span><br><span class="line">(<span class="number">2</span>) 状态切换：线程池处在<span class="selector-tag">TIDYING</span>状态时，执行完<span class="selector-tag">terminated</span>()之后，</span><br><span class="line">就会由 <span class="selector-tag">TIDYING</span> <span class="selector-tag">-</span>&gt; <span class="selector-tag">TERMINATED</span>。</span><br></pre></td></tr></table></figure></p>
 
         
     </section>
@@ -233,6 +367,49 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/04/07/Dubbo/">Dubbo</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-04-07T02:10:00.000Z" itemprop="datePublished">2018-04-07</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Dubbo/">Dubbo</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Dubbo"><a href="#Dubbo" class="headerlink" title="Dubbo"></a>Dubbo</h1><p>高性能Java RPC框架.Apache Dubbo |ˈdʌbəʊ| 是一款高性能、轻量级的开源Java RPC框架，它提供了三大核心能力：面向接口的远程方法调用，智能容错和负载均衡，以及服务自动注册和发现。</p>
+<p>远程过程调用（英语：Remote Procedure Call，缩写为 RPC）是一个计算机通信协议。该协议允许运行于一台计算机的程序调用另一台计算机的子程序，而程序员无需额外地为这个交互作用编程。RPC协议假定某些传输协议的存在，如TCP或UDP，为通信程序之间携带信息数据。在OSI网络通信模型中，RPC跨越了传输层和应用层。RPC使得开发包括网络分布式多程序在内的应用程序更加容易。</p>
+<p>HTTP/TCP 都属于RPC</p>
+<h2 id="特性一览"><a href="#特性一览" class="headerlink" title="特性一览"></a>特性一览</h2><h3 id="面向接口代理的高性能RPC调用"><a href="#面向接口代理的高性能RPC调用" class="headerlink" title="面向接口代理的高性能RPC调用"></a>面向接口代理的高性能RPC调用</h3><p>提供高性能的基于代理的远程调用能力，服务以接口为粒度，为开发者屏蔽远程调用底层细节。</p>
+<h3 id="智能负载均衡"><a href="#智能负载均衡" class="headerlink" title="智能负载均衡"></a>智能负载均衡</h3><p>内置多种负载均衡策略，智能感知下游节点健康状况，显著减少调用延迟，提高系统吞吐量。</p>
+<h3 id="服务自动注册与发现"><a href="#服务自动注册与发现" class="headerlink" title="服务自动注册与发现"></a>服务自动注册与发现</h3><p>支持多种注册中心服务，服务实例上下线实时感知。</p>
+<h3 id="高度可扩展能力"><a href="#高度可扩展能力" class="headerlink" title="高度可扩展能力"></a>高度可扩展能力</h3><p>遵循微内核+插件的设计原则，所有核心能力如Protocol、Transport、Serialization被设计为扩展点，平等对待内置实现和第三方实现。</p>
+<h3 id="运行期流量调度"><a href="#运行期流量调度" class="headerlink" title="运行期流量调度"></a>运行期流量调度</h3><p>内置条件、脚本等路由策略，通过配置不同的路由规则，轻松实现灰度发布，同机房优先等功能。</p>
+<h3 id="可视化的服务治理与运维"><a href="#可视化的服务治理与运维" class="headerlink" title="可视化的服务治理与运维"></a>可视化的服务治理与运维</h3><p>提供丰富服务治理、运维工具：随时查询服务元数据、服务健康状态及调用统计，实时下发路由策略、调整配置参数。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/04/06/nginx/">Nginx</a>
         </h1>
         
@@ -275,45 +452,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/04/05/引用类型/">引用类型</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-04-05T04:10:22.000Z" itemprop="datePublished">2018-04-05</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="引用类型"><a href="#引用类型" class="headerlink" title="引用类型"></a>引用类型</h1><pre><code>对象引用类型分为强引用、软引用、弱引用和虚引用。
-</code></pre><p>强引用: 就是我们一般声明对象是时虚拟机生成的引用，强引用环境下，垃圾回收时需要严格判断当前对象是否被强引用，如果被强引用，则不会被垃圾回收</p>
-<p>软引用: 软引用一般被做为缓存来使用。与强引用的区别是，软引用在垃圾回收时，虚拟机会根据当前系统的剩余内存来决定是否对软引用进行回收。如果剩余内存比较紧张，则虚拟机会回收软引用所引用的空间；如果剩余内存相对富裕，则不会进行回收。换句话说，虚拟机在发生OutOfMemory时，肯定是没有软引用存在的。</p>
-<p>弱引用: 弱引用与软引用类似，都是作为缓存来使用。但与软引用不同，弱引用在进行垃圾回收时，是一定会被回收掉的，因此其生命周期只存在于一个垃圾回收周期内。</p>
-<p>强引用不用说，我们系统一般在使用时都是用的强引用。而“软引用”和“弱引用”比较少见。他们一般被作为缓存使用，而且一般是在内存大小比较受限的情况下做为缓存。因为如果内存足够大的话，可以直接使用强引用作为缓存即可，同时可控性更高。因而，他们常见的是被使用在桌面应用系统的缓存。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2018/04/05/并发编程/">并发编程</a>
         </h1>
         
@@ -344,6 +482,45 @@
 <p>Lock和并发常用工具类<br>1.Java当中的Lock、ReenrantLock、ReentrantReadWriteLock、Condition<br>2.Java当中的并发工具类CyclicBarrier、CountdownLatch、Semphore<br>3.Java当中的并发集合类ConcurrentHashMap、ConcurrentLinkedQueue…</p>
 <p>原子操作常用知识讲解<br>1.基本类型的原子操作比如经典的AtomicBoolean、AtomicIngter、AtomicLong<br>2.数组类型的原子操作代表的几个类AtomicIntegerArray、AtomicLongArray、AtomicReferenceArray<br>3.引用类型的原子操作的典型AtomicReference、AtomicReferenceFieldUpdater…<br>4.CAS概念知识、COmpare And Swap以及缺陷</p>
 <p>线程池和并发并行<br>1.Excutor、ThreadPoolExcutor、Callable &amp; Future、ScheduledExcutorService<br>2.ThreadLocal、Fork &amp; Join？什么是并行？线程池如何保证核心线程不被销毁？</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/04/05/引用类型/">引用类型</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-04-05T04:10:22.000Z" itemprop="datePublished">2018-04-05</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="引用类型"><a href="#引用类型" class="headerlink" title="引用类型"></a>引用类型</h1><pre><code>对象引用类型分为强引用、软引用、弱引用和虚引用。
+</code></pre><p>强引用: 就是我们一般声明对象是时虚拟机生成的引用，强引用环境下，垃圾回收时需要严格判断当前对象是否被强引用，如果被强引用，则不会被垃圾回收</p>
+<p>软引用: 软引用一般被做为缓存来使用。与强引用的区别是，软引用在垃圾回收时，虚拟机会根据当前系统的剩余内存来决定是否对软引用进行回收。如果剩余内存比较紧张，则虚拟机会回收软引用所引用的空间；如果剩余内存相对富裕，则不会进行回收。换句话说，虚拟机在发生OutOfMemory时，肯定是没有软引用存在的。</p>
+<p>弱引用: 弱引用与软引用类似，都是作为缓存来使用。但与软引用不同，弱引用在进行垃圾回收时，是一定会被回收掉的，因此其生命周期只存在于一个垃圾回收周期内。</p>
+<p>强引用不用说，我们系统一般在使用时都是用的强引用。而“软引用”和“弱引用”比较少见。他们一般被作为缓存使用，而且一般是在内存大小比较受限的情况下做为缓存。因为如果内存足够大的话，可以直接使用强引用作为缓存即可，同时可控性更高。因而，他们常见的是被使用在桌面应用系统的缓存。</p>
 
         
     </section>
@@ -440,130 +617,6 @@
 <li>提供了良好的约定，以便设定执行的时间间隔</li>
 </ul>
 <figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"><span class="meta-keyword">import</span> java.util.concurrent.Executors;</span></span><br><span class="line"><span class="meta"><span class="meta-keyword">import</span> java.util.concurrent.ScheduledExecutorService;</span></span><br><span class="line"><span class="meta"><span class="meta-keyword">import</span> java.util.concurrent.TimeUnit;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ScheduledExecutorServiceTest</span> </span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">		Runnable runnable = <span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">			<span class="keyword">public</span> <span class="keyword">void</span> run() &#123;</span><br><span class="line">				<span class="comment">// task to run goes here</span></span><br><span class="line">				System.out.println(<span class="string">"Hello !!"</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;;</span><br><span class="line"></span><br><span class="line">		ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();</span><br><span class="line">		service.scheduleAtFixedRate(runnable, <span class="number">0</span>, <span class="number">1</span>, TimeUnit.SECONDS);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/04/01/接口和抽象类的区别/">接口和抽象类的区别</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-04-01T15:00:00.000Z" itemprop="datePublished">2018-04-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="接口和抽象类的区别"><a href="#接口和抽象类的区别" class="headerlink" title="接口和抽象类的区别"></a>接口和抽象类的区别</h1><p>接口的方法默认是 public，所有方法在接口中不能有实现(Java 8 开始接口方法可以有默认实现），而抽象类可以有非抽象的方法。</p>
-<p>接口中除了static、final变量，不能有其他变量，而抽象类中则不一定。</p>
-<p>一个类可以实现多个接口，但只能实现一个抽象类。接口自己本身可以通过extends关键字扩展多个接口。</p>
-<p>接口方法默认修饰符是public，抽象方法可以有public、protected和default这些修饰符（抽象方法就是为了被重写所以不能使用private关键字修饰！）。</p>
-<p>从设计层面来说，抽象是对类的抽象，是一种模板设计，而接口是对行为的抽象，是一种行为的规范。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/04/01/Thread start() 和  run().md/">Thread start() 和 run()</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-04-01T02:10:00.000Z" itemprop="datePublished">2018-04-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Thread-start-和-run"><a href="#Thread-start-和-run" class="headerlink" title="Thread start() 和  run()"></a>Thread start() 和  run()</h1><ol>
-<li>start 和 run 方法解释：</li>
-</ol>
-<p>1） start：<br>用start方法来启动线程，真正实现了多线程运行，这时无需等待run方法体代码执行完毕而直接继续执行下面的代码。通过调用Thread类的start()方法来启动一个线程，这时此线程处于就绪（可运行）状态，并没有运行，一旦得到cpu时间片，就开始执行run()方法，这里方法 run()称为线程体，它包含了要执行的这个线程的内容，Run方法运行结束，此线程随即终止。</p>
-<p>2） run：<br>run()方法只是类的一个普通方法而已，如果直接调用Run方法，程序中依然只有主线程这一个线程，其程序执行路径还是只有一条，还是要顺序执行，还是要等待run方法体执行完毕后才可继续执行下面的代码，这样就没有达到写线程的目的。总结：调用start方法方可启动线程，而run方法只是thread的一个普通方法调用，还是在主线程里执行。这两个方法应该都比较熟悉，把需要并行处理的代码放在run()方法中，start()方法启动线程将自动调用 run()方法，这是由jvm的内存机制规定的。并且run()方法必须是public访问权限，返回值类型为void。</p>
-<p>Java 的线程是通过java.lang.Thread类来实现的。VM启动时会有一个由主方法所定义的线程。可以通过创建Thread的实例来创建新的线程。每个线程都是通过某个特定Thread对象所对应的方法run（）来完成其操作的，方法run()称为线程体。通过调用Thread类的start()方法来启动一个线程。</p>
-<p>在Java 当中，线程通常都有五种状态，创建、就绪、运行、阻塞和死亡。<br>第一是创建状态。在生成线程对象，并没有调用该对象的start方法，这是线程处于创建状态。<br>第二是就绪状态。当调用了线程对象的start方法之后，该线程就进入了就绪状态，但是此时线程调度程序还没有把该线程设置为当前线程，此时处于就绪状态。在线程运行之后，从等待或者睡眠中回来之后，也会处于就绪状态。<br>第三是运行状态。线程调度程序将处于就绪状态的线程设置为当前线程，此时线程就进入了运行状态，开始运行run函数当中的代码。<br>第四是阻塞状态。线程正在运行的时候，被暂停，通常是为了等待某个时间的发生(比如说某项资源就绪)之后再继续运行。sleep,suspend，wait等方法都可以导致线程阻塞。<br>第五是死亡状态。如果一个线程的run方法执行结束或者调用stop方法后，该线程就会死亡。对于已经死亡的线程，无法再使用start方法令其进入就绪。</p>
-<blockquote>
-<p>调用start（）后，线程会被放到等待队列，等待CPU调度，并不一定要马上开始执行，只是将这个线程置于可动行状态。然后通过JVM，线程Thread会调用run（）方法，执行本线程的线程体。先调用start后调用run，这么麻烦，为了不直接调用run？就是为了实现多线程的优点，没这个start不行。</p>
-</blockquote>
-<p>1.start（）方法来启动线程，真正实现了多线程运行。这时无需等待run方法体代码执行完毕，可以直接继续执行下面的代码；通过调用Thread类的start()方法来启动一个线程， 这时此线程是处于就绪状态， 并没有运行。 然后通过此Thread类调用方法run()来完成其运行操作的， 这里方法run()称为线程体，它包含了要执行的这个线程的内容， Run方法运行结束， 此线程终止。然后CPU再调度其它线程。<br>2.run（）方法当作普通方法的方式调用。程序还是要顺序执行，要等待run方法体执行完毕后，才可继续执行下面的代码；程序中只有主线程——这一个线程，其程序执行路径还是只有一条， 这样就没有达到写线程的目的。<br>记住：多线程就是分时利用CPU，宏观上让所有线程一起执行 ，也叫并发。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/04/01/Thread sleep() 和  wait()/">Thread sleep() 和 wait()</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-04-01T02:10:00.000Z" itemprop="datePublished">2018-04-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Thread-sleep-和-wait"><a href="#Thread-sleep-和-wait" class="headerlink" title="Thread sleep() 和  wait()"></a>Thread sleep() 和  wait()</h1><p>sleep()方法是Thread类里面的，主要的意义就是让当前线程停止执行，让出CPU给其他的线程，但是不会释放对象锁资源以及监控的状态，当指定的时间到了之后又会自动恢复运行状态。</p>
-<p>wait()方法是Object类里面的，主要的意义就是让线程放弃当前的对象的锁，进入等待此对象的等待锁定池，只有针对此对象调动notify方法后本线程才能够进入对象锁定池准备获取对象锁进入运行状态。</p>
-<figure class="highlight d"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> ThreadSleepWait &#123;</span><br><span class="line">	<span class="comment">/** java中的sleep()和wait()的区别 */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args) &#123;</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Thread1()).start();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">        	System.<span class="keyword">out</span>.println(<span class="string">"主线程Sleep"</span>);</span><br><span class="line">        	Thread.sleep(<span class="number">5000</span>);</span><br><span class="line">         &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Thread2()).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> Thread1 implements Runnable&#123;</span><br><span class="line">        <span class="keyword">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> run()&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (ThreadSleepWait.<span class="keyword">class</span>) &#123;</span><br><span class="line">            	System.<span class="keyword">out</span>.println(<span class="string">"启动线程"</span> + Thread.currentThread().getName());    </span><br><span class="line">            	System.<span class="keyword">out</span>.println(<span class="string">"线程等待中..."</span>);</span><br><span class="line">	            <span class="keyword">try</span> &#123;</span><br><span class="line">	            	<span class="comment">//调用wait()方法，线程会放弃对象锁，进入等待此对象的等待锁定池</span></span><br><span class="line">	            	ThreadSleepWait.<span class="keyword">class</span>.wait();</span><br><span class="line">	             &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">	                e.printStackTrace();</span><br><span class="line">	            &#125;</span><br><span class="line">	            System.<span class="keyword">out</span>.println(<span class="string">"线程1继续"</span>);</span><br><span class="line">	            System.<span class="keyword">out</span>.println(<span class="string">"线程1结束"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">    	&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> Thread2 implements Runnable&#123;</span><br><span class="line">        <span class="keyword">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> run()&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (ThreadSleepWait.<span class="keyword">class</span>) &#123;</span><br><span class="line">            	System.<span class="keyword">out</span>.println(<span class="string">"启动线程"</span> + Thread.currentThread().getName());    </span><br><span class="line">            	System.<span class="keyword">out</span>.println(<span class="string">"线程等待中..."</span>);</span><br><span class="line">                <span class="comment">//只有针对此锁对象调用notify后</span></span><br><span class="line">            	<span class="comment">//本线程才进入对象锁定池准备获取对象锁进入运行状态。</span></span><br><span class="line">                ThreadSleepWait.<span class="keyword">class</span>.notify();</span><br><span class="line">                 </span><br><span class="line">				<span class="comment">//区别</span></span><br><span class="line">				<span class="comment">//如果我们把代码：ThreadSleepWait.class.notify给注释掉，</span></span><br><span class="line">				<span class="comment">//ThreadSleepWait.class调用了wait()方法但是没有调用notify()方法,</span></span><br><span class="line">				<span class="comment">//则线程1永远处于挂起状态。</span></span><br><span class="line">                 </span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">				<span class="comment">//Sleep方法导致了程序暂停执行指定的时间,让出cpu该其他线程，</span></span><br><span class="line">				<span class="comment">//但是他的监控状态依然保持者,当指定的时间过又会自动恢复运行状态。</span></span><br><span class="line">				<span class="comment">//在调用sleep方法的过程中，线程不会释放对象锁。</span></span><br><span class="line">                     Thread.sleep(<span class="number">5000</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                System.<span class="keyword">out</span>.println(<span class="string">"线程2继续"</span>);</span><br><span class="line">	            System.<span class="keyword">out</span>.println(<span class="string">"线程2结束"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>运行效果：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">主线程Sleep</span><br><span class="line">启动线程Thread<span class="number">-0</span></span><br><span class="line">线程等待中...</span><br><span class="line">启动线程Thread<span class="number">-1</span></span><br><span class="line">线程等待中...</span><br><span class="line">线程<span class="number">2</span>继续</span><br><span class="line">线程<span class="number">2</span>结束</span><br><span class="line">线程<span class="number">1</span>继续</span><br><span class="line">线程<span class="number">1</span>结束</span><br></pre></td></tr></table></figure></p>
-<p>如果注释掉代码，之后调用<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">ThreadSleepWait</span><span class="selector-class">.class</span><span class="selector-class">.notify</span>();</span><br></pre></td></tr></table></figure></p>
-<p>运行效果：<br><figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">主线程Sleep</span><br><span class="line">启动线程<span class="keyword">Thread</span><span class="number">-0</span></span><br><span class="line">线程等待中<span class="params">...</span></span><br><span class="line">启动线程<span class="keyword">Thread</span><span class="number">-1</span></span><br><span class="line">线程等待中<span class="params">...</span></span><br><span class="line">线程<span class="number">2</span>继续</span><br><span class="line">线程<span class="number">2</span>结束</span><br></pre></td></tr></table></figure></p>
-
         
     </section>
 </article>

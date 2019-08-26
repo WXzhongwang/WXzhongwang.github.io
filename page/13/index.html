@@ -131,6 +131,101 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2017/09/12/Redis相关问题二/">Redis相关问题二</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-09-12T10:33:59.000Z" itemprop="datePublished">2017-09-12</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Redis-相关问题二"><a href="#Redis-相关问题二" class="headerlink" title="Redis 相关问题二"></a>Redis 相关问题二</h1><ol start="2">
+<li>Redis采用多线程会有哪些问题？</li>
+</ol>
+<p>公司某个项目使用了redis进行数据的快速写入与查询,但在测试中发现它的查询速度完全不敌MySQL.经过代码分析发现,我们的架构师来了个奇葩操作.Redis与MySQL的关联,也就是先从Redis中查出相关数据在循环查询MySQL来获取完整数据,对于这种操作只能认为架构的脑袋被电梯夹了,在没有什么借口可以解释。好多人都是这样,对新技术有点皮毛了解就想”大显身手”,结果就闹得很是尴尬。</p>
+<p>大家知道Redis是非关系型数据库,特点就是”快”,那我们直接把想要的数据全部存入Redis中,不做任何关联。</p>
+<p>这个问题解决之后又发现了一个新问题,Redis在多线程高并发下出现数据错乱,也就是A的数据给了B,B的数据给到了C….</p>
+<p>分析:程序是多线程并且高并发情况,而Redis是单线程,也就是程序在Redis驱动返回结果时发生了张冠李戴的现象.</p>
+<p>解决方法:Redis操作方法添加线程锁(lock),让其他线程排队.</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2017/09/12/Redis简介/">Redis简介</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-09-12T10:33:59.000Z" itemprop="datePublished">2017-09-12</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>Redis是一个开源的，使用C语言编写，面向“键/值”对类型数据的分布式NoSQL数据库系统，特点是高性能，持久存储，适应高并发的应用场景。Redis纯粹为应用而产生，它是一个高性能的key-value数据库,并且提供了多种语言的API，性能测试结果表示SET操作每秒钟可达110000次，GET操作每秒81000次（当然不同的服务器配置性能不同）。</p>
+<h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1><p>Redis是一个开源的，使用C语言编写，面向“键/值”对类型数据的分布式NoSQL数据库系统，特点是高性能，持久存储，适应高并发的应用场景。Redis纯粹为应用而产生，它是一个高性能的key-value数据库,并且提供了多种语言的API，性能测试结果表示SET操作每秒钟可达110000次，GET操作每秒81000次（当然不同的服务器配置性能不同）。</p>
+<p>Redis目前提供五种数据类型：</p>
+<ul>
+<li>string(字符串),</li>
+<li>list（链表）, </li>
+<li>Hash（哈希）,</li>
+<li>set（集合）,</li>
+<li>zset(sorted set)  （有序集合）</li>
+</ul>
+<p>Redis开发维护很活跃，虽然它是一个Key-Value数据库存储系统，但它本身支持MQ功能，所以完全可以当做一个轻量级的队列服务来使用。</p>
+<p>Redis可以做消息队列？</p>
+<blockquote>
+<p>首先，redis设计用来做缓存的，但是由于它自身的某种特性使得它可以用来做消息队列，它有几个阻塞式的API可以使用，正是这些阻塞式的API让其有能力做消息队列；另外，做消息队列的其他特性例如FIFO（先入先出）也很容易实现，只需要一个list对象从头取数据，从尾部塞数据即可；redis能做消息队列还得益于其list对象blpop brpop接口以及Pub/Sub（发布/订阅）的某些接口，它们都是阻塞版的，所以可以用来做消息队列。</p>
+</blockquote>
+<p>对于RabbitMQ和Redis的入队和出队操作，各执行100万次，每10万次记录一次执行时间。测试数据分为128Bytes、512Bytes、1K和10K四个不同大小的数据。<br>实验表明：</p>
+<blockquote>
+<p>入队时，当数据比较小时Redis的性能要高于RabbitMQ，而如果数据大小超过了10K，Redis则慢的无法忍<br>受；出队时，无论数据大小，Redis都表现出非常好的性能，而RabbitMQ的出队性能则远低于Redis。</p>
+</blockquote>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2017/09/12/Redis相关问题三/">Redis相关问题三</a>
         </h1>
         
@@ -168,6 +263,210 @@
 <p>3) 如果用户不停地查询一条不存在的数据，缓存没有，数据库也没有，那么会出现什么?</p>
 <p>如果数据不存在，缓存中没有，数据库也没有，当然如果不设置判断，会一直调用数据库，使数据库效率降低，访问量大时甚至会宕机。</p>
 <p>解决方案：从数据库查询，如果数据库没有，则返回值为Null，判断数据库返回的值，如果为Null，则自定义把标识的字段存到Redis中，用key,value的方法，jedis.setex(key,”empty”)，设置失效时间跟具体情况而定，然后调用String json=jedis.get(key),判断是否获取的值”empty”.equal(json),如果相等，则抛出自定义异常，给用户提示，或者直接return null。这样用户再次查询的时候由于先从reids缓存中查询，redis会有对应的Key获取之前设置的value值，这样就不会再次调用数据库，影响效率等问题。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2017/09/12/Redis相关问题一/">Redis相关问题一</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-09-12T10:33:59.000Z" itemprop="datePublished">2017-09-12</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Redis-相关问题一"><a href="#Redis-相关问题一" class="headerlink" title="Redis 相关问题一"></a>Redis 相关问题一</h1><ol>
+<li>Redis为什么那么快?</li>
+</ol>
+<blockquote>
+<p>完全基于内存，绝大部分请求是纯粹的内存操作，非常快速。数据存在内存中，类似于HashMap，HashMap的优势就是查找和操作的时间复杂度都是O(1)；</p>
+</blockquote>
+<blockquote>
+<p>数据结构简单，对数据操作也简单，Redis中的数据结构是专门进行设计的；</p>
+</blockquote>
+<blockquote>
+<p>采用单线程，避免了不必要的上下文切换和竞争条件，也不存在多进程或者多线程导致的切换而消耗 CPU，不用去考虑各种锁的问题，不存在加锁释放锁操作，没有因为可能出现死锁而导致的性能消耗；</p>
+</blockquote>
+<blockquote>
+<p>使用多路I/O复用模型，非阻塞IO；</p>
+</blockquote>
+<blockquote>
+<p>使用底层模型不同，它们之间底层实现方式以及与客户端之间通信的应用协议不一样，Redis直接自己构建了VM 机制，因为一般的系统调用系统函数的话，会浪费一定的时间去移动和请求；</p>
+</blockquote>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2017/06/01/Linux 更改文件属性/">Linux更改文件属性</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-06-01T08:18:02.000Z" itemprop="datePublished">2017-06-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h2 id="Linux-更改文件属性"><a href="#Linux-更改文件属性" class="headerlink" title="Linux 更改文件属性"></a>Linux 更改文件属性</h2><p>1、chgrp：改属组 change group</p>
+<p>语法：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chgrp <span class="string">[-R]</span> 属组名 文件名</span><br></pre></td></tr></table></figure></p>
+<p>参数选项 [-R]: 递归更改文件属组，就是在更改某个目录文件的属组时，如果加上-R的参数，那么该目录下的所有文件的属组都会更改。</p>
+<p>2、chown：改属主，也可以同时更改属组  change owner</p>
+<p>语法：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chown <span class="string">[–R]</span> 属主名 文件名</span><br><span class="line">chown <span class="string">[-R]</span> 属主名：属组名 文件名</span><br></pre></td></tr></table></figure></p>
+<p>进入 /root 目录（~）将install.log的拥有者改为bin这个账号：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@www ~] cd ~</span><br><span class="line">[root@www ~]# chown bin install.log</span><br><span class="line">[root@www ~]# ls -l</span><br><span class="line">-rw-r--r--  1 bin <span class="built_in"> users </span>68495 Jun 25 08:53 install.log</span><br></pre></td></tr></table></figure></p>
+<p>3、chmod：更改文件9个属性</p>
+<p>Linux文件的基本权限就有九个，分别是owner/group/others三种身份各有自己的read/write/execute权限。</p>
+<p>例如：文件的权限字符为：『-rwxrwxrwx』， 可以使用数字来代表各个权限，各权限的分数对照表如下：</p>
+<ul>
+<li>r:4</li>
+<li>w:2</li>
+<li>x:1</li>
+</ul>
+<p>每种身份(owner/group/others)各自的三个权限(r/w/x)分数是需要累加的，例如当权限为： [-rwxrwx—] 结果：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">owner = rwx = <span class="number">4</span>+<span class="number">2</span>+<span class="number">1</span> = <span class="number">7</span></span><br><span class="line">group = rwx = <span class="number">4</span>+<span class="number">2</span>+<span class="number">1</span> = <span class="number">7</span></span><br><span class="line">others= --- = <span class="number">0</span>+<span class="number">0</span>+<span class="number">0</span> = <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>设定权限变更为：770</p>
+<p>语法<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod <span class="string">[-R]</span> xyz 文件或目录</span><br></pre></td></tr></table></figure></p>
+<p>参数 xyz : 就是刚刚提到的数字类型的权限属性，为 rwx 属性数值的相加。eg: 770</p>
+<p>Example: 将.bashrc这个文件所有的权限都设定启用<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">ls</span> <span class="selector-tag">-al</span> <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-tag">-rw-r--r--</span>  1 <span class="selector-tag">root</span> <span class="selector-tag">root</span> 395 <span class="selector-tag">Jul</span>  4 11<span class="selector-pseudo">:45</span> <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">chmod</span> 777 <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">ls</span> <span class="selector-tag">-al</span> <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-tag">-rwxrwxrwx</span>  1 <span class="selector-tag">root</span> <span class="selector-tag">root</span> 395 <span class="selector-tag">Jul</span>  4 11<span class="selector-pseudo">:45</span> <span class="selector-class">.bashrc</span></span><br></pre></td></tr></table></figure></p>
+<p>那如果要将权限变成 -rwxr-xr– 呢？那么权限的分数就成为 [4+2+1][4+0+1][4+0+0]=754。</p>
+<h2 id="符号类型改变文件权限"><a href="#符号类型改变文件权限" class="headerlink" title="符号类型改变文件权限"></a>符号类型改变文件权限</h2><p>另一种改权限的方式。针对user,group,others设置权限。</p>
+<ol>
+<li>user</li>
+<li>group</li>
+<li>others</li>
+</ol>
+<p>那么我们就可以使用 u, g, o 来代表三种身份的权限。</p>
+<p>可选 ：</p>
+<ul>
+<li>u</li>
+<li>g</li>
+<li>o</li>
+<li>a (指所有，即全部的身份)</li>
+</ul>
+<p>操作符： </p>
+<ul>
+<li><ul>
+<li>加入</li>
+</ul>
+</li>
+<li><ul>
+<li>除去</li>
+</ul>
+</li>
+<li>=    设定<br>权限：</li>
+<li>r</li>
+<li>w</li>
+<li>x</li>
+</ul>
+<p>可以使用以下语法来设定:<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod <span class="attribute">u</span>=rwx,g=rwx,o=rwx 文件名</span><br></pre></td></tr></table></figure></p>
+<p>Example：将文件权限设置为 -rwxr-xr– ，<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#  touch <span class="keyword">test</span>    <span class="comment">// 创建文件</span></span><br><span class="line"># <span class="keyword">ls</span> -al <span class="keyword">test</span>    <span class="comment">// 查看默认权限</span></span><br><span class="line">-rw-r--r-- 1 root root 0 Nov 15 10:32 <span class="keyword">test</span></span><br><span class="line"># chmod <span class="keyword">u</span>=rwx,<span class="keyword">g</span>=rx,o=r  <span class="keyword">test</span>    <span class="comment">// 修改权限</span></span><br><span class="line"># <span class="keyword">ls</span> -al <span class="keyword">test</span></span><br><span class="line">-rwxr-xr-- 1 root root 0 Nov 15 10:32 <span class="keyword">test</span></span><br></pre></td></tr></table></figure></p>
+<p>而如果是要将权限去掉而不改变其他已存在的权限呢？<br>例如要拿掉全部人的可执行权限，则：<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#  chmod  a-x test1</span></span><br><span class="line"><span class="comment"># ls -al test1</span></span><br><span class="line">-rw-r--r--<span class="number"> 1 </span>root root<span class="number"> 0 </span>Nov<span class="number"> 15 </span>10:32 test1</span><br></pre></td></tr></table></figure></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2017/06/01/Linux目录结构简易理解/">Linux目录结构简易理解</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-06-01T08:18:02.000Z" itemprop="datePublished">2017-06-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h2 id="Linux目录结构"><a href="#Linux目录结构" class="headerlink" title="Linux目录结构"></a>Linux目录结构</h2><p>/bin：<br>bin是Binary的缩写, 这个目录存放着最经常使用的命令。</p>
+<p>/boot：<br>这里存放的是启动Linux时使用的一些核心文件，包括一些连接文件以及镜像文件。</p>
+<p>/dev ：<br>dev是Device(设备)的缩写, 该目录下存放的是Linux的外部设备，在Linux中访问设备的方式和访问文件的方式是相同的。</p>
+<p>/etc：<br>这个目录用来存放所有的系统管理所需要的配置文件和子目录。</p>
+<p>/home：<br>用户的主目录，在Linux中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的。</p>
+<p>/lib：<br>这个目录里存放着系统最基本的动态连接共享库，其作用类似于Windows里的DLL文件。几乎所有的应用程序都需要用到这些共享库。</p>
+<p>/lost+found：<br>这个目录一般情况下是空的，当系统非法关机后，这里就存放了一些文件。</p>
+<p>/media：<br>linux系统会自动识别一些设备，例如U盘、光驱等等，当识别后，linux会把识别的设备挂载到这个目录下。</p>
+<p>/mnt：<br>系统提供该目录是为了让用户临时挂载别的文件系统的，我们可以将光驱挂载在/mnt/上，然后进入该目录就可以查看光驱里的内容了。</p>
+<p>/opt：<br> 这是给主机额外安装软件所摆放的目录。比如你安装一个ORACLE数据库则就可以放到这个目录下。默认是空的。</p>
+<p>/proc：<br>这个目录是一个虚拟的目录，它是系统内存的映射，我们可以通过直接访问这个目录来获取系统信息。<br>这个目录的内容不在硬盘上而是在内存里，我们也可以直接修改里面的某些文件，比如可以通过下面的命令来屏蔽主机的ping命令，使别人无法ping你的机器：</p>
+<p>echo 1 &gt; /proc/sys/net/ipv4/icmp_echo_ignore_all<br>/root：<br>该目录为系统管理员，也称作超级权限者的用户主目录。</p>
+<p>/sbin：<br>s就是Super User的意思，这里存放的是系统管理员使用的系统管理程序。</p>
+<p>/selinux：<br> 这个目录是Redhat/CentOS所特有的目录，Selinux是一个安全机制，类似于windows的防火墙，但是这套机制比较复杂，这个目录就是存放selinux相关的文件的。</p>
+<p>/srv：<br> 该目录存放一些服务启动之后需要提取的数据。</p>
+<p>/sys：</p>
+<p> 这是linux2.6内核的一个很大的变化。该目录下安装了2.6内核中新出现的一个文件系统 sysfs 。</p>
+<p>sysfs文件系统集成了下面3种文件系统的信息：针对进程信息的proc文件系统、针对设备的devfs文件系统以及针对伪终端的devpts文件系统。<br>该文件系统是内核设备树的一个直观反映。</p>
+<p>当一个内核对象被创建的时候，对应的文件和目录也在内核对象子系统中被创建。</p>
+<p>/tmp：<br>这个目录是用来存放一些临时文件的。</p>
+<p>/usr：<br> 这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似于windows下的program files目录。</p>
+<p>/usr/bin：<br>系统用户使用的应用程序。</p>
+<p>/usr/sbin：<br>超级用户使用的比较高级的管理程序和系统守护程序。</p>
+<p>/usr/src：<br>内核源代码默认的放置目录。</p>
+<p>/var：<br>这个目录中存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。包括各种日志文件。</p>
+<p>/run：<br>是一个临时文件系统，存储系统启动以来的信息。当系统重启时，这个目录下的文件应该被删掉或清除。如果你的系统上有 /var/run 目录，应该让它指向 run。</p>
+<h2 id="note"><a href="#note" class="headerlink" title="note"></a>note</h2><p>在 Linux 系统中，有几个目录是比较重要的，平时需要注意不要误删除或者随意更改内部文件。</p>
+<p>/etc： 上边也提到了，这个是系统中的配置文件，如果你更改了该目录下的某个文件可能会导致系统不能启动。</p>
+<p>/bin, /sbin, /usr/bin, /usr/sbin: 这是系统预设的执行文件的放置目录，比如 ls 就是在/bin/ls 目录下的。</p>
+<p>值得提出的是，/bin, /usr/bin 是给系统用户使用的指令（除root外的通用户），而/sbin, /usr/sbin 则是给root使用的指令。</p>
+<p>/var： 这是一个非常重要的目录，系统上跑了很多程序，那么每个程序都会有相应的日志产生，而这些日志就被记录到这个目录下，具体在/var/log 目录下，另外mail的预设放置也是在这里。</p>
 
         
     </section>
@@ -275,7 +574,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2017/06/01/Linux目录结构简易理解/">Linux目录结构简易理解</a>
+            <a href="/2017/06/01/Linux目录结构/">Linux 目录结构</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -378,158 +677,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2017/06/01/Linux目录结构/">Linux 目录结构</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-06-01T08:18:02.000Z" itemprop="datePublished">2017-06-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h2 id="Linux目录结构"><a href="#Linux目录结构" class="headerlink" title="Linux目录结构"></a>Linux目录结构</h2><p>/bin：<br>bin是Binary的缩写, 这个目录存放着最经常使用的命令。</p>
-<p>/boot：<br>这里存放的是启动Linux时使用的一些核心文件，包括一些连接文件以及镜像文件。</p>
-<p>/dev ：<br>dev是Device(设备)的缩写, 该目录下存放的是Linux的外部设备，在Linux中访问设备的方式和访问文件的方式是相同的。</p>
-<p>/etc：<br>这个目录用来存放所有的系统管理所需要的配置文件和子目录。</p>
-<p>/home：<br>用户的主目录，在Linux中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的。</p>
-<p>/lib：<br>这个目录里存放着系统最基本的动态连接共享库，其作用类似于Windows里的DLL文件。几乎所有的应用程序都需要用到这些共享库。</p>
-<p>/lost+found：<br>这个目录一般情况下是空的，当系统非法关机后，这里就存放了一些文件。</p>
-<p>/media：<br>linux系统会自动识别一些设备，例如U盘、光驱等等，当识别后，linux会把识别的设备挂载到这个目录下。</p>
-<p>/mnt：<br>系统提供该目录是为了让用户临时挂载别的文件系统的，我们可以将光驱挂载在/mnt/上，然后进入该目录就可以查看光驱里的内容了。</p>
-<p>/opt：<br> 这是给主机额外安装软件所摆放的目录。比如你安装一个ORACLE数据库则就可以放到这个目录下。默认是空的。</p>
-<p>/proc：<br>这个目录是一个虚拟的目录，它是系统内存的映射，我们可以通过直接访问这个目录来获取系统信息。<br>这个目录的内容不在硬盘上而是在内存里，我们也可以直接修改里面的某些文件，比如可以通过下面的命令来屏蔽主机的ping命令，使别人无法ping你的机器：</p>
-<p>echo 1 &gt; /proc/sys/net/ipv4/icmp_echo_ignore_all<br>/root：<br>该目录为系统管理员，也称作超级权限者的用户主目录。</p>
-<p>/sbin：<br>s就是Super User的意思，这里存放的是系统管理员使用的系统管理程序。</p>
-<p>/selinux：<br> 这个目录是Redhat/CentOS所特有的目录，Selinux是一个安全机制，类似于windows的防火墙，但是这套机制比较复杂，这个目录就是存放selinux相关的文件的。</p>
-<p>/srv：<br> 该目录存放一些服务启动之后需要提取的数据。</p>
-<p>/sys：</p>
-<p> 这是linux2.6内核的一个很大的变化。该目录下安装了2.6内核中新出现的一个文件系统 sysfs 。</p>
-<p>sysfs文件系统集成了下面3种文件系统的信息：针对进程信息的proc文件系统、针对设备的devfs文件系统以及针对伪终端的devpts文件系统。<br>该文件系统是内核设备树的一个直观反映。</p>
-<p>当一个内核对象被创建的时候，对应的文件和目录也在内核对象子系统中被创建。</p>
-<p>/tmp：<br>这个目录是用来存放一些临时文件的。</p>
-<p>/usr：<br> 这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似于windows下的program files目录。</p>
-<p>/usr/bin：<br>系统用户使用的应用程序。</p>
-<p>/usr/sbin：<br>超级用户使用的比较高级的管理程序和系统守护程序。</p>
-<p>/usr/src：<br>内核源代码默认的放置目录。</p>
-<p>/var：<br>这个目录中存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。包括各种日志文件。</p>
-<p>/run：<br>是一个临时文件系统，存储系统启动以来的信息。当系统重启时，这个目录下的文件应该被删掉或清除。如果你的系统上有 /var/run 目录，应该让它指向 run。</p>
-<h2 id="note"><a href="#note" class="headerlink" title="note"></a>note</h2><p>在 Linux 系统中，有几个目录是比较重要的，平时需要注意不要误删除或者随意更改内部文件。</p>
-<p>/etc： 上边也提到了，这个是系统中的配置文件，如果你更改了该目录下的某个文件可能会导致系统不能启动。</p>
-<p>/bin, /sbin, /usr/bin, /usr/sbin: 这是系统预设的执行文件的放置目录，比如 ls 就是在/bin/ls 目录下的。</p>
-<p>值得提出的是，/bin, /usr/bin 是给系统用户使用的指令（除root外的通用户），而/sbin, /usr/sbin 则是给root使用的指令。</p>
-<p>/var： 这是一个非常重要的目录，系统上跑了很多程序，那么每个程序都会有相应的日志产生，而这些日志就被记录到这个目录下，具体在/var/log 目录下，另外mail的预设放置也是在这里。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/06/01/Linux 更改文件属性/">Linux更改文件属性</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-06-01T08:18:02.000Z" itemprop="datePublished">2017-06-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h2 id="Linux-更改文件属性"><a href="#Linux-更改文件属性" class="headerlink" title="Linux 更改文件属性"></a>Linux 更改文件属性</h2><p>1、chgrp：改属组 change group</p>
-<p>语法：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chgrp <span class="string">[-R]</span> 属组名 文件名</span><br></pre></td></tr></table></figure></p>
-<p>参数选项 [-R]: 递归更改文件属组，就是在更改某个目录文件的属组时，如果加上-R的参数，那么该目录下的所有文件的属组都会更改。</p>
-<p>2、chown：改属主，也可以同时更改属组  change owner</p>
-<p>语法：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chown <span class="string">[–R]</span> 属主名 文件名</span><br><span class="line">chown <span class="string">[-R]</span> 属主名：属组名 文件名</span><br></pre></td></tr></table></figure></p>
-<p>进入 /root 目录（~）将install.log的拥有者改为bin这个账号：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@www ~] cd ~</span><br><span class="line">[root@www ~]# chown bin install.log</span><br><span class="line">[root@www ~]# ls -l</span><br><span class="line">-rw-r--r--  1 bin <span class="built_in"> users </span>68495 Jun 25 08:53 install.log</span><br></pre></td></tr></table></figure></p>
-<p>3、chmod：更改文件9个属性</p>
-<p>Linux文件的基本权限就有九个，分别是owner/group/others三种身份各有自己的read/write/execute权限。</p>
-<p>例如：文件的权限字符为：『-rwxrwxrwx』， 可以使用数字来代表各个权限，各权限的分数对照表如下：</p>
-<ul>
-<li>r:4</li>
-<li>w:2</li>
-<li>x:1</li>
-</ul>
-<p>每种身份(owner/group/others)各自的三个权限(r/w/x)分数是需要累加的，例如当权限为： [-rwxrwx—] 结果：</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">owner = rwx = <span class="number">4</span>+<span class="number">2</span>+<span class="number">1</span> = <span class="number">7</span></span><br><span class="line">group = rwx = <span class="number">4</span>+<span class="number">2</span>+<span class="number">1</span> = <span class="number">7</span></span><br><span class="line">others= --- = <span class="number">0</span>+<span class="number">0</span>+<span class="number">0</span> = <span class="number">0</span></span><br></pre></td></tr></table></figure>
-<p>设定权限变更为：770</p>
-<p>语法<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod <span class="string">[-R]</span> xyz 文件或目录</span><br></pre></td></tr></table></figure></p>
-<p>参数 xyz : 就是刚刚提到的数字类型的权限属性，为 rwx 属性数值的相加。eg: 770</p>
-<p>Example: 将.bashrc这个文件所有的权限都设定启用<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">ls</span> <span class="selector-tag">-al</span> <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-tag">-rw-r--r--</span>  1 <span class="selector-tag">root</span> <span class="selector-tag">root</span> 395 <span class="selector-tag">Jul</span>  4 11<span class="selector-pseudo">:45</span> <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">chmod</span> 777 <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">ls</span> <span class="selector-tag">-al</span> <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-tag">-rwxrwxrwx</span>  1 <span class="selector-tag">root</span> <span class="selector-tag">root</span> 395 <span class="selector-tag">Jul</span>  4 11<span class="selector-pseudo">:45</span> <span class="selector-class">.bashrc</span></span><br></pre></td></tr></table></figure></p>
-<p>那如果要将权限变成 -rwxr-xr– 呢？那么权限的分数就成为 [4+2+1][4+0+1][4+0+0]=754。</p>
-<h2 id="符号类型改变文件权限"><a href="#符号类型改变文件权限" class="headerlink" title="符号类型改变文件权限"></a>符号类型改变文件权限</h2><p>另一种改权限的方式。针对user,group,others设置权限。</p>
-<ol>
-<li>user</li>
-<li>group</li>
-<li>others</li>
-</ol>
-<p>那么我们就可以使用 u, g, o 来代表三种身份的权限。</p>
-<p>可选 ：</p>
-<ul>
-<li>u</li>
-<li>g</li>
-<li>o</li>
-<li>a (指所有，即全部的身份)</li>
-</ul>
-<p>操作符： </p>
-<ul>
-<li><ul>
-<li>加入</li>
-</ul>
-</li>
-<li><ul>
-<li>除去</li>
-</ul>
-</li>
-<li>=    设定<br>权限：</li>
-<li>r</li>
-<li>w</li>
-<li>x</li>
-</ul>
-<p>可以使用以下语法来设定:<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod <span class="attribute">u</span>=rwx,g=rwx,o=rwx 文件名</span><br></pre></td></tr></table></figure></p>
-<p>Example：将文件权限设置为 -rwxr-xr– ，<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#  touch <span class="keyword">test</span>    <span class="comment">// 创建文件</span></span><br><span class="line"># <span class="keyword">ls</span> -al <span class="keyword">test</span>    <span class="comment">// 查看默认权限</span></span><br><span class="line">-rw-r--r-- 1 root root 0 Nov 15 10:32 <span class="keyword">test</span></span><br><span class="line"># chmod <span class="keyword">u</span>=rwx,<span class="keyword">g</span>=rx,o=r  <span class="keyword">test</span>    <span class="comment">// 修改权限</span></span><br><span class="line"># <span class="keyword">ls</span> -al <span class="keyword">test</span></span><br><span class="line">-rwxr-xr-- 1 root root 0 Nov 15 10:32 <span class="keyword">test</span></span><br></pre></td></tr></table></figure></p>
-<p>而如果是要将权限去掉而不改变其他已存在的权限呢？<br>例如要拿掉全部人的可执行权限，则：<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#  chmod  a-x test1</span></span><br><span class="line"><span class="comment"># ls -al test1</span></span><br><span class="line">-rw-r--r--<span class="number"> 1 </span>root root<span class="number"> 0 </span>Nov<span class="number"> 15 </span>10:32 test1</span><br></pre></td></tr></table></figure></p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2017/05/11/实现最小值函数/">Java 实现最小值函数</a>
         </h1>
         
@@ -557,156 +704,6 @@
 <figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//注意：Number并没有实现Comparable</span><br><span class="line">private static &lt;T extends Number &amp; Comparable&lt;? super T&gt;&gt; T <span class="built_in">min</span>(T[] <span class="built_in">values</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">values</span> == null || <span class="built_in">values</span>.<span class="built_in">length</span> == <span class="number">0</span>) <span class="built_in">return</span> null;</span><br><span class="line">    T <span class="built_in">min</span> = <span class="built_in">values</span>[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span> (int i = <span class="number">1</span>; i &lt; <span class="built_in">values</span>.<span class="built_in">length</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">min</span>.compareTo(<span class="built_in">values</span>[i]) &gt; <span class="number">0</span>) <span class="built_in">min</span> = <span class="built_in">values</span>[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">return</span> <span class="built_in">min</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>测试：<br><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> minInteger = <span class="built_in">min</span>(<span class="keyword">new</span> Integer[]&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;);<span class="comment">//result:1</span></span><br><span class="line"><span class="keyword">double</span> minDouble = <span class="built_in">min</span>(<span class="keyword">new</span> Double[]&#123;<span class="number">1.2</span>, <span class="number">2.2</span>, <span class="number">-1</span>d&#125;);<span class="comment">//result:-1d</span></span><br><span class="line"><span class="keyword">String</span> typeError = <span class="built_in">min</span>(<span class="keyword">new</span> <span class="keyword">String</span>[]&#123;<span class="string">"1"</span>,<span class="string">"3"</span>&#125;);<span class="comment">//报错</span></span><br></pre></td></tr></table></figure></p>
 
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/05/11/数组实现栈/">Java 使用数组实现栈</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-05-11T15:30:00.000Z" itemprop="datePublished">2017-05-11</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/程序设计题/">程序设计题</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="使用数组实现栈"><a href="#使用数组实现栈" class="headerlink" title="使用数组实现栈"></a>使用数组实现栈</h1><figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">自己实现一个栈，要求这个栈具有push<span class="comment">()</span>、pop<span class="comment">()</span>（返回栈顶元素并出栈）、peek<span class="comment">()</span> （返回栈顶元素不出栈）、isEmpty<span class="comment">()</span>、size<span class="comment">()</span></span><br><span class="line">这些基本的方法。</span><br><span class="line"></span><br><span class="line">提示：每次入栈之前先判断栈的容量是否够用，如果不够用就用Arrays.copyOf<span class="comment">()</span>进行扩容；</span><br></pre></td></tr></table></figure>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">package</span> program;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> MyStack &#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * 使用数组实现栈： 自己实现一个栈，要求这个栈具有push()、pop()（返回栈顶元素并出栈）、peek()</span></span><br><span class="line"><span class="comment">	 * （返回栈顶元素不出栈）、isEmpty()、size()这些基本的方法。</span></span><br><span class="line"><span class="comment">	 * 提示：每次入栈之前先判断栈的容量是否够用，如果不够用就用Arrays.copyOf()进行扩容；</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * 存数据的数组</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span>[] storage;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * 容量</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> capacity;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * 元素个数</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> <span class="keyword">count</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * 每次以当前容量进行扩容</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> GROW_FACTOR = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// TODO：默认构造函数</span></span><br><span class="line">	<span class="keyword">public</span> MyStack() &#123;</span><br><span class="line">		<span class="keyword">this</span>.capacity = <span class="number">8</span>;</span><br><span class="line">		<span class="keyword">this</span>.<span class="keyword">count</span> = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">this</span>.storage = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">8</span>];</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// TODO：带初始容量的构造方法</span></span><br><span class="line">	<span class="keyword">public</span> MyStack(<span class="keyword">int</span> initialCapacity) &#123;</span><br><span class="line">		<span class="keyword">if</span> (initialCapacity &lt; <span class="number">1</span>)</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Capacity too small."</span>);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">this</span>.capacity = initialCapacity;</span><br><span class="line">		<span class="keyword">this</span>.storage = <span class="keyword">new</span> <span class="keyword">int</span>[initialCapacity];</span><br><span class="line">		<span class="keyword">this</span>.<span class="keyword">count</span> = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// TODO： 入栈</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="keyword">push</span>(<span class="keyword">int</span> value) &#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="keyword">count</span> == capacity) &#123;</span><br><span class="line">			scrollUpCapacity();</span><br><span class="line">		&#125;</span><br><span class="line">		storage[<span class="keyword">count</span>++] = value;		</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// <span class="doctag">TODO:</span> 扩容</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">void</span> scrollUpCapacity() &#123;</span><br><span class="line">		<span class="keyword">int</span> newCapacity = capacity * GROW_FACTOR;</span><br><span class="line">		storage = Arrays.copyOf(storage, newCapacity);</span><br><span class="line">		capacity = newCapacity;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// TODO： 返回栈顶元素(出栈)</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> <span class="keyword">pop</span>() &#123;</span><br><span class="line">		<span class="keyword">count</span>--;</span><br><span class="line">		<span class="keyword">if</span> (<span class="keyword">count</span> == -<span class="number">1</span>) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Stack is empty."</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> storage[<span class="keyword">count</span>];</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// TODO： 返回栈顶元素(不出栈)</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> peek() &#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="keyword">count</span> == <span class="number">0</span>) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Stack is empty."</span>);</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="keyword">return</span> storage[<span class="keyword">count</span> - <span class="number">1</span>];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// <span class="doctag">TODO:</span> 判断是否为空</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">boolean</span> isEmpty() &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">count</span> == <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// <span class="doctag">TODO:</span> 返回长度(元素个数)</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> <span class="keyword">size</span>() &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">count</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args) &#123;</span><br><span class="line">		MyStack myStack = <span class="keyword">new</span> MyStack(<span class="number">3</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">1</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">2</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">3</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">4</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">5</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">6</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">7</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">8</span>);</span><br><span class="line">		System.out.<span class="keyword">println</span>(myStack.peek());<span class="comment">// 8</span></span><br><span class="line">		System.out.<span class="keyword">println</span>(myStack.<span class="keyword">size</span>());<span class="comment">// 8</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++) &#123;</span><br><span class="line">			System.out.<span class="keyword">println</span>(myStack.<span class="keyword">pop</span>());</span><br><span class="line">		&#125;</span><br><span class="line">		System.out.<span class="keyword">println</span>(myStack.isEmpty());<span class="comment">// true</span></span><br><span class="line">		myStack.<span class="keyword">pop</span>();<span class="comment">// 报错：java.lang.IllegalArgumentException: Stack is empty.</span></span><br><span class="line"></span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">520</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/04/15/JavaIO/">Java IO</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-04-15T15:30:00.000Z" itemprop="datePublished">2017-04-15</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>#Java IO</p>
-<h2 id="Java-中-IO-流分为几种"><a href="#Java-中-IO-流分为几种" class="headerlink" title="Java 中 IO 流分为几种?"></a>Java 中 IO 流分为几种?</h2><p>java 中 IO 流分为几种?<br>按照流的流向分，可以分为输入流和输出流；<br>按照操作单元划分，可以划分为字节流和字符流；<br>按照流的角色划分为节点流和处理流。</p>
-<p>Java Io流共涉及40多个类，这些类看上去很杂乱，但实际上很有规则，而且彼此之间存在非常紧密的联系，<br>Java I0流的40多个类都是从如下4个抽象类基类中派生出来的。</p>
-<p>InputStream/Reader: 所有的输入流的基类，前者是字节输入流，后者是字符输入流。<br>OutputStream/Writer: 所有输出流的基类，前者是字节输出流，后者是字符输出流。</p>
-<p>字符： Reader/Writer<br>字节： InputStream/OutputStream</p>
-<h2 id="BIO-NIO-AIO-有什么区别"><a href="#BIO-NIO-AIO-有什么区别" class="headerlink" title="BIO,NIO,AIO 有什么区别?"></a>BIO,NIO,AIO 有什么区别?</h2><h3 id="BIO-Blocking-I-O"><a href="#BIO-Blocking-I-O" class="headerlink" title="BIO (Blocking I/O):"></a>BIO (Blocking I/O):</h3><p>同步阻塞I/O模式，数据的读取写入必须阻塞在一个线程内等待其完成。在活动连接数不是特别高（小于单机1000）的情况下，<br>这种模型是比较不错的，可以让每一个连接专注于自己的 I/O 并且编程模型简单，也不用过多考虑系统的过载、限流等问题。<br>线程池本身就是一个天然的漏斗，可以缓冲一些系统处理不了的连接或请求。但是，当面对十万甚至百万级连接的时候，<br>传统的 BIO 模型是无能为力的。因此，我们需要一种更高效的 I/O 处理模型来应对更高的并发量。</p>
-<h3 id="NIO-New-I-O"><a href="#NIO-New-I-O" class="headerlink" title="NIO (New I/O):"></a>NIO (New I/O):</h3><p>NIO是一种同步非阻塞的I/O模型，在Java 1.4 中引入了NIO框架，对应 java.nio 包，提供了 Channel , Selector，Buffer等抽象。<br>NIO中的N可以理解为Non-blocking，不单纯是New。它支持面向缓冲的，基于通道的I/O操作方法。 NIO提供了与传统BIO模型中的<br>Socket 和 ServerSocket 相对应的 SocketChannel 和 ServerSocketChannel 两种不同的套接字通道实现,两种通道都支持阻塞和<br>非阻塞两种模式。阻塞模式使用就像传统中的支持一样，比较简单，但是性能和可靠性都不好；非阻塞模式正好与之相反。<br>对于低负载、低并发的应用程序，可以使用同步阻塞I/O来提升开发速率和更好的维护性；<br>对于高负载、高并发的（网络）应用，应使用 NIO 的非阻塞模式来开发。</p>
-<h3 id="AIO-Asynchronous-I-O"><a href="#AIO-Asynchronous-I-O" class="headerlink" title="AIO (Asynchronous I/O):"></a>AIO (Asynchronous I/O):</h3><p>AIO 也就是 NIO 2。在 Java 7 中引入了 NIO 的改进版 NIO 2,它是异步非阻塞的IO模型。异步 IO 是基于事件和回调机制实现的，<br>也就是应用操作之后会直接返回，不会堵塞在那里，当后台处理完成，操作系统会通知相应的线程进行后续的操作。<br>AIO 是异步IO的缩写，虽然 NIO 在网络操作中，提供了非阻塞的方法，但是 NIO 的 IO 行为还是同步的。对于 NIO 来说，我们的<br>业务线程是在 IO 操作准备好时，得到通知，接着就由这个线程自行进行 IO 操作，IO操作本身是同步的。查阅网上相关资料，<br>我发现就目前来说 AIO 的应用还不是很广泛，Netty 之前也尝试使用过 AIO，不过又放弃了。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/04/10/异常处理/">异常处理</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-04-10T14:30:00.000Z" itemprop="datePublished">2017-04-10</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h1><p>分类：<br>                                                    ====StackOverFlowError(栈溢出)</p>
-<pre><code>                    ====VirtualMachineError
-
-                                            ====OutOfMemoryError  (内存溢出)
-==== Error
-
-                    ====AWTError
-</code></pre><p>Throwable    ======================================================       </p>
-<pre><code>                                            ====EOFException
-
-                    ====IOException
-
-                                            ====FileNoFoundException
-
-==== Exception   
-
-                                            ====ClassNoFoundException
-
-                                            ====NullPointerException
-
-                    ====RuntimeException   ====IllegalArgumentException
-
-                                            ====ArrayIndexOutOfBoundsException
-
-                                            ====UnknownTypeException
-
-                                            ====MissingResourceException
-
-                                            ====ArrithmeticException(除数为0的异常 ArrithmeticException,就是运行时异常)
-</code></pre><p>在 Java 中，所有的异常都有一个共同的祖先java.lang包中的 Throwable类。Throwable：<br>有两个重要的子类：Exception（异常） 和 Error（错误）<br>二者都是 Java 异常处理的重要子类，各自都包含大量子类。</p>
-<p>Error（错误）:是程序无法处理的错误，表示运行应用程序中较严重问题。大多数错误与代码编写者执行的操作无关，而表示代码运行时<br>JVM（Java 虚拟机）出现的问题。例如，Java虚拟机运行错误（Virtual MachineError），当 JVM 不再有继续执行操作所需的内存资源时<br>，将出现 OutOfMemoryError。这些异常发生时，Java虚拟机（JVM）一般会选择线程终止。</p>
-<p>这些错误表示故障发生于虚拟机自身、或者发生在虚拟机试图执行应用时，如Java虚拟机运行错误（Virtual MachineError）、类定义错误<br>（NoClassDefFoundError）等。这些错误是不可查的，因为它们在应用程序的控制和处理能力之外，而且绝大多数是程序运行时不允许<br>出现的状况。对于设计合理的应用程序来说，即使确实发生了错误，本质上也不应该试图去处理它所引起的异常状况。<br>在 Java中，错误通过Error的子类描述。</p>
-<p>Exception（异常）:是程序本身可以处理的异常。Exception 类有一个重要的子类 RuntimeException。RuntimeException 异常由<br>Java虚拟机抛出。NullPointerException（要访问的变量没有引用任何对象时，抛出该异常）、ArithmeticException（算术运算异常，<br>一个整数除以0时，抛出该异常）和 ArrayIndexOutOfBoundsException （下标越界异常）。                            </p>
-<p>注意：异常和错误的区别：异常能被程序本身可以处理，错误是无法处理。                            </p>
-<p>Throwable类常用方法</p>
-<pre><code>public string getMessage():返回异常发生时的详细信息
-public string toString():返回异常发生时的简要描述
-public string getLocalizedMessage():返回异常对象的本地化信息。使用Throwable的子类覆盖这个方法，可以声称本地化信息。如果子类没有覆盖该方法，则该方法返回的信息与getMessage（）返回的结果相同
-public void printStackTrace():在控制台上打印Throwable对象封装的异常信息                            
-</code></pre>
         
     </section>
 </article>

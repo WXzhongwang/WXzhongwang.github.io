@@ -131,6 +131,94 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/03/03/Linux Java 安装环境变量 /">Linux Java 安装环境变量</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-03-03T06:22:30.000Z" itemprop="datePublished">2018-03-03</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java/">Java</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Linux-Java-安装环境变量"><a href="#Linux-Java-安装环境变量" class="headerlink" title="Linux Java 安装环境变量"></a>Linux Java 安装环境变量</h1><p>如下安装目录为 /usr/java<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tar -zxf jdk-8u211-linux-x64.tag.gz</span><br><span class="line">vim etc/profile</span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">JAVA_HOME</span>=/usr/java/jdk-8u221</span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">PATH</span>=<span class="variable">$JAVA_HOME</span>/bin:$PATH</span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">CLASSPATH</span>=.$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar</span><br></pre></td></tr></table></figure></p>
+<p>修改.bash_profile文件 </p>
+<p>这种方法更为安全，它可以把使用这些环境变量的权限控制到用户级别，如果你需要给某个用户权限使用这些环境变量，你只需要修改其个人用户主目录下的.bash_profile文件就可以了。<br>·用文本编辑器打开用户目录下的.bash_profile文件<br>·在.bash_profile文件末尾加入：<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=<span class="regexp">/usr/java</span><span class="regexp">/jdk-8u221</span></span><br><span class="line"><span class="regexp">export PATH=$JAVA_HOME/bin</span>:$PATH </span><br><span class="line">export CLASSPATH=.:$JAVA_HOME/<span class="class"><span class="keyword">lib</span>/<span class="title">dt</span>.<span class="title">jar</span>:$<span class="title">JAVA_HOME</span>/<span class="title">lib</span>/<span class="title">tools</span>.<span class="title">jar</span></span></span><br></pre></td></tr></table></figure></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/03/01/String StringBuffer 和 StringBuilder/">String StringBuffer 和 StringBuilder</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-03-01T02:10:00.000Z" itemprop="datePublished">2018-03-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java/">Java</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="String、StringBuffer-和-StringBuilder"><a href="#String、StringBuffer-和-StringBuilder" class="headerlink" title="String、StringBuffer 和 StringBuilder"></a>String、StringBuffer 和 StringBuilder</h1><h3 id="可变性"><a href="#可变性" class="headerlink" title="可变性"></a>可变性</h3><p>String:</p>
+<p>简单的来说：String 类中使用 final 关键字修饰字符数组来保存字符串，private　final　char　value[]，所以 String 对象是不可变的。</p>
+<p>StringBuilder 与 StringBuffer:</p>
+<p>而StringBuilder 与 StringBuffer 都继承自 AbstractStringBuilder 类，<br>在 AbstractStringBuilder 中也是使用字符数组保存字符串char[]value 但是没有用 final 关键字修饰，所以这两种对象都是可变的。</p>
+<h3 id="线程安全性"><a href="#线程安全性" class="headerlink" title="线程安全性"></a>线程安全性</h3><p>String 中的对象是不可变的，也就可以理解为常量，线程安全。</p>
+<p>AbstractStringBuilder 是 StringBuilder 与 StringBuffer 的公共父类，定义了一些字符串的基本操作，<br>如 expandCapacity、append、insert、indexOf 等公共方法。</p>
+<p>StringBuffer 对方法加了同步锁或者对调用的方法加了同步锁，所以是线程安全的。</p>
+<p>StringBuilder 并没有对方法进行加同步锁，所以是非线程安全的。　</p>
+<p>对于三者使用的总结：</p>
+<p>操作少量的数据: 适用String</p>
+<p>单线程操作字符串缓冲区下操作大量数据: 适用StringBuilder</p>
+<p>多线程操作字符串缓冲区下操作大量数据: 适用StringBuffer</p>
+<p>装箱与拆箱</p>
+<ul>
+<li>装箱：将基本类型用它们对应的引用类型包装起来；</li>
+<li>拆箱：将包装类型转换为基本数据类型；</li>
+</ul>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/02/24/3.0 Java虚拟机的内部体系结构/">JVM 3.0</a>
         </h1>
         
@@ -192,6 +280,50 @@
 <h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><p>准备阶段正式为类变量在方法区中分配内存并且赋初始值，初始值一般为该类变量类型的零值。</p>
 <h3 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h3><p>解析阶段虚拟机将常量池内的符号引用替换为直接引用。<br>符号引用：以一组符号来描述所引用的目标，符号可以是任何形式的字面量，只要使用时能无歧义的定位到目标即可。<br>直接引用：是指能直接指向目标的指针，相对偏移量或是一个能间接定位到目标的句柄。</p>
 <h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>初始化是类加载过程的最后一个阶段，在前面的类加载过程中，除了在加载阶段用户可以自定义类加载器参与之外，其余动作完全由虚拟机主导和控制，到了初始化阶段，才真正开始执行类中定义的Java代码（字节码）。准备阶段为类变量分配内存并且赋初始值，赋值操作在初始化阶段执行。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/02/24/4.0 Class文件/">JVM 4.0</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-24T02:10:00.000Z" itemprop="datePublished">2018-02-24</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Class文件"><a href="#Class文件" class="headerlink" title="Class文件"></a>Class文件</h1><p>Class文件是一组以8位字节为基础单位的二进制流，各个数据项目严格按照顺序紧凑地排列在Class文件中，<br>中间没有添加任何分隔符号。Class文件采用一种类似于C语言结构体的伪结构来存储数据，这种伪结构中只包含两种数据类型，<br>无符号数和表。无符号数属于基本的数据类型，以u1,u2,u4,u8分别代表1个字节，2个字节，4个字节和8个字节的无符号数，<br>可以用来描述数字、索引引用、数量值或者按照utf-8编码构成字符串值。表是由多个无符号数或者其他表作为数据项构成的复合数据类型，<br>所有表都习惯性地以“_info”结尾，用来描述有层次关系的复合结构数据。</p>
+<p>Class文件的内容包括：</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">ClassFile</span> &#123;</span><br><span class="line"></span><br><span class="line">   <span class="selector-tag">u4</span> <span class="selector-tag">magic</span>;                                     <span class="comment">//魔数：0xCAFEBABE，用来判断是否是Java class文件</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">minor_version</span>;                             <span class="comment">//次版本号</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">major_version</span>;                             <span class="comment">//主版本号</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">constant_pool_count</span>;                       <span class="comment">//常量池大小</span></span><br><span class="line">   <span class="selector-tag">cp_info</span> <span class="selector-tag">constant_pool</span><span class="selector-attr">[constant_pool_count-1]</span>; <span class="comment">//常量池</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">access_flags</span>;                              <span class="comment">//类和接口层次的访问标志（通过|运算得到）</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">this_class</span>;                                <span class="comment">//类索引（指向常量池中的类常量）</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">super_class</span>;                               <span class="comment">//父类索引（指向常量池中的类常量）</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">interfaces_count</span>;                          <span class="comment">//接口索引计数器</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">interfaces</span><span class="selector-attr">[interfaces_count]</span>;              <span class="comment">//接口索引集合</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">fields_count</span>;                              <span class="comment">//字段数量计数器</span></span><br><span class="line">   <span class="selector-tag">field_info</span> <span class="selector-tag">fields</span><span class="selector-attr">[fields_count]</span>;              <span class="comment">//字段表集合</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">methods_count</span>;                             <span class="comment">//方法数量计数器</span></span><br><span class="line">   <span class="selector-tag">method_info</span> <span class="selector-tag">methods</span><span class="selector-attr">[methods_count]</span>;           <span class="comment">//方法表集合</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">attributes_count</span>;                          <span class="comment">//属性个数</span></span><br><span class="line">   <span class="selector-tag">attribute_info</span> <span class="selector-tag">attributes</span><span class="selector-attr">[attributes_count]</span>;  <span class="comment">//属性表</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>访问标志：类还是接口；是否定义为public类型，abstract类型；若为类，是否声明为final。</li>
+<li>字段：用来描述接口或类中的变量，但不包括在方法内部的变量。</li>
+<li>字面量：文本字符串，声明为final的常量值等。</li>
+<li>符号引用：类和接口的全限定名；字段的名称和描述符；方法的名称和描述符。</li>
+<li>类索引，父类索引，接口索引：用来确定类的继承关系。</li>
+</ul>
 
         
     </section>
@@ -283,6 +415,52 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/02/08/Java多线程/">Java多线程相关问题</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-08T04:18:45.000Z" itemprop="datePublished">2018-02-08</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>Java多线程相关问题</p>
+<p>1.线程池的原理，为什么要创建线程池？创建线程池的方式？</p>
+<p>2.线程的生命周期？什么时候会出现僵死线程？</p>
+<ol start="3">
+<li><p>说说线程安全问题？什么是线程安全？如何实现线程安全？</p>
+</li>
+<li><p>创建线程池有哪几个核心参数？如何合理的配置线程池的大小？</p>
+</li>
+</ol>
+<p>5.volatile、ThreadLocal的使用场景和原理；</p>
+<p>6.ThreadLocal什么时候会出现OOM情况？为什么？</p>
+<p>7.sychronized、volatile区别？synchronized锁粒度、模拟死锁场景、原子性和可见性</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/02/08/IO复用技术/">IO复用技术</a>
         </h1>
         
@@ -326,52 +504,6 @@
 <blockquote>
 <p>内核（kernel）利用文件描述符（file descriptor）来访问文件。文件描述符是非负整数。打开现存文件或新建文件时，内核会返回一个文件描述符。读写文件也需要使用文件描述符来指定待读写的文件。</p>
 </blockquote>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/02/08/Java多线程/">Java多线程相关问题</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-02-08T04:18:45.000Z" itemprop="datePublished">2018-02-08</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>Java多线程相关问题</p>
-<p>1.线程池的原理，为什么要创建线程池？创建线程池的方式？</p>
-<p>2.线程的生命周期？什么时候会出现僵死线程？</p>
-<ol start="3">
-<li><p>说说线程安全问题？什么是线程安全？如何实现线程安全？</p>
-</li>
-<li><p>创建线程池有哪几个核心参数？如何合理的配置线程池的大小？</p>
-</li>
-</ol>
-<p>5.volatile、ThreadLocal的使用场景和原理；</p>
-<p>6.ThreadLocal什么时候会出现OOM情况？为什么？</p>
-<p>7.sychronized、volatile区别？synchronized锁粒度、模拟死锁场景、原子性和可见性</p>
 
         
     </section>
@@ -466,123 +598,10 @@
 </article>
 
 
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/02/01/JDK&JRE/">Java 字节码</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-02-01T04:10:00.000Z" itemprop="datePublished">2018-02-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="JDK-和-JRE"><a href="#JDK-和-JRE" class="headerlink" title="JDK 和 JRE"></a>JDK 和 JRE</h1><p>JDK:</p>
-<p>JDK是Java Development Kit，它是功能齐全的Java SDK。它拥有JRE所拥有的一切，还有编译器（javac）和工具（如javadoc和jdb）。<br>它能够创建和编译程序。</p>
-<p>JRE:<br>Java运行时环境。它是运行已编译 Java 程序所需的所有内容的集合，包括 Java虚拟机（JVM），Java类库，java命令和其他的一些基础构件。<br>但是，它不能用于创建新程序。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/02/01/1.0 Java程序执行流程/">JVM 1.0</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-02-01T02:10:00.000Z" itemprop="datePublished">2018-02-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>1.Java程序执行流程</p>
-<p>Java技术的核心就是Java虚拟机，因为所有的Java程序都在虚拟机上运行。Java程序的运行需要Java虚拟机、Java API和Java Class文件的配合。Java虚拟机实例负责运行一个Java程序。当启动一个Java程序时，一个虚拟机实例就诞生了。当程序结束，这个虚拟机实例也就消亡。</p>
-<p><img src="https://www.javazhiyin.com/wp-content/uploads/2019/01/java3-1547432465.jpg" alt="image"></p>
-<p>分为编译时环境和运行时环境，很基础很重要。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/01/01/架构演变背景/">架构演变背景</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-01-01T04:10:10.000Z" itemprop="datePublished">2018-01-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/架构/">架构</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="架构演变背景"><a href="#架构演变背景" class="headerlink" title="架构演变背景"></a>架构演变背景</h1><h2 id="单一应用架构"><a href="#单一应用架构" class="headerlink" title="单一应用架构"></a>单一应用架构</h2><p>当网站流量很小时，只需一个应用，将所有功能都部署在一起，以减少部署节点和成本。此时，用于简化增删改查工作量的数据访问框架(ORM)是关键。</p>
-<h2 id="垂直应用架构"><a href="#垂直应用架构" class="headerlink" title="垂直应用架构"></a>垂直应用架构</h2><p>当访问量逐渐增大，单一应用增加机器带来的加速度越来越小，将应用拆成互不相干的几个应用，以提升效率。此时，用于加速前端页面开发的Web框架(MVC)是关键。</p>
-<h2 id="分布式服务架构"><a href="#分布式服务架构" class="headerlink" title="分布式服务架构"></a>分布式服务架构</h2><p>当垂直应用越来越多，应用之间交互不可避免，将核心业务抽取出来，作为独立的服务，逐渐形成稳定的服务中心，使前端应用能更快速的响应多变的市场需求。此时，用于提高业务复用及整合的分布式服务框架(RPC)是关键。</p>
-<h2 id="流动计算架构"><a href="#流动计算架构" class="headerlink" title="流动计算架构"></a>流动计算架构</h2><p>当服务越来越多，容量的评估，小服务资源的浪费等问题逐渐显现，此时需增加一个调度中心基于访问压力实时管理集群容量，提高集群利用率。此时，用于提高机器利用率的资源调度和治理中心(SOA)是关键。</p>
-
-        
-    </section>
-</article>
-
-
 
 
 <nav class="page-nav">
-    <a class="extend prev" rel="prev" href="/categories/Java/page/5/">&laquo; 上一页</a><a class="page-number" href="/categories/Java/">1</a><span class="space">&hellip;</span><a class="page-number" href="/categories/Java/page/4/">4</a><a class="page-number" href="/categories/Java/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/categories/Java/page/7/">7</a><a class="extend next" rel="next" href="/categories/Java/page/7/">下一页 &raquo;</a>
+    <a class="extend prev" rel="prev" href="/categories/Java/page/5/">&laquo; 上一页</a><a class="page-number" href="/categories/Java/">1</a><span class="space">&hellip;</span><a class="page-number" href="/categories/Java/page/4/">4</a><a class="page-number" href="/categories/Java/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/categories/Java/page/7/">7</a><a class="page-number" href="/categories/Java/page/8/">8</a><a class="extend next" rel="next" href="/categories/Java/page/7/">下一页 &raquo;</a>
 </nav>
 
 

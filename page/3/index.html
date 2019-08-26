@@ -283,7 +283,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/01/08/大数据/">大数据</a>
+            <a href="/2019/01/08/流处理、批处理、交互式查询/">流处理、批处理、交互式查询</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -297,7 +297,7 @@
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/大数据/">大数据</a>
+    <a class="article-tag-link" href="/tags/Hadoop/">Hadoop</a>
 </div>
 
 
@@ -306,27 +306,14 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="大数据生命周期"><a href="#大数据生命周期" class="headerlink" title="大数据生命周期"></a>大数据生命周期</h1><ul>
-<li>基础设施层，涵盖计算资源、内存与存储和网络互联，具体表现为计算节点、集群、机柜和数据中心。</li>
-<li>数据存储和管理层，包括文件系统、数据库和类似YARN的资源管理系统。</li>
-<li>计算处理层，如hadoop、MapReduce和Spark</li>
-<li>在此之上的各种不同计算范式，如批处理、流处理和图计算等，包括衍生出编程模型的计算模型，如BSP、GAS等</li>
-</ul>
-<blockquote>
-<p>数据分析和可视化基于计算处理层。分析包括简单的查询分析、流分析以及更复杂的分析(如机器学习、图计算等)。查询分析多基于表结构和关系函数，流分析基于数据、事件流以及简单的统计分析，而复杂分析则基于更复杂的数据结构与方法，如图、矩阵、迭代计算和线性代数。一般意义的可视化是对分析结果的展示。但是通过交互式可视化，还可以探索性地提问，使分析获得新的线索，形成迭代的分析和可视化。基于大规模数据的实时交互可视化分析以及在这个过程中引入自动化的因素是目前研究的热点。</p>
-</blockquote>
-<h1 id="大数据技术生态"><a href="#大数据技术生态" class="headerlink" title="大数据技术生态"></a>大数据技术生态</h1><p>大数据的基本处理流程与传统数据处理流程并无太大差异，主要区别在于：由于大数据要处理大量、非结构化的数据，所以在各处理环节中都可以采用并行处理。目前，Hadoop、MapReduce和Spark等分布式处理方式已经成为大数据处理各环节的通用处理方法。</p>
-<h1 id="大数据采集与预处理"><a href="#大数据采集与预处理" class="headerlink" title="大数据采集与预处理"></a>大数据采集与预处理</h1><ul>
-<li>存储层</li>
-<li>预处理层</li>
-<li>采集层</li>
-</ul>
-<p>在大数据的生命周期中，数据采集处于第一个环节。根据MapReduce产生数据的应用系统分类，大数据的采集主要有4种来源：管理信息系统、Web信息系统、物理信息系统、科学实验系统。对于不同的数据集，可能存在不同的结构和模式，如文件、XML树、关系表等，表现为数据的异构性。对多个异构的数据集，需要做进一步集成处理或整合处理，将来自不同数据集的数据收集、整理、清洗、转换后，生成到一个新的数据集，为后续查询和分析处理提供统一的数据视图。针对管理信息系统中异构数据库集成技术、Web信息系统中的实体识别技术和DeepWeb集成技术、传感器网络数据融合技术已经有很多研究工作，取得了较大的进展，已经推出了多种数据清洗和质量控制工具。</p>
-<h1 id="大数据的存储和管理"><a href="#大数据的存储和管理" class="headerlink" title="大数据的存储和管理"></a>大数据的存储和管理</h1><p>按数据类型的不同，大数据的存储和管理采用不同的技术路线，大致可以分为3类。</p>
-<h2 id="第1类"><a href="#第1类" class="headerlink" title="第1类"></a>第1类</h2><p>主要面对的是大规模的结构化数据。针对这类大数据，通常采用新型数据库集群。它们通过列存储或行列混合存储以及粗粒度索引等技术，结合MPP(MassiveParallelProcessing)架构高效的分布式计算模式，实现对PB量级数据的存储和管理。这类集群具有高性能和高扩展性特点，在企业分析类应用领域已获得广泛应用;</p>
-<h2 id="第2类"><a href="#第2类" class="headerlink" title="第2类"></a>第2类</h2><p>主要面对的是半结构化和非结构化数据。应对这类应用场景，基于Hadoop开源体系的系统平台更为擅长。它们通过对Hadoop生态体系的技术扩展和封装，实现对半结构化和非结构化数据的存储和管理;</p>
-<h2 id="第3类"><a href="#第3类" class="headerlink" title="第3类"></a>第3类</h2><p>面对的是结构化和非结构化混合的大数据，因此采用MPP并行数据库集群与Hadoop集群的混合来实现对百PB量级、EB量级数据的存储和管理。一方面，用MPP来管理计算高质量的结构化数据，提供强大的SQL和OLTP型服务;另一方面，用Hadoop实现对半结构化和非结构化数据的处理，以支持诸如内容检索、深度挖掘与综合分析等新型应用。这类混合模式将是大数据存储和管理未来发展的趋势。</p>
+        <pre><code>我们将大数据处理按处理时间的跨度要求分为以下几类
 
+基于实时数据流的处理，通常的时间跨度在数百毫秒到数秒之间
+
+基于历史数据的交互式查询，通常时间跨度在数十秒到数分钟之间
+
+复杂的批量数据处理，通常的时间跨度在几分钟到数小时之间
+</code></pre>
         
     </section>
 </article>
@@ -405,7 +392,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/01/08/流处理、批处理、交互式查询/">流处理、批处理、交互式查询</a>
+            <a href="/2019/01/08/大数据/">大数据</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -419,7 +406,7 @@
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Hadoop/">Hadoop</a>
+    <a class="article-tag-link" href="/tags/大数据/">大数据</a>
 </div>
 
 
@@ -428,14 +415,27 @@
     
     <section class="article-body markdown-body">
         
-        <pre><code>我们将大数据处理按处理时间的跨度要求分为以下几类
+        <h1 id="大数据生命周期"><a href="#大数据生命周期" class="headerlink" title="大数据生命周期"></a>大数据生命周期</h1><ul>
+<li>基础设施层，涵盖计算资源、内存与存储和网络互联，具体表现为计算节点、集群、机柜和数据中心。</li>
+<li>数据存储和管理层，包括文件系统、数据库和类似YARN的资源管理系统。</li>
+<li>计算处理层，如hadoop、MapReduce和Spark</li>
+<li>在此之上的各种不同计算范式，如批处理、流处理和图计算等，包括衍生出编程模型的计算模型，如BSP、GAS等</li>
+</ul>
+<blockquote>
+<p>数据分析和可视化基于计算处理层。分析包括简单的查询分析、流分析以及更复杂的分析(如机器学习、图计算等)。查询分析多基于表结构和关系函数，流分析基于数据、事件流以及简单的统计分析，而复杂分析则基于更复杂的数据结构与方法，如图、矩阵、迭代计算和线性代数。一般意义的可视化是对分析结果的展示。但是通过交互式可视化，还可以探索性地提问，使分析获得新的线索，形成迭代的分析和可视化。基于大规模数据的实时交互可视化分析以及在这个过程中引入自动化的因素是目前研究的热点。</p>
+</blockquote>
+<h1 id="大数据技术生态"><a href="#大数据技术生态" class="headerlink" title="大数据技术生态"></a>大数据技术生态</h1><p>大数据的基本处理流程与传统数据处理流程并无太大差异，主要区别在于：由于大数据要处理大量、非结构化的数据，所以在各处理环节中都可以采用并行处理。目前，Hadoop、MapReduce和Spark等分布式处理方式已经成为大数据处理各环节的通用处理方法。</p>
+<h1 id="大数据采集与预处理"><a href="#大数据采集与预处理" class="headerlink" title="大数据采集与预处理"></a>大数据采集与预处理</h1><ul>
+<li>存储层</li>
+<li>预处理层</li>
+<li>采集层</li>
+</ul>
+<p>在大数据的生命周期中，数据采集处于第一个环节。根据MapReduce产生数据的应用系统分类，大数据的采集主要有4种来源：管理信息系统、Web信息系统、物理信息系统、科学实验系统。对于不同的数据集，可能存在不同的结构和模式，如文件、XML树、关系表等，表现为数据的异构性。对多个异构的数据集，需要做进一步集成处理或整合处理，将来自不同数据集的数据收集、整理、清洗、转换后，生成到一个新的数据集，为后续查询和分析处理提供统一的数据视图。针对管理信息系统中异构数据库集成技术、Web信息系统中的实体识别技术和DeepWeb集成技术、传感器网络数据融合技术已经有很多研究工作，取得了较大的进展，已经推出了多种数据清洗和质量控制工具。</p>
+<h1 id="大数据的存储和管理"><a href="#大数据的存储和管理" class="headerlink" title="大数据的存储和管理"></a>大数据的存储和管理</h1><p>按数据类型的不同，大数据的存储和管理采用不同的技术路线，大致可以分为3类。</p>
+<h2 id="第1类"><a href="#第1类" class="headerlink" title="第1类"></a>第1类</h2><p>主要面对的是大规模的结构化数据。针对这类大数据，通常采用新型数据库集群。它们通过列存储或行列混合存储以及粗粒度索引等技术，结合MPP(MassiveParallelProcessing)架构高效的分布式计算模式，实现对PB量级数据的存储和管理。这类集群具有高性能和高扩展性特点，在企业分析类应用领域已获得广泛应用;</p>
+<h2 id="第2类"><a href="#第2类" class="headerlink" title="第2类"></a>第2类</h2><p>主要面对的是半结构化和非结构化数据。应对这类应用场景，基于Hadoop开源体系的系统平台更为擅长。它们通过对Hadoop生态体系的技术扩展和封装，实现对半结构化和非结构化数据的存储和管理;</p>
+<h2 id="第3类"><a href="#第3类" class="headerlink" title="第3类"></a>第3类</h2><p>面对的是结构化和非结构化混合的大数据，因此采用MPP并行数据库集群与Hadoop集群的混合来实现对百PB量级、EB量级数据的存储和管理。一方面，用MPP来管理计算高质量的结构化数据，提供强大的SQL和OLTP型服务;另一方面，用Hadoop实现对半结构化和非结构化数据的处理，以支持诸如内容检索、深度挖掘与综合分析等新型应用。这类混合模式将是大数据存储和管理未来发展的趋势。</p>
 
-基于实时数据流的处理，通常的时间跨度在数百毫秒到数秒之间
-
-基于历史数据的交互式查询，通常时间跨度在数十秒到数分钟之间
-
-复杂的批量数据处理，通常的时间跨度在几分钟到数小时之间
-</code></pre>
         
     </section>
 </article>
@@ -516,7 +516,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/09/15/JVM课程四/">JVM课程四</a>
+            <a href="/2018/10/01/JVM课程七/">JVM课程七</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -524,7 +524,7 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-09-15T02:55:00.000Z" itemprop="datePublished">2018-09-15</time>
+    <time datetime="2018-10-01T14:22:22.000Z" itemprop="datePublished">2018-10-01</time>
 </a>
 
             
@@ -539,19 +539,46 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="JVM分代策略"><a href="#JVM分代策略" class="headerlink" title="JVM分代策略"></a>JVM分代策略</h1><h2 id="新生代"><a href="#新生代" class="headerlink" title="新生代"></a>新生代</h2><p>三个区的默认存放空间是Eden : From : To = 8: 1: 1</p>
-<p>目的是因为HotSpot采用复制算法来回收新生代，设置这个比例是为了充分利用空间。</p>
-<p>新生成的对象优先存放在新生代中，在新生代中，常规应用采取一次垃圾收集可以回收70%-90%。</p>
-<p>新生成的对象在Eden区中分配（大对象除外，直接老年代）。</p>
-<p>当Eden没有足够空间，虚拟机发起一次Minor GC。（只会收集一次Eden区）</p>
-<p>GC开始时，对象只会存在于Eden区和From Suvivor区，To Survivor为空。用于复制</p>
-<p>GC进行时，Eden区中所有存活的对象会被复制到To Survivor(连续存储)，<br>而在From Survivor区中仍存活的对象，会根据年龄决定去向。<br>阈值为15，每熬过一次GC,年龄就加1，GC分代年龄值存在对象的header中，<br>大于15，移至老年代中，没有达到15的复制到To Survivor。<br>之后，From和To交换角色。From被清空，变成下一次GC的To区， 而To区成为下一次GC的From区。</p>
-<p>无论如何，保证To区域在下一轮GC中为空的。</p>
-<blockquote>
-<p>note: 当TO区域用于复制From中的对象时，出现空间不足的时候，需要依赖老年代分配内存进行存放。</p>
-</blockquote>
-<h2 id="老年代"><a href="#老年代" class="headerlink" title="老年代"></a>老年代</h2><p>在新生代中经历了多次的GC后存活下来的对象会进入老年代。<br>老年代的对象生命周期较长，存活率比较高，在老年代中进行GC的频率较低，效率也较低。</p>
-<h2 id="永久代"><a href="#永久代" class="headerlink" title="永久代"></a>永久代</h2><p>永久代中存放类信息，常量，静态变量，即时编译器编译后的代码等数据。<br>对此区域，Java虚拟机规范指出可以不进行垃圾收集。一般而言不会进行垃圾回收。</p>
+        <h2 id="分代收集器"><a href="#分代收集器" class="headerlink" title="分代收集器"></a>分代收集器</h2><p>一起七个 3 + 3 + 1</p>
+<p>在收集器使用的时候都是：新老搭配的。</p>
+<p>新生代收集器：</p>
+<ul>
+<li>Serial</li>
+<li>ParNew</li>
+<li>Parallel Scavenge</li>
+</ul>
+<p>老年代收集器：</p>
+<ul>
+<li>CMS(Concurrent Mark Sweep)</li>
+<li>Serial Old </li>
+<li>Parallel Old</li>
+</ul>
+<p>新老通吃：<br>G1: Garbadge First</p>
+<h2 id="新生代收集器"><a href="#新生代收集器" class="headerlink" title="新生代收集器"></a>新生代收集器</h2><h3 id="Serial-GC-串行"><a href="#Serial-GC-串行" class="headerlink" title="Serial GC(串行)"></a>Serial GC(串行)</h3><p>HotSpot运行在client模式下的默认新生代收集器。只用一个CPU/一个收集器线程去完成GC。<br>“Stop The World” -XX:+UseSerialGC</p>
+<ol>
+<li>启动回收</li>
+<li>暂停其他所有工作线程。新生代回收采用<strong>复制</strong>算法。</li>
+<li>暂停其他所有工作线程。老年代回收采用<strong>标记整理算法</strong>。单线程收集，但是简单高效。<br>在内存占用不大的应用中，效率很高。</li>
+</ol>
+<h3 id="ParNew-并行"><a href="#ParNew-并行" class="headerlink" title="ParNew(并行)"></a>ParNew(并行)</h3><p>其本质是Serial的多线程版本，目的是缩短垃圾收集的时间，也就是占用工作线程时间的问题。单CPU甚至不如Serial，但是在多核CPU配合多线程效果明显。多核CPU + 超线程技术。<br>若VM启用老年代使用CMS(concurrent mark sweep)时候，<br>参数： -XX:+UseConcMarkSweepGC<br>新生代次收集器默认为ParNew。<br>多核CPU时候一般配置为CPU核数。-XX:ParallelGCThreads=<n> 参数控制GC线程数。</n></p>
+<ol>
+<li>启动回收</li>
+<li>暂停其他所有工作线程。新生代回收采用<strong>复制</strong>算法。 (GC线程多个同时工作，并行执行)</li>
+<li>暂停其他所有工作线程。老年代回收采用<strong>标记整理算法</strong>。</li>
+</ol>
+<h3 id="Parallel-Scavenge"><a href="#Parallel-Scavenge" class="headerlink" title="Parallel Scavenge"></a>Parallel Scavenge</h3><p>并行多线程，复制算法。关注点与ParNew不同，关注的是系统吞吐量。</p>
+<p>系统吞吐量 = 运行用户代码时间 /（运行用户代码时间 + 垃圾回收时间）</p>
+<p>停顿时间越短就越适用于用户交互的程序。良好的响应速度提升用户体验。<br>而高吞吐则适用于后台计算而不需要太多交互的任务，可以最高效率的利用CPU时间，<br>尽快的完成程序的运算任务。</p>
+<h2 id="老年代收集器"><a href="#老年代收集器" class="headerlink" title="老年代收集器"></a>老年代收集器</h2><h3 id="Serial-Old"><a href="#Serial-Old" class="headerlink" title="Serial Old"></a>Serial Old</h3><ol>
+<li>启动回收</li>
+<li>暂停其他所有工作线程。新生代回收采用复制算法。</li>
+<li>暂停其他所有工作线程。老年代回收采用标记整理算法。单线程收集，但是简单高效。<br>在内存占用不大的应用中，效率很高。</li>
+</ol>
+<p>可以与任意的新生代收集器配置使用</p>
+<h3 id="Parallel-Old"><a href="#Parallel-Old" class="headerlink" title="Parallel Old"></a>Parallel Old</h3><p>只能配合Parallel Scavenge收集器一起使用。</p>
+<h3 id="CMS-并发"><a href="#CMS-并发" class="headerlink" title="CMS (并发)"></a>CMS (并发)</h3><p>Concurrent Mark Sweep,可以和用户线程同时工作。是一款并发收集器。<br>虽然有理论上表现更好的G1收集器，主流的仍然是CMS收集器。<br>能用于server模式下的JVM优化。能结合新生代的Serial 和 ParNew一起使用。</p>
+<h2 id="G1"><a href="#G1" class="headerlink" title="G1"></a>G1</h2><p>Garbage-First。可以运用在新生代和老年代的直接分区收集。面向服务端的垃圾收集器。 –XX:+UseG1GC<br>将Java堆划分为多个相等的独立区域Region，保留新生代和老年代的概念。但是不再是物理隔离。</p>
+<p>优化方式：<br>1.选择JVM版本<br>2.对于堆区大小的分配<br>3.垃圾回收的方式</p>
 
         
     </section>
@@ -563,7 +590,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/09/15/JVM课程五/">JVM课程四</a>
+            <a href="/2018/09/20/JVM课程八/">JVM课程八</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -571,7 +598,7 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-09-15T02:55:00.000Z" itemprop="datePublished">2018-09-15</time>
+    <time datetime="2018-09-20T06:55:00.000Z" itemprop="datePublished">2018-09-20</time>
 </a>
 
             
@@ -586,10 +613,25 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="垃圾回收算法和收集器"><a href="#垃圾回收算法和收集器" class="headerlink" title="垃圾回收算法和收集器"></a>垃圾回收算法和收集器</h1><h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><h3 id="引用计数（reference-counting）"><a href="#引用计数（reference-counting）" class="headerlink" title="引用计数（reference counting）"></a>引用计数（reference counting）</h3><p>古老的算法。此对象有一个引用，增加一个计数，删除一个引用减少一个引用。垃圾回收时，只用收集为0的对象。<br>致命问题是无法解决循环引用的问题。</p>
-<h3 id="复制（copying）"><a href="#复制（copying）" class="headerlink" title="复制（copying）"></a>复制（copying）</h3><p>eg：survivor from to<br>此算法将内存空间分为两份。每次使用其中一个区域。（占用空间）<br>垃圾回收时，遍历当前使用的区域，把正在使用中的对象复制到另一个区域中。</p>
-<h3 id="标记清楚（Mark-Sweep）"><a href="#标记清楚（Mark-Sweep）" class="headerlink" title="标记清楚（Mark-Sweep）"></a>标记清楚（Mark-Sweep）</h3><p>执行分为两阶段。<br>第一阶段：从对象根节点开始标记所有被引用的对象。<br>第二阶段：遍历整个堆，把未标记的对象清除，此算法需要暂停整个应用(Stop the world)。<br>同时会产生内存碎片。<br>缺点：<br>1）未使用的内存空间不连续，浪费。<br>2）暂停整个应用。</p>
-<h3 id="标记整理（Mark-Compact）"><a href="#标记整理（Mark-Compact）" class="headerlink" title="标记整理（Mark-Compact）"></a>标记整理（Mark-Compact）</h3><p>执行分为两阶段。<br>第一阶段：从对象根节点开始标记所有被引用的对象。<br>第二阶段：遍历整个堆，把未标记的对象清除，同时把存活的对象压缩到一块，顺序排放，避免碎片问题。<br>避免了复制算法的空间问题。</p>
+        <h1 id="JVM性能监测工具"><a href="#JVM性能监测工具" class="headerlink" title="JVM性能监测工具"></a>JVM性能监测工具</h1><p><strong>jps</strong><br>      查询运行于jvm的线程jps -l</p>
+<p><strong>jstat</strong><br>        查看HotSpot VM运行的信息<br>        jstat -gc pid 毫秒数 次数</p>
+<pre><code>From Created
+From Used
+To Created 
+To Used
+Eden Created
+Eden Used
+Old Created
+Old Used
+Permanent Created
+Permanent Used
+Young GC 次收集器收集次数
+Young GC Time 次收集器时间
+Full GC  全收集次数
+Full GC Time 全收集时间
+GC Time 收集总时间
+S0C S1C S0U S1U EC EU OC OU PC PU YGC YGCT FGC FGCT GCT
+</code></pre><p><strong>jvisualvm</strong><br>        可视化工具<br>        jvisualvm</p>
 
         
     </section>
@@ -601,7 +643,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/09/13/JVM课程二/">JVM课程二</a>
+            <a href="/2018/09/15/JVM课程六/">JVM课程六</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -609,7 +651,7 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-09-13T07:55:00.000Z" itemprop="datePublished">2018-09-13</time>
+    <time datetime="2018-09-15T15:12:00.000Z" itemprop="datePublished">2018-09-15</time>
 </a>
 
             
@@ -624,20 +666,14 @@
     
     <section class="article-body markdown-body">
         
-        <h2 id="类加载器子系统和方法区："><a href="#类加载器子系统和方法区：" class="headerlink" title="类加载器子系统和方法区："></a>类加载器子系统和方法区：</h2><p>从文件系统中加载class文件，加载类信息。加载的信息存放于一个叫做方法区的内存空间。</p>
-<blockquote>
-<p>方法区中包括： 类信息，常量池（字符串字面量和数字常量）</p>
-</blockquote>
-<h2 id="堆："><a href="#堆：" class="headerlink" title="堆："></a>堆：</h2><p>主要内存空间。存放对象的实例。线程共享</p>
-<h2 id="直接内存："><a href="#直接内存：" class="headerlink" title="直接内存："></a>直接内存：</h2><p>NIO允许Java程序直接访问直接内存。</p>
-<p>不受JVM内存 -Xmx 最大堆大小限制。不属于堆内存。直接内存速率高于堆内存。</p>
-<p>读写频繁的场合可能会用到直接内存，与系统内存挂钩。</p>
-<h2 id="垃圾回收系统"><a href="#垃圾回收系统" class="headerlink" title="垃圾回收系统"></a>垃圾回收系统</h2><p>回收java堆，方法区，直接内存都可以回收。java所有的对象的释放都是隐式的。<br>垃圾回收系统后台默默运行，标示和释放对象，实现全自动化管理。</p>
-<h2 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h2><p>每一个虚拟机线程都有一个私有的栈，栈在线程创建的时候被创建。栈保存着帧信息。</p>
-<p>栈中保存方法中的局部变量，方法参数，和程序的调用，返回相关。</p>
-<h2 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h2><p>本地方法栈和虚拟机栈类似，虚拟机栈用于方法的调用。本地方法栈则用于本地方法（Native API）的调用。</p>
-<p>Java虚拟机的重要拓展之一，不同的操作系统本地方法的API也不一样。</p>
-<h2 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h2><p>线程私有，字节码解释器工作时通过改变这个计数器的值来选取下一条需要执行的字节码指令，<br>分支、循环、跳转、异常处理、线程恢复等功能都需要依赖这个计数器来完。</p>
+        <h1 id="垃圾收集器"><a href="#垃圾收集器" class="headerlink" title="垃圾收集器"></a>垃圾收集器</h1><p>Scavenge(次收集) 和 Full GC(全收集)区别</p>
+<p>新生代GC (Scavenge GC): 发生在新生代的GC，因为新生代的Java对象大多是朝生夕死，所以Scavenge GC非常频繁。<br>回收速度快，当Eden内存空间不足时，会触发Scavenge GC。<br>一般情况下，当新对象生成时，并且在Eden中申请空间失败，就会触发Scavenge GC,对Eden区进行GC，清除非存活对象，<br>将尚存活的对象移动至Survivor区，然后整理两个Survivor区，这种方式的GC是对年轻代的Eden区进行，不会影响老年代。</p>
+<p>老年代GC (Full GC/Major GC): Full GC是指发生在老年代的GC。出现了Full GC一般至少会伴随一次Minor GC。<br>老年代的对象大多是Minor GC过程中从新生代进入老年代。比如分配担保失败。Full GC的速度一般会比Minor GC慢十倍以上。<br>当老年代内存不足时或者显式调用System.gc()时候，会触发Full GC。</p>
+<p>次收集：<br>当年轻代堆空间紧张会被触发，相对于全收集，收集间隔较短。</p>
+<p>全收集：<br>当老年代或者持久代空间满了时候会触发全收集操作。可以使用System.gc()显式调用。<br>全收集一般会根据堆大小，需要的时间较长。不过全收集时间超过3s-5s,那就太长了。</p>
+<p>新生代收集器：<br>Serial<br>ParNew<br>Parallel scavenge </p>
+<p>老年代收集器：<br>CMS(Concurrent Mark Sweep)<br>Serial Old<br>Parallel Old </p>
+<p>新老通吃：<br>G1: Garbadge First</p>
 
         
     </section>
