@@ -346,81 +346,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/08/07/Java基础面试题四/">Java基础面试题四</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2019-08-07T14:37:25.985Z" itemprop="datePublished">2019-08-07</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/面试题/">面试题</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>Java基础面试题四</p>
-<blockquote>
-<p>Q1: Java中垃圾回收有什么目的？什么时候进行垃圾回收？ </p>
-</blockquote>
-<p>垃圾回收的目的是识别并且丢弃应用不再使用的对象来释放和重用资源。</p>
-<blockquote>
-<p>Q2：如果对象的引用被置为null，垃圾收集器是否会立即释放对象占用的内存？ </p>
-</blockquote>
-<p>不会，在下一个垃圾回收周期中，这个对象将是可被回收的。</p>
-<blockquote>
-<p>Q3: String是最基本的数据类型吗? </p>
-</blockquote>
-<p>基本数据类型包括:</p>
-<ul>
-<li>byte</li>
-<li>int</li>
-<li>char</li>
-<li>long</li>
-<li>float</li>
-<li>double</li>
-<li>boolean</li>
-<li>short </li>
-</ul>
-<p>java.lang.String类是final类型的，因此不可以继承这个类、不能修改这个类。为了提高效率节省空间，我们应该用StringBuffer类。</p>
-<blockquote>
-<p>Q4: int 和 Integer 有什么区别?</p>
-</blockquote>
-<p>Java 提供两种不同的类型：引用类型和原始类型（或内置类型）。Int是java的原始数据类型，Integer是java为int提供的封装类。Java为每个原始类型提供了封装类。</p>
-<blockquote>
-<p>Q5: String 和 StringBuffer的区别?</p>
-</blockquote>
-<p>JAVA平台提供了两个类：String和StringBuffer，它们可以储存和操作字符串，即包含多个字符的字符数据。这个String类提供了数值不可改变的字符串。而这个StringBuffer类提供的字符串进行修改。</p>
-<blockquote>
-<p>Q6: ArrayList,Vector,LinkedList的存储性能和特性?</p>
-</blockquote>
-<p>ArrayList和Vector都是使用数组方式存储数据，此数组元素数大于实际存储的数据以便增加和插入元素，它们都允许直接按序号索引元素，但是插入元素要涉及数组元素移动等内存操作，所以索引数据快而插入数据慢，Vector由于使用了synchronized方法（线程安全），通常性能上较ArrayList差，而LinkedList使用双向链表实现存储，按序号索引数据需要进行前向或后向遍历，但是插入数据时只需要记录本项的前后项即可，所以插入速度较快。<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">List的子类特点</span><br><span class="line"><span class="symbol">        ArrayList:</span></span><br><span class="line">            底层数据结构是数组，查询快，增删慢</span><br><span class="line">            线程不安全，效率高</span><br><span class="line"><span class="symbol">        Vector:</span></span><br><span class="line">            底层数据结构是数组，查询快，增删慢</span><br><span class="line">            线程安全，效率低</span><br><span class="line"><span class="symbol">        LinkedList:</span></span><br><span class="line">            底层数据结构是链表，查询慢，增删快</span><br><span class="line">            线程不安全，效率高</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>Q7: Collection 和 Collections的区别 </p>
-</blockquote>
-<p>Collection是集合类的上级接口，继承与他的接口主要有Set和List. </p>
-<p>Collections是针对集合类的一个帮助类，他提供一系列静态方法实现对各种集合的搜索、排序、线程安全化等操作。<br>集合的继承体系：<br><img src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1551609409314&amp;di=26c716fbc7abe264f61d07f051639caf&amp;imgtype=0&amp;src=http%3A%2F%2Faliyunzixunbucket.oss-cn-beijing.aliyuncs.com%2Fjpg%2F16f3e1d844693be57f7e0f55c969f42d.jpg%3Fx-oss-process%3Dimage%2Fresize%2Cp_100%2Fauto-orient%2C1%2Fquality%2Cq_90%2Fformat%2Cjpg%2Fwatermark%2Cimage_eXVuY2VzaGk%3D%2Ct_100" alt="image"></p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2019/08/07/Java基础面试题五/">Java基础面试题五</a>
         </h1>
         
@@ -485,7 +410,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/08/07/Java基础面试题二/">Java基础面试题二</a>
+            <a href="/2019/08/07/Java基础面试题四/">Java基础面试题四</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -493,7 +418,7 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2019-08-07T14:37:25.984Z" itemprop="datePublished">2019-08-07</time>
+    <time datetime="2019-08-07T14:37:25.985Z" itemprop="datePublished">2019-08-07</time>
 </a>
 
             
@@ -508,13 +433,47 @@
     
     <section class="article-body markdown-body">
         
-        <p>Java基础面试题二</p>
+        <p>Java基础面试题四</p>
 <blockquote>
-<p>Q1: 什么是死锁(deadlock)？ </p>
+<p>Q1: Java中垃圾回收有什么目的？什么时候进行垃圾回收？ </p>
 </blockquote>
-<p>两个进程都在等待对方执行完毕才能继续往下执行的时候就发生了死锁。结果就是两个进程都陷入了无限的等待中。<br>代码表示：<br><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLockDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> void main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">    DieLock dl1 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">true</span>);</span><br><span class="line">    DieLock dl2 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">false</span>);</span><br><span class="line">    dl1.start();</span><br><span class="line">    dl2.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>理想状态下dl1线程为true从if执行先打出”if objA”然后再接着打出”if objB”之后释放A、B的锁对象，之后dl2线程执行else语句打出”else objB”，”else objA”。<br>非理想状态下dl1先打出”if objA”，之后线程dl2执行打出”else objB”，然后1、2线程的锁对象A和B都处于被锁的状态，两个线程争夺锁对象发生死锁现象。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLock</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> flag;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DieLock</span><span class="params">(<span class="keyword">boolean</span> flag)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.flag = flag;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (flag) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                System.out.println(<span class="string">"if objA"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"if objB"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                System.out.println(<span class="string">"else objB"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"else objA"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>垃圾回收的目的是识别并且丢弃应用不再使用的对象来释放和重用资源。</p>
+<blockquote>
+<p>Q2：如果对象的引用被置为null，垃圾收集器是否会立即释放对象占用的内存？ </p>
+</blockquote>
+<p>不会，在下一个垃圾回收周期中，这个对象将是可被回收的。</p>
+<blockquote>
+<p>Q3: String是最基本的数据类型吗? </p>
+</blockquote>
+<p>基本数据类型包括:</p>
+<ul>
+<li>byte</li>
+<li>int</li>
+<li>char</li>
+<li>long</li>
+<li>float</li>
+<li>double</li>
+<li>boolean</li>
+<li>short </li>
+</ul>
+<p>java.lang.String类是final类型的，因此不可以继承这个类、不能修改这个类。为了提高效率节省空间，我们应该用StringBuffer类。</p>
+<blockquote>
+<p>Q4: int 和 Integer 有什么区别?</p>
+</blockquote>
+<p>Java 提供两种不同的类型：引用类型和原始类型（或内置类型）。Int是java的原始数据类型，Integer是java为int提供的封装类。Java为每个原始类型提供了封装类。</p>
+<blockquote>
+<p>Q5: String 和 StringBuffer的区别?</p>
+</blockquote>
+<p>JAVA平台提供了两个类：String和StringBuffer，它们可以储存和操作字符串，即包含多个字符的字符数据。这个String类提供了数值不可改变的字符串。而这个StringBuffer类提供的字符串进行修改。</p>
+<blockquote>
+<p>Q6: ArrayList,Vector,LinkedList的存储性能和特性?</p>
+</blockquote>
+<p>ArrayList和Vector都是使用数组方式存储数据，此数组元素数大于实际存储的数据以便增加和插入元素，它们都允许直接按序号索引元素，但是插入元素要涉及数组元素移动等内存操作，所以索引数据快而插入数据慢，Vector由于使用了synchronized方法（线程安全），通常性能上较ArrayList差，而LinkedList使用双向链表实现存储，按序号索引数据需要进行前向或后向遍历，但是插入数据时只需要记录本项的前后项即可，所以插入速度较快。<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">List的子类特点</span><br><span class="line"><span class="symbol">        ArrayList:</span></span><br><span class="line">            底层数据结构是数组，查询快，增删慢</span><br><span class="line">            线程不安全，效率高</span><br><span class="line"><span class="symbol">        Vector:</span></span><br><span class="line">            底层数据结构是数组，查询快，增删慢</span><br><span class="line">            线程安全，效率低</span><br><span class="line"><span class="symbol">        LinkedList:</span></span><br><span class="line">            底层数据结构是链表，查询慢，增删快</span><br><span class="line">            线程不安全，效率高</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>Q7: Collection 和 Collections的区别 </p>
+</blockquote>
+<p>Collection是集合类的上级接口，继承与他的接口主要有Set和List. </p>
+<p>Collections是针对集合类的一个帮助类，他提供一系列静态方法实现对各种集合的搜索、排序、线程安全化等操作。<br>集合的继承体系：<br><img src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1551609409314&amp;di=26c716fbc7abe264f61d07f051639caf&amp;imgtype=0&amp;src=http%3A%2F%2Faliyunzixunbucket.oss-cn-beijing.aliyuncs.com%2Fjpg%2F16f3e1d844693be57f7e0f55c969f42d.jpg%3Fx-oss-process%3Dimage%2Fresize%2Cp_100%2Fauto-orient%2C1%2Fquality%2Cq_90%2Fformat%2Cjpg%2Fwatermark%2Cimage_eXVuY2VzaGk%3D%2Ct_100" alt="image"></p>
 
         
     </section>
@@ -619,6 +578,47 @@
 </blockquote>
 <p>HashSet是由一个hash表来实现的，因此，它的元素是无序的。add()，remove()，contains()方法的时间复杂度是O(1)。 </p>
 <p>TreeSet是由一个树形的结构来实现的，它里面的元素是有序的。因此，add()，remove()，contains()方法的时间复杂度是O(logn)。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2019/08/07/Java基础面试题二/">Java基础面试题二</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-08-07T14:37:25.984Z" itemprop="datePublished">2019-08-07</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/面试题/">面试题</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>Java基础面试题二</p>
+<blockquote>
+<p>Q1: 什么是死锁(deadlock)？ </p>
+</blockquote>
+<p>两个进程都在等待对方执行完毕才能继续往下执行的时候就发生了死锁。结果就是两个进程都陷入了无限的等待中。<br>代码表示：<br><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLockDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> void main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">    DieLock dl1 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">true</span>);</span><br><span class="line">    DieLock dl2 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">false</span>);</span><br><span class="line">    dl1.start();</span><br><span class="line">    dl2.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>理想状态下dl1线程为true从if执行先打出”if objA”然后再接着打出”if objB”之后释放A、B的锁对象，之后dl2线程执行else语句打出”else objB”，”else objA”。<br>非理想状态下dl1先打出”if objA”，之后线程dl2执行打出”else objB”，然后1、2线程的锁对象A和B都处于被锁的状态，两个线程争夺锁对象发生死锁现象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLock</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> flag;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DieLock</span><span class="params">(<span class="keyword">boolean</span> flag)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.flag = flag;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (flag) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                System.out.println(<span class="string">"if objA"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"if objB"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                System.out.println(<span class="string">"else objB"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"else objA"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
         
     </section>

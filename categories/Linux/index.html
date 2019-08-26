@@ -263,6 +263,61 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/03/06/Linux文件属性/">Linux 文件属性</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Linux/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-03-06T08:18:02.000Z" itemprop="datePublished">2018-03-06</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h2 id="Linux-文件属性"><a href="#Linux-文件属性" class="headerlink" title="Linux 文件属性"></a>Linux 文件属性</h2><p>在Linux中我们可以使用命令来显示一个文件的属性以及文件所属的用户和组，如：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@www /]# ls -l</span><br><span class="line">total <span class="number">64</span></span><br><span class="line">dr-xr-xr-x   <span class="number">2</span> root root <span class="number">4096</span> Dec <span class="number">14</span>  <span class="number">2012</span> bin</span><br><span class="line">dr-xr-xr-x   <span class="number">4</span> root root <span class="number">4096</span> Apr <span class="number">19</span>  <span class="number">2012</span> boot</span><br><span class="line">……</span><br></pre></td></tr></table></figure></p>
+<p>note: “ll” 也可以。</p>
+<p>在Linux中第一个字符代表这个文件是目录、文件或链接文件等等。”d”在Linux中代表该文件是一个目录文件。</p>
+<ul>
+<li>当为[ d ]则是目录</li>
+<li>当为[ - ]则是文件；</li>
+<li>若是[ l ]则表示为链接文档(link file)；</li>
+<li>若是[ b ]则表示为装置文件里面的可供储存的接口设备(可随机存取装置)；</li>
+<li>若是[ c ]则表示为装置文件里面的串行端口设备，例如键盘、鼠标(一次性读取装置)。</li>
+</ul>
+<p>接下来的字符中，以三个为一组，且均为『rwx』 的三个参数的组合。</p>
+<ul>
+<li>[ r ]代表可读(read)</li>
+<li>[ w ]代表可写(write)</li>
+<li>[ x ]代表可执行(execute)</li>
+</ul>
+<p>要注意的是，这三个权限的位置不会改变，如果没有权限，就会出现减号[ - ]而已。</p>
+<blockquote>
+<p>对于文件来说，它都有一个特定的所有者，也就是对该文件具有所有权的用户。同时，在Linux系统中，用户是按组分类的，一个用户属于一个或多个组。文件所有者以外的用户又可以分为文件所有者的同组用户和其他用户。因此，Linux系统按文件所有者、文件所有者同组用户和其他用户来规定了不同的文件访问权限。</p>
+</blockquote>
+<p>对于 root 用户来说，一般情况下，文件的权限对其不起作用。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/03/06/Linux用户和用户组管理/">Linux用户和用户组管理</a>
         </h1>
         
@@ -348,61 +403,6 @@
 <h3 id="切换"><a href="#切换" class="headerlink" title="切换"></a>切换</h3><p>如果一个用户同时属于多个用户组，那么用户可以在用户组之间切换，以便具有其他用户组的权限</p>
 <figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="keyword">new</span><span class="type">grp</span> root</span><br></pre></td></tr></table></figure>
 <p>这条命令将当前用户切换到root用户组，前提条件是root用户组确实是该用户的主组或附加组。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/03/06/Linux文件属性/">Linux 文件属性</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Linux/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-03-06T08:18:02.000Z" itemprop="datePublished">2018-03-06</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h2 id="Linux-文件属性"><a href="#Linux-文件属性" class="headerlink" title="Linux 文件属性"></a>Linux 文件属性</h2><p>在Linux中我们可以使用命令来显示一个文件的属性以及文件所属的用户和组，如：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@www /]# ls -l</span><br><span class="line">total <span class="number">64</span></span><br><span class="line">dr-xr-xr-x   <span class="number">2</span> root root <span class="number">4096</span> Dec <span class="number">14</span>  <span class="number">2012</span> bin</span><br><span class="line">dr-xr-xr-x   <span class="number">4</span> root root <span class="number">4096</span> Apr <span class="number">19</span>  <span class="number">2012</span> boot</span><br><span class="line">……</span><br></pre></td></tr></table></figure></p>
-<p>note: “ll” 也可以。</p>
-<p>在Linux中第一个字符代表这个文件是目录、文件或链接文件等等。”d”在Linux中代表该文件是一个目录文件。</p>
-<ul>
-<li>当为[ d ]则是目录</li>
-<li>当为[ - ]则是文件；</li>
-<li>若是[ l ]则表示为链接文档(link file)；</li>
-<li>若是[ b ]则表示为装置文件里面的可供储存的接口设备(可随机存取装置)；</li>
-<li>若是[ c ]则表示为装置文件里面的串行端口设备，例如键盘、鼠标(一次性读取装置)。</li>
-</ul>
-<p>接下来的字符中，以三个为一组，且均为『rwx』 的三个参数的组合。</p>
-<ul>
-<li>[ r ]代表可读(read)</li>
-<li>[ w ]代表可写(write)</li>
-<li>[ x ]代表可执行(execute)</li>
-</ul>
-<p>要注意的是，这三个权限的位置不会改变，如果没有权限，就会出现减号[ - ]而已。</p>
-<blockquote>
-<p>对于文件来说，它都有一个特定的所有者，也就是对该文件具有所有权的用户。同时，在Linux系统中，用户是按组分类的，一个用户属于一个或多个组。文件所有者以外的用户又可以分为文件所有者的同组用户和其他用户。因此，Linux系统按文件所有者、文件所有者同组用户和其他用户来规定了不同的文件访问权限。</p>
-</blockquote>
-<p>对于 root 用户来说，一般情况下，文件的权限对其不起作用。</p>
 
         
     </section>
@@ -635,7 +635,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2017/06/01/Linux目录结构/">Linux 目录结构</a>
+            <a href="/2017/06/01/Linux目录结构简易理解/">Linux目录结构简易理解</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -700,7 +700,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2017/06/01/Linux目录结构简易理解/">Linux目录结构简易理解</a>
+            <a href="/2017/06/01/Linux目录结构/">Linux 目录结构</a>
         </h1>
         
         <div class="article-meta clearfix">
