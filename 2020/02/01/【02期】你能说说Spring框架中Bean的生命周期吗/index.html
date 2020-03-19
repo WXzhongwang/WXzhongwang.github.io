@@ -7,11 +7,11 @@
 
     
 
-    <title>归档: 2018 | 我喜欢你喜欢我的歌</title>
+    <title>【02期】你能说说Spring框架中Bean的生命周期吗？ | 我喜欢你喜欢我的歌</title>
     <meta name="author" content="Dick Zhong">
     <meta name="version" content="1.0.0">
     <meta name="keywords" content>
-    <meta name="description" content>
+    <meta name="description" content="1、实例化一个Bean－－也就是我们常说的new；2、按照Spring上下文对实例化的Bean进行配置－－也就是IOC注入；3、如果这个Bean已经实现了BeanNameAware接口，会调用它实现的setBeanName(String)方法，此处传递的就是Spring配置文件中Bean的id值4、如果这个Bean已经实现了BeanFactoryAware接口，会调用它实现的setBeanFactory(setBeanFactory(BeanFactory)传递的是Spring工厂自...">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 
@@ -49,7 +49,7 @@
                 <span class="nav-text">标签</span>
             </a>
         
-            <a class="nav-item active" href="/archives">
+            <a class="nav-item" href="/archives">
                 <span class="nav-text">归档</span>
             </a>
         
@@ -69,6 +69,8 @@
     <div id="aside-inner" class="aside-inner">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit"><i class="icon-search-stroke"></i></button><input type="hidden" name="sitesearch" value="https://wxzhongwang.github.io"></form>
 
+        
+        
         
         
 
@@ -125,238 +127,70 @@
 
 </header>
 
-        <div id="content" class="content">
-
-
+        <div id="content" class="content"><article class="article" itemscope itemprop="blogPost">
     
-    
-    
-    
-    
-    <section class="archives-wrap">
-    <div class="archive-year-wrap">
-    <a href="/archives/2018" class="page-hd">
-        2018
-    </a>
-    </div>
-    <ol class="archives">
-    
-
-    <li class="archive-section-item">
+    <header class="article-header">
         
-<article class="archive-article archive-type-post">
-    <div class="archive-article-inner">
-        <header class="archive-article-header">
-            <a class="archive-article-link" href="/2018/05/01/为什么Java中只有值传递/">为什么 Java 中只有值传递？</a>
-            <span class="archive-article-date">
-                (<a class="article-date" href="/archives/2018/05">
-    
-    <time datetime="2018-05-01T15:10:00.000Z" itemprop="datePublished">5/1</time>
-</a>
-)
-            </span>
-        </header>
-    </div>
-</article>
-    </li>
-
-    
-    
-
-    <li class="archive-section-item">
+        <h1 itemprop="name">
+            【02期】你能说说Spring框架中Bean的生命周期吗？
+        </h1>
         
-<article class="archive-article archive-type-post">
-    <div class="archive-article-inner">
-        <header class="archive-article-header">
-            <a class="archive-article-link" href="/2018/05/01/nginx工作原理/">Nginx工作原理</a>
-            <span class="archive-article-date">
-                (<a class="article-date" href="/archives/2018/05">
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/2020/02/01/【02期】你能说说Spring框架中Bean的生命周期吗/index.html">
     
-    <time datetime="2018-05-01T08:22:22.000Z" itemprop="datePublished">5/1</time>
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2020-02-01T02:10:00.000Z" itemprop="datePublished">2020-02-01</time>
 </a>
-)
-            </span>
-        </header>
-    </div>
-</article>
-    </li>
 
-    
-    
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/整理/">整理</a>
+</div>
 
-    <li class="archive-section-item">
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
         
-<article class="archive-article archive-type-post">
-    <div class="archive-article-inner">
-        <header class="archive-article-header">
-            <a class="archive-article-link" href="/2018/04/20/tomcat源码解析/">tomcat源码解析</a>
-            <span class="archive-article-date">
-                (<a class="article-date" href="/archives/2018/04">
-    
-    <time datetime="2018-04-20T04:00:00.000Z" itemprop="datePublished">4/20</time>
-</a>
-)
-            </span>
-        </header>
-    </div>
-</article>
-    </li>
-
-    
-    
-
-    <li class="archive-section-item">
+        <p>1、实例化一个Bean－－也就是我们常说的new；</p>
+<p>2、按照Spring上下文对实例化的Bean进行配置－－也就是IOC注入；</p>
+<p>3、如果这个Bean已经实现了BeanNameAware接口，会调用它实现的setBeanName(String)方法，此处传递的就是Spring配置文件中Bean的id值</p>
+<p>4、如果这个Bean已经实现了BeanFactoryAware接口，会调用它实现的setBeanFactory(setBeanFactory(BeanFactory)传递的是Spring工厂自身（可以用这个方式来获取其它Bean，只需在Spring配置文件中配置一个普通的Bean就可以）；</p>
+<p>5、如果这个Bean已经实现了ApplicationContextAware接口，会调用setApplicationContext(ApplicationContext)方法，传入Spring上下文（同样这个方式也可以实现步骤4的内容，但比4更好，因为ApplicationContext是BeanFactory的子接口，有更多的实现方法）；</p>
+<p>6、如果这个Bean关联了BeanPostProcessor接口，将会调用postProcessBeforeInitialization(Object obj, String s)方法，BeanPostProcessor经常被用作是Bean内容的更改，并且由于这个是在Bean初始化结束时调用那个的方法，也可以被应用于内存或缓存技术；</p>
+<p>7、如果Bean在Spring配置文件中配置了init-method属性会自动调用其配置的初始化方法。</p>
+<p>8、如果这个Bean关联了BeanPostProcessor接口，将会调用postProcessAfterInitialization(Object obj, String s)方法、；</p>
+<p>注：以上工作完成以后就可以应用这个Bean了，那这个Bean是一个Singleton的，所以一般情况下我们调用同一个id的Bean会是在内容地址相同的实例，当然在Spring配置文件中也可以配置非Singleton，这里我们不做赘述。</p>
+<p>9、当Bean不再需要时，会经过清理阶段，如果Bean实现了DisposableBean这个接口，会调用那个其实现的destroy()方法；</p>
+<p>10、最后，如果这个Bean的Spring配置中配置了destroy-method属性，会自动调用其配置的销毁方法。</p>
+<img src="/.io//02/01/【02期】你能说说Spring框架中Bean的生命周期吗/【02期】你能说说Spring框架中Bean的生命周期吗.jpg" title="【02期】你能说说Spring框架中Bean的生命周期吗">
         
-<article class="archive-article archive-type-post">
-    <div class="archive-article-inner">
-        <header class="archive-article-header">
-            <a class="archive-article-link" href="/2018/04/11/Thread实现多线程三/">Thread实现多线程三</a>
-            <span class="archive-article-date">
-                (<a class="article-date" href="/archives/2018/04">
-    
-    <time datetime="2018-04-11T02:10:00.000Z" itemprop="datePublished">4/11</time>
-</a>
-)
-            </span>
-        </header>
-    </div>
+    </section>
 </article>
-    </li>
-
-    
-    
-
-    <li class="archive-section-item">
-        
-<article class="archive-article archive-type-post">
-    <div class="archive-article-inner">
-        <header class="archive-article-header">
-            <a class="archive-article-link" href="/2018/04/08/Mockjs/">Mock.js</a>
-            <span class="archive-article-date">
-                (<a class="article-date" href="/archives/2018/04">
-    
-    <time datetime="2018-04-08T05:22:02.000Z" itemprop="datePublished">4/8</time>
-</a>
-)
-            </span>
-        </header>
-    </div>
-</article>
-    </li>
-
-    
-    
-
-    <li class="archive-section-item">
-        
-<article class="archive-article archive-type-post">
-    <div class="archive-article-inner">
-        <header class="archive-article-header">
-            <a class="archive-article-link" href="/2018/04/08/Java线程池工作原理/">Java线程池工作原理</a>
-            <span class="archive-article-date">
-                (<a class="article-date" href="/archives/2018/04">
-    
-    <time datetime="2018-04-08T04:18:45.000Z" itemprop="datePublished">4/8</time>
-</a>
-)
-            </span>
-        </header>
-    </div>
-</article>
-    </li>
-
-    
-    
-
-    <li class="archive-section-item">
-        
-<article class="archive-article archive-type-post">
-    <div class="archive-article-inner">
-        <header class="archive-article-header">
-            <a class="archive-article-link" href="/2018/04/08/Java对象的大小/">Java对象的大小</a>
-            <span class="archive-article-date">
-                (<a class="article-date" href="/archives/2018/04">
-    
-    <time datetime="2018-04-08T04:18:45.000Z" itemprop="datePublished">4/8</time>
-</a>
-)
-            </span>
-        </header>
-    </div>
-</article>
-    </li>
-
-    
-    
-
-    <li class="archive-section-item">
-        
-<article class="archive-article archive-type-post">
-    <div class="archive-article-inner">
-        <header class="archive-article-header">
-            <a class="archive-article-link" href="/2018/04/07/Dubbo/">Dubbo</a>
-            <span class="archive-article-date">
-                (<a class="article-date" href="/archives/2018/04">
-    
-    <time datetime="2018-04-07T02:10:00.000Z" itemprop="datePublished">4/7</time>
-</a>
-)
-            </span>
-        </header>
-    </div>
-</article>
-    </li>
-
-    
-    
-
-    <li class="archive-section-item">
-        
-<article class="archive-article archive-type-post">
-    <div class="archive-article-inner">
-        <header class="archive-article-header">
-            <a class="archive-article-link" href="/2018/04/07/Dubbo深入/">Dubbo核心角色</a>
-            <span class="archive-article-date">
-                (<a class="article-date" href="/archives/2018/04">
-    
-    <time datetime="2018-04-07T02:10:00.000Z" itemprop="datePublished">4/7</time>
-</a>
-)
-            </span>
-        </header>
-    </div>
-</article>
-    </li>
-
-    
-    
-
-    <li class="archive-section-item">
-        
-<article class="archive-article archive-type-post">
-    <div class="archive-article-inner">
-        <header class="archive-article-header">
-            <a class="archive-article-link" href="/2018/04/06/nginx/">Nginx</a>
-            <span class="archive-article-date">
-                (<a class="article-date" href="/archives/2018/04">
-    
-    <time datetime="2018-04-06T08:22:22.000Z" itemprop="datePublished">4/6</time>
-</a>
-)
-            </span>
-        </header>
-    </div>
-</article>
-    </li>
-
-
-</ol></section>
 
 
 
-<nav class="page-nav">
-    <a class="extend prev" rel="prev" href="/archives/2018/page/3/">&laquo; 上一页</a><a class="page-number" href="/archives/2018/">1</a><a class="page-number" href="/archives/2018/page/2/">2</a><a class="page-number" href="/archives/2018/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/archives/2018/page/5/">5</a><a class="page-number" href="/archives/2018/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/archives/2018/page/9/">9</a><a class="extend next" rel="next" href="/archives/2018/page/5/">下一页 &raquo;</a>
-</nav>
+<div class="comments">
+    <div id="comments"></div>
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+    new Gitalk({
+        clientID: "a21da302f365ee8611f9",
+        clientSecret: "de5031e10790090efa7d79e3fca6d38e39c7483b",
+        repo: "WXzhongwang.github.io",
+        owner: "WXzhongwang",
+        admin: ["WXzhongwang"],
+        id: "2020/02/01/【02期】你能说说Spring框架中Bean的生命周期吗",
+        distractionFreeMode: true,
+        title: "【02期】你能说说Spring框架中Bean的生命周期吗？",
+        body: "https://wxzhongwang.github.io/2020/02/01/【02期】你能说说Spring框架中Bean的生命周期吗/",
+        labels: ["整理"]
+    }).render('comments');
+    </script>
+</div>
 
 </div>
         <footer class="footer">
@@ -418,6 +252,11 @@
         }
     });
     </script>
+    
+        <script type="text/javascript" src="/js/scrollspy.min.js"></script>
+        <script type="text/javascript">
+        $(document.body).scrollspy({target: '#aside-inner'});
+        </script>
     
 
 </body>

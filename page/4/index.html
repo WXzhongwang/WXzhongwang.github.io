@@ -131,6 +131,80 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/10/01/JVM课程七/">JVM课程七</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/4/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-10-01T14:22:22.000Z" itemprop="datePublished">2018-10-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h2 id="分代收集器"><a href="#分代收集器" class="headerlink" title="分代收集器"></a>分代收集器</h2><p>一起七个 3 + 3 + 1</p>
+<p>在收集器使用的时候都是：新老搭配的。</p>
+<p>新生代收集器：</p>
+<ul>
+<li>Serial</li>
+<li>ParNew</li>
+<li>Parallel Scavenge</li>
+</ul>
+<p>老年代收集器：</p>
+<ul>
+<li>CMS(Concurrent Mark Sweep)</li>
+<li>Serial Old </li>
+<li>Parallel Old</li>
+</ul>
+<p>新老通吃：<br>G1: Garbadge First</p>
+<h2 id="新生代收集器"><a href="#新生代收集器" class="headerlink" title="新生代收集器"></a>新生代收集器</h2><h3 id="Serial-GC-串行"><a href="#Serial-GC-串行" class="headerlink" title="Serial GC(串行)"></a>Serial GC(串行)</h3><p>HotSpot运行在client模式下的默认新生代收集器。只用一个CPU/一个收集器线程去完成GC。<br>“Stop The World” -XX:+UseSerialGC</p>
+<ol>
+<li>启动回收</li>
+<li>暂停其他所有工作线程。新生代回收采用<strong>复制</strong>算法。</li>
+<li>暂停其他所有工作线程。老年代回收采用<strong>标记整理算法</strong>。单线程收集，但是简单高效。<br>在内存占用不大的应用中，效率很高。</li>
+</ol>
+<h3 id="ParNew-并行"><a href="#ParNew-并行" class="headerlink" title="ParNew(并行)"></a>ParNew(并行)</h3><p>其本质是Serial的多线程版本，目的是缩短垃圾收集的时间，也就是占用工作线程时间的问题。单CPU甚至不如Serial，但是在多核CPU配合多线程效果明显。多核CPU + 超线程技术。<br>若VM启用老年代使用CMS(concurrent mark sweep)时候，<br>参数： -XX:+UseConcMarkSweepGC<br>新生代次收集器默认为ParNew。<br>多核CPU时候一般配置为CPU核数。-XX:ParallelGCThreads=<n> 参数控制GC线程数。</n></p>
+<ol>
+<li>启动回收</li>
+<li>暂停其他所有工作线程。新生代回收采用<strong>复制</strong>算法。 (GC线程多个同时工作，并行执行)</li>
+<li>暂停其他所有工作线程。老年代回收采用<strong>标记整理算法</strong>。</li>
+</ol>
+<h3 id="Parallel-Scavenge"><a href="#Parallel-Scavenge" class="headerlink" title="Parallel Scavenge"></a>Parallel Scavenge</h3><p>并行多线程，复制算法。关注点与ParNew不同，关注的是系统吞吐量。</p>
+<p>系统吞吐量 = 运行用户代码时间 /（运行用户代码时间 + 垃圾回收时间）</p>
+<p>停顿时间越短就越适用于用户交互的程序。良好的响应速度提升用户体验。<br>而高吞吐则适用于后台计算而不需要太多交互的任务，可以最高效率的利用CPU时间，<br>尽快的完成程序的运算任务。</p>
+<h2 id="老年代收集器"><a href="#老年代收集器" class="headerlink" title="老年代收集器"></a>老年代收集器</h2><h3 id="Serial-Old"><a href="#Serial-Old" class="headerlink" title="Serial Old"></a>Serial Old</h3><ol>
+<li>启动回收</li>
+<li>暂停其他所有工作线程。新生代回收采用复制算法。</li>
+<li>暂停其他所有工作线程。老年代回收采用标记整理算法。单线程收集，但是简单高效。<br>在内存占用不大的应用中，效率很高。</li>
+</ol>
+<p>可以与任意的新生代收集器配置使用</p>
+<h3 id="Parallel-Old"><a href="#Parallel-Old" class="headerlink" title="Parallel Old"></a>Parallel Old</h3><p>只能配合Parallel Scavenge收集器一起使用。</p>
+<h3 id="CMS-并发"><a href="#CMS-并发" class="headerlink" title="CMS (并发)"></a>CMS (并发)</h3><p>Concurrent Mark Sweep,可以和用户线程同时工作。是一款并发收集器。<br>虽然有理论上表现更好的G1收集器，主流的仍然是CMS收集器。<br>能用于server模式下的JVM优化。能结合新生代的Serial 和 ParNew一起使用。</p>
+<h2 id="G1"><a href="#G1" class="headerlink" title="G1"></a>G1</h2><p>Garbage-First。可以运用在新生代和老年代的直接分区收集。面向服务端的垃圾收集器。 –XX:+UseG1GC<br>将Java堆划分为多个相等的独立区域Region，保留新生代和老年代的概念。但是不再是物理隔离。</p>
+<p>优化方式：<br>1.选择JVM版本<br>2.对于堆区大小的分配<br>3.垃圾回收的方式</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/09/20/JVM课程八/">JVM课程八</a>
         </h1>
         
@@ -526,75 +600,6 @@ Eden   From   To
 <p>static class Segment&lt;K,V&gt; extends ReentrantLock implements Serializable {<br>}<br>一个 ConcurrentHashMap 里包含一个 Segment 数组。Segment 的结构和HashMap类似，是一种数组和链表结构，一个 Segment 包含一个 HashEntry 数组，每个 HashEntry 是一个链表结构的元素，每个 Segment 守护着一个HashEntry数组里的元素，当对 HashEntry 数组的数据进行修改时，必须首先获得对应的 Segment的锁。</p>
 <p>JDK1.8 （上面有示意图）<br>ConcurrentHashMap取消了Segment分段锁，采用CAS和synchronized来保证并发安全。数据结构跟HashMap1.8的结构类似，数组+链表/红黑二叉树。Java 8在链表长度超过一定阈值（8）时将链表（寻址时间复杂度为O(N)）转换为红黑树（寻址时间复杂度为O(log(N))）</p>
 <p>synchronized只锁定当前链表或红黑二叉树的首节点，这样只要hash不冲突，就不会产生并发，效率又提升N倍。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/08/15/HashMap 和 HashTable的区别/">HashMap 和 HashTable的区别</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/4/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-08-15T15:20:00.000Z" itemprop="datePublished">2018-08-15</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java容器/">Java容器</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="HashMap-和-HashTable的区别"><a href="#HashMap-和-HashTable的区别" class="headerlink" title="HashMap 和 HashTable的区别"></a>HashMap 和 HashTable的区别</h1><h2 id="区别："><a href="#区别：" class="headerlink" title="区别："></a>区别：</h2><p>1）线程是否安全： </p>
-<p>HashMap 是非线程安全的，HashTable 是线程安全的；HashTable 内部的方法基本都经过synchronized 修饰。（如果你要保证线程安全的话就使用 ConcurrentHashMap 吧！）；</p>
-<p>2）效率： </p>
-<p>因为线程安全的问题，HashMap 要比 HashTable 效率高一点。另外，HashTable 基本被淘汰，不要在代码中使用它；</p>
-<p>3）对Null key 和Null value的支持：</p>
-<p>HashMap 中，null 可以作为键，这样的键只有一个，可以有一个或多个键所对应的值为 null。<br>但是在 HashTable 中 put 进的键值只要有一个 null，直接抛出 NullPointerException。</p>
-<p>4）初始容量大小和每次扩充容量大小的不同 ：</p>
-<p>①Hashtable 默认的初始大小为11，之后每次扩充，容量变为原来的2n+1。<br>HashMap 默认的初始化大小为16。之后每次扩充，容量变为原来的2倍。</p>
-<p>②创建时如果给定了容量初始值，那么 Hashtable 会直接使用你给定的大小。<br>而 HashMap 会将其扩充为2的幂次方大小（HashMap 中的tableSizeFor()方法保证）。8 16 32 64 …<br>也就是说 HashMap 总是使用2的幂作为哈希表的大小。</p>
-<p>5) 底层数据结构：</p>
-<p> JDK1.8 以后的 HashMap 在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为8）时，将链表转化为红黑树，以减少搜索时间。Hashtable 没有这样的机制。</p>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">HasMap 中带有初始容量的构造函数：</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity, <span class="keyword">float</span> loadFactor)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (initialCapacity &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Illegal initial capacity: "</span> +</span><br><span class="line">                                               initialCapacity);</span><br><span class="line">        <span class="keyword">if</span> (initialCapacity &gt; MAXIMUM_CAPACITY)</span><br><span class="line">            initialCapacity = MAXIMUM_CAPACITY;</span><br><span class="line">        <span class="keyword">if</span> (loadFactor &lt;= <span class="number">0</span> || Float.isNaN(loadFactor))</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Illegal load factor: "</span> +</span><br><span class="line">                                               loadFactor);</span><br><span class="line">        <span class="keyword">this</span>.loadFactor = loadFactor;</span><br><span class="line">        <span class="keyword">this</span>.threshold = tableSizeFor(initialCapacity);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(initialCapacity, DEFAULT_LOAD_FACTOR);</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">下面这个方法保证了 HashMap 总是使用<span class="number">2</span>的幂作为哈希表的大小。</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">static</span> <span class="keyword">final</span> <span class="function"><span class="keyword">int</span> <span class="title">tableSizeFor</span><span class="params">(<span class="keyword">int</span> cap)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = cap - <span class="number">1</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">2</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">4</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">8</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">16</span>;</span><br><span class="line">        <span class="keyword">return</span> (n &lt; <span class="number">0</span>) ? <span class="number">1</span> : (n &gt;= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<h2 id="HashMap-和-HashSet区别"><a href="#HashMap-和-HashSet区别" class="headerlink" title="HashMap 和 HashSet区别"></a>HashMap 和 HashSet区别</h2><p>如果你看过 HashSet 源码的话就应该知道：HashSet 底层就是基于 HashMap 实现的。（HashSet 的源码非常非常少，因为除了 clone()、writeObject()、readObject()是 HashSet 自己不得不实现之外，其他方法都是直接调用 HashMap 中的方法。</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">HashMap</th>
-<th style="text-align:center">HashSet</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">实现了Map接口</td>
-<td style="text-align:center">实现Set接口</td>
-</tr>
-<tr>
-<td style="text-align:center">存储键值对</td>
-<td style="text-align:center">仅存储对象</td>
-</tr>
-<tr>
-<td style="text-align:center">调用 <code>put（）</code>向map中添加元素</td>
-<td style="text-align:center">调用 <code>add（）</code>方法向Set中添加元素</td>
-</tr>
-</tbody>
-</table>
 
         
     </section>

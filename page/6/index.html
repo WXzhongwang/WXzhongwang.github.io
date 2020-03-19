@@ -131,6 +131,62 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/06/06/Zookeeper通知机制/">Zookeeper通知机制</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-06-06T02:10:00.000Z" itemprop="datePublished">2018-06-06</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Zookeeper/">Zookeeper</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h2 id="Zookeeper通知机制"><a href="#Zookeeper通知机制" class="headerlink" title="Zookeeper通知机制"></a>Zookeeper通知机制</h2><p>客户端注册监听(watch)它关心的目录节点，当目录节点发生变化（数据改变、被删除、子目录节点增加删除）时，zookeeper会通知客户端。</p>
+<h2 id="Zookeeper做了什么？"><a href="#Zookeeper做了什么？" class="headerlink" title="Zookeeper做了什么？"></a>Zookeeper做了什么？</h2><p>1.命名服务   2.配置管理   3.集群管理   4.分布式锁  5.队列管理</p>
+<h3 id="命名服务"><a href="#命名服务" class="headerlink" title="命名服务"></a>命名服务</h3><p>在zookeeper的文件系统里创建一个目录，即有唯一的path。在我们使用tborg无法确定上游程序的部署机器时即可与下游程序约定好path，通过path即能互相探索发现。</p>
+<p>命名服务是分布式系统中比较常见的一类场景。在分布式系统中，被命名的实体通常可以是集群中的机器、提供的服务地址或远程对象等——这些我们都可以统称它们为名字（Name），<br>其中较为常见的就是一些分布式服务框架（如RPC、RMI）中的服务地址列表，通过使用命名服务，客户端应用能够根据指定名字来获取资源的实体、服务地址和提供者的信息等。</p>
+<p>Java中的JNDI便是一种典型的命名服务。JNDI是Java命名与目录接口（Java Naming and Directory Interface）的缩写，是J2EE体系中重要的规范之一，标准的J2EE容器都提供了对JNDI规范的实现。<br>因此，在实际开发中，开发人员常常使用应用服务窗口自带的JNDI实现来完成数据源的配置与管理。<br>使用JNDI方式后，开发人员可以完全不需要关心数据库相关的任何信息，包括数据库类型、JDBC驱动类型及数据库账户等。</p>
+<p>ZooKeeper的命名服务有两个应用方向： </p>
+<ol>
+<li>ZooKeeper提供类似JNDI服务，都能够帮助应用系统通过一个资源引用的方式来实现对资源的定位与实用。     </li>
+<li>利用ZooKeeper顺序节点的特性，制作分布式的ID生成器。</li>
+</ol>
+<h3 id="配置管理"><a href="#配置管理" class="headerlink" title="配置管理"></a>配置管理</h3><p>程序总是需要配置的，如果程序分散部署在多台机器上，要逐个改变配置就变得困难。现在把这些配置全部放到zookeeper上去，保存在 Zookeeper 的某个目录节点中，<br>然后所有相关应用程序对这个目录节点进行监听，一旦配置信息发生变化，每个应用程序就会收到 Zookeeper 的通知，然后从 Zookeeper 获取新的配置信息应用到系统中就好。</p>
+<h3 id="集群管理"><a href="#集群管理" class="headerlink" title="集群管理"></a>集群管理</h3><p>所谓集群管理无在乎两点：是否有机器退出和加入、选举master。 </p>
+<p>对于第一点，所有机器约定在父目录GroupMembers下创建临时目录节点，然后监听父目录节点的子节点变化消息。一旦有机器挂掉，该机器与 zookeeper的连接断开，其所创建的临时目录节点被删除，所有其他机器都收到通知：某个兄弟目录被删除，于是，所有人都知道：它上船了。<br>新机器加入也是类似，所有机器收到通知：新兄弟目录加入，highcount又有了。</p>
+<p>对于第二点，我们稍微改变一下，所有机器创建临时顺序编号目录节点，每次选取编号最小的机器作为master就好。</p>
+<h3 id="Zookeeper分布式锁"><a href="#Zookeeper分布式锁" class="headerlink" title="Zookeeper分布式锁"></a>Zookeeper分布式锁</h3><p>有了zookeeper的一致性文件系统，锁的问题变得容易。锁服务可以分为两类，一个是保持独占，另一个是控制时序。 </p>
+<p>对于第一类，我们将zookeeper上的一个znode看作是一把锁，通过createznode的方式来实现。所有客户端都去创建 /distribute_lock 节点，最终成功创建的那个客户端也即拥有了这把锁。用完删除掉自己创建的distribute_lock 节点就释放出锁。 </p>
+<p>对于第二类， /distribute_lock 已经预先存在，所有客户端在它下面创建临时顺序编号目录节点，和选master一样，编号最小的获得锁，用完删除，依次方便。</p>
+<h3 id="队列管理"><a href="#队列管理" class="headerlink" title="队列管理"></a>队列管理</h3><p>两种类型的队列：</p>
+<p>1、同步队列，当一个队列的成员都聚齐时，这个队列才可用，否则一直等待所有成员到达。 </p>
+<p>2、队列按照 FIFO 方式进行入队和出队操作。 </p>
+<p>第一类，在约定目录下创建临时目录节点，监听节点数目是否是我们要求的数目。 </p>
+<p>第二类，和分布式锁服务中的控制时序场景基本原理一致，入列有编号，出列按编号。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/06/06/BIO NIO AIO 总结/">BIO,NIO,AIO 总结</a>
         </h1>
         
@@ -276,6 +332,48 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/06/03/Spring Boot/">Spring Boot 介绍</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-06-03T04:00:00.000Z" itemprop="datePublished">2018-06-03</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Spring/">Spring</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h2 id="Spring-Boot-介绍"><a href="#Spring-Boot-介绍" class="headerlink" title="Spring Boot 介绍"></a>Spring Boot 介绍</h2><p>Spring Boot 提供了一组工具只需要极少的配置就可以快速的构建并启动基于 Spring 的应用程序。解决了传统 Spring 开发需要配置大量配置文件的痛点，同时 Spring Boot 对于第三方库设置了合理的默认值，可以快速的构建起应用程序。当然 Spring Boot 也可以轻松的自定义各种配置，无论是在开发的初始阶段还是投入生成的后期阶段。</p>
+<h2 id="Spring-Boot-优点"><a href="#Spring-Boot-优点" class="headerlink" title="Spring Boot 优点"></a>Spring Boot 优点</h2><p>1.快速的创建可以独立运行的 Spring 项目以及与主流框架的集成。</p>
+<p>2.使用嵌入式的 Servlet 容器，用于不需要打成war包。</p>
+<p>3.使用很多的启动器（Starters）自动依赖与版本控制。</p>
+<p>4.大量的自动化配置，简化了开发，当然，我们也可以修改默认值。</p>
+<p>5.不需要配置 XML 文件，无代码生成，开箱即用。</p>
+<p>6.准生产环境的运行时应用监控。</p>
+<p>7.与云计算的天然集成。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/06/03/Spring源码/">Spring源码</a>
         </h1>
         
@@ -310,48 +408,6 @@
 <p>2.BeanDefinitionRegistry的作用，源码分析</p>
 <p>3.BeanNameGenerator如何改变beanName的生成策略</p>
 <p>4.BeanPostProcessor在bean实例化过程中可以做什么？经典应用场景有哪些？</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/06/03/Spring Boot/">Spring Boot 介绍</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/6/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-06-03T04:00:00.000Z" itemprop="datePublished">2018-06-03</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Spring/">Spring</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h2 id="Spring-Boot-介绍"><a href="#Spring-Boot-介绍" class="headerlink" title="Spring Boot 介绍"></a>Spring Boot 介绍</h2><p>Spring Boot 提供了一组工具只需要极少的配置就可以快速的构建并启动基于 Spring 的应用程序。解决了传统 Spring 开发需要配置大量配置文件的痛点，同时 Spring Boot 对于第三方库设置了合理的默认值，可以快速的构建起应用程序。当然 Spring Boot 也可以轻松的自定义各种配置，无论是在开发的初始阶段还是投入生成的后期阶段。</p>
-<h2 id="Spring-Boot-优点"><a href="#Spring-Boot-优点" class="headerlink" title="Spring Boot 优点"></a>Spring Boot 优点</h2><p>1.快速的创建可以独立运行的 Spring 项目以及与主流框架的集成。</p>
-<p>2.使用嵌入式的 Servlet 容器，用于不需要打成war包。</p>
-<p>3.使用很多的启动器（Starters）自动依赖与版本控制。</p>
-<p>4.大量的自动化配置，简化了开发，当然，我们也可以修改默认值。</p>
-<p>5.不需要配置 XML 文件，无代码生成，开箱即用。</p>
-<p>6.准生产环境的运行时应用监控。</p>
-<p>7.与云计算的天然集成。</p>
 
         
     </section>
@@ -401,6 +457,45 @@
 <pre><code>线程共享区：  Heap堆， Method Area方法区
 线程独占区：  程序计数器，虚拟机栈，本地方法栈
 </code></pre><p>程序最小单元：线程</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/05/06/Nginx的负载均衡策略(粗略)/">Nginx的负载均衡策略</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-05-06T14:22:22.000Z" itemprop="datePublished">2018-05-06</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Nginx/">Nginx</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Nginx的负载均衡策略"><a href="#Nginx的负载均衡策略" class="headerlink" title="Nginx的负载均衡策略"></a>Nginx的负载均衡策略</h1><h2 id="轮询（默认）"><a href="#轮询（默认）" class="headerlink" title="轮询（默认）:"></a>轮询（默认）:</h2><p>每个请求按时间顺序逐一分配到不同的后端服务器，如果后端服务器down掉，能自动剔除。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="指定权重"><a href="#指定权重" class="headerlink" title="指定权重"></a>指定权重</h2><p>指定轮询几率，weight和访问比率成正比，用于后端服务器性能不均的情况。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14 <span class="attribute">weight</span>=10; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15 <span class="attribute">weight</span>=10; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="IP绑定-ip-hash"><a href="#IP绑定-ip-hash" class="headerlink" title="IP绑定 ip_hash"></a>IP绑定 ip_hash</h2><p>每个请求按访问ip的hash结果分配，这样每个访客固定访问一个后端服务器，可以解决session的问题。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"> ip_hash; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14:88; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15:80; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="fair（第三方）"><a href="#fair（第三方）" class="headerlink" title="fair（第三方）"></a>fair（第三方）</h2><p>按后端服务器的响应时间来分配请求，响应时间短的优先分配。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14:88; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15:80;</span><br><span class="line"> fair; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="url-hash（第三方）"><a href="#url-hash（第三方）" class="headerlink" title="url_hash（第三方）"></a>url_hash（第三方）</h2><p>按访问url的hash结果来分配请求，使每个url定向到同一个后端服务器，后端服务器为缓存时比较有效。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123;</span><br><span class="line"><span class="built_in"> server </span>squid1:3128; </span><br><span class="line"><span class="built_in"> server </span>squid2:3128;</span><br><span class="line"> </span><br><span class="line"> hash <span class="variable">$request_uri</span>; </span><br><span class="line"> hash_method crc32; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
         
     </section>
@@ -491,45 +586,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/05/06/Nginx的负载均衡策略(粗略)/">Nginx的负载均衡策略</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/6/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-05-06T14:22:22.000Z" itemprop="datePublished">2018-05-06</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Nginx/">Nginx</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Nginx的负载均衡策略"><a href="#Nginx的负载均衡策略" class="headerlink" title="Nginx的负载均衡策略"></a>Nginx的负载均衡策略</h1><h2 id="轮询（默认）"><a href="#轮询（默认）" class="headerlink" title="轮询（默认）:"></a>轮询（默认）:</h2><p>每个请求按时间顺序逐一分配到不同的后端服务器，如果后端服务器down掉，能自动剔除。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="指定权重"><a href="#指定权重" class="headerlink" title="指定权重"></a>指定权重</h2><p>指定轮询几率，weight和访问比率成正比，用于后端服务器性能不均的情况。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14 <span class="attribute">weight</span>=10; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15 <span class="attribute">weight</span>=10; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="IP绑定-ip-hash"><a href="#IP绑定-ip-hash" class="headerlink" title="IP绑定 ip_hash"></a>IP绑定 ip_hash</h2><p>每个请求按访问ip的hash结果分配，这样每个访客固定访问一个后端服务器，可以解决session的问题。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"> ip_hash; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14:88; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15:80; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="fair（第三方）"><a href="#fair（第三方）" class="headerlink" title="fair（第三方）"></a>fair（第三方）</h2><p>按后端服务器的响应时间来分配请求，响应时间短的优先分配。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14:88; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15:80;</span><br><span class="line"> fair; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="url-hash（第三方）"><a href="#url-hash（第三方）" class="headerlink" title="url_hash（第三方）"></a>url_hash（第三方）</h2><p>按访问url的hash结果来分配请求，使每个url定向到同一个后端服务器，后端服务器为缓存时比较有效。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123;</span><br><span class="line"><span class="built_in"> server </span>squid1:3128; </span><br><span class="line"><span class="built_in"> server </span>squid2:3128;</span><br><span class="line"> </span><br><span class="line"> hash <span class="variable">$request_uri</span>; </span><br><span class="line"> hash_method crc32; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2018/05/01/为什么Java中只有值传递/">为什么 Java 中只有值传递？</a>
         </h1>
         
@@ -557,48 +613,6 @@
 <p>Java程序设计语言对对象采用的不是引用调用，实际上，对象引用是按值传递的。</p>
 <p>下面再总结一下Java中方法参数的使用情况：</p>
 <p>一个方法不能修改一个基本数据类型的参数（即数值型或布尔型）。<br>一个方法可以改变一个对象参数的状态。<br>一个方法不能让对象参数引用一个新的对象。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/05/01/nginx工作原理/">Nginx工作原理</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/6/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-05-01T08:22:22.000Z" itemprop="datePublished">2018-05-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Nginx/">Nginx</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Nginx工作原理"><a href="#Nginx工作原理" class="headerlink" title="Nginx工作原理"></a>Nginx工作原理</h1><p>当我们在操作Nginx的时候，Nginx内部做了些什么事情，那么，worker 进程又是如何处理请求的呢？我们前面有提到，worker进程之间是平等的，每个进程，处理请求的机会也是一样的。当我们提供80端口的 http 服务时，一个连接请求过来，每个进程都有可能处理这个连接，怎么做到的呢？首先，每个worker进程都是从master进程fork过来，在master进程里面，先建立好需要listen的socket（listenfd）之后，然后再fork出多个worker进程。所有worker进程的listenfd会在新连接到来时变得可读，为保证只有一个进程处理该连接，所有worker进程在注册listenfd读事件前抢accept_mutex，抢到互斥锁的那个进程注册listenfd读事件，在读事件里调用accept接受该连接。当一个worker进程在accept这个连接之后，就开始读取请求，解析请求，处理请求，产生数据后，再返回给客户端，最后才断开连接，这样一个完整的请求就是这样的了。我们可以看到，一个请求，完全由worker进程来处理，而且只在一个worker进程中处理。</p>
-<p>一个请求在一个worker进程中处理。同时一个worker只有一个主线程。（worker进程通过监听共享套接字接受新请求）</p>
-<h2 id="进程模型"><a href="#进程模型" class="headerlink" title="进程模型"></a>进程模型</h2><p>进程模型有什么好处呢？</p>
-<p>首先，对于每个worker进程来说，独立的进程，不需要加锁，所以省掉了锁带来的开销，同时在编程以及问题查找时，也会方便很多。<br>其次，采用独立的进程，可以让互相之间不会影响，一个进程退出后，其它进程还在工作，服务不会中断，master进程则很快启动新的worker进程。</p>
-<h2 id="高并发"><a href="#高并发" class="headerlink" title="高并发"></a>高并发</h2><p>那是如何解决高并发的呢？每个 worker 里面只有一个主线程，那能够处理的并发数很有限啊，多少个 worker 就能处理多少个并发，何来高并发呢？</p>
-<p>Nginx 采用了异步非阻塞的方式来处理请求</p>
-<p>Nginx供了一种机制，同时监控多个事件(具体到系统调用就是像select、poll、epoll、kqueue这样的系统调用，调用他们是阻塞的，但可以设置超时时间，在超时时间之内，如果有事件准备好了，就返回。这种机制正好解决了我们上面的两个问题，拿epoll为例，当事件没准备好时，放到epoll里面，事件准备好了，我们就去读写，当读写返回EAGAIN时，我们将它再次加入到epoll里面。这样，只要有事件准备好了，我们就去处理它，只有当所有事件都没准备好时，才在epoll里面等着。我们就可以并发处理大量的并发了。</p>
-<p>线程只有一个，所以同时能处理的请求当然只有一个了，只是在请求间进行不断地切换而已，切换也是因为异步事件未准备好，而主动让出的。这里的切换是没有任何代价，你可以理解为循环处理多个准备好的事件，事实上就是这样的。与多线程相比，这种事件处理方式是有很大的优势的，不需要创建线程，每个请求占用的内存也很少，没有上下文切换，事件处理非常的轻量级。并发数再多也不会导致无谓的资源浪费（上下文切换）。更多的并发数，只是会占用更多的内存而已。 </p>
 
         
     </section>

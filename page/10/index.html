@@ -131,7 +131,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/03/03/Linux Java安装环境变量 /">Linux Java 安装环境变量</a>
+            <a href="/2018/03/03/Log 配置文件/">log4j</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -154,10 +154,44 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="Linux-Java-安装环境变量"><a href="#Linux-Java-安装环境变量" class="headerlink" title="Linux Java 安装环境变量"></a>Linux Java 安装环境变量</h1><p>如下安装目录为 /usr/java<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tar -zxf jdk-8u211-linux-x64.tag.gz</span><br><span class="line">vim etc/profile</span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">JAVA_HOME</span>=/usr/java/jdk-8u221</span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">PATH</span>=<span class="variable">$JAVA_HOME</span>/bin:$PATH</span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">CLASSPATH</span>=.$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar</span><br></pre></td></tr></table></figure></p>
-<p>修改.bash_profile文件 </p>
-<p>这种方法更为安全，它可以把使用这些环境变量的权限控制到用户级别，如果你需要给某个用户权限使用这些环境变量，你只需要修改其个人用户主目录下的.bash_profile文件就可以了。<br>·用文本编辑器打开用户目录下的.bash_profile文件<br>·在.bash_profile文件末尾加入：<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=<span class="regexp">/usr/java</span><span class="regexp">/jdk-8u221</span></span><br><span class="line"><span class="regexp">export PATH=$JAVA_HOME/bin</span>:$PATH </span><br><span class="line">export CLASSPATH=.:$JAVA_HOME/<span class="class"><span class="keyword">lib</span>/<span class="title">dt</span>.<span class="title">jar</span>:$<span class="title">JAVA_HOME</span>/<span class="title">lib</span>/<span class="title">tools</span>.<span class="title">jar</span></span></span><br></pre></td></tr></table></figure></p>
+        <figure class="highlight roboconf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">### 设置###</span></span><br><span class="line">log4j.rootLogger = debug,stdout,D,E</span><br><span class="line"></span><br><span class="line"><span class="comment">### 输出信息到控制台  ###</span></span><br><span class="line">log4j.appender.stdout = org.apache.log4j.ConsoleAppender</span><br><span class="line">log4j.appender.stdout.Target = System.out</span><br><span class="line">log4j.appender.stdout.layout = org.apache.log4j.PatternLayout</span><br><span class="line">log4j.appender.stdout.layout.ConversionPattern = [%-5p] %d&#123;<span class="attribute">yyyy-MM-dd HH</span>:mm:ss,SSS&#125; method:%l%n%m%n</span><br><span class="line"></span><br><span class="line">### 输出DEBUG 级别以上的日志文件设置 ###</span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.D</span> = org<span class="variable">.apache</span><span class="variable">.log</span>4j<span class="variable">.DailyRollingFileAppender</span></span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.D</span><span class="variable">.File</span> = logs/debug<span class="variable">.log</span></span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.D</span><span class="variable">.Append</span> = true</span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.D</span><span class="variable">.Threshold</span> = DEBUG </span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.D</span><span class="variable">.layout</span> = org<span class="variable">.apache</span><span class="variable">.log</span>4j<span class="variable">.PatternLayout</span></span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.D</span><span class="variable">.layout</span><span class="variable">.ConversionPattern</span> = %-d&#123;yyyy-MM-dd HH:mm:ss&#125;  [ %t:%r ] - [ %p ]  %m%n</span><br><span class="line"></span><br><span class="line">### 输出ERROR 级别以上的日志文件设置 ###</span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.E</span> = org<span class="variable">.apache</span><span class="variable">.log</span>4j<span class="variable">.DailyRollingFileAppender</span></span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.E</span><span class="variable">.File</span> = logs/error<span class="variable">.log</span></span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.E</span><span class="variable">.Append</span> = true</span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.E</span><span class="variable">.Threshold</span> = ERROR </span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.E</span><span class="variable">.layout</span> = org<span class="variable">.apache</span><span class="variable">.log</span>4j<span class="variable">.PatternLayout</span></span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.E</span><span class="variable">.layout</span><span class="variable">.ConversionPattern</span> = %-d&#123;yyyy-MM-dd HH:mm:ss&#125;  [ %t:%r ] - [ %p ]  %m%n</span><br></pre></td></tr></table></figure>
+<p>测试 ：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">package com.test.util;</span><br><span class="line"></span><br><span class="line">import org.apache.log4j.*;</span><br><span class="line"></span><br><span class="line">public class LogUtil &#123;</span><br><span class="line">	private static Logger logger = Logger.getLogger(LogUtil.class);</span><br><span class="line">    </span><br><span class="line">    public static void main(String[] args) throws Exception &#123;</span><br><span class="line">        // 记录debug级别的信息  </span><br><span class="line">        logger.debug(&quot;This is debug message.&quot;);  </span><br><span class="line">        // 记录info级别的信息  </span><br><span class="line">        logger.info(&quot;This is info message.&quot;);  </span><br><span class="line">        // 记录error级别的信息  </span><br><span class="line">        logger.error(&quot;This is error message.&quot;); </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/03/03/Maven添加阿里云镜像/">Maven 添加阿里云镜像</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-03-03T06:22:30.000Z" itemprop="datePublished">2018-03-03</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Maven/">Maven</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Maven-添加阿里云镜像"><a href="#Maven-添加阿里云镜像" class="headerlink" title="Maven 添加阿里云镜像"></a>Maven 添加阿里云镜像</h1><p>setting.xml</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mirror</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span>&gt;</span>nexus-aliyun<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>*<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>Nexus aliyun<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.aliyun.com/nexus/content/groups/public<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br></pre></td></tr></table></figure>
         
     </section>
 </article>
@@ -207,6 +241,50 @@
 <ul>
 <li>装箱：将基本类型用它们对应的引用类型包装起来；</li>
 <li>拆箱：将包装类型转换为基本数据类型；</li>
+</ul>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/02/24/4.0 Class文件/">JVM 4.0</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-24T02:10:00.000Z" itemprop="datePublished">2018-02-24</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Class文件"><a href="#Class文件" class="headerlink" title="Class文件"></a>Class文件</h1><p>Class文件是一组以8位字节为基础单位的二进制流，各个数据项目严格按照顺序紧凑地排列在Class文件中，<br>中间没有添加任何分隔符号。Class文件采用一种类似于C语言结构体的伪结构来存储数据，这种伪结构中只包含两种数据类型，<br>无符号数和表。无符号数属于基本的数据类型，以u1,u2,u4,u8分别代表1个字节，2个字节，4个字节和8个字节的无符号数，<br>可以用来描述数字、索引引用、数量值或者按照utf-8编码构成字符串值。表是由多个无符号数或者其他表作为数据项构成的<br>复合数据类型，所有表都习惯性地以“_info”结尾，用来描述有层次关系的复合结构数据。</p>
+<p>Class文件的内容包括：</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">ClassFile</span> &#123;</span><br><span class="line"></span><br><span class="line">   <span class="selector-tag">u4</span> <span class="selector-tag">magic</span>;                                     <span class="comment">//魔数：0xCAFEBABE，用来判断是否是Java class文件</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">minor_version</span>;                             <span class="comment">//次版本号</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">major_version</span>;                             <span class="comment">//主版本号</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">constant_pool_count</span>;                       <span class="comment">//常量池大小</span></span><br><span class="line">   <span class="selector-tag">cp_info</span> <span class="selector-tag">constant_pool</span><span class="selector-attr">[constant_pool_count-1]</span>; <span class="comment">//常量池</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">access_flags</span>;                              <span class="comment">//类和接口层次的访问标志（通过|运算得到）</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">this_class</span>;                                <span class="comment">//类索引（指向常量池中的类常量）</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">super_class</span>;                               <span class="comment">//父类索引（指向常量池中的类常量）</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">interfaces_count</span>;                          <span class="comment">//接口索引计数器</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">interfaces</span><span class="selector-attr">[interfaces_count]</span>;              <span class="comment">//接口索引集合</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">fields_count</span>;                              <span class="comment">//字段数量计数器</span></span><br><span class="line">   <span class="selector-tag">field_info</span> <span class="selector-tag">fields</span><span class="selector-attr">[fields_count]</span>;              <span class="comment">//字段表集合</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">methods_count</span>;                             <span class="comment">//方法数量计数器</span></span><br><span class="line">   <span class="selector-tag">method_info</span> <span class="selector-tag">methods</span><span class="selector-attr">[methods_count]</span>;           <span class="comment">//方法表集合</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">attributes_count</span>;                          <span class="comment">//属性个数</span></span><br><span class="line">   <span class="selector-tag">attribute_info</span> <span class="selector-tag">attributes</span><span class="selector-attr">[attributes_count]</span>;  <span class="comment">//属性表</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>访问标志：类还是接口；是否定义为public类型，abstract类型；若为类，是否声明为final。</li>
+<li>字段：用来描述接口或类中的变量，但不包括在方法内部的变量。</li>
+<li>字面量：文本字符串，声明为final的常量值等。</li>
+<li>符号引用：类和接口的全限定名；字段的名称和描述符；方法的名称和描述符。</li>
+<li>类索引，父类索引，接口索引：用来确定类的继承关系。</li>
 </ul>
 
         
@@ -297,50 +375,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/02/24/4.0 Class文件/">JVM 4.0</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-02-24T02:10:00.000Z" itemprop="datePublished">2018-02-24</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Class文件"><a href="#Class文件" class="headerlink" title="Class文件"></a>Class文件</h1><p>Class文件是一组以8位字节为基础单位的二进制流，各个数据项目严格按照顺序紧凑地排列在Class文件中，<br>中间没有添加任何分隔符号。Class文件采用一种类似于C语言结构体的伪结构来存储数据，这种伪结构中只包含两种数据类型，<br>无符号数和表。无符号数属于基本的数据类型，以u1,u2,u4,u8分别代表1个字节，2个字节，4个字节和8个字节的无符号数，<br>可以用来描述数字、索引引用、数量值或者按照utf-8编码构成字符串值。表是由多个无符号数或者其他表作为数据项构成的<br>复合数据类型，所有表都习惯性地以“_info”结尾，用来描述有层次关系的复合结构数据。</p>
-<p>Class文件的内容包括：</p>
-<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">ClassFile</span> &#123;</span><br><span class="line"></span><br><span class="line">   <span class="selector-tag">u4</span> <span class="selector-tag">magic</span>;                                     <span class="comment">//魔数：0xCAFEBABE，用来判断是否是Java class文件</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">minor_version</span>;                             <span class="comment">//次版本号</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">major_version</span>;                             <span class="comment">//主版本号</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">constant_pool_count</span>;                       <span class="comment">//常量池大小</span></span><br><span class="line">   <span class="selector-tag">cp_info</span> <span class="selector-tag">constant_pool</span><span class="selector-attr">[constant_pool_count-1]</span>; <span class="comment">//常量池</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">access_flags</span>;                              <span class="comment">//类和接口层次的访问标志（通过|运算得到）</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">this_class</span>;                                <span class="comment">//类索引（指向常量池中的类常量）</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">super_class</span>;                               <span class="comment">//父类索引（指向常量池中的类常量）</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">interfaces_count</span>;                          <span class="comment">//接口索引计数器</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">interfaces</span><span class="selector-attr">[interfaces_count]</span>;              <span class="comment">//接口索引集合</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">fields_count</span>;                              <span class="comment">//字段数量计数器</span></span><br><span class="line">   <span class="selector-tag">field_info</span> <span class="selector-tag">fields</span><span class="selector-attr">[fields_count]</span>;              <span class="comment">//字段表集合</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">methods_count</span>;                             <span class="comment">//方法数量计数器</span></span><br><span class="line">   <span class="selector-tag">method_info</span> <span class="selector-tag">methods</span><span class="selector-attr">[methods_count]</span>;           <span class="comment">//方法表集合</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">attributes_count</span>;                          <span class="comment">//属性个数</span></span><br><span class="line">   <span class="selector-tag">attribute_info</span> <span class="selector-tag">attributes</span><span class="selector-attr">[attributes_count]</span>;  <span class="comment">//属性表</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>访问标志：类还是接口；是否定义为public类型，abstract类型；若为类，是否声明为final。</li>
-<li>字段：用来描述接口或类中的变量，但不包括在方法内部的变量。</li>
-<li>字面量：文本字符串，声明为final的常量值等。</li>
-<li>符号引用：类和接口的全限定名；字段的名称和描述符；方法的名称和描述符。</li>
-<li>类索引，父类索引，接口索引：用来确定类的继承关系。</li>
-</ul>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2018/02/13/Git远程仓库/">Git 远程仓库</a>
         </h1>
         
@@ -397,6 +431,47 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/02/12/2.0 Java虚拟机/">JVM 2.0</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-12T02:10:00.000Z" itemprop="datePublished">2018-02-12</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>#Java虚拟机</p>
+<p>作用：</p>
+<blockquote>
+<p>Java虚拟机的主要任务是装载class文件并且执行其中的字节码。<br>Java虚拟机包含一个类装载器（class loader），它可以从程序和API中装载class文件，<br>Java API中只有程序执行时需要的类才会被装载，字节码由执行引擎来执行。</p>
+</blockquote>
+<p>当Java虚拟机由主机操作系统上的软件实现时，Java程序通过调用本地方法和主机进行交互。<br>Java方法由Java语言编写，编译成字节码，存储在class文件中。<br>本地方法由C/C++/汇编语言编写，编译成和处理器相关的机器代码，存储在动态链接库中，格式是各个平台专有。<br>所以本地方法是联系Java程序和底层主机操作系统的连接方式。（跨平台）</p>
+<p><img src="https://www.javazhiyin.com/wp-content/uploads/2019/01/java8-1547432465.png" alt="image"></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/02/12/Git撤销操作/">Git 撤销操作</a>
         </h1>
         
@@ -437,47 +512,6 @@
 <blockquote>
 <p>Important: 你需要知道 git checkout – [file] 是一个危险的命令，这很重要。 你对那个文件做的任何修改都会消失 - 你只是拷贝了另一个文件来覆盖它。 除非你确实清楚不想要那个文件了，否则不要使用这个命令。</p>
 </blockquote>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/02/12/2.0 Java虚拟机/">JVM 2.0</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-02-12T02:10:00.000Z" itemprop="datePublished">2018-02-12</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>#Java虚拟机</p>
-<p>作用：</p>
-<blockquote>
-<p>Java虚拟机的主要任务是装载class文件并且执行其中的字节码。<br>Java虚拟机包含一个类装载器（class loader），它可以从程序和API中装载class文件，<br>Java API中只有程序执行时需要的类才会被装载，字节码由执行引擎来执行。</p>
-</blockquote>
-<p>当Java虚拟机由主机操作系统上的软件实现时，Java程序通过调用本地方法和主机进行交互。<br>Java方法由Java语言编写，编译成字节码，存储在class文件中。<br>本地方法由C/C++/汇编语言编写，编译成和处理器相关的机器代码，存储在动态链接库中，格式是各个平台专有。<br>所以本地方法是联系Java程序和底层主机操作系统的连接方式。（跨平台）</p>
-<p><img src="https://www.javazhiyin.com/wp-content/uploads/2019/01/java8-1547432465.png" alt="image"></p>
 
         
     </section>
@@ -559,45 +593,6 @@
 <p>git rm 命令后面可以列出文件或者目录的名字，也可以使用 glob 模式。 比方说：<br><figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">$</span> git rm <span class="built-in">log</span>/\*.<span class="built-in">log</span></span><br></pre></td></tr></table></figure></p>
 <p>注意到星号 * 之前的反斜杠 \， 因为 Git 有它自己的文件模式扩展匹配方式，所以我们不用 shell 来帮忙展开。 此命令删除 log/ 目录下扩展名为 .log 的所有文件。 类似的比如：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>git rm \*~</span><br></pre></td></tr></table></figure></p>
 <p>该命令为删除以 ~ 结尾的所有文件。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/02/08/清除eclipse launch configuration/">清除eclipse launch configuration</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-02-08T06:18:02.000Z" itemprop="datePublished">2018-02-08</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="清除eclipse-launch-configuration"><a href="#清除eclipse-launch-configuration" class="headerlink" title="清除eclipse launch configuration"></a>清除eclipse launch configuration</h1><p>eclipse里面export runnable jar之前要先run一下才行, 但是之后launch configuration里面的记录一直存在, 非常难看, 清除的方法是:<br>清空workspace文件夹下的里的内容。</p>
-<blockquote>
-<p>注意是删掉文件夹里面的内容, 而不是把文件夹删了</p>
-</blockquote>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.metadata/.plugins/org<span class="selector-class">.eclipse</span><span class="selector-class">.debug</span><span class="selector-class">.core</span>/.launches</span><br><span class="line"></span><br><span class="line">eg:</span><br><span class="line">E:\JavaWorkSpace\.metadata\.plugins\org<span class="selector-class">.eclipse</span><span class="selector-class">.debug</span><span class="selector-class">.core</span>\.launches</span><br></pre></td></tr></table></figure>
 
         
     </section>

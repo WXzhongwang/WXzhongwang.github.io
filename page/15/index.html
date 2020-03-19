@@ -131,6 +131,40 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2017/04/01/判断字符串是否为空字符串/">判断字符串是否为空字符串</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/15/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-04-01T09:10:10.000Z" itemprop="datePublished">2017-04-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java/">Java</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="判断字符串是否为空字符串"><a href="#判断字符串是否为空字符串" class="headerlink" title="判断字符串是否为空字符串"></a>判断字符串是否为空字符串</h1><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> class StringUtil &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 判断是否为空字符串最优代码</span></span><br><span class="line"><span class="comment">     * @param str</span></span><br><span class="line"><span class="comment">     * @return 如果为空，则返回true</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">boolean</span> isEmpty(<span class="keyword">String</span> <span class="built_in">str</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">str</span> == <span class="keyword">null</span> || <span class="built_in">str</span>.<span class="built_in">trim</span>().length() == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 判断字符串是否非空</span></span><br><span class="line"><span class="comment">     * @param str </span></span><br><span class="line"><span class="comment">     * @return 如果不为空，则返回true</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">boolean</span> isNotEmpty(<span class="keyword">String</span> <span class="built_in">str</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> !isEmpty(<span class="built_in">str</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2017/03/06/MAVEN/">对maven中setting.xml配置文件进行解释</a>
         </h1>
         
@@ -540,6 +574,45 @@ req.acceptsLanguages：返回指定字符集的第一个可接受字符编码
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2017/01/24/Centos7安装nginx后仍然无法访问/">Nginx无法访问的问题</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/15/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-01-24T02:10:00.000Z" itemprop="datePublished">2017-01-24</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Nginx/">Nginx</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Centos7安装nginx后，无法访问的问题"><a href="#Centos7安装nginx后，无法访问的问题" class="headerlink" title="Centos7安装nginx后，无法访问的问题"></a>Centos7安装nginx后，无法访问的问题</h1><p><a href="https://www.runoob.com/linux/nginx-install-setup.html" target="_blank" rel="noopener">安装步骤</a></p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">curl localhost</span></span><br></pre></td></tr></table></figure>
+<p>发现是通的 （Welcome to nginx）</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd <span class="attribute">--zone</span>=public <span class="attribute">--add-port</span>=80/tcp --permanent</span><br></pre></td></tr></table></figure>
+<p>重启防火墙：<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="literal">stop</span> firewalld.service</span><br><span class="line">systemctl <span class="literal">start</span> firewalld.service</span><br></pre></td></tr></table></figure></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2017/01/24/C# 编码规范/">编码规范</a>
         </h1>
         
@@ -618,45 +691,6 @@ req.acceptsLanguages：返回指定字符集的第一个可接受字符编码
 <h1 id="变量声明及命名规范"><a href="#变量声明及命名规范" class="headerlink" title="变量声明及命名规范"></a>变量声明及命名规范</h1><h3 id="变量："><a href="#变量：" class="headerlink" title="变量："></a>变量：</h3><p>Camel：变量名首单词的首字母小写，其余每个单词首字母单词大写,多用于给变量或字段或方法参数命名。　　<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">var str</span> = <span class="string">"123"</span>;</span><br><span class="line"><span class="attribute">var highSchoolStudent</span> = <span class="string">"123"</span>;</span><br><span class="line"><span class="attribute">int num</span> = 5;</span><br></pre></td></tr></table></figure></p>
 <h3 id="常量："><a href="#常量：" class="headerlink" title="常量："></a>常量：</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">string</span> BaseIpAddress = <span class="string">""</span>;</span><br></pre></td></tr></table></figure>
 <h3 id="方法名："><a href="#方法名：" class="headerlink" title="方法名："></a>方法名：</h3><p>Pascal：每个单词的首字母都要大些其余小写，多用于类或方法。尽量用一般名词或动名词。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">GetHighSchoolStudent</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/01/24/Centos7安装nginx后仍然无法访问/">Nginx无法访问的问题</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/15/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-01-24T02:10:00.000Z" itemprop="datePublished">2017-01-24</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Nginx/">Nginx</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Centos7安装nginx后，无法访问的问题"><a href="#Centos7安装nginx后，无法访问的问题" class="headerlink" title="Centos7安装nginx后，无法访问的问题"></a>Centos7安装nginx后，无法访问的问题</h1><p><a href="https://www.runoob.com/linux/nginx-install-setup.html" target="_blank" rel="noopener">安装步骤</a></p>
-<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">curl localhost</span></span><br></pre></td></tr></table></figure>
-<p>发现是通的 （Welcome to nginx）</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd <span class="attribute">--zone</span>=public <span class="attribute">--add-port</span>=80/tcp --permanent</span><br></pre></td></tr></table></figure>
-<p>重启防火墙：<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="literal">stop</span> firewalld.service</span><br><span class="line">systemctl <span class="literal">start</span> firewalld.service</span><br></pre></td></tr></table></figure></p>
 
         
     </section>
