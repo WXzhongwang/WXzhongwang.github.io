@@ -7,11 +7,11 @@
 
     
 
-    <title>Linux 文件属性 | 我喜欢你喜欢我的歌</title>
+    <title>【01期】Spring，SpringMVC，SpringBoot，SpringCloud有什么区别和联系？ | 我喜欢你喜欢我的歌</title>
     <meta name="author" content="Dick Zhong">
     <meta name="version" content="1.0.0">
     <meta name="keywords" content>
-    <meta name="description" content="Linux 文件属性在Linux中我们可以使用命令来显示一个文件的属性以及文件所属的用户和组，如：12345[root@www /]# ls -ltotal 64dr-xr-xr-x   2 root root 4096 Dec 14  2012 bindr-xr-xr-x   4 root root 4096 Apr 19  2012 boot……note: “ll” 也可以。在Linux中第一个字符代表这个文件是目录、文件或链接文件等等。”d”在Linux中代表该文件是一个目录文件...">
+    <meta name="description" content="简单介绍Spring是一个轻量级的控制反转(IoC)和面向切面(AOP)的容器框架。Spring使你能够编写更干净、更可管理、并且更易于测试的代码。Spring MVC是Spring的一个模块，一个web框架。通过DispatcherServlet, ModelAndView 和 View Resolver，开发web应用变得很容易。主要针对的是网站应用程序或者服务开发——URL路由、Session、模板引擎、静态Web资源等等。Spring配置复杂，繁琐，所以推出了Spring bo...">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 
@@ -75,7 +75,7 @@
         
 
         
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux-文件属性"><span class="toc-number">1.</span> <span class="toc-text">Linux 文件属性</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#简单介绍"><span class="toc-number">1.</span> <span class="toc-text">简单介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring-VS-SpringMVC："><span class="toc-number">1.1.</span> <span class="toc-text">Spring VS SpringMVC：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SpringMVC-VS-SpringBoot："><span class="toc-number">1.2.</span> <span class="toc-text">SpringMVC VS SpringBoot：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SpringBoot和SpringCloud："><span class="toc-number">1.3.</span> <span class="toc-text">SpringBoot和SpringCloud：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结下来："><span class="toc-number">1.4.</span> <span class="toc-text">总结下来：</span></a></li></ol></li></ol>
         
     </div>
 </aside>
@@ -87,21 +87,21 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            Linux 文件属性
+            【01期】Spring，SpringMVC，SpringBoot，SpringCloud有什么区别和联系？
         </h1>
         
         <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/2018/03/06/Linux文件属性/index.html">
+            <a class="article-date" href="https://wxzhongwang.github.io/2020/02/01/【01期】Spring，SpringMVC，SpringBoot，SpringCloud有什么区别和联系/index.html">
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-03-06T08:18:02.000Z" itemprop="datePublished">2018-03-06</time>
+    <time datetime="2020-02-01T02:10:00.000Z" itemprop="datePublished">2020-02-01</time>
 </a>
 
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
+    <a class="article-tag-link" href="/tags/整理/">整理</a>
 </div>
 
 
@@ -110,27 +110,20 @@
     
     <section class="article-body markdown-body">
         
-        <h2 id="Linux-文件属性"><a href="#Linux-文件属性" class="headerlink" title="Linux 文件属性"></a>Linux 文件属性</h2><p>在Linux中我们可以使用命令来显示一个文件的属性以及文件所属的用户和组，如：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@www /]# ls -l</span><br><span class="line">total <span class="number">64</span></span><br><span class="line">dr-xr-xr-x   <span class="number">2</span> root root <span class="number">4096</span> Dec <span class="number">14</span>  <span class="number">2012</span> bin</span><br><span class="line">dr-xr-xr-x   <span class="number">4</span> root root <span class="number">4096</span> Apr <span class="number">19</span>  <span class="number">2012</span> boot</span><br><span class="line">……</span><br></pre></td></tr></table></figure></p>
-<p>note: “ll” 也可以。</p>
-<p>在Linux中第一个字符代表这个文件是目录、文件或链接文件等等。”d”在Linux中代表该文件是一个目录文件。</p>
-<ul>
-<li>当为[ d ]则是目录</li>
-<li>当为[ - ]则是文件；</li>
-<li>若是[ l ]则表示为链接文档(link file)；</li>
-<li>若是[ b ]则表示为装置文件里面的可供储存的接口设备(可随机存取装置)；</li>
-<li>若是[ c ]则表示为装置文件里面的串行端口设备，例如键盘、鼠标(一次性读取装置)。</li>
-</ul>
-<p>接下来的字符中，以三个为一组，且均为『rwx』 的三个参数的组合。</p>
-<ul>
-<li>[ r ]代表可读(read)</li>
-<li>[ w ]代表可写(write)</li>
-<li>[ x ]代表可执行(execute)</li>
-</ul>
-<p>要注意的是，这三个权限的位置不会改变，如果没有权限，就会出现减号[ - ]而已。</p>
-<blockquote>
-<p>对于文件来说，它都有一个特定的所有者，也就是对该文件具有所有权的用户。同时，在Linux系统中，用户是按组分类的，一个用户属于一个或多个组。文件所有者以外的用户又可以分为文件所有者的同组用户和其他用户。因此，Linux系统按文件所有者、文件所有者同组用户和其他用户来规定了不同的文件访问权限。</p>
-</blockquote>
-<p>对于 root 用户来说，一般情况下，文件的权限对其不起作用。</p>
+        <h1 id="简单介绍"><a href="#简单介绍" class="headerlink" title="简单介绍"></a>简单介绍</h1><p>Spring是一个轻量级的控制反转(IoC)和面向切面(AOP)的容器框架。Spring使你能够编写更干净、更可管理、并且更易于测试的代码。</p>
+<p>Spring MVC是Spring的一个模块，一个web框架。通过DispatcherServlet, ModelAndView 和 View Resolver，开发web应用变得很容易。主要针对的是网站应用程序或者服务开发——URL路由、Session、模板引擎、静态Web资源等等。</p>
+<p>Spring配置复杂，繁琐，所以推出了Spring boot，约定优于配置，简化了spring的配置流程。</p>
+<p>Spring Cloud构建于Spring Boot之上，是一个关注全局的服务治理框架。</p>
+<h2 id="Spring-VS-SpringMVC："><a href="#Spring-VS-SpringMVC：" class="headerlink" title="Spring VS SpringMVC："></a>Spring VS SpringMVC：</h2><p>Spring是一个一站式的轻量级的java开发框架，核心是控制反转（IOC）和面向切面（AOP），针对于开发的WEB层(springMvc)、业务层(Ioc)、持久层(jdbcTemplate)等都提供了多种配置解决方案；</p>
+<p>SpringMVC是Spring基础之上的一个MVC框架，主要处理web开发的路径映射和视图渲染，属于Spring框架中WEB层开发的一部分；</p>
+<h2 id="SpringMVC-VS-SpringBoot："><a href="#SpringMVC-VS-SpringBoot：" class="headerlink" title="SpringMVC VS SpringBoot："></a>SpringMVC VS SpringBoot：</h2><p>SpringMVC属于一个企业WEB开发的MVC框架，涵盖面包括前端视图开发、文件配置、后台接口逻辑开发等，XML、config等配置相对比较繁琐复杂；</p>
+<p>SpringBoot框架相对于SpringMVC框架来说，更专注于开发微服务后台接口，不开发前端视图；</p>
+<h2 id="SpringBoot和SpringCloud："><a href="#SpringBoot和SpringCloud：" class="headerlink" title="SpringBoot和SpringCloud："></a>SpringBoot和SpringCloud：</h2><p>SpringBoot使用了约定大于配置的理念，集成了快速开发的Spring多个插件，同时自动过滤不需要配置的多余的插件，简化了项目的开发配置流程，一定程度上取消xml配置，是一套快速配置开发的脚手架，能快速开发单个微服务；</p>
+<p>SpringCloud大部分的功能插件都是基于SpringBoot去实现的，SpringCloud关注于全局的微服务整合和管理，将多个SpringBoot单体微服务进行整合以及管理；SpringCloud依赖于SpringBoot开发，而SpringBoot可以独立开发；</p>
+<h2 id="总结下来："><a href="#总结下来：" class="headerlink" title="总结下来："></a>总结下来：</h2><p>Spring是核心，提供了基础功能；</p>
+<p>Spring MVC 是基于Spring的一个 MVC 框架 ；</p>
+<p>Spring Boot 是为简化Spring配置的快速开发整合包；</p>
+<p>Spring Cloud是构建在Spring Boot之上的服务治理框架。</p>
 
         
     </section>
@@ -148,11 +141,11 @@
         repo: "WXzhongwang.github.io",
         owner: "WXzhongwang",
         admin: ["WXzhongwang"],
-        id: "2018/03/06/Linux文件属性",
+        id: "2020/02/01/【01期】Spring，SpringMVC，SpringBoot，SpringCloud有什么区别和联系",
         distractionFreeMode: true,
-        title: "Linux 文件属性",
-        body: "https://wxzhongwang.github.io/2018/03/06/Linux文件属性/",
-        labels: ["Linux"]
+        title: "【01期】Spring，SpringMVC，SpringBoot，SpringCloud有什么区别和联系？",
+        body: "https://wxzhongwang.github.io/2020/02/01/【01期】Spring，SpringMVC，SpringBoot，SpringCloud有什么区别和联系/",
+        labels: ["整理"]
     }).render('comments');
     </script>
 </div>

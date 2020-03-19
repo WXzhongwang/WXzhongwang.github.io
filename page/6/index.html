@@ -131,6 +131,151 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/06/06/BIO NIO AIO 总结/">BIO,NIO,AIO 总结</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-06-05T16:30:00.000Z" itemprop="datePublished">2018-06-06</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java/">Java</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="BIO-NIO-AIO-IO模型总结"><a href="#BIO-NIO-AIO-IO模型总结" class="headerlink" title="BIO,NIO,AIO IO模型总结"></a>BIO,NIO,AIO IO模型总结</h1><p>Java 中的 BIO、NIO和 AIO 理解为是 Java 语言对操作系统的各种 IO 模型的封装。<br>程序员在使用这些 API 的时候，不需要关心操作系统层面的知识，也不需要根据不同操作系统编写不同的代码。<br>只需要使用Java的API就可以了。</p>
+<h2 id="同步与异步"><a href="#同步与异步" class="headerlink" title="同步与异步"></a>同步与异步</h2><p>同步： </p>
+<p>同步就是发起一个调用后，被调用者未处理完请求之前，调用不返回。</p>
+<p>异步： </p>
+<p>异步就是发起一个调用后，立刻得到被调用者的回应表示已接收到请求，但是被调用者并没有返回结果，此时我们可以处理其他的请求，<br>被调用者通常依靠事件，回调等机制来通知调用者其返回结果。</p>
+<p>同步和异步的区别最大在于异步的话调用者不需要等待处理结果，被调用者会通过回调等机制来通知调用者其返回结果。</p>
+<h2 id="阻塞和非阻塞"><a href="#阻塞和非阻塞" class="headerlink" title="阻塞和非阻塞"></a>阻塞和非阻塞</h2><p>阻塞： </p>
+<p>阻塞就是发起一个请求，调用者一直等待请求结果返回，也就是当前线程会被挂起，无法从事其他任务，只有当条件就绪才能继续。</p>
+<p>非阻塞： </p>
+<p>非阻塞就是发起一个请求，调用者不用一直等着结果返回，可以先去干其他事情。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">举个生活中简单的例子，你妈妈让你烧水，</span><br><span class="line"></span><br><span class="line">小时候你比较笨啊，在那里傻等着水开（同步阻塞）。</span><br><span class="line">等你稍微再长大一点，你知道每次烧水的空隙可以去干点其他事，然后只需要时不时来看看水开了没有（同步非阻塞）。</span><br><span class="line">后来，你们家用上了水开了会发出声音的壶，这样你就只需要听到响声后就知道水开了，在这期间你可以随便干自己的事情，你需要去倒水了（异步非阻塞）。</span><br></pre></td></tr></table></figure>
+<h2 id="BIO-Blocking-I-O"><a href="#BIO-Blocking-I-O" class="headerlink" title="BIO (Blocking I/O)"></a>BIO (Blocking I/O)</h2><p>同步阻塞I/O模式，数据的读取写入必须阻塞在一个线程内等待其完成。</p>
+<h3 id="传统-BIO"><a href="#传统-BIO" class="headerlink" title="传统 BIO"></a>传统 BIO</h3><p>BIO通信（一请求一应答）</p>
+<p>采用 BIO 通信模型 的服务端，通常由一个独立的 Acceptor 线程负责监听客户端的连接。<br>我们一般通过在while(true) 循环中服务端会调用 accept() 方法等待接收客户端的连接的方式监听请求，<br>请求一旦接收到一个连接请求，就可以建立通信套接字在这个通信套接字上进行读写操作，此时不能再接收其他客户端连接请求，<br>只能等待同当前连接的客户端的操作执行完成， 不过可以通过多线程来支持多个客户端的连接</p>
+<p>如果要让 BIO 通信模型能够同时处理多个客户端请求，就必须使用多线程<br>（主要原因是socket.accept()、socket.read()、socket.write() 涉及的三个主要函数都是同步阻塞的），<br>也就是说它在接收到客户端连接请求之后为每个客户端创建一个新的线程进行链路处理，处理完成之后，<br>通过输出流返回应答给客户端，线程销毁。这就是典型的 一请求一应答通信模型 。<br>我们可以设想一下如果这个连接不做任何事情的话就会造成不必要的线程开销，不过可以通过线程池机制改善，<br>线程池还可以让线程的创建和回收成本相对较低。使用FixedThreadPool 可以有效的控制了线程的最大数量，<br>保证了系统有限的资源的控制，实现了N(客户端请求数量):M(处理客户端请求的线程数量)的伪异步I/O模型（N 可以远远大于 M）</p>
+<p>我们再设想一下当客户端并发访问量增加后这种模型会出现什么问题？<br><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">在 <span class="keyword">Java </span>虚拟机中，线程是宝贵的资源，线程的创建和销毁成本很高，除此之外，线程的切换成本也是很高的。</span><br><span class="line">尤其在 Linux 这样的操作系统中，线程本质上就是一个进程，创建和销毁线程都是重量级的系统函数。</span><br><span class="line">如果并发访问量增加会导致线程数急剧膨胀可能会导致线程堆栈溢出、创建新线程失败等问题，最终导致进程宕机或者僵死，</span><br><span class="line">不能对外提供服务。</span><br></pre></td></tr></table></figure></p>
+<p>Demo:</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">IOClient</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> void main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">    <span class="comment">// TODO 创建多个线程，模拟多个客户端连接服务端</span></span><br><span class="line">    <span class="keyword">new</span> <span class="type">Thread</span>(() -&gt; &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        Socket socket = <span class="keyword">new</span> <span class="type">Socket</span>(<span class="string">"127.0.0.1"</span>, <span class="number">3333</span>);</span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">          <span class="keyword">try</span> &#123;</span><br><span class="line">            socket.getOutputStream().write((<span class="keyword">new</span> <span class="type">Date</span>() + <span class="string">": hello world"</span>).getBytes());</span><br><span class="line">            Thread.sleep(<span class="number">2000</span>);</span><br><span class="line">          &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;).start();</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">IOServer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> void main(<span class="keyword">String</span>[] args) throws IOException &#123;</span><br><span class="line">    <span class="comment">// TODO 服务端处理客户端连接请求</span></span><br><span class="line">    ServerSocket serverSocket = <span class="keyword">new</span> <span class="type">ServerSocket</span>(<span class="number">3333</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 接收到客户端连接请求之后为每个客户端创建一个新的线程进行链路处理</span></span><br><span class="line">    <span class="keyword">new</span> <span class="type">Thread</span>(() -&gt; &#123;</span><br><span class="line">      <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="comment">// 阻塞方法获取新的连接</span></span><br><span class="line">          Socket socket = serverSocket.accept();</span><br><span class="line"></span><br><span class="line">          <span class="comment">// 每一个新的连接都创建一个线程，负责读取数据</span></span><br><span class="line">          <span class="keyword">new</span> <span class="type">Thread</span>(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">              int len;</span><br><span class="line">              byte[] data = <span class="keyword">new</span> <span class="type">byte</span>[<span class="number">1024</span>];</span><br><span class="line">              InputStream inputStream = socket.getInputStream();</span><br><span class="line">              <span class="comment">// 按字节流方式读取数据</span></span><br><span class="line">              <span class="keyword">while</span> ((len = inputStream.read(data)) != <span class="number">-1</span>) &#123;</span><br><span class="line">                System.out.println(<span class="keyword">new</span> <span class="type">String</span>(data, <span class="number">0</span>, len));</span><br><span class="line">              &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;).start();</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;).start();</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="伪异步-IO"><a href="#伪异步-IO" class="headerlink" title="伪异步 IO"></a>伪异步 IO</h3><p>为了解决同步阻塞I/O面临的一个链路需要一个线程处理的问题，后来有人对它的线程模型进行了优化一一一<br>后端通过一个线程池来处理多个客户端的请求接入，<br>形成客户端个数M：线程池最大线程数N的比例关系，其中M可以远远大于N.<br>通过线程池可以灵活地调配线程资源，设置线程的最大值，防止由于海量并发接入导致线程耗尽。</p>
+<p>采用线程池和任务队列可以实现一种叫做伪异步的 I/O 通信框架</p>
+<p>当有新的客户端接入时，将客户端的 Socket 封装成一个Task（该任务实现java.lang.Runnable接口）投递到后端的线程池中<br>进行处理，JDK 的线程池维护一个消息队列和 N 个活跃线程，对消息队列中的任务进行处理。由于线程池可以设置消息队列的大小<br>和最大线程数，因此，它的资源占用是可控的，无论多少个客户端并发访问，都不会导致资源的耗尽和宕机。</p>
+<p>伪异步I/O通信框架采用了线程池实现，因此避免了为每个请求都创建一个独立线程造成的线程资源耗尽问题。<br>不过因为它的底层仍然是同步阻塞的BIO模型，因此无法从根本上解决问题。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在活动连接数不是特别高（小于单机1000）的情况下，这种模型是比较不错的，可以让每一个连接专注于自己的 I/O<br>并且编程模型简单，也不用过多考虑系统的过载、限流等问题。线程池本身就是一个天然的漏斗，可以缓冲一些系统处理不了的<br>连接或请求。但是，当面对十万甚至百万级连接的时候，传统的 BIO 模型是无能为力的。因此，我们需要一种更高效的 I/O<br>处理模型来应对更高的并发量。</p>
+<h2 id="NIO-New-I-O"><a href="#NIO-New-I-O" class="headerlink" title="NIO (New I/O)"></a>NIO (New I/O)</h2><p>NIO是一种同步非阻塞的I/O模型，对应 java.nio 包，提供了 Channel , Selector，Buffer等抽象。</p>
+<p>NIO中的N可以理解为Non-blocking，不单纯是New。它支持面向缓冲的，基于通道的I/O操作方法。<br>NIO提供了与传统BIO模型中的 Socket 和 ServerSocket 相对应的 SocketChannel 和 ServerSocketChannel 两种不同的套接字通道<br>实现,两种通道都支持阻塞和非阻塞两种模式。</p>
+<p>阻塞模式使用就像传统中的支持一样，比较简单，但是性能和可靠性都不好；<br>非阻塞模式正好与之相反。</p>
+<p>对于低负载、低并发的应用程序，可以使用同步阻塞I/O来提升开发速率和更好的维护性；<br>对于高负载、高并发的（网络）应用，应使用 NIO 的非阻塞模式来开发。</p>
+<p>区别：（关键）</p>
+<p>1） Non-blocking IO（非阻塞IO）<br>Java IO流：<br>阻塞的。这意味着，当一个线程调用 read() 或 write() 时，该线程被阻塞，<br>直到有一些数据被读取，或数据完全写入。该线程在此期间不能再干任何事情了。</p>
+<p>NIO流：<br>不阻塞的。Java NIO使我们可以进行非阻塞IO操作。<br>比如说，单线程中从通道读取数据到buffer，同时可以继续做别的事情，当数据读取到buffer中后，<br>线程再继续处理数据。写数据也是一样的。另外，非阻塞写也是如此。一个线程请求写入一些数据到某通道，<br>但不需要等待它完全写入，这个线程同时可以去做别的事情。</p>
+<p>2）Buffer(缓冲区)<br>IO 面向流(Stream oriented)，而 NIO 面向缓冲区(Buffer oriented)。<br>Buffer是一个对象，它包含一些要写入或者要读出的数据。在NIO类库中加入Buffer对象，体现了新库与原I/O的一个重要区别。<br>Java NIO Buffers用于和NIO Channel交互。 我们从Channel中读取数据到buffers里，从Buffer把数据写入到Channels；<br>Buffer本质上就是一块内存区；</p>
+<p>一个Buffer有三个属性是必须掌握的，分别是：capacity容量、position位置、limit限制。</p>
+<p>IO:<br>在面向流的I/O中·可以将数据直接写入或者将数据直接读到 Stream 对象中。<br>虽然 Stream 中也有 Buffer 开头的扩展类，但只是流的包装类，还是从流读到缓冲区，<br>而 NIO 却是直接读到 Buffer 中进行操作。</p>
+<p>NIO流：<br>在NIO厍中，所有数据都是用缓冲区处理的。在读取数据时，它是直接读到缓冲区中的;<br>在写入数据时，写入到缓冲区中。任何时候访问NIO中的数据，都是通过缓冲区进行操作。<br>最常用的缓冲区是 ByteBuffer,一个 ByteBuffer 提供了一组功能用于操作 byte 数组。<br>除了ByteBuffer,还有其他的一些缓冲区，事实上，每一种Java基本类型（除了Boolean类型）都对应有一种缓冲区。</p>
+<p>3)Channel (通道)<br>NIO 通过Channel（通道） 进行读写。</p>
+<p>通道是双向的，可读也可写，而流的读写是单向的。无论读写，通道只能和Buffer交互。因为 Buffer，通道可以异步地读写。</p>
+<p>4)Selector (选择器)<br>NIO有选择器，而IO没有。</p>
+<p>选择器用于使用单个线程处理多个通道。因此，它需要较少的线程来处理这些通道。线程之间的切换对于操作系统来说是昂贵的。<br>因此，为了提高系统效率选择器是有用的。</p>
+<p>NIO 包含下面几个核心的组件：</p>
+<p>Channel (通道)<br>Buffer  (缓冲区)<br>Selector(选择器)</p>
+<h2 id="AIO-Asynchronous-I-O"><a href="#AIO-Asynchronous-I-O" class="headerlink" title="AIO (Asynchronous I/O)"></a>AIO (Asynchronous I/O)</h2><p>AIO 也就是 NIO 2。在 Java 7 中引入了 NIO 的改进版 NIO 2,它是异步非阻塞的IO模型。<br>异步 IO 是基于事件和回调机制实现的，也就是应用操作之后会直接返回，不会堵塞在那里，当后台处理完成，<br>操作系统会通知相应的线程进行后续的操作。</p>
+<p>AIO 是异步IO的缩写，虽然 NIO 在网络操作中，提供了非阻塞的方法，但是 NIO 的 IO 行为还是同步的。<br>对于 NIO 来说，我们的业务线程是在 IO 操作准备好时，得到通知，接着就由这个线程自行进行 IO 操作，IO操作本身是同步的。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/06/05/Zookeeper/">Zookeeper分布式协调服务</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-06-05T02:10:00.000Z" itemprop="datePublished">2018-06-05</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Zookeeper/">Zookeeper</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Zookeeper分布式协调服务"><a href="#Zookeeper分布式协调服务" class="headerlink" title="Zookeeper分布式协调服务"></a>Zookeeper分布式协调服务</h1><p>分布式特点：</p>
+<ul>
+<li>凡是分布式就有路由</li>
+<li>凡是路由就有负载</li>
+<li>凡是有负载就一定会有宕机</li>
+<li>凡是分布式就有链接</li>
+<li>凡是链接就有安全</li>
+</ul>
+<p>分布式、开源、分布式应用程序协调服务。包括配置维护、域名服务、分布式同步、组服务等。</p>
+<h2 id="单机模式："><a href="#单机模式：" class="headerlink" title="单机模式："></a>单机模式：</h2><p>Mode: standalone<br>C/S架构<br>Znode 称为zk节点数据</p>
+<h2 id="对节点基本操作"><a href="#对节点基本操作" class="headerlink" title="对节点基本操作"></a>对节点基本操作</h2><p>create /monkey xxx 创建节点<br>set /monkey xxxxa  更新节点<br>get /zk_test     获取节点<br>delete /zk_test 一般删除（若里面不为空，无法删除）<br>rmr /zk_test 递归删除</p>
+<p>节点类型：</p>
+<ul>
+<li>持久节点</li>
+<li>持久有序</li>
+<li>临时节点</li>
+<li>临时有序</li>
+</ul>
+<h2 id="watcher-监听作用"><a href="#watcher-监听作用" class="headerlink" title="watcher(监听作用)"></a>watcher(监听作用)</h2><p>get /zk_test watch 监听节点数据，一旦发生改变，可以通知</p>
+<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><p>jps 查看进程号 ===》 查看方法名<br><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\Administrator&gt;<span class="keyword">jps</span></span><br><span class="line"><span class="keyword">1748 </span><span class="keyword">Bootstrap</span></span><br><span class="line"><span class="keyword">4788 </span>QuorumPeerMain</span><br><span class="line"><span class="number">2424</span> ZooKeeperMain</span><br><span class="line"><span class="number">3116</span> <span class="keyword">Jps</span></span><br></pre></td></tr></table></figure></p>
+<p>ZooKeeperMain客户端入口<br>QuorumPeerMain服务端源码</p>
+<p>通过源码发现：<br>help 帮助<br>history 历史</p>
+<p>create -s /monkey xxxxx</p>
+<ul>
+<li>持久: 当客户端断开时，znode节点不会被删除</li>
+<li>临时: 当客户端断开时，znode节点自动删除</li>
+</ul>
+<p>利用Watch机制实现  》》》 分布式配置中心</p>
+<p>利用临时有序节点（失效删除，自增等特点）  》》》分布式任务调度</p>
+<p>》》》分布式服务注册与订阅</p>
+<p>znode节点属性：<br>cZxid = 0x2<br>ctime = Tue Jun 04 23:21:32 CST 2019<br>mZxid = 0x2<br>mtime = Tue Jun 04 23:21:32 CST 2019<br>pZxid = 0xa<br>cversion = 1<br>dataVersion = 0<br>aclVersion = 0<br>ephemeralOwner = 0x0<br>dataLength = 0<br>numChildren = 1</p>
+<h2 id="集群模式-（选举）"><a href="#集群模式-（选举）" class="headerlink" title="集群模式 （选举）"></a>集群模式 （选举）</h2><p>zk一般部署奇数个</p>
+<p>zoo.cfg文件修改，2888端口，添加集群机器<br>server.1=196.128.3.1:2888:3888<br>server.2=196.128.3.2:2888:3888<br>server.3=196.128.3.3:2888:3888</p>
+<p>选举模式 ==&gt; 过半选举（过半原则）<br>Mode: leader<br>Mode: follower</p>
+<p>查看状态：<br>sh zkServer.sh status</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/06/03/Spring源码/">Spring源码</a>
         </h1>
         
@@ -267,45 +412,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/05/06/Nginx的负载均衡策略(粗略)/">Nginx的负载均衡策略</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/6/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-05-06T14:22:22.000Z" itemprop="datePublished">2018-05-06</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Nginx/">Nginx</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Nginx的负载均衡策略"><a href="#Nginx的负载均衡策略" class="headerlink" title="Nginx的负载均衡策略"></a>Nginx的负载均衡策略</h1><h2 id="轮询（默认）"><a href="#轮询（默认）" class="headerlink" title="轮询（默认）:"></a>轮询（默认）:</h2><p>每个请求按时间顺序逐一分配到不同的后端服务器，如果后端服务器down掉，能自动剔除。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="指定权重"><a href="#指定权重" class="headerlink" title="指定权重"></a>指定权重</h2><p>指定轮询几率，weight和访问比率成正比，用于后端服务器性能不均的情况。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14 <span class="attribute">weight</span>=10; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15 <span class="attribute">weight</span>=10; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="IP绑定-ip-hash"><a href="#IP绑定-ip-hash" class="headerlink" title="IP绑定 ip_hash"></a>IP绑定 ip_hash</h2><p>每个请求按访问ip的hash结果分配，这样每个访客固定访问一个后端服务器，可以解决session的问题。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"> ip_hash; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14:88; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15:80; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="fair（第三方）"><a href="#fair（第三方）" class="headerlink" title="fair（第三方）"></a>fair（第三方）</h2><p>按后端服务器的响应时间来分配请求，响应时间短的优先分配。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14:88; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15:80;</span><br><span class="line"> fair; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="url-hash（第三方）"><a href="#url-hash（第三方）" class="headerlink" title="url_hash（第三方）"></a>url_hash（第三方）</h2><p>按访问url的hash结果来分配请求，使每个url定向到同一个后端服务器，后端服务器为缓存时比较有效。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123;</span><br><span class="line"><span class="built_in"> server </span>squid1:3128; </span><br><span class="line"><span class="built_in"> server </span>squid2:3128;</span><br><span class="line"> </span><br><span class="line"> hash <span class="variable">$request_uri</span>; </span><br><span class="line"> hash_method crc32; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2018/05/06/Nginx配置文件nginx.conf中文详解/">nginx.conf中文详解</a>
         </h1>
         
@@ -374,6 +480,45 @@
 <p>你把这粒粮食直接扔到小鸡中间，一百只小鸡一起上来抢，最终只有一只小鸡能得手，其它九十九只小鸡只能铩羽而归。这就相当于关闭了accept_mutex。<br>你主动抓一只小鸡过来，把这粒粮食塞到它嘴里，其它九十九只小鸡对此浑然不知，该睡觉睡觉。这就相当于激活了accept_mutex。<br>可以看到此场景下，激活accept_mutex相对更好一些，让我们修改一下问题的场景，我不再只有一粒粮食，而是一盆粮食，怎么办？</p>
 <p>此时如果仍然采用主动抓小鸡过来塞粮食的做法就太低效了，一盆粮食不知何年何月才能喂完，大家可以设想一下几十只小鸡排队等着喂食时那种翘首以盼的情景。此时更好的方法是把这盆粮食直接撒到小鸡中间，让它们自己去抢，虽然这可能会造成一定程度的混乱，但是整体的效率无疑大大增强了。</p>
 <p>accept_mutex会轮流来选择worker进程。Nginx默认开启了accept_mutex。<br>Nginx缺省激活了accept_mutex，是一种保守的选择。如果关闭了它，可能会引起一定程度的惊群问题，表现为上下文切换增多（sar -w）或者负载上升，但是如果你的网站访问量比较大，为了系统的吞吐量，我还是建议大家关闭它。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/05/06/Nginx的负载均衡策略(粗略)/">Nginx的负载均衡策略</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-05-06T14:22:22.000Z" itemprop="datePublished">2018-05-06</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Nginx/">Nginx</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Nginx的负载均衡策略"><a href="#Nginx的负载均衡策略" class="headerlink" title="Nginx的负载均衡策略"></a>Nginx的负载均衡策略</h1><h2 id="轮询（默认）"><a href="#轮询（默认）" class="headerlink" title="轮询（默认）:"></a>轮询（默认）:</h2><p>每个请求按时间顺序逐一分配到不同的后端服务器，如果后端服务器down掉，能自动剔除。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="指定权重"><a href="#指定权重" class="headerlink" title="指定权重"></a>指定权重</h2><p>指定轮询几率，weight和访问比率成正比，用于后端服务器性能不均的情况。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14 <span class="attribute">weight</span>=10; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15 <span class="attribute">weight</span>=10; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="IP绑定-ip-hash"><a href="#IP绑定-ip-hash" class="headerlink" title="IP绑定 ip_hash"></a>IP绑定 ip_hash</h2><p>每个请求按访问ip的hash结果分配，这样每个访客固定访问一个后端服务器，可以解决session的问题。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"> ip_hash; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14:88; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15:80; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="fair（第三方）"><a href="#fair（第三方）" class="headerlink" title="fair（第三方）"></a>fair（第三方）</h2><p>按后端服务器的响应时间来分配请求，响应时间短的优先分配。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14:88; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15:80;</span><br><span class="line"> fair; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="url-hash（第三方）"><a href="#url-hash（第三方）" class="headerlink" title="url_hash（第三方）"></a>url_hash（第三方）</h2><p>按访问url的hash结果来分配请求，使每个url定向到同一个后端服务器，后端服务器为缓存时比较有效。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123;</span><br><span class="line"><span class="built_in"> server </span>squid1:3128; </span><br><span class="line"><span class="built_in"> server </span>squid2:3128;</span><br><span class="line"> </span><br><span class="line"> hash <span class="variable">$request_uri</span>; </span><br><span class="line"> hash_method crc32; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
         
     </section>
@@ -454,97 +599,6 @@
 <p>Nginx 采用了异步非阻塞的方式来处理请求</p>
 <p>Nginx供了一种机制，同时监控多个事件(具体到系统调用就是像select、poll、epoll、kqueue这样的系统调用，调用他们是阻塞的，但可以设置超时时间，在超时时间之内，如果有事件准备好了，就返回。这种机制正好解决了我们上面的两个问题，拿epoll为例，当事件没准备好时，放到epoll里面，事件准备好了，我们就去读写，当读写返回EAGAIN时，我们将它再次加入到epoll里面。这样，只要有事件准备好了，我们就去处理它，只有当所有事件都没准备好时，才在epoll里面等着。我们就可以并发处理大量的并发了。</p>
 <p>线程只有一个，所以同时能处理的请求当然只有一个了，只是在请求间进行不断地切换而已，切换也是因为异步事件未准备好，而主动让出的。这里的切换是没有任何代价，你可以理解为循环处理多个准备好的事件，事实上就是这样的。与多线程相比，这种事件处理方式是有很大的优势的，不需要创建线程，每个请求占用的内存也很少，没有上下文切换，事件处理非常的轻量级。并发数再多也不会导致无谓的资源浪费（上下文切换）。更多的并发数，只是会占用更多的内存而已。 </p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/04/20/tomcat源码解析/">tomcat源码解析</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/6/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-04-20T04:00:00.000Z" itemprop="datePublished">2018-04-20</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Tomcat/">Tomcat</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="tomcat源码解析"><a href="#tomcat源码解析" class="headerlink" title="tomcat源码解析"></a>tomcat源码解析</h1><p>1.tomcat的总体概述和tomcat的启动流程源码分析</p>
-<p>2.tomcat当中的web请求源码分析？一个http请求是如何请求到tomcat的？tomcat如何处理的？</p>
-<p>3.tomcat的协议分析，从源码分析tomcat当中各种协议详细配置的意义。</p>
-<p>4.tomcat和apache、nginx等主流静态资源服务器的搭配使用</p>
-<p>5.tomcat的性能调优？生产环境下如何让tomcat容器的性能达到最高</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/04/11/Thread实现多线程三/">Thread实现多线程三</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/6/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-04-11T02:10:00.000Z" itemprop="datePublished">2018-04-11</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Thread实现多线程三"><a href="#Thread实现多线程三" class="headerlink" title="Thread实现多线程三"></a>Thread实现多线程三</h1><p>接上文，关系到线程运行状态的几个方法：</p>
-<p>6）interrupt方法</p>
-<p>interrupt，顾名思义，即中断的意思。单独调用interrupt方法可以使得处于阻塞状态的线程抛出一个异常，也就说，它可以用来中断一个正处于阻塞状态的线程；另外，通过interrupt方法和isInterrupted()方法来停止正在运行的线程。</p>
-<p>下面看一个例子：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.<span class="type">IOException</span>;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">ThreadInterupt</span> </span>&#123;</span><br><span class="line">	public static void main(<span class="type">String</span>[] args) <span class="keyword">throws</span> <span class="type">IOException</span>  &#123;</span><br><span class="line">		<span class="type">ThreadInterupt</span> test = <span class="keyword">new</span> <span class="type">ThreadInterupt</span>();</span><br><span class="line">        <span class="type">MyThread</span> thread = test.<span class="keyword">new</span> <span class="type">MyThread</span>();</span><br><span class="line">        <span class="comment">//线程开始</span></span><br><span class="line">        <span class="type">System</span>.out.println(<span class="string">"进入线程"</span> + <span class="type">Thread</span>.currentThread().getName());</span><br><span class="line">        thread.start();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">Thread</span>.currentThread().sleep(<span class="number">2000</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (<span class="type">InterruptedException</span> e) &#123;</span><br><span class="line">             </span><br><span class="line">        &#125;</span><br><span class="line">        thread.interrupt();</span><br><span class="line">    &#125; </span><br><span class="line">     </span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        public void run() &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="type">System</span>.out.println(<span class="string">"线程"</span> + <span class="type">Thread</span>.currentThread().getName() + <span class="string">"进入睡眠状态"</span>);</span><br><span class="line">                <span class="type">Thread</span>.currentThread().sleep(<span class="number">10000</span>);</span><br><span class="line">                <span class="type">System</span>.out.println(<span class="string">"线程"</span> + <span class="type">Thread</span>.currentThread().getName() + <span class="string">"睡眠完毕"</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (<span class="type">InterruptedException</span> e) &#123;</span><br><span class="line">                <span class="type">System</span>.out.println(<span class="string">"线程"</span> + <span class="type">Thread</span>.currentThread().getName() + <span class="string">"得到中断异常"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="type">System</span>.out.println(<span class="string">"线程"</span> + <span class="type">Thread</span>.currentThread().getName() + <span class="string">"run方法执行完毕"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>执行结果 ：<br><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">进入线程main</span><br><span class="line">线程<span class="keyword">Thread</span>-<span class="number">0</span>进入睡眠状态</span><br><span class="line">线程<span class="keyword">Thread</span>-<span class="number">0</span>得到中断异常</span><br><span class="line">线程<span class="keyword">Thread</span>-<span class="number">0</span>run方法执行完毕</span><br></pre></td></tr></table></figure></p>
-<p>从这里可以看出，在主线程中,通过interrupt方法可以中断处于阻塞状态的线程。</p>
-<p>那么能不能中断处于非阻塞状态的线程呢？看下面这个例子：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.<span class="type">IOException</span>;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">InteruptRunningThread</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	  public static void main(<span class="type">String</span>[] args) <span class="keyword">throws</span> <span class="type">IOException</span>  &#123;</span><br><span class="line">		  	<span class="type">InteruptRunningThread</span> test = <span class="keyword">new</span> <span class="type">InteruptRunningThread</span>();</span><br><span class="line">		    <span class="comment">//线程开始</span></span><br><span class="line">	        <span class="type">System</span>.out.println(<span class="string">"进入线程"</span> + <span class="type">Thread</span>.currentThread().getName());</span><br><span class="line">	        </span><br><span class="line">	        <span class="type">MyThread</span> thread = test.<span class="keyword">new</span> <span class="type">MyThread</span>();</span><br><span class="line">	        thread.start();</span><br><span class="line">	        <span class="keyword">try</span> &#123;</span><br><span class="line">	            <span class="type">Thread</span>.currentThread().sleep(<span class="number">2000</span>);</span><br><span class="line">	        &#125; <span class="keyword">catch</span> (<span class="type">InterruptedException</span> e) &#123;</span><br><span class="line">	             </span><br><span class="line">	        &#125;</span><br><span class="line">	        thread.interrupt();</span><br><span class="line">	    &#125; </span><br><span class="line">	     </span><br><span class="line">	    <span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">	        <span class="meta">@Override</span></span><br><span class="line">	        public void run() &#123;</span><br><span class="line">	            int i = <span class="number">0</span>;</span><br><span class="line">	            <span class="keyword">while</span>(i &lt; <span class="type">Integer</span>.<span class="type">MAX_VALUE</span>)&#123;</span><br><span class="line">	                <span class="type">System</span>.out.println(<span class="string">"while循环, i = "</span> + i + <span class="string">"\r\n"</span>);</span><br><span class="line">	                i++;</span><br><span class="line">	            &#125;</span><br><span class="line">	        &#125;</span><br><span class="line">	    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>执行结果：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">while循环, <span class="selector-tag">i</span> = <span class="number">394572</span></span><br><span class="line"></span><br><span class="line">while循环, <span class="selector-tag">i</span> = <span class="number">394573</span></span><br><span class="line"></span><br><span class="line">while循环, <span class="selector-tag">i</span> = <span class="number">394574</span></span><br><span class="line">...<span class="comment">//还在继续</span></span><br></pre></td></tr></table></figure></p>
-<p>运行该程序会发现，while循环会一直运行直到变量i的值超出Integer.MAX_VALUE。所以说直接调用interrupt方法不能中断正在运行中的线程。</p>
-<p>但是如果配合isInterrupted()能够中断正在运行的线程，因为调用interrupt方法相当于<br>将中断标志位置为true，那么可以通过调用isInterrupted()判断中断标志是否被置位来中断线程的执行。比如下面这段代码：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.<span class="type">IOException</span>;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">InteruptRunningThread</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	  public static void main(<span class="type">String</span>[] args) <span class="keyword">throws</span> <span class="type">IOException</span>  &#123;</span><br><span class="line">		  	<span class="type">InteruptRunningThread</span> test = <span class="keyword">new</span> <span class="type">InteruptRunningThread</span>();</span><br><span class="line">		    <span class="comment">//线程开始</span></span><br><span class="line">	        <span class="type">System</span>.out.println(<span class="string">"进入线程"</span> + <span class="type">Thread</span>.currentThread().getName());</span><br><span class="line">	        </span><br><span class="line">	        <span class="type">MyThread</span> thread = test.<span class="keyword">new</span> <span class="type">MyThread</span>();</span><br><span class="line">	        thread.start();</span><br><span class="line">	        <span class="keyword">try</span> &#123;</span><br><span class="line">	            <span class="type">Thread</span>.currentThread().sleep(<span class="number">2000</span>);</span><br><span class="line">	        &#125; <span class="keyword">catch</span> (<span class="type">InterruptedException</span> e) &#123;</span><br><span class="line">	             </span><br><span class="line">	        &#125;</span><br><span class="line">	        thread.interrupt();</span><br><span class="line">	        <span class="type">System</span>.out.println(<span class="string">"结束线程"</span> + <span class="type">Thread</span>.currentThread().getName());</span><br><span class="line">	    &#125; </span><br><span class="line">	     </span><br><span class="line">	    <span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">	        <span class="meta">@Override</span></span><br><span class="line">	        public void run() &#123;</span><br><span class="line">	            int i = <span class="number">0</span>;</span><br><span class="line">	            <span class="comment">/*while(i &lt; Integer.MAX_VALUE)&#123;</span></span><br><span class="line"><span class="comment">	                System.out.println("while循环, i = " + i + "\r\n");</span></span><br><span class="line"><span class="comment">	                i++;</span></span><br><span class="line"><span class="comment">	            &#125;*/</span></span><br><span class="line">	            <span class="keyword">while</span>(!isInterrupted() &amp;&amp; i&lt;<span class="type">Integer</span>.<span class="type">MAX_VALUE</span>)&#123;</span><br><span class="line">	                <span class="type">System</span>.out.println(i+<span class="string">" while循环"</span>);</span><br><span class="line">	                i++;</span><br><span class="line">	            &#125;</span><br><span class="line">	        &#125;</span><br><span class="line">	    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>执行结果：<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">138537</span> <span class="keyword">while</span>循环</span><br><span class="line"><span class="number">138538</span> <span class="keyword">while</span>循环</span><br><span class="line"><span class="number">138539</span> <span class="keyword">while</span>循环</span><br><span class="line">结束线程main</span><br></pre></td></tr></table></figure></p>
-<p>但是一般情况下不建议通过这种方式来中断线程，一般会在MyThread类中增加一个属性 isStop来标志是否结束while循环，然后再在while循环中判断isStop的值。<br>那么就可以在外面通过调用setStop方法来终止while循环。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> isStop = <span class="keyword">false</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(!isStop &amp;&amp; i &lt; Integer.MAX_VALUE)&#123;</span><br><span class="line">        	System.out.println(<span class="string">"while循环, i = "</span> + i + <span class="string">"\r\n"</span>);</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">     </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setStop</span><span class="params">(<span class="keyword">boolean</span> stop)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.isStop = stop;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>7）stop方法</p>
-<p>stop方法已经是一个废弃的方法，它是一个不安全的方法。因为调用stop方法会直接终止run方法的调用，并且会抛出一个ThreadDeath错误，如果线程持有某个对象锁的话，会完全释放锁，导致对象状态不一致。所以stop方法基本是不会被用到的。</p>
-<p>8）destroy方法</p>
-<p>destroy方法也是废弃的方法。基本不会被使用到。</p>
 
         
     </section>
