@@ -11,7 +11,7 @@
     <meta name="author" content="Dick Zhong">
     <meta name="version" content="1.0.0">
     <meta name="keywords" content>
-    <meta name="description" content="索引数据结构1.二叉树2.红黑树3.Hash表4.B-Tree5.B+Tree 非叶子节点不存储data,只存储索引，可以放更多的索引。顺序访问指针，提高区间访问性能。MySQL索引底层支持两种：Hash和B+TreeMyISAM索引文件和数据文件是分离的，非聚集索引。frm 表结构MYD 行数据MYI 索引文件InnoDB索引实现（聚集索引）1）表数据文件本身是按B+tree组织的一个索引结构文件2）聚集索引-叶子结点包含了完整的数据记录3）InnoDB表必须有主键，并且推荐使用整...">
+    <meta name="description" content="https://www.cs.usfa.edu索引数据结构1.二叉树2.红黑树3.Hash表4.B-Tree5.B+Tree 非叶子节点不存储data,只存储索引，可以放更多的索引。顺序访问指针，提高区间访问性能。MySQL索引底层支持两种：Hash和B+TreeMyISAM索引文件和数据文件是分离的，非聚集索引。frm 表结构MYD 行数据MYI 索引文件InnoDB索引实现（聚集索引）1）表数据文件本身是按B+tree组织的一个索引结构文件2）聚集索引-叶子结点包含了完整的数据...">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 
@@ -155,7 +155,8 @@
     
     <section class="article-body markdown-body">
         
-        <p>索引数据结构<br>1.二叉树<br>2.红黑树<br>3.Hash表<br>4.B-Tree<br>5.B+Tree 非叶子节点不存储data,只存储索引，可以放更多的索引。顺序访问指针，提高区间访问性能。</p>
+        <p><a href="https://www.cs.usfa.edu" target="_blank" rel="noopener">https://www.cs.usfa.edu</a></p>
+<p>索引数据结构<br>1.二叉树<br>2.红黑树<br>3.Hash表<br>4.B-Tree<br>5.B+Tree 非叶子节点不存储data,只存储索引，可以放更多的索引。顺序访问指针，提高区间访问性能。</p>
 <p>MySQL索引底层支持两种：Hash和B+Tree</p>
 <p>MyISAM<br>索引文件和数据文件是分离的，非聚集索引。<br>frm 表结构<br>MYD 行数据<br>MYI 索引文件</p>
 <p>InnoDB索引实现（聚集索引）<br>1）表数据文件本身是按B+tree组织的一个索引结构文件<br>2）聚集索引-叶子结点包含了完整的数据记录<br>3）InnoDB表必须有主键，并且推荐使用整形的自增主键<br>(UUID vs 整型， 整型所需索引空间小，消耗的磁盘空间小，可以存放更多的索引，同时数据比较时更快)<br>4）非主键索引结构叶子结点存储的是主键值 （一致性和节省存储空间）</p>
