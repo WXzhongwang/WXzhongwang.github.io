@@ -131,6 +131,76 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/12/08/消息队列/">消息队列</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/4/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-08T03:18:02.000Z" itemprop="datePublished">2018-12-08</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/消息队列/">消息队列</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="一、消息队列的基本概念"><a href="#一、消息队列的基本概念" class="headerlink" title="一、消息队列的基本概念"></a>一、消息队列的基本概念</h1><h2 id="1-1-Broker"><a href="#1-1-Broker" class="headerlink" title="1.1 Broker"></a>1.1 Broker</h2><p>==Broker== 的概念来自与Apache ActiveMQ，通俗的讲就是消息队列服务器。</p>
+<h2 id="1-2-消息生产者和消费者"><a href="#1-2-消息生产者和消费者" class="headerlink" title="1.2 消息生产者和消费者"></a>1.2 消息生产者和消费者</h2><ul>
+<li>消息生产者 ==Producer==：发送消息到消息队列。</li>
+<li>消息消费者 ==Consumer==：从消息队列接收消息。</li>
+</ul>
+<h2 id="1-3-消息模型"><a href="#1-3-消息模型" class="headerlink" title="1.3 消息模型"></a>1.3 消息模型</h2><h3 id="点对点消息队列模型"><a href="#点对点消息队列模型" class="headerlink" title="点对点消息队列模型"></a>点对点消息队列模型</h3><p>消息生产者向一个特定的队列发送消息，消息消费者从该队列中接收消息。消息的生产者和消费者可以不同时处于运行状态。每一个成功处理的消息都由消息消费者签收确认（Acknowledge）。</p>
+<h3 id="发布订阅消息模型-Topic"><a href="#发布订阅消息模型-Topic" class="headerlink" title="发布订阅消息模型-Topic"></a>发布订阅消息模型-Topic</h3><p>发布订阅消息模型中，支持向一个特定的主题Topic发布消息，0个或多个订阅者接收来自这个消息主题的消息。在这种模型下，发布者和订阅者彼此不知道对方。实际操作过程中，必须先订阅，再发送消息，而后接收订阅的消息，这个顺序必须保证。 </p>
+<h2 id="1-4-消息顺序性保证"><a href="#1-4-消息顺序性保证" class="headerlink" title="1.4 消息顺序性保证"></a>1.4 消息顺序性保证</h2><p>基于Queue消息模型，利用FIFO先进先出的特性，可以保证消息的顺序性。</p>
+<h2 id="1-5-消息的ACK确认机制"><a href="#1-5-消息的ACK确认机制" class="headerlink" title="1.5 消息的ACK确认机制"></a>1.5 消息的ACK确认机制</h2><p>即消息的Ackownledge确认机制：<br>为了保证消息不丢失，消息队列提供了消息Acknowledge机制，即ACK机制，当Consumer确认消息已经消费处理，发送一个ACK给消息队列，此时消息队列便可以删除这个消息了。如果Consumer宕机/关闭，没有发送ACK，消息队列将认为这个消息没有被处理，会将这个消息重新发送给其他的Consumer重新消费处理。</p>
+<h2 id="1-6-消息的持久化"><a href="#1-6-消息的持久化" class="headerlink" title="1.6 消息的持久化"></a>1.6 消息的持久化</h2><p>消息的持久化，对于一些关键的核心业务来说是非常重要的，启用消息持久化后，消息队列宕机重启后，消息可以从持久化存储恢复，消息不丢失，可以继续消费处理。</p>
+<h2 id="1-7-消息的同步和异步收发"><a href="#1-7-消息的同步和异步收发" class="headerlink" title="1.7 消息的同步和异步收发"></a>1.7 消息的同步和异步收发</h2><h3 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h3><p>消息的收发支持同步收发的方式<br>同步收发场景下，消息生产者和消费者双向应答模式，例如：张三写封信送到邮局中转站，然后李四从中转站获得信，然后在写一份回执信，放到中转站，然后张三去取，当然张三写信的时候就得写明回信地址。<br>消息的接收如果以同步的方式(Pull)进行接收，如果队列中为空，此时接收将处于同步阻塞状态，会一直等待，直到消息的到达。</p>
+<h3 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h3><p>消息的收发同样支持异步方式：异步发送消息，不需要等待消息队列的接收确认。<br>异步接收消息，以Push的方式触发消息消费者接收消息。</p>
+<h2 id="1-8-消息的事务支持"><a href="#1-8-消息的事务支持" class="headerlink" title="1.8 消息的事务支持"></a>1.8 消息的事务支持</h2><p>消息的收发处理支持事务，例如：在任务中心场景中，一次处理可能涉及多个消息的接收、处理，这处于同一个事务范围内，如果一个消息处理失败，事务回滚，消息重新回到队列中。</p>
+<h1 id="二、JMS消费服务"><a href="#二、JMS消费服务" class="headerlink" title="二、JMS消费服务"></a>二、JMS消费服务</h1><p>Java消息服务（Java Message Service，JMS）应用程序接口是一个Java平台中关于面向消息中间件（MOM）的API，用于在两个应用程序之间，或分布式系统中发送消息，进行异步通信。 点对点与发布订阅最初是由JMS定义的。这两种模式主要区别或解决的问题就是发送到队列的消息能否重复消费(多订阅) 。</p>
+<p>JMS规范目前支持两种消息模型：</p>
+<ol>
+<li>点对点（point to point， queue）</li>
+<li>发布/订阅（publish/subscribe，topic）</li>
+</ol>
+<h2 id="2-1-点对点：Queue，不可重复消费"><a href="#2-1-点对点：Queue，不可重复消费" class="headerlink" title="2.1 点对点：Queue，不可重复消费"></a>2.1 点对点：Queue，不可重复消费</h2><p>消息生产者生产消息发送到queue中，然后消息消费者从queue中取出并且消费消息。<br>消息被消费以后，queue中不再有存储，所以消息消费者不可能消费到已经被消费的消息。<br>Queue支持存在多个消费者，但是对一个消息而言，只会有一个消费者可以消费。 </p>
+<p>P2P模式包含三个角色：</p>
+<ul>
+<li>消息队列（Queue）</li>
+<li>发送者(Sender)</li>
+<li>接收者(Receiver)</li>
+</ul>
+<p>每个消息都被发送到一个特定的队列，接收者从队列中获取消息。队列保留着消息，<br>直到他们被消费或超时。</p>
+<h2 id="2-2-发布-订阅：Topic，可以重复消费"><a href="#2-2-发布-订阅：Topic，可以重复消费" class="headerlink" title="2.2 发布/订阅：Topic，可以重复消费"></a>2.2 发布/订阅：Topic，可以重复消费</h2><p>消息生产者（发布）将消息发布到topic中，同时有多个消息消费者（订阅）消费该消息。<br>和点对点方式不同，发布到topic的消息会被所有订阅者消费。 </p>
+<p>支持订阅组的发布订阅模式：<br>发布订阅模式下，当发布者消息量很大时，显然单个订阅者的处理能力是不足的。实际上现实场景中是多个订阅者节点组成一个订阅组负载均衡消费topic消息即分组订阅，这样订阅者很容易实现消费能力线性扩展。可以看成是一个topic下有多个Queue，每个Queue是点对点的方式，Queue之间是发布订阅方式。 </p>
+<h2 id="2-3-区别"><a href="#2-3-区别" class="headerlink" title="2.3 区别"></a>2.3 区别</h2><h3 id="点对点模式"><a href="#点对点模式" class="headerlink" title="点对点模式"></a>点对点模式</h3><p>生产者发送一条消息到queue，一个queue可以有很多消费者，但是一个消息只能被一个消费者接受，当没有消费者可用时，这个消息会被保存直到有一个可用的消费者，所以Queue实现了一个可靠的负载均衡。</p>
+<h3 id="发布订阅模式"><a href="#发布订阅模式" class="headerlink" title="发布订阅模式"></a>发布订阅模式</h3><p>发布者发送到topic的消息，只有订阅了topic的订阅者才会收到消息。topic实现了发布和订阅，当你发布一个消息，所有订阅这个topic的服务都能得到这个消息，所以从1到N个订阅者都能得到这个消息的拷贝。</p>
+<h1 id="三、流行模型对比"><a href="#三、流行模型对比" class="headerlink" title="三、流行模型对比"></a>三、流行模型对比</h1><p>传统企业型消息队列ActiveMQ遵循了JMS规范，实现了点对点和发布订阅模型，但其他流行的消息队列RabbitMQ、Kafka并没有遵循JMS规范。</p>
+<h2 id="3-1-RabbitMQ"><a href="#3-1-RabbitMQ" class="headerlink" title="3.1 RabbitMQ"></a>3.1 RabbitMQ</h2><p>RabbitMQ实现了AQMP协议，AQMP协议定义了消息路由规则和方式。生产端通过路由规则发送消息到不同queue，消费端根据queue名称消费消息。RabbitMQ既支持内存队列也支持持久化队列，消费端为推模型，消费状态和订阅关系由服务端负责维护，消息消费完后立即删除，不保留历史消息。</p>
+<h3 id="点对点"><a href="#点对点" class="headerlink" title="点对点"></a>点对点</h3><p>生产端发送一条消息通过路由投递到Queue，只有一个消费者能消费到。 </p>
+<h3 id="多订阅"><a href="#多订阅" class="headerlink" title="多订阅"></a>多订阅</h3><p>当RabbitMQ需要支持多订阅时，发布者发送的消息通过路由同时写到多个Queue，不同订阅组消费不同的Queue。所以支持多订阅时，消息会多个拷贝。 </p>
+<h2 id="3-2-Kafka"><a href="#3-2-Kafka" class="headerlink" title="3.2 Kafka"></a>3.2 Kafka</h2><p>Kafka只支持消息持久化，消费端为拉模型，消费状态和订阅关系由客户端端负责维护，消息消费完后不会立即删除，会保留历史消息。因此支持多订阅时，消息只会存储一份就可以了。但是可能产生重复消费的情况。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/10/01/JVM课程七/">JVM课程七</a>
         </h1>
         
@@ -300,6 +370,44 @@ S0C S1C S0U S1U EC EU OC OU PC PU YGC YGCT FGC FGCT GCT
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/09/15/JVM课程五/">JVM课程五</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/4/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-09-15T02:55:00.000Z" itemprop="datePublished">2018-09-15</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="垃圾回收算法和收集器"><a href="#垃圾回收算法和收集器" class="headerlink" title="垃圾回收算法和收集器"></a>垃圾回收算法和收集器</h1><h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><h3 id="引用计数（reference-counting）"><a href="#引用计数（reference-counting）" class="headerlink" title="引用计数（reference counting）"></a>引用计数（reference counting）</h3><p>古老的算法。此对象有一个引用，增加一个计数，删除一个引用减少一个引用。垃圾回收时，只用收集为0的对象。<br>致命问题是无法解决循环引用的问题。</p>
+<h3 id="复制（copying）"><a href="#复制（copying）" class="headerlink" title="复制（copying）"></a>复制（copying）</h3><p>eg：survivor from to<br>此算法将内存空间分为两份。每次使用其中一个区域。（占用空间）<br>垃圾回收时，遍历当前使用的区域，把正在使用中的对象复制到另一个区域中。</p>
+<h3 id="标记清楚（Mark-Sweep）"><a href="#标记清楚（Mark-Sweep）" class="headerlink" title="标记清楚（Mark-Sweep）"></a>标记清楚（Mark-Sweep）</h3><p>执行分为两阶段。<br>第一阶段：从对象根节点开始标记所有被引用的对象。<br>第二阶段：遍历整个堆，把未标记的对象清除，此算法需要暂停整个应用(Stop the world)。<br>同时会产生内存碎片。<br>缺点：<br>1）未使用的内存空间不连续，浪费。<br>2）暂停整个应用。</p>
+<h3 id="标记整理（Mark-Compact）"><a href="#标记整理（Mark-Compact）" class="headerlink" title="标记整理（Mark-Compact）"></a>标记整理（Mark-Compact）</h3><p>执行分为两阶段。<br>第一阶段：从对象根节点开始标记所有被引用的对象。<br>第二阶段：遍历整个堆，把未标记的对象清除，同时把存活的对象压缩到一块，顺序排放，避免碎片问题。<br>避免了复制算法的空间问题。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/09/15/JVM课程四/">JVM课程四</a>
         </h1>
         
@@ -336,44 +444,6 @@ S0C S1C S0U S1U EC EU OC OU PC PU YGC YGCT FGC FGCT GCT
 </blockquote>
 <h2 id="老年代"><a href="#老年代" class="headerlink" title="老年代"></a>老年代</h2><p>在新生代中经历了多次的GC后存活下来的对象会进入老年代。<br>老年代的对象生命周期较长，存活率比较高，在老年代中进行GC的频率较低，效率也较低。</p>
 <h2 id="永久代"><a href="#永久代" class="headerlink" title="永久代"></a>永久代</h2><p>永久代中存放类信息，常量，静态变量，即时编译器编译后的代码等数据。<br>对此区域，Java虚拟机规范指出可以不进行垃圾收集。一般而言不会进行垃圾回收。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/09/15/JVM课程五/">JVM课程五</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/4/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-09-15T02:55:00.000Z" itemprop="datePublished">2018-09-15</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="垃圾回收算法和收集器"><a href="#垃圾回收算法和收集器" class="headerlink" title="垃圾回收算法和收集器"></a>垃圾回收算法和收集器</h1><h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><h3 id="引用计数（reference-counting）"><a href="#引用计数（reference-counting）" class="headerlink" title="引用计数（reference counting）"></a>引用计数（reference counting）</h3><p>古老的算法。此对象有一个引用，增加一个计数，删除一个引用减少一个引用。垃圾回收时，只用收集为0的对象。<br>致命问题是无法解决循环引用的问题。</p>
-<h3 id="复制（copying）"><a href="#复制（copying）" class="headerlink" title="复制（copying）"></a>复制（copying）</h3><p>eg：survivor from to<br>此算法将内存空间分为两份。每次使用其中一个区域。（占用空间）<br>垃圾回收时，遍历当前使用的区域，把正在使用中的对象复制到另一个区域中。</p>
-<h3 id="标记清楚（Mark-Sweep）"><a href="#标记清楚（Mark-Sweep）" class="headerlink" title="标记清楚（Mark-Sweep）"></a>标记清楚（Mark-Sweep）</h3><p>执行分为两阶段。<br>第一阶段：从对象根节点开始标记所有被引用的对象。<br>第二阶段：遍历整个堆，把未标记的对象清除，此算法需要暂停整个应用(Stop the world)。<br>同时会产生内存碎片。<br>缺点：<br>1）未使用的内存空间不连续，浪费。<br>2）暂停整个应用。</p>
-<h3 id="标记整理（Mark-Compact）"><a href="#标记整理（Mark-Compact）" class="headerlink" title="标记整理（Mark-Compact）"></a>标记整理（Mark-Compact）</h3><p>执行分为两阶段。<br>第一阶段：从对象根节点开始标记所有被引用的对象。<br>第二阶段：遍历整个堆，把未标记的对象清除，同时把存活的对象压缩到一块，顺序排放，避免碎片问题。<br>避免了复制算法的空间问题。</p>
 
         
     </section>
@@ -556,50 +626,6 @@ Eden   From   To
 <p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
 <h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/08/16/ConcurrentHashMap线程安全/">ConcurrentHashMap线程安全的具体实现方式/底层具体实现</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/4/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-08-15T18:20:00.000Z" itemprop="datePublished">2018-08-16</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java容器/">Java容器</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="ConcurrentHashMap线程安全的具体实现方式-底层具体实现"><a href="#ConcurrentHashMap线程安全的具体实现方式-底层具体实现" class="headerlink" title="ConcurrentHashMap线程安全的具体实现方式/底层具体实现"></a>ConcurrentHashMap线程安全的具体实现方式/底层具体实现</h1><p><strong>JDK1.7的ConcurrentHashMap：</strong></p>
-<p><img src="https://my-blog-to-use.oss-cn-beijing.aliyuncs.com/2019-6/ConcurrentHashMap分段锁.jpg" alt="JDK1.7的ConcurrentHashMap"></p>
-<p><strong>JDK1.8的ConcurrentHashMap（TreeBin: 红黑二叉树节点 Node: 链表节点）：</strong></p>
-<p><img src="https://my-blog-to-use.oss-cn-beijing.aliyuncs.com/2019-6/JDK1.8-ConcurrentHashMap-Structure.jpg" alt="JDK1.8的ConcurrentHashMap"></p>
-<p>JDK1.7（上面有示意图）<br>首先将数据分为一段一段的存储，然后给每一段数据配一把锁，当一个线程占用锁访问其中一个段数据时，其他段的数据也能被其他线程访问。</p>
-<p>ConcurrentHashMap 是由 Segment 数组结构和 HashEntry 数组结构组成。</p>
-<p>Segment 实现了 ReentrantLock,所以 Segment 是一种可重入锁，扮演锁的角色。HashEntry 用于存储键值对数据。</p>
-<p>static class Segment&lt;K,V&gt; extends ReentrantLock implements Serializable {<br>}<br>一个 ConcurrentHashMap 里包含一个 Segment 数组。Segment 的结构和HashMap类似，是一种数组和链表结构，一个 Segment 包含一个 HashEntry 数组，每个 HashEntry 是一个链表结构的元素，每个 Segment 守护着一个HashEntry数组里的元素，当对 HashEntry 数组的数据进行修改时，必须首先获得对应的 Segment的锁。</p>
-<p>JDK1.8 （上面有示意图）<br>ConcurrentHashMap取消了Segment分段锁，采用CAS和synchronized来保证并发安全。数据结构跟HashMap1.8的结构类似，数组+链表/红黑二叉树。Java 8在链表长度超过一定阈值（8）时将链表（寻址时间复杂度为O(N)）转换为红黑树（寻址时间复杂度为O(log(N))）</p>
-<p>synchronized只锁定当前链表或红黑二叉树的首节点，这样只要hash不冲突，就不会产生并发，效率又提升N倍。</p>
 
         
     </section>

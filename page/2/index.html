@@ -131,6 +131,47 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2019/08/07/Java基础面试题二/">Java基础面试题二</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/2/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-08-07T14:37:25.984Z" itemprop="datePublished">2019-08-07</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/面试题/">面试题</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>Java基础面试题二</p>
+<blockquote>
+<p>Q1: 什么是死锁(deadlock)？ </p>
+</blockquote>
+<p>两个进程都在等待对方执行完毕才能继续往下执行的时候就发生了死锁。结果就是两个进程都陷入了无限的等待中。<br>代码表示：<br><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLockDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> void main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">    DieLock dl1 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">true</span>);</span><br><span class="line">    DieLock dl2 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">false</span>);</span><br><span class="line">    dl1.start();</span><br><span class="line">    dl2.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>理想状态下dl1线程为true从if执行先打出”if objA”然后再接着打出”if objB”之后释放A、B的锁对象，之后dl2线程执行else语句打出”else objB”，”else objA”。<br>非理想状态下dl1先打出”if objA”，之后线程dl2执行打出”else objB”，然后1、2线程的锁对象A和B都处于被锁的状态，两个线程争夺锁对象发生死锁现象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLock</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> flag;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DieLock</span><span class="params">(<span class="keyword">boolean</span> flag)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.flag = flag;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (flag) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                System.out.println(<span class="string">"if objA"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"if objB"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                System.out.println(<span class="string">"else objB"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"else objA"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2019/08/07/Java基础面试题/">Java基础面试题一</a>
         </h1>
         
@@ -493,6 +534,57 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2019/03/01/Java 并发进阶常见面试题总结/">Java 并发进阶常见面试题总结</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/2/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-03-01T02:10:00.000Z" itemprop="datePublished">2019-03-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Java-并发进阶常见面试题总结"><a href="#Java-并发进阶常见面试题总结" class="headerlink" title="Java 并发进阶常见面试题总结"></a>Java 并发进阶常见面试题总结</h1><h2 id="synchronized-关键字"><a href="#synchronized-关键字" class="headerlink" title="synchronized 关键字"></a>synchronized 关键字</h2><p>synchronized关键字解决的是多个线程之间访问资源的同步性，synchronized关键字可以保证被它修饰的方法或者代码块在任意时刻只能有一个线程执行。<br>(后半句) 任意时刻只有一个线程在访问</p>
+<p>在 Java 早期版本中，synchronized属于重量级锁，效率低下，因为监视器锁（monitor）是依赖于底层的操作系统的 Mutex Lock 来实现的，Java 的线程是映射到操作系统的原生线程之上的。如果要挂起或者唤醒一个线程，都需要操作系统帮忙完成，而操作系统实现线程之间的切换时需要从用户态转换到内核态，这个状态之间的转换需要相对比较长的时间，时间成本相对较高，这也是为什么早期的 synchronized 效率低的原因。庆幸的是在 Java 6 之后 Java 官方对从JVM层面对synchronized较大优化，所以现在的 synchronized 锁效率也优化得很不错了。JDK1.6对锁的实现引入了大量的优化，如自旋锁、适应性自旋锁、锁消除、锁粗化、偏向锁、轻量级锁等技术来减少锁操作的开销。</p>
+<h2 id="项目中怎么使用-synchronized-关键字"><a href="#项目中怎么使用-synchronized-关键字" class="headerlink" title="项目中怎么使用 synchronized 关键字"></a>项目中怎么使用 synchronized 关键字</h2><p>synchronized关键字最主要的三种使用方式：</p>
+<p>修饰实例方法:<br>作用于当前对象实例加锁，进入同步代码前要获得当前对象实例的锁</p>
+<p>修饰静态方法: 也就是给当前类加锁，会作用于类的所有对象实例，因为静态成员不属于任何一个实例对象，是类成员（ static 表明这是该类的一个静态资源，不管new了多少个对象，只有一份）。所以如果一个线程A调用一个实例对象的非静态 synchronized 方法，而线程B需要调用这个实例对象所属类的静态 synchronized 方法，是允许的，不会发生互斥现象，因为访问静态 synchronized 方法占用的锁是当前类的锁，而访问非静态 synchronized 方法占用的锁是当前实例对象锁。</p>
+<p>修饰代码块: 指定加锁对象，对给定对象加锁，进入同步代码块前要获得给定对象的锁。</p>
+<p>比如以下的：双重校验锁实现单例<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> Singleton uniqueInstance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getUniqueInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="comment">//先判断对象是否已经实例过，没有实例化过才进入加锁代码</span></span><br><span class="line">        <span class="keyword">if</span> (uniqueInstance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">//类对象加锁</span></span><br><span class="line">            <span class="keyword">synchronized</span> (Singleton.class) &#123;</span><br><span class="line">                <span class="keyword">if</span> (uniqueInstance == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    uniqueInstance = <span class="keyword">new</span> Singleton();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> uniqueInstance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>另外，需要注意 uniqueInstance 采用 volatile 关键字修饰也是很有必要。</p>
+<p>uniqueInstance 采用 volatile 关键字修饰也是很有必要的， uniqueInstance = new Singleton(); 这段代码其实是分为三步执行：</p>
+<ul>
+<li>为 uniqueInstance 分配内存空间</li>
+<li>初始化 uniqueInstance</li>
+<li>将 uniqueInstance 指向分配的内存地址</li>
+</ul>
+<p>但是由于 JVM 具有指令重排的特性，执行顺序有可能变成 1-&gt;3-&gt;2。指令重排在单线程环境下不会出先问题，但是在多线程环境下会导致一个线程获得还没有初始化的实例。例如，线程 T1 执行了 1 和 3，此时 T2 调用 getUniqueInstance() 后发现 uniqueInstance 不为空，因此返回 uniqueInstance，但此时 uniqueInstance 还未被初始化。</p>
+<p>使用 volatile 可以禁止 JVM 的指令重排，保证在多线程环境下也能正常运行。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2019/03/01/Java 并发基础常见面试题总结/">Java 并发基础常见面试题总结</a>
         </h1>
         
@@ -587,169 +679,6 @@
 <p>含义上: 字符常量相当于一个整型值( ASCII 值),可以参加表达式运算; 字符串常量代表一个地址值(该字符串在内存中存放位置)</p>
 <p>占内存大小: 字符常量只占2个字节; 字符串常量占若干个字节(至少一个字符结束标志) (注意： char在Java中占两个字节)</p>
 <p>数据类型     大小        包装器类型<br>boolean      -           Boolean<br>char       16bits        Character<br>byte        8bits        Byte<br>short      16bits        Short<br>int        32bits        Integer<br>long       64bits        Long<br>float      32bits        Float<br>double     64bits        Double</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2019/03/01/Java 并发进阶常见面试题总结/">Java 并发进阶常见面试题总结</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/2/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2019-03-01T02:10:00.000Z" itemprop="datePublished">2019-03-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Java-并发进阶常见面试题总结"><a href="#Java-并发进阶常见面试题总结" class="headerlink" title="Java 并发进阶常见面试题总结"></a>Java 并发进阶常见面试题总结</h1><h2 id="synchronized-关键字"><a href="#synchronized-关键字" class="headerlink" title="synchronized 关键字"></a>synchronized 关键字</h2><p>synchronized关键字解决的是多个线程之间访问资源的同步性，synchronized关键字可以保证被它修饰的方法或者代码块在任意时刻只能有一个线程执行。<br>(后半句) 任意时刻只有一个线程在访问</p>
-<p>在 Java 早期版本中，synchronized属于重量级锁，效率低下，因为监视器锁（monitor）是依赖于底层的操作系统的 Mutex Lock 来实现的，Java 的线程是映射到操作系统的原生线程之上的。如果要挂起或者唤醒一个线程，都需要操作系统帮忙完成，而操作系统实现线程之间的切换时需要从用户态转换到内核态，这个状态之间的转换需要相对比较长的时间，时间成本相对较高，这也是为什么早期的 synchronized 效率低的原因。庆幸的是在 Java 6 之后 Java 官方对从JVM层面对synchronized较大优化，所以现在的 synchronized 锁效率也优化得很不错了。JDK1.6对锁的实现引入了大量的优化，如自旋锁、适应性自旋锁、锁消除、锁粗化、偏向锁、轻量级锁等技术来减少锁操作的开销。</p>
-<h2 id="项目中怎么使用-synchronized-关键字"><a href="#项目中怎么使用-synchronized-关键字" class="headerlink" title="项目中怎么使用 synchronized 关键字"></a>项目中怎么使用 synchronized 关键字</h2><p>synchronized关键字最主要的三种使用方式：</p>
-<p>修饰实例方法:<br>作用于当前对象实例加锁，进入同步代码前要获得当前对象实例的锁</p>
-<p>修饰静态方法: 也就是给当前类加锁，会作用于类的所有对象实例，因为静态成员不属于任何一个实例对象，是类成员（ static 表明这是该类的一个静态资源，不管new了多少个对象，只有一份）。所以如果一个线程A调用一个实例对象的非静态 synchronized 方法，而线程B需要调用这个实例对象所属类的静态 synchronized 方法，是允许的，不会发生互斥现象，因为访问静态 synchronized 方法占用的锁是当前类的锁，而访问非静态 synchronized 方法占用的锁是当前实例对象锁。</p>
-<p>修饰代码块: 指定加锁对象，对给定对象加锁，进入同步代码块前要获得给定对象的锁。</p>
-<p>比如以下的：双重校验锁实现单例<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> Singleton uniqueInstance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getUniqueInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="comment">//先判断对象是否已经实例过，没有实例化过才进入加锁代码</span></span><br><span class="line">        <span class="keyword">if</span> (uniqueInstance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">//类对象加锁</span></span><br><span class="line">            <span class="keyword">synchronized</span> (Singleton.class) &#123;</span><br><span class="line">                <span class="keyword">if</span> (uniqueInstance == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    uniqueInstance = <span class="keyword">new</span> Singleton();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> uniqueInstance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<hr>
-<p>另外，需要注意 uniqueInstance 采用 volatile 关键字修饰也是很有必要。</p>
-<p>uniqueInstance 采用 volatile 关键字修饰也是很有必要的， uniqueInstance = new Singleton(); 这段代码其实是分为三步执行：</p>
-<ul>
-<li>为 uniqueInstance 分配内存空间</li>
-<li>初始化 uniqueInstance</li>
-<li>将 uniqueInstance 指向分配的内存地址</li>
-</ul>
-<p>但是由于 JVM 具有指令重排的特性，执行顺序有可能变成 1-&gt;3-&gt;2。指令重排在单线程环境下不会出先问题，但是在多线程环境下会导致一个线程获得还没有初始化的实例。例如，线程 T1 执行了 1 和 3，此时 T2 调用 getUniqueInstance() 后发现 uniqueInstance 不为空，因此返回 uniqueInstance，但此时 uniqueInstance 还未被初始化。</p>
-<p>使用 volatile 可以禁止 JVM 的指令重排，保证在多线程环境下也能正常运行。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2019/02/04/Greenplum 从入门到放弃（四）/">Greenplum 从入门到放弃 四</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/2/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2019-02-04T02:10:00.000Z" itemprop="datePublished">2019-02-04</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Greenplum/">Greenplum</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Greenplum-从入门到放弃（四）"><a href="#Greenplum-从入门到放弃（四）" class="headerlink" title="Greenplum 从入门到放弃（四）"></a>Greenplum 从入门到放弃（四）</h1><h2 id="PostgreSQL与Greenplum的关系"><a href="#PostgreSQL与Greenplum的关系" class="headerlink" title="PostgreSQL与Greenplum的关系"></a>PostgreSQL与Greenplum的关系</h2><h3 id="PostgreSQL"><a href="#PostgreSQL" class="headerlink" title="PostgreSQL"></a>PostgreSQL</h3><p>PostgreSQL是一种非常先进的对象–关系型数据库管理系统（ORDBMS），是目前功能最强大，特性最丰富和技术最先进的自由软件数据库系统之一，其某些特性甚至连商业数据库都不具备。</p>
-<p>PostgreSQL的特点可以说是数不胜数，称其为最先进的开<br>源软件数据库当之无愧，支持绝大部分的主流数据库特性，主<br>要体现在如下几方面：</p>
-<ol>
-<li>函数/存储过程</li>
-</ol>
-<p>PostgreSQL对非常丰富的过程类语言提供支持，可以编写自定义函数/存储过程</p>
-<ul>
-<li>内置的plpgsql，一种类似Oracle的PLsql的语言</li>
-<li>支持的脚本语言有：PL/Lua、PL/LOLCODE、PL/Perl、PL/HP、PL/Python、PL/Ruby、PL/sh、PL/Tcl和PL/Scheme。、</li>
-<li>编译语言有C、C++和JAVA。</li>
-<li>·统计语言PL/R</li>
-</ul>
-<ol start="2">
-<li>索引</li>
-</ol>
-<p>PostgreSQL支持用户定义的索引访问方法，并且内置了Btree、哈希和GiST索引。PostgreSQL中的索引有下面几个特点：</p>
-<ul>
-<li>可以从后向前扫描</li>
-<li>可以创建表达式索引</li>
-<li>部分索引</li>
-</ul>
-<ol start="3">
-<li>触发器</li>
-</ol>
-<p>触发器是由SQL查询的动作触发的事件。比如，一个INSERT查询可能激活一个检查输入值是否有效的触发器。大多数触发器都只对INSERT或者UPDATE查询有效。PostgreSQL完全支持触发器，可以附着在表上，但是不能在视图上。不过视图可以有规则。多个触发器是按照字母顺序触发的。我们还可以用其他过程语言书写触发器函数，不仅仅PL/PgSQL。</p>
-<ol start="4">
-<li>并发管理（MVCC）</li>
-</ol>
-<p>PostgreSQL的并发管理使用的是一种叫做“MVCC”（多版本并发机制）的机制，这种机制实际上就是现在在众多所谓的编程语言中极其火爆的“Lock Free”，其本质是通过类似科幻世界的时空穿梭的原理，给予每个用户一个自己的“时空”<br>，然后通过原子的“时空”控制来控制时间基线，并以此控制并发更改的可见区域，从而实现近乎无锁的并发，而同时还能在很大程度上保证数据库的ACID特性。</p>
-<ol start="5">
-<li>规则（RULE）</li>
-</ol>
-<p>规则允许我们对由一个查询生成的查询树进行改写。</p>
-<ol start="6">
-<li>数据类型</li>
-</ol>
-<p>PostgreSQL支持非常广泛的数据类型，包括：</p>
-<ul>
-<li>任意精度的数值类型；</li>
-<li>无限长度的文本类型；</li>
-<li>几何原语；</li>
-<li>IPv4和IPv6类型；</li>
-<li>CIDR块和MAC地址；</li>
-<li>数组。</li>
-</ul>
-<p>用户还可以创建自己的类型，并且可以利用GiST框架把这些类型做成完全可索引的，比如来自PostGIS的地理信息系统（GIS）的数据类型。</p>
-<ol start="7">
-<li>用户定义对象</li>
-</ol>
-<p>因为PostgreSQL使用一种基于系统表的可扩展的结构设计，所以PostgreSQL内部的几乎所有对象都可以由用户定义，这些对象包括：</p>
-<ul>
-<li>索引；</li>
-<li>操作符（内部操作符可以被覆盖）；</li>
-<li>聚集函数；</li>
-<li>域；</li>
-<li>类型转换；</li>
-<li>编码转换。</li>
-</ul>
-<ol start="8">
-<li>继承</li>
-</ol>
-<p>PostgreSQL的表是可以相互继承的。一个表可以有父表，<br>父表的结构变化会导致子表的结构变化，而对子表的插入和数<br>据更新等也会反映到父表中。</p>
-<ol start="9">
-<li>其他特性与扩展</li>
-</ol>
-<ul>
-<li>二进制和文本大对象存储；</li>
-<li>在线备份；</li>
-<li>TOAST（The Oversized-Attribute Storage Technique）用于透明地在独立的地方保存大的数据库属性，当数据超过一定大小的时候，会自动进行压缩以节省空间；</li>
-<li>正则表达式。</li>
-</ul>
-<p>此外PostgreSQL还有大量的附加模块和扩展版本，比如，多种不同的主从/主主复制方案:</p>
-<ul>
-<li>Slony-I；</li>
-<li>pgcluster；</li>
-<li>Mammoth replicator；</li>
-<li>Bucardo。</li>
-</ul>
 
         
     </section>

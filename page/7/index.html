@@ -131,6 +131,44 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/05/01/为什么Java中只有值传递/">为什么 Java 中只有值传递？</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-05-01T15:10:00.000Z" itemprop="datePublished">2018-05-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java/">Java</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="为什么-Java-中只有值传递？"><a href="#为什么-Java-中只有值传递？" class="headerlink" title="为什么 Java 中只有值传递？"></a>为什么 Java 中只有值传递？</h1><p>首先回顾一下在程序设计语言中有关将参数传递给方法（或函数）的一些专业术语。<br>按值调用(call by value)表示方法接收的是调用者提供的值。<br>按引用调用（call by reference)表示方法接收的是调用者提供的变量地址。<br>一个方法可以修改传递引用所对应的变量值，而不能修改传递值调用所对应的变量值。<br>它用来描述各种程序设计语言（不只是Java)中方法参数传递方式。</p>
+<p>Java程序设计语言对对象采用的不是引用调用，实际上，对象引用是按值传递的。</p>
+<p>下面再总结一下Java中方法参数的使用情况：</p>
+<p>一个方法不能修改一个基本数据类型的参数（即数值型或布尔型）。<br>一个方法可以改变一个对象参数的状态。<br>一个方法不能让对象参数引用一个新的对象。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/05/01/nginx工作原理/">Nginx工作原理</a>
         </h1>
         
@@ -574,47 +612,6 @@
 <p>Nginx 采用 master-slave 模型,能够充分利用 SMP 的优势，且能够减少工作进程在磁盘 I/O 的阻塞延迟。当采用 select()/poll() 调用时，还可以限制每个进程的连接数。</p>
 <p>Nginx 代码质量非常高，代码很规范，手法成熟，模块扩展也很容易。特别值得一提的是强大的 Upstream 与 Filter 链。Upstream 为诸如 reverse proxy,与其他服务器通信模块的编写奠定了很好的基础。而 Filter 链最酷的部分就是各个 filter 不必等待前一个 filter 执行完毕。它可以把前一个 filter 的输出做为当前 filter 的输入，这有点像 Unix 的管线。这意味着，一个模块可以开始压缩从后端服务器发送过来的请求，且可以在模块接收完后端服务器的整个请求之前把压缩流转向客户端。</p>
 <p>Nginx 采用了一些 os 提供的最新特性如对 sendfile (Linux2.2+)，accept-filter (FreeBSD4.1+)，TCP_DEFER_ACCEPT (Linux 2.4+)的支持，从而大大提高了性能。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/04/05/并发编程/">并发编程</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-04-05T04:10:22.000Z" itemprop="datePublished">2018-04-05</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="并发编程"><a href="#并发编程" class="headerlink" title="并发编程"></a>并发编程</h1><p>JVM内存模型（JMM）<br>1.Java当中的线程通讯和消息传递<br>2.什么是重排序和顺序一致性？Happens-Before?As-If-Serial?</p>
-<p>Synchronized的概念和分析<br>1.同步，重量级锁以及Sychronized的原理分析<br>2.自旋锁，偏向锁，轻量级锁，重量级锁的概念、使用以及如何优化</p>
-<p>Volatile和DCL的知识<br>1.Volatile的使用场景和Volatile实现机制、内存语义、内存模型<br>2.DCL的单例模式，什么是DCL?如何来解决DCL的问题</p>
-<p>并发基础之AQS的深度分析<br>1.AnstractAueuedSynchronizer同步器的概念、CLH同步队列是什么？<br>2.同步状态的获取和释放、线程阻塞和唤醒</p>
-<p>Lock和并发常用工具类<br>1.Java当中的Lock、ReenrantLock、ReentrantReadWriteLock、Condition<br>2.Java当中的并发工具类CyclicBarrier、CountdownLatch、Semphore<br>3.Java当中的并发集合类ConcurrentHashMap、ConcurrentLinkedQueue…</p>
-<p>原子操作常用知识讲解<br>1.基本类型的原子操作比如经典的AtomicBoolean、AtomicIngter、AtomicLong<br>2.数组类型的原子操作代表的几个类AtomicIntegerArray、AtomicLongArray、AtomicReferenceArray<br>3.引用类型的原子操作的典型AtomicReference、AtomicReferenceFieldUpdater…<br>4.CAS概念知识、COmpare And Swap以及缺陷</p>
-<p>线程池和并发并行<br>1.Excutor、ThreadPoolExcutor、Callable &amp; Future、ScheduledExcutorService<br>2.ThreadLocal、Fork &amp; Join？什么是并行？线程池如何保证核心线程不被销毁？</p>
 
         
     </section>

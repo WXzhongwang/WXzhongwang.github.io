@@ -131,6 +131,70 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2020/02/02/【03期】如何决定使用 HashMap 还是 TreeMap/">【03期】如何决定使用 HashMap 还是 TreeMap？</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2020-02-02T02:10:00.000Z" itemprop="datePublished">2020-02-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/整理/">整理</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="如何决定使用-HashMap-还是-TreeMap？"><a href="#如何决定使用-HashMap-还是-TreeMap？" class="headerlink" title="如何决定使用 HashMap 还是 TreeMap？"></a>如何决定使用 HashMap 还是 TreeMap？</h1><h2 id="问：如何决定使用-HashMap-还是-TreeMap？"><a href="#问：如何决定使用-HashMap-还是-TreeMap？" class="headerlink" title="问：如何决定使用 HashMap 还是 TreeMap？"></a>问：如何决定使用 HashMap 还是 TreeMap？</h2><p>介绍<br>TreeMap&lt;K,V&gt;的Key值是要求实现java.lang.Comparable，所以迭代的时候TreeMap默认是按照Key值升序排序的；TreeMap的实现是基于红黑树结构。适用于按自然顺序或自定义顺序遍历键（key）。</p>
+<p>HashMap&lt;K,V&gt;的Key值实现散列hashCode()，分布是散列的、均匀的，不支持排序；数据结构主要是桶(数组)，链表或红黑树。适用于在Map中插入、删除和定位元素。</p>
+<p>结论<br>如果你需要得到一个有序的结果时就应该使用TreeMap（因为HashMap中元素的排列顺序是不固定的）。除此之外，由于HashMap有更好的性能，所以大多不需要排序的时候我们会使用HashMap。</p>
+<h2 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h2><h3 id="1、HashMap-和-TreeMap-的实现"><a href="#1、HashMap-和-TreeMap-的实现" class="headerlink" title="1、HashMap 和 TreeMap 的实现"></a>1、HashMap 和 TreeMap 的实现</h3><p>HashMap：基于哈希表实现。使用HashMap要求添加的键类明确定义了hashCode()和equals()[可以重写hashCode()和equals()]，为了优化HashMap空间的使用，您可以调优==初始容量==和==负载因子==。</p>
+<p>HashMap(): 构建一个空的哈希映像</p>
+<p>HashMap(Map m): 构建一个哈希映像，并且添加映像m的所有映射</p>
+<p>HashMap(int initialCapacity): 构建一个拥有特定容量的空的哈希映像</p>
+<p>HashMap(int initialCapacity, float loadFactor): 构建一个拥有特定容量和加载因子的空的哈希映像</p>
+<p>TreeMap：基于红黑树实现。TreeMap没有调优选项，因为该树总处于平衡状态。</p>
+<p>TreeMap()：构建一个空的映像树</p>
+<p>TreeMap(Map m): 构建一个映像树，并且添加映像m中所有元素</p>
+<p>TreeMap(Comparator c): 构建一个映像树，并且使用特定的比较器对关键字进行排序</p>
+<p>TreeMap(SortedMap s): 构建一个映像树，添加映像树s中所有映射，并且使用与有序映像s相同的比较器排序</p>
+<h3 id="2、HashMap-和-TreeMap-都是非线程安全"><a href="#2、HashMap-和-TreeMap-都是非线程安全" class="headerlink" title="2、HashMap 和 TreeMap 都是非线程安全"></a>2、HashMap 和 TreeMap 都是非线程安全</h3><p>HashMap继承AbstractMap抽象类，TreeMap继承自SortedMap接口。</p>
+<p>AbstractMap抽象类：覆盖了equals()和hashCode()方法以确保两个相等映射返回相同的哈希码。如果两个映射大小相等、包含同样的键且每个键在这两个映射中对应的值都相同，则这两个映射相等。映射的哈希码是映射元素哈希码的总和，其中每个元素是Map.Entry接口的一个实现。因此，不论映射内部顺序如何，两个相等映射会报告相同的哈希码。</p>
+<p>SortedMap接口：它用来保持键的有序顺序。SortedMap接口为映像的视图(子集)，包括两个端点提供了访问方法。除了排序是作用于映射的键以外，处理SortedMap和处理SortedSet一样。添加到SortedMap实现类的元素必须实现Comparable接口，否则您必须给它的构造函数提供一个Comparator接口的实现。TreeMap类是它的唯一一个实现。</p>
+<h3 id="3、TreeMap中默认是按照升序进行排序的，如何让他降序"><a href="#3、TreeMap中默认是按照升序进行排序的，如何让他降序" class="headerlink" title="3、TreeMap中默认是按照升序进行排序的，如何让他降序"></a>3、TreeMap中默认是按照升序进行排序的，如何让他降序</h3><p>通过自定义的比较器来实现</p>
+<p>定义一个比较器类，实现Comparator接口，重写compare方法，有两个参数，这两个参数通过调用compareTo进行比较，而compareTo默认规则是：</p>
+<ul>
+<li><p>如果参数字符串等于此字符串，则返回 0 值；</p>
+</li>
+<li><p>如果此字符串小于字符串参数，则返回一个小于 0 的值；</p>
+</li>
+<li><p>如果此字符串大于字符串参数，则返回一个大于 0 的值。</p>
+</li>
+</ul>
+<p>自定义比较器时，在返回时多添加了个负号，就将比较的结果以相反的形式返回，代码如下：<br><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyComparator</span> <span class="keyword">implements</span> <span class="title">Comparator</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    public <span class="built_in">int</span> compare(<span class="built_in">Object</span> o1, <span class="built_in">Object</span> o2) &#123;</span><br><span class="line">        <span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">        <span class="built_in">String</span> param1 = (<span class="built_in">String</span>)o1;</span><br><span class="line">        <span class="built_in">String</span> param2 = (<span class="built_in">String</span>)o2;</span><br><span class="line">        <span class="keyword">return</span> -param1.compareTo(param2);</span><br><span class="line">    &#125;   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>之后，通过MyComparator类初始化一个比较器实例，将其作为参数传进TreeMap的构造方法中：</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MyComparator comparator = <span class="keyword">new</span> <span class="type">MyComparator</span>();</span><br><span class="line"></span><br><span class="line">Map&lt;<span class="keyword">String</span>,<span class="keyword">String</span>&gt; map = <span class="keyword">new</span> <span class="type">TreeMap</span>&lt;<span class="keyword">String</span>,<span class="keyword">String</span>&gt;(comparator);</span><br></pre></td></tr></table></figure>
+<p>使用自定义比较器：<br><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> class MapTest &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">        <span class="comment">//初始化自定义比较器</span></span><br><span class="line">        MyComparator comparator = <span class="keyword">new</span> MyComparator();</span><br><span class="line">        <span class="comment">//初始化一个map集合</span></span><br><span class="line">        Map&lt;<span class="keyword">String</span>,<span class="keyword">String</span>&gt; <span class="built_in">map</span> = <span class="keyword">new</span> TreeMap&lt;<span class="keyword">String</span>,<span class="keyword">String</span>&gt;(comparator);</span><br><span class="line">        <span class="comment">//存入数据</span></span><br><span class="line">        <span class="built_in">map</span>.<span class="built_in">put</span>(<span class="string">"a"</span>, <span class="string">"a"</span>);</span><br><span class="line">        <span class="built_in">map</span>.<span class="built_in">put</span>(<span class="string">"b"</span>, <span class="string">"b"</span>);</span><br><span class="line">        <span class="built_in">map</span>.<span class="built_in">put</span>(<span class="string">"f"</span>, <span class="string">"f"</span>);</span><br><span class="line">        <span class="built_in">map</span>.<span class="built_in">put</span>(<span class="string">"d"</span>, <span class="string">"d"</span>);</span><br><span class="line">        <span class="built_in">map</span>.<span class="built_in">put</span>(<span class="string">"c"</span>, <span class="string">"c"</span>);</span><br><span class="line">        <span class="built_in">map</span>.<span class="built_in">put</span>(<span class="string">"g"</span>, <span class="string">"g"</span>);</span><br><span class="line">        <span class="comment">//遍历输出</span></span><br><span class="line">        Iterator iterator = <span class="built_in">map</span>.keySet().iterator();</span><br><span class="line">        <span class="built_in">while</span>(iterator.hasNext())&#123;</span><br><span class="line">            <span class="keyword">String</span> key = (<span class="keyword">String</span>)iterator.next();</span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="built_in">map</span>.<span class="built_in">get</span>(key));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> class MyComparator implements Comparator&#123;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">int</span> compare(Object o1, Object o2) &#123;</span><br><span class="line">            <span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">            <span class="keyword">String</span> param1 = (<span class="keyword">String</span>)o1;</span><br><span class="line">            <span class="keyword">String</span> param2 = (<span class="keyword">String</span>)o2;</span><br><span class="line">            <span class="built_in">return</span> -param1.compareTo(param2);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2020/02/01/【02期】你能说说Spring框架中Bean的生命周期吗/">【02期】你能说说Spring框架中Bean的生命周期吗？</a>
         </h1>
         
@@ -439,81 +503,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/08/07/Java基础面试题四/">Java基础面试题四</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2019-08-07T14:37:25.985Z" itemprop="datePublished">2019-08-07</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/面试题/">面试题</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>Java基础面试题四</p>
-<blockquote>
-<p>Q1: Java中垃圾回收有什么目的？什么时候进行垃圾回收？ </p>
-</blockquote>
-<p>垃圾回收的目的是识别并且丢弃应用不再使用的对象来释放和重用资源。</p>
-<blockquote>
-<p>Q2：如果对象的引用被置为null，垃圾收集器是否会立即释放对象占用的内存？ </p>
-</blockquote>
-<p>不会，在下一个垃圾回收周期中，这个对象将是可被回收的。</p>
-<blockquote>
-<p>Q3: String是最基本的数据类型吗? </p>
-</blockquote>
-<p>基本数据类型包括:</p>
-<ul>
-<li>byte</li>
-<li>int</li>
-<li>char</li>
-<li>long</li>
-<li>float</li>
-<li>double</li>
-<li>boolean</li>
-<li>short </li>
-</ul>
-<p>java.lang.String类是final类型的，因此不可以继承这个类、不能修改这个类。为了提高效率节省空间，我们应该用StringBuffer类。</p>
-<blockquote>
-<p>Q4: int 和 Integer 有什么区别?</p>
-</blockquote>
-<p>Java 提供两种不同的类型：引用类型和原始类型（或内置类型）。Int是java的原始数据类型，Integer是java为int提供的封装类。Java为每个原始类型提供了封装类。</p>
-<blockquote>
-<p>Q5: String 和 StringBuffer的区别?</p>
-</blockquote>
-<p>JAVA平台提供了两个类：String和StringBuffer，它们可以储存和操作字符串，即包含多个字符的字符数据。这个String类提供了数值不可改变的字符串。而这个StringBuffer类提供的字符串进行修改。</p>
-<blockquote>
-<p>Q6: ArrayList,Vector,LinkedList的存储性能和特性?</p>
-</blockquote>
-<p>ArrayList和Vector都是使用数组方式存储数据，此数组元素数大于实际存储的数据以便增加和插入元素，它们都允许直接按序号索引元素，但是插入元素要涉及数组元素移动等内存操作，所以索引数据快而插入数据慢，Vector由于使用了synchronized方法（线程安全），通常性能上较ArrayList差，而LinkedList使用双向链表实现存储，按序号索引数据需要进行前向或后向遍历，但是插入数据时只需要记录本项的前后项即可，所以插入速度较快。<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">List的子类特点</span><br><span class="line"><span class="symbol">        ArrayList:</span></span><br><span class="line">            底层数据结构是数组，查询快，增删慢</span><br><span class="line">            线程不安全，效率高</span><br><span class="line"><span class="symbol">        Vector:</span></span><br><span class="line">            底层数据结构是数组，查询快，增删慢</span><br><span class="line">            线程安全，效率低</span><br><span class="line"><span class="symbol">        LinkedList:</span></span><br><span class="line">            底层数据结构是链表，查询慢，增删快</span><br><span class="line">            线程不安全，效率高</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>Q7: Collection 和 Collections的区别 </p>
-</blockquote>
-<p>Collection是集合类的上级接口，继承与他的接口主要有Set和List. </p>
-<p>Collections是针对集合类的一个帮助类，他提供一系列静态方法实现对各种集合的搜索、排序、线程安全化等操作。<br>集合的继承体系：<br><img src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1551609409314&amp;di=26c716fbc7abe264f61d07f051639caf&amp;imgtype=0&amp;src=http%3A%2F%2Faliyunzixunbucket.oss-cn-beijing.aliyuncs.com%2Fjpg%2F16f3e1d844693be57f7e0f55c969f42d.jpg%3Fx-oss-process%3Dimage%2Fresize%2Cp_100%2Fauto-orient%2C1%2Fquality%2Cq_90%2Fformat%2Cjpg%2Fwatermark%2Cimage_eXVuY2VzaGk%3D%2Ct_100" alt="image"></p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2019/08/07/Java基础面试题五/">Java基础面试题五</a>
         </h1>
         
@@ -578,7 +567,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/08/07/Java基础面试题二/">Java基础面试题二</a>
+            <a href="/2019/08/07/Java基础面试题四/">Java基础面试题四</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -586,7 +575,7 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2019-08-07T14:37:25.984Z" itemprop="datePublished">2019-08-07</time>
+    <time datetime="2019-08-07T14:37:25.985Z" itemprop="datePublished">2019-08-07</time>
 </a>
 
             
@@ -601,13 +590,47 @@
     
     <section class="article-body markdown-body">
         
-        <p>Java基础面试题二</p>
+        <p>Java基础面试题四</p>
 <blockquote>
-<p>Q1: 什么是死锁(deadlock)？ </p>
+<p>Q1: Java中垃圾回收有什么目的？什么时候进行垃圾回收？ </p>
 </blockquote>
-<p>两个进程都在等待对方执行完毕才能继续往下执行的时候就发生了死锁。结果就是两个进程都陷入了无限的等待中。<br>代码表示：<br><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLockDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> void main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">    DieLock dl1 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">true</span>);</span><br><span class="line">    DieLock dl2 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">false</span>);</span><br><span class="line">    dl1.start();</span><br><span class="line">    dl2.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>理想状态下dl1线程为true从if执行先打出”if objA”然后再接着打出”if objB”之后释放A、B的锁对象，之后dl2线程执行else语句打出”else objB”，”else objA”。<br>非理想状态下dl1先打出”if objA”，之后线程dl2执行打出”else objB”，然后1、2线程的锁对象A和B都处于被锁的状态，两个线程争夺锁对象发生死锁现象。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLock</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> flag;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DieLock</span><span class="params">(<span class="keyword">boolean</span> flag)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.flag = flag;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (flag) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                System.out.println(<span class="string">"if objA"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"if objB"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                System.out.println(<span class="string">"else objB"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"else objA"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>垃圾回收的目的是识别并且丢弃应用不再使用的对象来释放和重用资源。</p>
+<blockquote>
+<p>Q2：如果对象的引用被置为null，垃圾收集器是否会立即释放对象占用的内存？ </p>
+</blockquote>
+<p>不会，在下一个垃圾回收周期中，这个对象将是可被回收的。</p>
+<blockquote>
+<p>Q3: String是最基本的数据类型吗? </p>
+</blockquote>
+<p>基本数据类型包括:</p>
+<ul>
+<li>byte</li>
+<li>int</li>
+<li>char</li>
+<li>long</li>
+<li>float</li>
+<li>double</li>
+<li>boolean</li>
+<li>short </li>
+</ul>
+<p>java.lang.String类是final类型的，因此不可以继承这个类、不能修改这个类。为了提高效率节省空间，我们应该用StringBuffer类。</p>
+<blockquote>
+<p>Q4: int 和 Integer 有什么区别?</p>
+</blockquote>
+<p>Java 提供两种不同的类型：引用类型和原始类型（或内置类型）。Int是java的原始数据类型，Integer是java为int提供的封装类。Java为每个原始类型提供了封装类。</p>
+<blockquote>
+<p>Q5: String 和 StringBuffer的区别?</p>
+</blockquote>
+<p>JAVA平台提供了两个类：String和StringBuffer，它们可以储存和操作字符串，即包含多个字符的字符数据。这个String类提供了数值不可改变的字符串。而这个StringBuffer类提供的字符串进行修改。</p>
+<blockquote>
+<p>Q6: ArrayList,Vector,LinkedList的存储性能和特性?</p>
+</blockquote>
+<p>ArrayList和Vector都是使用数组方式存储数据，此数组元素数大于实际存储的数据以便增加和插入元素，它们都允许直接按序号索引元素，但是插入元素要涉及数组元素移动等内存操作，所以索引数据快而插入数据慢，Vector由于使用了synchronized方法（线程安全），通常性能上较ArrayList差，而LinkedList使用双向链表实现存储，按序号索引数据需要进行前向或后向遍历，但是插入数据时只需要记录本项的前后项即可，所以插入速度较快。<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">List的子类特点</span><br><span class="line"><span class="symbol">        ArrayList:</span></span><br><span class="line">            底层数据结构是数组，查询快，增删慢</span><br><span class="line">            线程不安全，效率高</span><br><span class="line"><span class="symbol">        Vector:</span></span><br><span class="line">            底层数据结构是数组，查询快，增删慢</span><br><span class="line">            线程安全，效率低</span><br><span class="line"><span class="symbol">        LinkedList:</span></span><br><span class="line">            底层数据结构是链表，查询慢，增删快</span><br><span class="line">            线程不安全，效率高</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>Q7: Collection 和 Collections的区别 </p>
+</blockquote>
+<p>Collection是集合类的上级接口，继承与他的接口主要有Set和List. </p>
+<p>Collections是针对集合类的一个帮助类，他提供一系列静态方法实现对各种集合的搜索、排序、线程安全化等操作。<br>集合的继承体系：<br><img src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1551609409314&amp;di=26c716fbc7abe264f61d07f051639caf&amp;imgtype=0&amp;src=http%3A%2F%2Faliyunzixunbucket.oss-cn-beijing.aliyuncs.com%2Fjpg%2F16f3e1d844693be57f7e0f55c969f42d.jpg%3Fx-oss-process%3Dimage%2Fresize%2Cp_100%2Fauto-orient%2C1%2Fquality%2Cq_90%2Fformat%2Cjpg%2Fwatermark%2Cimage_eXVuY2VzaGk%3D%2Ct_100" alt="image"></p>
 
         
     </section>
