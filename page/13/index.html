@@ -131,6 +131,83 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/01/08/Git使用中的问题/">Git使用中的问题</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-01-08T04:20:02.000Z" itemprop="datePublished">2018-01-08</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Git/">Git</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>git push失败 fatal: Could not read from remote repository</p>
+<h2 id="阐述问题"><a href="#阐述问题" class="headerlink" title="阐述问题"></a>阐述问题</h2><p>git push失败 fatal: Could not read from remote repository. 因为仓库地址不对。更改地址就可以push了。</p>
+<h3 id="问题原因"><a href="#问题原因" class="headerlink" title="问题原因"></a>问题原因</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git remote -v</span><br><span class="line">$ git remote <span class="built_in">set</span>-url origin XXX</span><br></pre></td></tr></table></figure>
+<h2 id="服务器上的-Git-生成-SSH-公钥"><a href="#服务器上的-Git-生成-SSH-公钥" class="headerlink" title="服务器上的 Git - 生成 SSH 公钥"></a>服务器上的 Git - 生成 SSH 公钥</h2><h3 id="生成-SSH-公钥"><a href="#生成-SSH-公钥" class="headerlink" title="生成 SSH 公钥"></a>生成 SSH 公钥</h3><p>大多数 Git 服务器都会选择使用 SSH 公钥来进行授权。系统中的每个用户都必须提供一个公钥用于授权，没有的话就要生成一个。生成公钥的过程在所有操作系统上都差不多。首先先确认一下是否已经有一个公钥了。SSH 公钥默认储存在账户的主目录下的 ~/.ssh 目录。<br>若想在github中使用的话需要将公钥复制到github&gt;setting&gt;SSH and GPG keys中添加ssh keys。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">生成钥匙</span><br><span class="line">$ ssh-keygen</span><br><span class="line">查看公钥</span><br><span class="line"><span class="variable">$cat</span> ~/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/01/01/架构演变背景/">架构演变背景</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-01-01T04:10:10.000Z" itemprop="datePublished">2018-01-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/架构/">架构</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="架构演变背景"><a href="#架构演变背景" class="headerlink" title="架构演变背景"></a>架构演变背景</h1><h2 id="单一应用架构"><a href="#单一应用架构" class="headerlink" title="单一应用架构"></a>单一应用架构</h2><p>当网站流量很小时，只需一个应用，将所有功能都部署在一起，以减少部署节点和成本。此时，用于简化增删改查工作量的数据访问框架(ORM)是关键。</p>
+<h2 id="垂直应用架构"><a href="#垂直应用架构" class="headerlink" title="垂直应用架构"></a>垂直应用架构</h2><p>当访问量逐渐增大，单一应用增加机器带来的加速度越来越小，将应用拆成互不相干的几个应用，以提升效率。此时，用于加速前端页面开发的Web框架(MVC)是关键。</p>
+<h2 id="分布式服务架构"><a href="#分布式服务架构" class="headerlink" title="分布式服务架构"></a>分布式服务架构</h2><p>当垂直应用越来越多，应用之间交互不可避免，将核心业务抽取出来，作为独立的服务，逐渐形成稳定的服务中心，使前端应用能更快速的响应多变的市场需求。此时，用于提高业务复用及整合的分布式服务框架(RPC)是关键。</p>
+<h2 id="流动计算架构"><a href="#流动计算架构" class="headerlink" title="流动计算架构"></a>流动计算架构</h2><p>当服务越来越多，容量的评估，小服务资源的浪费等问题逐渐显现，此时需增加一个调度中心基于访问压力实时管理集群容量，提高集群利用率。此时，用于提高机器利用率的资源调度和治理中心(SOA)是关键。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2017/12/08/优秀的开源项目及优秀文章地址/">优秀的开源项目</a>
         </h1>
         
@@ -225,50 +302,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2017/09/12/Redis相关问题四/">相关问题四</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-09-12T10:33:59.000Z" itemprop="datePublished">2017-09-12</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Redis-相关问题四"><a href="#Redis-相关问题四" class="headerlink" title="Redis 相关问题四"></a>Redis 相关问题四</h1><ol>
-<li><p>Redis跳跃表问题。</p>
-</li>
-<li><p>Redis单进程单线程的Redis如何能够高并发？</p>
-</li>
-<li><p>如何使用Redis实现分布式锁？</p>
-</li>
-<li><p>Redis分布式锁操作的原子性，Redis内部如何实现？</p>
-</li>
-</ol>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2017/09/12/Redis相关问题三/">Redis相关问题三</a>
         </h1>
         
@@ -306,6 +339,103 @@
 <p>3) 如果用户不停地查询一条不存在的数据，缓存没有，数据库也没有，那么会出现什么?</p>
 <p>如果数据不存在，缓存中没有，数据库也没有，当然如果不设置判断，会一直调用数据库，使数据库效率降低，访问量大时甚至会宕机。</p>
 <p>解决方案：从数据库查询，如果数据库没有，则返回值为Null，判断数据库返回的值，如果为Null，则自定义把标识的字段存到Redis中，用key,value的方法，jedis.setex(key,”empty”)，设置失效时间跟具体情况而定，然后调用String json=jedis.get(key),判断是否获取的值”empty”.equal(json),如果相等，则抛出自定义异常，给用户提示，或者直接return null。这样用户再次查询的时候由于先从reids缓存中查询，redis会有对应的Key获取之前设置的value值，这样就不会再次调用数据库，影响效率等问题。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2017/09/12/Redis简介/">Redis简介</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-09-12T10:33:59.000Z" itemprop="datePublished">2017-09-12</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>Redis是一个开源的，使用C语言编写，面向“键/值”对类型数据的分布式NoSQL数据库系统，特点是高性能，持久存储，适应高并发的应用场景。Redis纯粹为应用而产生，它是一个高性能的key-value数据库,并且提供了多种语言的API，性能测试结果表示SET操作每秒钟可达110000次，GET操作每秒81000次（当然不同的服务器配置性能不同）。</p>
+<h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1><p>Redis是一个开源的，使用C语言编写，面向“键/值”对类型数据的分布式NoSQL数据库系统，特点是高性能，持久存储，适应高并发的应用场景。Redis纯粹为应用而产生，它是一个高性能的key-value数据库,并且提供了多种语言的API，性能测试结果表示SET操作每秒钟可达110000次，GET操作每秒81000次（当然不同的服务器配置性能不同）。</p>
+<p>Redis目前提供五种数据类型：</p>
+<ul>
+<li>string(字符串),</li>
+<li>list（链表）, </li>
+<li>Hash（哈希）,</li>
+<li>set（集合）,</li>
+<li>zset(sorted set)  （有序集合）</li>
+</ul>
+<p>Redis开发维护很活跃，虽然它是一个Key-Value数据库存储系统，但它本身支持MQ功能，所以完全可以当做一个轻量级的队列服务来使用。</p>
+<p>Redis可以做消息队列？</p>
+<blockquote>
+<p>首先，redis设计用来做缓存的，但是由于它自身的某种特性使得它可以用来做消息队列，它有几个阻塞式的API可以使用，正是这些阻塞式的API让其有能力做消息队列；另外，做消息队列的其他特性例如FIFO（先入先出）也很容易实现，只需要一个list对象从头取数据，从尾部塞数据即可；redis能做消息队列还得益于其list对象blpop brpop接口以及Pub/Sub（发布/订阅）的某些接口，它们都是阻塞版的，所以可以用来做消息队列。</p>
+</blockquote>
+<p>对于RabbitMQ和Redis的入队和出队操作，各执行100万次，每10万次记录一次执行时间。测试数据分为128Bytes、512Bytes、1K和10K四个不同大小的数据。<br>实验表明：</p>
+<blockquote>
+<p>入队时，当数据比较小时Redis的性能要高于RabbitMQ，而如果数据大小超过了10K，Redis则慢的无法忍<br>受；出队时，无论数据大小，Redis都表现出非常好的性能，而RabbitMQ的出队性能则远低于Redis。</p>
+</blockquote>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2017/09/12/Redis相关问题四/">相关问题四</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-09-12T10:33:59.000Z" itemprop="datePublished">2017-09-12</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Redis-相关问题四"><a href="#Redis-相关问题四" class="headerlink" title="Redis 相关问题四"></a>Redis 相关问题四</h1><ol>
+<li><p>Redis跳跃表问题。</p>
+</li>
+<li><p>Redis单进程单线程的Redis如何能够高并发？</p>
+</li>
+<li><p>如何使用Redis实现分布式锁？</p>
+</li>
+<li><p>Redis分布式锁操作的原子性，Redis内部如何实现？</p>
+</li>
+</ol>
 
         
     </section>
@@ -376,48 +506,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2017/09/12/Redis相关问题二/">Redis相关问题二</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-09-12T10:33:59.000Z" itemprop="datePublished">2017-09-12</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Redis-相关问题二"><a href="#Redis-相关问题二" class="headerlink" title="Redis 相关问题二"></a>Redis 相关问题二</h1><ol start="2">
-<li>Redis采用多线程会有哪些问题？</li>
-</ol>
-<p>公司某个项目使用了redis进行数据的快速写入与查询,但在测试中发现它的查询速度完全不敌MySQL.经过代码分析发现,我们的架构师来了个奇葩操作.Redis与MySQL的关联,也就是先从Redis中查出相关数据在循环查询MySQL来获取完整数据,对于这种操作只能认为架构的脑袋被电梯夹了,在没有什么借口可以解释。好多人都是这样,对新技术有点皮毛了解就想”大显身手”,结果就闹得很是尴尬。</p>
-<p>大家知道Redis是非关系型数据库,特点就是”快”,那我们直接把想要的数据全部存入Redis中,不做任何关联。</p>
-<p>这个问题解决之后又发现了一个新问题,Redis在多线程高并发下出现数据错乱,也就是A的数据给了B,B的数据给到了C….</p>
-<p>分析:程序是多线程并且高并发情况,而Redis是单线程,也就是程序在Redis驱动返回结果时发生了张冠李戴的现象.</p>
-<p>解决方法:Redis操作方法添加线程锁(lock),让其他线程排队.</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2017/09/12/Redis相关问题一/">Redis相关问题一</a>
         </h1>
         
@@ -470,7 +558,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2017/09/12/Redis简介/">Redis简介</a>
+            <a href="/2017/09/12/Redis相关问题二/">Redis相关问题二</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -493,177 +581,14 @@
     
     <section class="article-body markdown-body">
         
-        <p>Redis是一个开源的，使用C语言编写，面向“键/值”对类型数据的分布式NoSQL数据库系统，特点是高性能，持久存储，适应高并发的应用场景。Redis纯粹为应用而产生，它是一个高性能的key-value数据库,并且提供了多种语言的API，性能测试结果表示SET操作每秒钟可达110000次，GET操作每秒81000次（当然不同的服务器配置性能不同）。</p>
-<h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1><p>Redis是一个开源的，使用C语言编写，面向“键/值”对类型数据的分布式NoSQL数据库系统，特点是高性能，持久存储，适应高并发的应用场景。Redis纯粹为应用而产生，它是一个高性能的key-value数据库,并且提供了多种语言的API，性能测试结果表示SET操作每秒钟可达110000次，GET操作每秒81000次（当然不同的服务器配置性能不同）。</p>
-<p>Redis目前提供五种数据类型：</p>
-<ul>
-<li>string(字符串),</li>
-<li>list（链表）, </li>
-<li>Hash（哈希）,</li>
-<li>set（集合）,</li>
-<li>zset(sorted set)  （有序集合）</li>
-</ul>
-<p>Redis开发维护很活跃，虽然它是一个Key-Value数据库存储系统，但它本身支持MQ功能，所以完全可以当做一个轻量级的队列服务来使用。</p>
-<p>Redis可以做消息队列？</p>
-<blockquote>
-<p>首先，redis设计用来做缓存的，但是由于它自身的某种特性使得它可以用来做消息队列，它有几个阻塞式的API可以使用，正是这些阻塞式的API让其有能力做消息队列；另外，做消息队列的其他特性例如FIFO（先入先出）也很容易实现，只需要一个list对象从头取数据，从尾部塞数据即可；redis能做消息队列还得益于其list对象blpop brpop接口以及Pub/Sub（发布/订阅）的某些接口，它们都是阻塞版的，所以可以用来做消息队列。</p>
-</blockquote>
-<p>对于RabbitMQ和Redis的入队和出队操作，各执行100万次，每10万次记录一次执行时间。测试数据分为128Bytes、512Bytes、1K和10K四个不同大小的数据。<br>实验表明：</p>
-<blockquote>
-<p>入队时，当数据比较小时Redis的性能要高于RabbitMQ，而如果数据大小超过了10K，Redis则慢的无法忍<br>受；出队时，无论数据大小，Redis都表现出非常好的性能，而RabbitMQ的出队性能则远低于Redis。</p>
-</blockquote>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/06/01/Linux 更改文件属性/">Linux更改文件属性</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-06-01T08:18:02.000Z" itemprop="datePublished">2017-06-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h2 id="Linux-更改文件属性"><a href="#Linux-更改文件属性" class="headerlink" title="Linux 更改文件属性"></a>Linux 更改文件属性</h2><p>1、chgrp：改属组 change group</p>
-<p>语法：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chgrp <span class="string">[-R]</span> 属组名 文件名</span><br></pre></td></tr></table></figure></p>
-<p>参数选项 [-R]: 递归更改文件属组，就是在更改某个目录文件的属组时，如果加上-R的参数，那么该目录下的所有文件的属组都会更改。</p>
-<p>2、chown：改属主，也可以同时更改属组  change owner</p>
-<p>语法：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chown <span class="string">[–R]</span> 属主名 文件名</span><br><span class="line">chown <span class="string">[-R]</span> 属主名：属组名 文件名</span><br></pre></td></tr></table></figure></p>
-<p>进入 /root 目录（~）将install.log的拥有者改为bin这个账号：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@www ~] cd ~</span><br><span class="line">[root@www ~]# chown bin install.log</span><br><span class="line">[root@www ~]# ls -l</span><br><span class="line">-rw-r--r--  1 bin <span class="built_in"> users </span>68495 Jun 25 08:53 install.log</span><br></pre></td></tr></table></figure></p>
-<p>3、chmod：更改文件9个属性</p>
-<p>Linux文件的基本权限就有九个，分别是owner/group/others三种身份各有自己的read/write/execute权限。</p>
-<p>例如：文件的权限字符为：『-rwxrwxrwx』， 可以使用数字来代表各个权限，各权限的分数对照表如下：</p>
-<ul>
-<li>r:4</li>
-<li>w:2</li>
-<li>x:1</li>
-</ul>
-<p>每种身份(owner/group/others)各自的三个权限(r/w/x)分数是需要累加的，例如当权限为： [-rwxrwx—] 结果：</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">owner = rwx = <span class="number">4</span>+<span class="number">2</span>+<span class="number">1</span> = <span class="number">7</span></span><br><span class="line">group = rwx = <span class="number">4</span>+<span class="number">2</span>+<span class="number">1</span> = <span class="number">7</span></span><br><span class="line">others= --- = <span class="number">0</span>+<span class="number">0</span>+<span class="number">0</span> = <span class="number">0</span></span><br></pre></td></tr></table></figure>
-<p>设定权限变更为：770</p>
-<p>语法<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod <span class="string">[-R]</span> xyz 文件或目录</span><br></pre></td></tr></table></figure></p>
-<p>参数 xyz : 就是刚刚提到的数字类型的权限属性，为 rwx 属性数值的相加。eg: 770</p>
-<p>Example: 将.bashrc这个文件所有的权限都设定启用<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">ls</span> <span class="selector-tag">-al</span> <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-tag">-rw-r--r--</span>  1 <span class="selector-tag">root</span> <span class="selector-tag">root</span> 395 <span class="selector-tag">Jul</span>  4 11<span class="selector-pseudo">:45</span> <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">chmod</span> 777 <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-attr">[root@www ~]</span># <span class="selector-tag">ls</span> <span class="selector-tag">-al</span> <span class="selector-class">.bashrc</span></span><br><span class="line"><span class="selector-tag">-rwxrwxrwx</span>  1 <span class="selector-tag">root</span> <span class="selector-tag">root</span> 395 <span class="selector-tag">Jul</span>  4 11<span class="selector-pseudo">:45</span> <span class="selector-class">.bashrc</span></span><br></pre></td></tr></table></figure></p>
-<p>那如果要将权限变成 -rwxr-xr– 呢？那么权限的分数就成为 [4+2+1][4+0+1][4+0+0]=754。</p>
-<h2 id="符号类型改变文件权限"><a href="#符号类型改变文件权限" class="headerlink" title="符号类型改变文件权限"></a>符号类型改变文件权限</h2><p>另一种改权限的方式。针对user,group,others设置权限。</p>
-<ol>
-<li>user</li>
-<li>group</li>
-<li>others</li>
+        <h1 id="Redis-相关问题二"><a href="#Redis-相关问题二" class="headerlink" title="Redis 相关问题二"></a>Redis 相关问题二</h1><ol start="2">
+<li>Redis采用多线程会有哪些问题？</li>
 </ol>
-<p>那么我们就可以使用 u, g, o 来代表三种身份的权限。</p>
-<p>可选 ：</p>
-<ul>
-<li>u</li>
-<li>g</li>
-<li>o</li>
-<li>a (指所有，即全部的身份)</li>
-</ul>
-<p>操作符： </p>
-<ul>
-<li><ul>
-<li>加入</li>
-</ul>
-</li>
-<li><ul>
-<li>除去</li>
-</ul>
-</li>
-<li>=    设定<br>权限：</li>
-<li>r</li>
-<li>w</li>
-<li>x</li>
-</ul>
-<p>可以使用以下语法来设定:<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod <span class="attribute">u</span>=rwx,g=rwx,o=rwx 文件名</span><br></pre></td></tr></table></figure></p>
-<p>Example：将文件权限设置为 -rwxr-xr– ，<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#  touch <span class="keyword">test</span>    <span class="comment">// 创建文件</span></span><br><span class="line"># <span class="keyword">ls</span> -al <span class="keyword">test</span>    <span class="comment">// 查看默认权限</span></span><br><span class="line">-rw-r--r-- 1 root root 0 Nov 15 10:32 <span class="keyword">test</span></span><br><span class="line"># chmod <span class="keyword">u</span>=rwx,<span class="keyword">g</span>=rx,o=r  <span class="keyword">test</span>    <span class="comment">// 修改权限</span></span><br><span class="line"># <span class="keyword">ls</span> -al <span class="keyword">test</span></span><br><span class="line">-rwxr-xr-- 1 root root 0 Nov 15 10:32 <span class="keyword">test</span></span><br></pre></td></tr></table></figure></p>
-<p>而如果是要将权限去掉而不改变其他已存在的权限呢？<br>例如要拿掉全部人的可执行权限，则：<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#  chmod  a-x test1</span></span><br><span class="line"><span class="comment"># ls -al test1</span></span><br><span class="line">-rw-r--r--<span class="number"> 1 </span>root root<span class="number"> 0 </span>Nov<span class="number"> 15 </span>10:32 test1</span><br></pre></td></tr></table></figure></p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/06/01/Linux 目录结构简易理解/">Linux目录结构简易理解</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/13/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-06-01T08:18:02.000Z" itemprop="datePublished">2017-06-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h2 id="Linux目录结构"><a href="#Linux目录结构" class="headerlink" title="Linux目录结构"></a>Linux目录结构</h2><p>/bin：<br>bin是Binary的缩写, 这个目录存放着最经常使用的命令。</p>
-<p>/boot：<br>这里存放的是启动Linux时使用的一些核心文件，包括一些连接文件以及镜像文件。</p>
-<p>/dev ：<br>dev是Device(设备)的缩写, 该目录下存放的是Linux的外部设备，在Linux中访问设备的方式和访问文件的方式是相同的。</p>
-<p>/etc：<br>这个目录用来存放所有的系统管理所需要的配置文件和子目录。</p>
-<p>/home：<br>用户的主目录，在Linux中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的。</p>
-<p>/lib：<br>这个目录里存放着系统最基本的动态连接共享库，其作用类似于Windows里的DLL文件。几乎所有的应用程序都需要用到这些共享库。</p>
-<p>/lost+found：<br>这个目录一般情况下是空的，当系统非法关机后，这里就存放了一些文件。</p>
-<p>/media：<br>linux系统会自动识别一些设备，例如U盘、光驱等等，当识别后，linux会把识别的设备挂载到这个目录下。</p>
-<p>/mnt：<br>系统提供该目录是为了让用户临时挂载别的文件系统的，我们可以将光驱挂载在/mnt/上，然后进入该目录就可以查看光驱里的内容了。</p>
-<p>/opt：<br> 这是给主机额外安装软件所摆放的目录。比如你安装一个ORACLE数据库则就可以放到这个目录下。默认是空的。</p>
-<p>/proc：<br>这个目录是一个虚拟的目录，它是系统内存的映射，我们可以通过直接访问这个目录来获取系统信息。<br>这个目录的内容不在硬盘上而是在内存里，我们也可以直接修改里面的某些文件，比如可以通过下面的命令来屏蔽主机的ping命令，使别人无法ping你的机器：</p>
-<p>echo 1 &gt; /proc/sys/net/ipv4/icmp_echo_ignore_all<br>/root：<br>该目录为系统管理员，也称作超级权限者的用户主目录。</p>
-<p>/sbin：<br>s就是Super User的意思，这里存放的是系统管理员使用的系统管理程序。</p>
-<p>/selinux：<br> 这个目录是Redhat/CentOS所特有的目录，Selinux是一个安全机制，类似于windows的防火墙，但是这套机制比较复杂，这个目录就是存放selinux相关的文件的。</p>
-<p>/srv：<br> 该目录存放一些服务启动之后需要提取的数据。</p>
-<p>/sys：</p>
-<p> 这是linux2.6内核的一个很大的变化。该目录下安装了2.6内核中新出现的一个文件系统 sysfs 。</p>
-<p>sysfs文件系统集成了下面3种文件系统的信息：针对进程信息的proc文件系统、针对设备的devfs文件系统以及针对伪终端的devpts文件系统。<br>该文件系统是内核设备树的一个直观反映。</p>
-<p>当一个内核对象被创建的时候，对应的文件和目录也在内核对象子系统中被创建。</p>
-<p>/tmp：<br>这个目录是用来存放一些临时文件的。</p>
-<p>/usr：<br> 这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似于windows下的program files目录。</p>
-<p>/usr/bin：<br>系统用户使用的应用程序。</p>
-<p>/usr/sbin：<br>超级用户使用的比较高级的管理程序和系统守护程序。</p>
-<p>/usr/src：<br>内核源代码默认的放置目录。</p>
-<p>/var：<br>这个目录中存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。包括各种日志文件。</p>
-<p>/run：<br>是一个临时文件系统，存储系统启动以来的信息。当系统重启时，这个目录下的文件应该被删掉或清除。如果你的系统上有 /var/run 目录，应该让它指向 run。</p>
-<h2 id="note"><a href="#note" class="headerlink" title="note"></a>note</h2><p>在 Linux 系统中，有几个目录是比较重要的，平时需要注意不要误删除或者随意更改内部文件。</p>
-<p>/etc： 上边也提到了，这个是系统中的配置文件，如果你更改了该目录下的某个文件可能会导致系统不能启动。</p>
-<p>/bin, /sbin, /usr/bin, /usr/sbin: 这是系统预设的执行文件的放置目录，比如 ls 就是在/bin/ls 目录下的。</p>
-<p>值得提出的是，/bin, /usr/bin 是给系统用户使用的指令（除root外的通用户），而/sbin, /usr/sbin 则是给root使用的指令。</p>
-<p>/var： 这是一个非常重要的目录，系统上跑了很多程序，那么每个程序都会有相应的日志产生，而这些日志就被记录到这个目录下，具体在/var/log 目录下，另外mail的预设放置也是在这里。</p>
+<p>公司某个项目使用了redis进行数据的快速写入与查询,但在测试中发现它的查询速度完全不敌MySQL.经过代码分析发现,我们的架构师来了个奇葩操作.Redis与MySQL的关联,也就是先从Redis中查出相关数据在循环查询MySQL来获取完整数据,对于这种操作只能认为架构的脑袋被电梯夹了,在没有什么借口可以解释。好多人都是这样,对新技术有点皮毛了解就想”大显身手”,结果就闹得很是尴尬。</p>
+<p>大家知道Redis是非关系型数据库,特点就是”快”,那我们直接把想要的数据全部存入Redis中,不做任何关联。</p>
+<p>这个问题解决之后又发现了一个新问题,Redis在多线程高并发下出现数据错乱,也就是A的数据给了B,B的数据给到了C….</p>
+<p>分析:程序是多线程并且高并发情况,而Redis是单线程,也就是程序在Redis驱动返回结果时发生了张冠李戴的现象.</p>
+<p>解决方法:Redis操作方法添加线程锁(lock),让其他线程排队.</p>
 
         
     </section>
@@ -673,7 +598,7 @@
 
 
 <nav class="page-nav">
-    <a class="extend prev" rel="prev" href="/page/12/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/14/">下一页 &raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/12/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><a class="page-number" href="/page/15/">15</a><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/14/">下一页 &raquo;</a>
 </nav>
 
 

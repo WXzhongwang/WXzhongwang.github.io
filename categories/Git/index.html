@@ -274,45 +274,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/02/09/Git移动文件/">Git移动文件</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Git/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-02-09T02:10:00.000Z" itemprop="datePublished">2018-02-09</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Git/">Git</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="移动文件"><a href="#移动文件" class="headerlink" title="移动文件"></a>移动文件</h1><p>Git 并不显式跟踪文件移动操作。如果在Git中重命名了某个文件，仓库中存储的元数据并不会体现出这是一次改名操作。 不过 Git 非常聪明，它会推断出究竟发生了什么。</p>
-<p>既然如此，当你看到 Git 的 mv 命令时一定会困惑不已。 要在 Git 中对文件改名，可以这么做：<br><figure class="highlight cos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="keyword">mv</span> file_from file_to</span><br></pre></td></tr></table></figure></p>
-<p>它会恰如预期般正常工作。实际上，即便此时查看状态信息，也会明白无误地看到关于重命名操作的说明：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>git mv README.md README</span><br><span class="line"><span class="variable">$ </span>git status</span><br><span class="line">On branch master</span><br><span class="line">Changes to be <span class="symbol">committed:</span></span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git reset HEAD &lt;file&gt;..."</span> to unstage)</span><br><span class="line"></span><br><span class="line">    <span class="symbol">renamed:</span>    README.md -&gt; README</span><br></pre></td></tr></table></figure></p>
-<p>其实，运行 git mv 就相当于运行了下面三条命令：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ mv README<span class="selector-class">.md</span> README</span><br><span class="line">$ git rm README.md</span><br><span class="line">$ git add README</span><br></pre></td></tr></table></figure></p>
-<p>如此分开操作，Git 也会意识到这是一次改名，所以不管何种方式结果都一样。 两者唯一的区别是，mv 是一条命令而另一种方式需要三条命令，直接用 git mv 轻便得多。 不过有时候用其他工具批处理改名的话，要记得在提交前删除老的文件名，再添加新的文件名。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2018/02/09/Git移除文件/">Git移除文件</a>
         </h1>
         
@@ -355,7 +316,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/02/07/Git Commit/">Git提交</a>
+            <a href="/2018/02/09/Git移动文件/">Git移动文件</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -363,7 +324,7 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-02-07T02:10:00.000Z" itemprop="datePublished">2018-02-07</time>
+    <time datetime="2018-02-09T02:10:00.000Z" itemprop="datePublished">2018-02-09</time>
 </a>
 
             
@@ -378,17 +339,11 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="Git-Commit"><a href="#Git-Commit" class="headerlink" title="Git Commit"></a>Git Commit</h1><p>现在的暂存区域已经准备妥当可以提交了。 在此之前，请一定要确认还有什么修改过的或新建的文件还没有 git add 过，否则提交的时候不会记录这些还没暂存起来的变化。 这些修改过的文件只保留在本地磁盘。 所以，每次准备提交前，先用 git status 看下，是不是都已暂存起来了， 然后再运行提交命令 git commit：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>git commit</span><br></pre></td></tr></table></figure></p>
-<p>你也可以在 commit 命令后添加 -m 选项，将提交信息与命令放在同一行。</p>
-<blockquote>
-<p>请在每次提交时添加comment<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="keyword">commit</span> -m <span class="string">"Story 182: Fix benchmarks for speed"</span></span><br><span class="line">[<span class="keyword">master</span> <span class="number">463</span>dc4f] Story <span class="number">182</span>: Fix benchmarks <span class="keyword">for</span> speed</span><br><span class="line"> <span class="number">2</span> files <span class="keyword">changed</span>, <span class="number">2</span> insertions(+)</span><br><span class="line"> <span class="keyword">create</span> <span class="keyword">mode</span> <span class="number">100644</span> README</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<p>好，现在你已经创建了第一个提交！ 可以看到，提交后它会告诉你，当前是在哪个分支（master）提交的，本次提交的完整 SHA-1 校验和是什么（463dc4f），以及在本次提交中，有多少文件修订过，多少行添加和删改过。</p>
-<blockquote>
-<p>请记住，提交时记录的是放在暂存区域的快照。 任何还未暂存的仍然保持已修改状态，可以在下次提交时纳入版本管理。 每一次运行提交操作，都是对你项目作一次快照，以后可以回到这个状态，或者进行比较。</p>
-</blockquote>
-<h2 id="跳过使用暂存区域"><a href="#跳过使用暂存区域" class="headerlink" title="跳过使用暂存区域"></a>跳过使用暂存区域</h2><p>尽管使用暂存区域的方式可以精心准备要提交的细节，但有时候这么做略显繁琐。 Git 提供了一个跳过使用暂存区域的方式， 只要在提交的时候，给 git commit 加上 -a 选项，Git 就会自动把所有已经跟踪过的文件暂存起来一并提交，从而跳过 git add 步骤：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line">Changes not staged for <span class="keyword">commit</span>:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git add &lt;file&gt;..."</span> <span class="keyword">to</span> <span class="keyword">update</span> what will be committed)</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git checkout -- &lt;file&gt;..."</span> <span class="keyword">to</span> discard changes <span class="keyword">in</span> working <span class="keyword">directory</span>)</span><br><span class="line"></span><br><span class="line">    modified:   CONTRIBUTING.md</span><br><span class="line"></span><br><span class="line"><span class="keyword">no</span> changes added <span class="keyword">to</span> <span class="keyword">commit</span> (<span class="keyword">use</span> <span class="string">"git add"</span> <span class="keyword">and</span>/<span class="keyword">or</span> <span class="string">"git commit -a"</span>)</span><br><span class="line">$ git <span class="keyword">commit</span> -a -m <span class="string">'added new benchmarks'</span></span><br><span class="line">[<span class="keyword">master</span> <span class="number">83e38</span>c7] added <span class="keyword">new</span> benchmarks</span><br><span class="line"> <span class="number">1</span> <span class="keyword">file</span> <span class="keyword">changed</span>, <span class="number">5</span> insertions(+), <span class="number">0</span> deletions(-)</span><br></pre></td></tr></table></figure></p>
-<p>此时，提交之前不再需要 git add 文件“CONTRIBUTING.md”了。个人觉得不推荐。</p>
+        <h1 id="移动文件"><a href="#移动文件" class="headerlink" title="移动文件"></a>移动文件</h1><p>Git 并不显式跟踪文件移动操作。如果在Git中重命名了某个文件，仓库中存储的元数据并不会体现出这是一次改名操作。 不过 Git 非常聪明，它会推断出究竟发生了什么。</p>
+<p>既然如此，当你看到 Git 的 mv 命令时一定会困惑不已。 要在 Git 中对文件改名，可以这么做：<br><figure class="highlight cos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="keyword">mv</span> file_from file_to</span><br></pre></td></tr></table></figure></p>
+<p>它会恰如预期般正常工作。实际上，即便此时查看状态信息，也会明白无误地看到关于重命名操作的说明：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>git mv README.md README</span><br><span class="line"><span class="variable">$ </span>git status</span><br><span class="line">On branch master</span><br><span class="line">Changes to be <span class="symbol">committed:</span></span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git reset HEAD &lt;file&gt;..."</span> to unstage)</span><br><span class="line"></span><br><span class="line">    <span class="symbol">renamed:</span>    README.md -&gt; README</span><br></pre></td></tr></table></figure></p>
+<p>其实，运行 git mv 就相当于运行了下面三条命令：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ mv README<span class="selector-class">.md</span> README</span><br><span class="line">$ git rm README.md</span><br><span class="line">$ git add README</span><br></pre></td></tr></table></figure></p>
+<p>如此分开操作，Git 也会意识到这是一次改名，所以不管何种方式结果都一样。 两者唯一的区别是，mv 是一条命令而另一种方式需要三条命令，直接用 git mv 轻便得多。 不过有时候用其他工具批处理改名的话，要记得在提交前删除老的文件名，再添加新的文件名。</p>
 
         
     </section>
@@ -601,6 +556,51 @@
 <p>另外还有按照时间作限制的选项，比如 –since 和 –until 也很有用。 例如，下面的命令列出所有最近两周内的提交：<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> <span class="comment">--since=2.weeks</span></span><br></pre></td></tr></table></figure></p>
 <p>这个命令可以在多种格式下工作，比如说具体的某一天 “2008-01-15”，或者是相对地多久以前 “2 years 1 day 3 minutes ago”。</p>
 <p>来看一个实际的例子，如果要查看 Git 仓库中，2008 年 10 月期间，Junio Hamano 提交的但未合并的测试文件，可以用下面的查询命令：<br><figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="keyword">log</span> --pretty=<span class="string">"%h - %s"</span> --author=gitster --since=<span class="string">"2008-10-01"</span> \</span><br><span class="line">   --before=<span class="string">"2008-11-01"</span> --<span class="keyword">no</span>-merges -- t/</span><br><span class="line"><span class="number">5610</span>e3b - Fix testcase failure <span class="keyword">when</span> extended attributes are in <span class="keyword">use</span></span><br><span class="line">acd3b9e - Enhance hold_lock_file_for<span class="number">_</span>&#123;update,append&#125;() API</span><br><span class="line">f563754 - demonstrate breakage of detached checkout with symbolic <span class="keyword">link</span> HEAD</span><br><span class="line">d1a43f2 - <span class="keyword">reset</span> --hard/<span class="keyword">read</span>-tree --<span class="keyword">reset</span> -u: remove unmerged new paths</span><br><span class="line"><span class="number">51</span>a94af - Fix <span class="string">"checkout --track -b newbranch"</span> on detached HEAD</span><br><span class="line">b0ad11e - pull: allow <span class="string">"git pull origin $something:$current_branch"</span> into an unborn branch</span><br></pre></td></tr></table></figure></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/02/07/Git Commit/">Git提交</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Git/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-07T02:10:00.000Z" itemprop="datePublished">2018-02-07</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Git/">Git</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Git-Commit"><a href="#Git-Commit" class="headerlink" title="Git Commit"></a>Git Commit</h1><p>现在的暂存区域已经准备妥当可以提交了。 在此之前，请一定要确认还有什么修改过的或新建的文件还没有 git add 过，否则提交的时候不会记录这些还没暂存起来的变化。 这些修改过的文件只保留在本地磁盘。 所以，每次准备提交前，先用 git status 看下，是不是都已暂存起来了， 然后再运行提交命令 git commit：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>git commit</span><br></pre></td></tr></table></figure></p>
+<p>你也可以在 commit 命令后添加 -m 选项，将提交信息与命令放在同一行。</p>
+<blockquote>
+<p>请在每次提交时添加comment<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="keyword">commit</span> -m <span class="string">"Story 182: Fix benchmarks for speed"</span></span><br><span class="line">[<span class="keyword">master</span> <span class="number">463</span>dc4f] Story <span class="number">182</span>: Fix benchmarks <span class="keyword">for</span> speed</span><br><span class="line"> <span class="number">2</span> files <span class="keyword">changed</span>, <span class="number">2</span> insertions(+)</span><br><span class="line"> <span class="keyword">create</span> <span class="keyword">mode</span> <span class="number">100644</span> README</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>好，现在你已经创建了第一个提交！ 可以看到，提交后它会告诉你，当前是在哪个分支（master）提交的，本次提交的完整 SHA-1 校验和是什么（463dc4f），以及在本次提交中，有多少文件修订过，多少行添加和删改过。</p>
+<blockquote>
+<p>请记住，提交时记录的是放在暂存区域的快照。 任何还未暂存的仍然保持已修改状态，可以在下次提交时纳入版本管理。 每一次运行提交操作，都是对你项目作一次快照，以后可以回到这个状态，或者进行比较。</p>
+</blockquote>
+<h2 id="跳过使用暂存区域"><a href="#跳过使用暂存区域" class="headerlink" title="跳过使用暂存区域"></a>跳过使用暂存区域</h2><p>尽管使用暂存区域的方式可以精心准备要提交的细节，但有时候这么做略显繁琐。 Git 提供了一个跳过使用暂存区域的方式， 只要在提交的时候，给 git commit 加上 -a 选项，Git 就会自动把所有已经跟踪过的文件暂存起来一并提交，从而跳过 git add 步骤：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line">Changes not staged for <span class="keyword">commit</span>:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git add &lt;file&gt;..."</span> <span class="keyword">to</span> <span class="keyword">update</span> what will be committed)</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git checkout -- &lt;file&gt;..."</span> <span class="keyword">to</span> discard changes <span class="keyword">in</span> working <span class="keyword">directory</span>)</span><br><span class="line"></span><br><span class="line">    modified:   CONTRIBUTING.md</span><br><span class="line"></span><br><span class="line"><span class="keyword">no</span> changes added <span class="keyword">to</span> <span class="keyword">commit</span> (<span class="keyword">use</span> <span class="string">"git add"</span> <span class="keyword">and</span>/<span class="keyword">or</span> <span class="string">"git commit -a"</span>)</span><br><span class="line">$ git <span class="keyword">commit</span> -a -m <span class="string">'added new benchmarks'</span></span><br><span class="line">[<span class="keyword">master</span> <span class="number">83e38</span>c7] added <span class="keyword">new</span> benchmarks</span><br><span class="line"> <span class="number">1</span> <span class="keyword">file</span> <span class="keyword">changed</span>, <span class="number">5</span> insertions(+), <span class="number">0</span> deletions(-)</span><br></pre></td></tr></table></figure></p>
+<p>此时，提交之前不再需要 git add 文件“CONTRIBUTING.md”了。个人觉得不推荐。</p>
 
         
     </section>

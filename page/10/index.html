@@ -131,7 +131,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/03/03/Log 配置文件/">log4j</a>
+            <a href="/2018/03/06/Linux 常用命令/">Linux常用命令</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -139,13 +139,13 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-03-03T06:22:30.000Z" itemprop="datePublished">2018-03-03</time>
+    <time datetime="2018-03-06T08:18:02.000Z" itemprop="datePublished">2018-03-06</time>
 </a>
 
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
+    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
 </div>
 
 
@@ -154,8 +154,104 @@
     
     <section class="article-body markdown-body">
         
-        <figure class="highlight roboconf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">### 设置###</span></span><br><span class="line">log4j.rootLogger = debug,stdout,D,E</span><br><span class="line"></span><br><span class="line"><span class="comment">### 输出信息到控制台  ###</span></span><br><span class="line">log4j.appender.stdout = org.apache.log4j.ConsoleAppender</span><br><span class="line">log4j.appender.stdout.Target = System.out</span><br><span class="line">log4j.appender.stdout.layout = org.apache.log4j.PatternLayout</span><br><span class="line">log4j.appender.stdout.layout.ConversionPattern = [%-5p] %d&#123;<span class="attribute">yyyy-MM-dd HH</span>:mm:ss,SSS&#125; method:%l%n%m%n</span><br><span class="line"></span><br><span class="line">### 输出DEBUG 级别以上的日志文件设置 ###</span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.D</span> = org<span class="variable">.apache</span><span class="variable">.log</span>4j<span class="variable">.DailyRollingFileAppender</span></span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.D</span><span class="variable">.File</span> = logs/debug<span class="variable">.log</span></span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.D</span><span class="variable">.Append</span> = true</span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.D</span><span class="variable">.Threshold</span> = DEBUG </span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.D</span><span class="variable">.layout</span> = org<span class="variable">.apache</span><span class="variable">.log</span>4j<span class="variable">.PatternLayout</span></span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.D</span><span class="variable">.layout</span><span class="variable">.ConversionPattern</span> = %-d&#123;yyyy-MM-dd HH:mm:ss&#125;  [ %t:%r ] - [ %p ]  %m%n</span><br><span class="line"></span><br><span class="line">### 输出ERROR 级别以上的日志文件设置 ###</span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.E</span> = org<span class="variable">.apache</span><span class="variable">.log</span>4j<span class="variable">.DailyRollingFileAppender</span></span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.E</span><span class="variable">.File</span> = logs/error<span class="variable">.log</span></span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.E</span><span class="variable">.Append</span> = true</span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.E</span><span class="variable">.Threshold</span> = ERROR </span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.E</span><span class="variable">.layout</span> = org<span class="variable">.apache</span><span class="variable">.log</span>4j<span class="variable">.PatternLayout</span></span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.E</span><span class="variable">.layout</span><span class="variable">.ConversionPattern</span> = %-d&#123;yyyy-MM-dd HH:mm:ss&#125;  [ %t:%r ] - [ %p ]  %m%n</span><br></pre></td></tr></table></figure>
-<p>测试 ：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">package com.test.util;</span><br><span class="line"></span><br><span class="line">import org.apache.log4j.*;</span><br><span class="line"></span><br><span class="line">public class LogUtil &#123;</span><br><span class="line">	private static Logger logger = Logger.getLogger(LogUtil.class);</span><br><span class="line">    </span><br><span class="line">    public static void main(String[] args) throws Exception &#123;</span><br><span class="line">        // 记录debug级别的信息  </span><br><span class="line">        logger.debug(&quot;This is debug message.&quot;);  </span><br><span class="line">        // 记录info级别的信息  </span><br><span class="line">        logger.info(&quot;This is info message.&quot;);  </span><br><span class="line">        // 记录error级别的信息  </span><br><span class="line">        logger.error(&quot;This is error message.&quot;); </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        <p>Linux常用命令</p>
+<p>#Linux 常用命令</p>
+<h2 id="cd"><a href="#cd" class="headerlink" title="cd"></a>cd</h2><ul>
+<li>==cd /== 进入主目录</li>
+<li>==cd ~== 进入Home目录</li>
+<li>==cd -== 进入上一次工作中路径</li>
+</ul>
+<h2 id="ls"><a href="#ls" class="headerlink" title="ls"></a>ls</h2><ul>
+<li>==ls -a== 列出所有</li>
+<li>==ls -r== 反序排列</li>
+<li>==ls -t== 以文件修改时间排列</li>
+<li>==ls -l== 将文件名,文件所有者，文件大小信息详细信息列出来</li>
+</ul>
+<h2 id="pwd"><a href="#pwd" class="headerlink" title="pwd"></a>pwd</h2><ul>
+<li>==pwd== 展示当前工作目录路径</li>
+</ul>
+<h2 id="mkdir"><a href="#mkdir" class="headerlink" title="mkdir"></a>mkdir</h2><p>创建文件夹<br>可用选项：</p>
+<ul>
+<li>==mkdir -m==: 对新建目录设置存取权限,也可以用chmod命令设置;</li>
+<li>==mkdir -p==: 可以是一个路径名称。此时若路径中的某些目录尚不存在,加上此选项后,系统将自动建立那 些尚不在的目录,即一次可以建立多个目录;</li>
+</ul>
+<h2 id="rm"><a href="#rm" class="headerlink" title="rm"></a>rm</h2><p>删除文件，删除一个目录中的一个或多个文件或目录，如果没有使用- r选项，则rm不会删除目录</p>
+<h2 id="rmdir"><a href="#rmdir" class="headerlink" title="rmdir"></a>rmdir</h2><p>从一个目录中删除一个或多个子目录项，删除某目录时也必须具有对其父目录的写权限。</p>
+<h2 id="mv"><a href="#mv" class="headerlink" title="mv"></a>mv</h2><p>移动文件或修改文件名，根据第二参数类型（如目录，则移动文件；如为文件则重命令该文件）。</p>
+<h2 id="cp"><a href="#cp" class="headerlink" title="cp"></a>cp</h2><p>将源文件复制至目标文件，或将多个源文件复制至目标目录。</p>
+<h2 id="free"><a href="#free" class="headerlink" title="free"></a>free</h2><p>显示系统内存使用情况，包括物理内存、交互区内存(swap)和内核缓冲区内存</p>
+<ul>
+<li>-b 以Byte显示内存使用情况</li>
+<li>-k 以kb为单位显示内存使用情况</li>
+<li>-m 以mb为单位显示内存使用情况</li>
+<li>-g 以gb为单位显示内存使用情况</li>
+<li>-s &lt;间隔秒数&gt; 持续显示内存</li>
+<li>-t 显示内存使用总合</li>
+</ul>
+<h2 id="cat"><a href="#cat" class="headerlink" title="cat"></a>cat</h2><p>  cat主要有三大功能：</p>
+<ul>
+<li>一次显示整个文件:cat filename</li>
+<li>从键盘创建一个文件:cat &gt; filename 只能创建新文件,不能编辑已有文件.</li>
+<li>将几个文件合并为一个文件:cat file1 file2 &gt; file</li>
+</ul>
+<ol>
+<li>-b对非空输出行号</li>
+<li>-n输出所有行号</li>
+</ol>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/03/06/Linux 文件内容查看/">Linux文件内容查看</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-03-06T08:18:02.000Z" itemprop="datePublished">2018-03-06</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Linux文件内容查看"><a href="#Linux文件内容查看" class="headerlink" title="Linux文件内容查看"></a>Linux文件内容查看</h1><h2 id="Linux文件内容查看-1"><a href="#Linux文件内容查看-1" class="headerlink" title="Linux文件内容查看"></a>Linux文件内容查看</h2><p>Linux 文件内容查看<br>Linux系统中使用以下命令来查看文件的内容：</p>
+<ul>
+<li>cat  由第一行开始显示文件内容</li>
+<li>tac  从最后一行开始显示，可以看出 tac 是 cat 的倒著写！</li>
+<li>nl   显示的时候，顺道输出行号！</li>
+<li>more 一页一页的显示文件内容</li>
+<li>less 与 more 类似，但是比 more 更好的是，他可以往前翻页！</li>
+<li>head 只看头几行</li>
+<li>tail 只看尾巴几行</li>
+</ul>
+<h3 id="cat-由第一行开始显示文件内容"><a href="#cat-由第一行开始显示文件内容" class="headerlink" title="cat (由第一行开始显示文件内容)"></a>cat (由第一行开始显示文件内容)</h3><p>语法：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat <span class="string">[-AbEnTv]</span></span><br></pre></td></tr></table></figure></p>
+<p>参数：</p>
+<ul>
+<li>-A ：相当於 -vET 的整合选项，可列出一些特殊字符而不是空白而已；</li>
+<li>-b ：列出行号，仅针对非空白行做行号显示，空白行不标行号</li>
+<li>-E ：将结尾的断行字节 $ 显示出来；</li>
+<li>-n ：列印出行号，连同空白行也会有行号，与 -b 的选项不同；</li>
+<li>-T ：将 [tab] 按键以 ^I 显示出来；</li>
+<li>-v ：列出一些看不出来的特殊字符<br>检看 /etc/issue 这个文件的内容：<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@www ~]<span class="comment"># cat /etc/issue</span></span><br><span class="line">CentOS release <span class="number">6.4</span> (Final)</span><br><span class="line">Kernel <span class="string">\r</span> <span class="literal">on</span> an <span class="string">\m</span></span><br></pre></td></tr></table></figure></li>
+</ul>
 
         
     </section>
@@ -239,6 +335,42 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/03/03/Log 配置文件/">log4j</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-03-03T06:22:30.000Z" itemprop="datePublished">2018-03-03</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java/">Java</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <figure class="highlight roboconf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">### 设置###</span></span><br><span class="line">log4j.rootLogger = debug,stdout,D,E</span><br><span class="line"></span><br><span class="line"><span class="comment">### 输出信息到控制台  ###</span></span><br><span class="line">log4j.appender.stdout = org.apache.log4j.ConsoleAppender</span><br><span class="line">log4j.appender.stdout.Target = System.out</span><br><span class="line">log4j.appender.stdout.layout = org.apache.log4j.PatternLayout</span><br><span class="line">log4j.appender.stdout.layout.ConversionPattern = [%-5p] %d&#123;<span class="attribute">yyyy-MM-dd HH</span>:mm:ss,SSS&#125; method:%l%n%m%n</span><br><span class="line"></span><br><span class="line">### 输出DEBUG 级别以上的日志文件设置 ###</span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.D</span> = org<span class="variable">.apache</span><span class="variable">.log</span>4j<span class="variable">.DailyRollingFileAppender</span></span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.D</span><span class="variable">.File</span> = logs/debug<span class="variable">.log</span></span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.D</span><span class="variable">.Append</span> = true</span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.D</span><span class="variable">.Threshold</span> = DEBUG </span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.D</span><span class="variable">.layout</span> = org<span class="variable">.apache</span><span class="variable">.log</span>4j<span class="variable">.PatternLayout</span></span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.D</span><span class="variable">.layout</span><span class="variable">.ConversionPattern</span> = %-d&#123;yyyy-MM-dd HH:mm:ss&#125;  [ %t:%r ] - [ %p ]  %m%n</span><br><span class="line"></span><br><span class="line">### 输出ERROR 级别以上的日志文件设置 ###</span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.E</span> = org<span class="variable">.apache</span><span class="variable">.log</span>4j<span class="variable">.DailyRollingFileAppender</span></span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.E</span><span class="variable">.File</span> = logs/error<span class="variable">.log</span></span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.E</span><span class="variable">.Append</span> = true</span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.E</span><span class="variable">.Threshold</span> = ERROR </span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.E</span><span class="variable">.layout</span> = org<span class="variable">.apache</span><span class="variable">.log</span>4j<span class="variable">.PatternLayout</span></span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.E</span><span class="variable">.layout</span><span class="variable">.ConversionPattern</span> = %-d&#123;yyyy-MM-dd HH:mm:ss&#125;  [ %t:%r ] - [ %p ]  %m%n</span><br></pre></td></tr></table></figure>
+<p>测试 ：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">package com.test.util;</span><br><span class="line"></span><br><span class="line">import org.apache.log4j.*;</span><br><span class="line"></span><br><span class="line">public class LogUtil &#123;</span><br><span class="line">	private static Logger logger = Logger.getLogger(LogUtil.class);</span><br><span class="line">    </span><br><span class="line">    public static void main(String[] args) throws Exception &#123;</span><br><span class="line">        // 记录debug级别的信息  </span><br><span class="line">        logger.debug(&quot;This is debug message.&quot;);  </span><br><span class="line">        // 记录info级别的信息  </span><br><span class="line">        logger.info(&quot;This is info message.&quot;);  </span><br><span class="line">        // 记录error级别的信息  </span><br><span class="line">        logger.error(&quot;This is error message.&quot;); </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/03/01/String StringBuffer 和 StringBuilder/">String StringBuffer 和 StringBuilder</a>
         </h1>
         
@@ -278,6 +410,50 @@
 <ul>
 <li>装箱：将基本类型用它们对应的引用类型包装起来；</li>
 <li>拆箱：将包装类型转换为基本数据类型；</li>
+</ul>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/02/24/4.0 Class文件/">JVM 4.0</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-24T02:10:00.000Z" itemprop="datePublished">2018-02-24</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Class文件"><a href="#Class文件" class="headerlink" title="Class文件"></a>Class文件</h1><p>Class文件是一组以8位字节为基础单位的二进制流，各个数据项目严格按照顺序紧凑地排列在Class文件中，<br>中间没有添加任何分隔符号。Class文件采用一种类似于C语言结构体的伪结构来存储数据，这种伪结构中只包含两种数据类型，<br>无符号数和表。无符号数属于基本的数据类型，以u1,u2,u4,u8分别代表1个字节，2个字节，4个字节和8个字节的无符号数，<br>可以用来描述数字、索引引用、数量值或者按照utf-8编码构成字符串值。表是由多个无符号数或者其他表作为数据项构成的<br>复合数据类型，所有表都习惯性地以“_info”结尾，用来描述有层次关系的复合结构数据。</p>
+<p>Class文件的内容包括：</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">ClassFile</span> &#123;</span><br><span class="line"></span><br><span class="line">   <span class="selector-tag">u4</span> <span class="selector-tag">magic</span>;                                     <span class="comment">//魔数：0xCAFEBABE，用来判断是否是Java class文件</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">minor_version</span>;                             <span class="comment">//次版本号</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">major_version</span>;                             <span class="comment">//主版本号</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">constant_pool_count</span>;                       <span class="comment">//常量池大小</span></span><br><span class="line">   <span class="selector-tag">cp_info</span> <span class="selector-tag">constant_pool</span><span class="selector-attr">[constant_pool_count-1]</span>; <span class="comment">//常量池</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">access_flags</span>;                              <span class="comment">//类和接口层次的访问标志（通过|运算得到）</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">this_class</span>;                                <span class="comment">//类索引（指向常量池中的类常量）</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">super_class</span>;                               <span class="comment">//父类索引（指向常量池中的类常量）</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">interfaces_count</span>;                          <span class="comment">//接口索引计数器</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">interfaces</span><span class="selector-attr">[interfaces_count]</span>;              <span class="comment">//接口索引集合</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">fields_count</span>;                              <span class="comment">//字段数量计数器</span></span><br><span class="line">   <span class="selector-tag">field_info</span> <span class="selector-tag">fields</span><span class="selector-attr">[fields_count]</span>;              <span class="comment">//字段表集合</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">methods_count</span>;                             <span class="comment">//方法数量计数器</span></span><br><span class="line">   <span class="selector-tag">method_info</span> <span class="selector-tag">methods</span><span class="selector-attr">[methods_count]</span>;           <span class="comment">//方法表集合</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">attributes_count</span>;                          <span class="comment">//属性个数</span></span><br><span class="line">   <span class="selector-tag">attribute_info</span> <span class="selector-tag">attributes</span><span class="selector-attr">[attributes_count]</span>;  <span class="comment">//属性表</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>访问标志：类还是接口；是否定义为public类型，abstract类型；若为类，是否声明为final。</li>
+<li>字段：用来描述接口或类中的变量，但不包括在方法内部的变量。</li>
+<li>字面量：文本字符串，声明为final的常量值等。</li>
+<li>符号引用：类和接口的全限定名；字段的名称和描述符；方法的名称和描述符。</li>
+<li>类索引，父类索引，接口索引：用来确定类的继承关系。</li>
 </ul>
 
         
@@ -357,50 +533,6 @@
 <h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><p>准备阶段正式为类变量在方法区中分配内存并且赋初始值，初始值一般为该类变量类型的零值。</p>
 <h3 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h3><p>解析阶段虚拟机将常量池内的符号引用替换为直接引用。<br>符号引用：以一组符号来描述所引用的目标，符号可以是任何形式的字面量，只要使用时能无歧义的定位到目标即可。<br>直接引用：是指能直接指向目标的指针，相对偏移量或是一个能间接定位到目标的句柄。</p>
 <h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>初始化是类加载过程的最后一个阶段，在前面的类加载过程中，除了在加载阶段用户可以自定义类加载器参与之外，其余动作完全由虚拟机主导和控制，到了初始化阶段，才真正开始执行类中定义的Java代码（字节码）。准备阶段为类变量分配内存并且赋初始值，赋值操作在初始化阶段执行。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/02/24/4.0 Class文件/">JVM 4.0</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-02-24T02:10:00.000Z" itemprop="datePublished">2018-02-24</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Class文件"><a href="#Class文件" class="headerlink" title="Class文件"></a>Class文件</h1><p>Class文件是一组以8位字节为基础单位的二进制流，各个数据项目严格按照顺序紧凑地排列在Class文件中，<br>中间没有添加任何分隔符号。Class文件采用一种类似于C语言结构体的伪结构来存储数据，这种伪结构中只包含两种数据类型，<br>无符号数和表。无符号数属于基本的数据类型，以u1,u2,u4,u8分别代表1个字节，2个字节，4个字节和8个字节的无符号数，<br>可以用来描述数字、索引引用、数量值或者按照utf-8编码构成字符串值。表是由多个无符号数或者其他表作为数据项构成的<br>复合数据类型，所有表都习惯性地以“_info”结尾，用来描述有层次关系的复合结构数据。</p>
-<p>Class文件的内容包括：</p>
-<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">ClassFile</span> &#123;</span><br><span class="line"></span><br><span class="line">   <span class="selector-tag">u4</span> <span class="selector-tag">magic</span>;                                     <span class="comment">//魔数：0xCAFEBABE，用来判断是否是Java class文件</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">minor_version</span>;                             <span class="comment">//次版本号</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">major_version</span>;                             <span class="comment">//主版本号</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">constant_pool_count</span>;                       <span class="comment">//常量池大小</span></span><br><span class="line">   <span class="selector-tag">cp_info</span> <span class="selector-tag">constant_pool</span><span class="selector-attr">[constant_pool_count-1]</span>; <span class="comment">//常量池</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">access_flags</span>;                              <span class="comment">//类和接口层次的访问标志（通过|运算得到）</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">this_class</span>;                                <span class="comment">//类索引（指向常量池中的类常量）</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">super_class</span>;                               <span class="comment">//父类索引（指向常量池中的类常量）</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">interfaces_count</span>;                          <span class="comment">//接口索引计数器</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">interfaces</span><span class="selector-attr">[interfaces_count]</span>;              <span class="comment">//接口索引集合</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">fields_count</span>;                              <span class="comment">//字段数量计数器</span></span><br><span class="line">   <span class="selector-tag">field_info</span> <span class="selector-tag">fields</span><span class="selector-attr">[fields_count]</span>;              <span class="comment">//字段表集合</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">methods_count</span>;                             <span class="comment">//方法数量计数器</span></span><br><span class="line">   <span class="selector-tag">method_info</span> <span class="selector-tag">methods</span><span class="selector-attr">[methods_count]</span>;           <span class="comment">//方法表集合</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">attributes_count</span>;                          <span class="comment">//属性个数</span></span><br><span class="line">   <span class="selector-tag">attribute_info</span> <span class="selector-tag">attributes</span><span class="selector-attr">[attributes_count]</span>;  <span class="comment">//属性表</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>访问标志：类还是接口；是否定义为public类型，abstract类型；若为类，是否声明为final。</li>
-<li>字段：用来描述接口或类中的变量，但不包括在方法内部的变量。</li>
-<li>字面量：文本字符串，声明为final的常量值等。</li>
-<li>符号引用：类和接口的全限定名；字段的名称和描述符；方法的名称和描述符。</li>
-<li>类索引，父类索引，接口索引：用来确定类的继承关系。</li>
-</ul>
 
         
     </section>
@@ -504,103 +636,10 @@
 </article>
 
 
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/02/12/Git撤销操作/">Git 撤销操作</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-02-12T02:10:00.000Z" itemprop="datePublished">2018-02-12</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Git/">Git</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Git-撤销操作"><a href="#Git-撤销操作" class="headerlink" title="Git 撤销操作"></a>Git 撤销操作</h1><p>在任何一个阶段，你都有可能想要撤消某些操作。 注意，有些撤消操作是不可逆的。 这是在使用 Git 的过程中，会因为操作失误而导致之前的工作丢失的少有的几个地方之一。</p>
-<h2 id="撤销操作"><a href="#撤销操作" class="headerlink" title="撤销操作"></a>撤销操作</h2><p>有时候我们提交完了才发现漏掉了几个文件没有添加，或者提交信息写错了。 此时，可以运行带有 –amend 选项的提交命令尝试重新提交：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="keyword">commit</span> <span class="comment">--amend</span></span><br></pre></td></tr></table></figure></p>
-<p>这个命令会将暂存区中的文件提交。如果自上次提交以来你还未做任何修改（例如，在上次提交后马上执行了此命令），那么快照会保持不变，而你所修改的只是提交信息。</p>
-<p>例如，你提交后发现忘记了暂存某些需要的修改，可以像下面这样操作：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="keyword">commit</span> -m <span class="string">'initial commit'</span></span><br><span class="line">$ git <span class="keyword">add</span> forgotten_file</span><br><span class="line">$ git <span class="keyword">commit</span> <span class="comment">--amend</span></span><br></pre></td></tr></table></figure></p>
-<p>最终你只会有一个提交 - 第二次提交将代替第一次提交的结果。</p>
-<h2 id="取消暂存的文件"><a href="#取消暂存的文件" class="headerlink" title="取消暂存的文件"></a>取消暂存的文件</h2><p>接下来的两个小节演示如何操作暂存区域与工作目录中已修改的文件。 这些命令在修改文件状态的同时，也会提示如何撤消操作。 例如，你已经修改了两个文件并且想要将它们作为两次独立的修改提交，但是却意外地输入了 git add * 暂存了它们两个。 如何只取消暂存两个中的一个呢？ git status 命令提示了你：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>git add *</span><br><span class="line"><span class="variable">$ </span>git status</span><br><span class="line">On branch master</span><br><span class="line">Changes to be <span class="symbol">committed:</span></span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git reset HEAD &lt;file&gt;..."</span> to unstage)</span><br><span class="line"></span><br><span class="line">    <span class="symbol">renamed:</span>    README.md -&gt; README</span><br><span class="line">    <span class="symbol">modified:</span>   CONTRIBUTING.md</span><br></pre></td></tr></table></figure></p>
-<p>在 “Changes to be committed” 文字正下方，提示使用 git reset HEAD <file>… 来取消暂存。 所以，我们可以这样来取消暂存 CONTRIBUTING.md 文件：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="keyword">reset</span> <span class="keyword">HEAD</span> CONTRIBUTING.md</span><br><span class="line">Unstaged changes <span class="keyword">after</span> <span class="keyword">reset</span>:</span><br><span class="line">M	CONTRIBUTING.md</span><br><span class="line">$ git <span class="keyword">status</span></span><br><span class="line"><span class="keyword">On</span> branch <span class="keyword">master</span></span><br><span class="line">Changes <span class="keyword">to</span> be committed:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git reset HEAD &lt;file&gt;..."</span> <span class="keyword">to</span> unstage)</span><br><span class="line"></span><br><span class="line">    renamed:    README.md -&gt; README</span><br><span class="line"></span><br><span class="line">Changes <span class="keyword">not</span> staged <span class="keyword">for</span> <span class="keyword">commit</span>:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git add &lt;file&gt;..."</span> <span class="keyword">to</span> <span class="keyword">update</span> what will be committed)</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git checkout -- &lt;file&gt;..."</span> <span class="keyword">to</span> discard changes <span class="keyword">in</span> working <span class="keyword">directory</span>)</span><br><span class="line"></span><br><span class="line">    modified:   CONTRIBUTING.md</span><br></pre></td></tr></table></figure></file></p>
-<p>这个命令有点儿奇怪，但是起作用了。 CONTRIBUTING.md 文件已经是修改未暂存的状态了。</p>
-<blockquote>
-<p>Note：虽然在调用时加上 –hard 选项可以令 git reset 成为一个危险的命令（译注：可能导致工作目录中所有当前进度丢失！）不加选项地调用 git reset 并不危险 — 它只会修改暂存区域。</p>
-</blockquote>
-<h2 id="撤消对文件的修改"><a href="#撤消对文件的修改" class="headerlink" title="撤消对文件的修改"></a>撤消对文件的修改</h2><p>如果你并不想保留对 CONTRIBUTING.md 文件的修改怎么办？ 你该如何方便地撤消修改 - 将它还原成上次提交时的样子（或者刚克隆完的样子，或者刚把它放入工作目录时的样子）？ 幸运的是，git status 也告诉了你应该如何做。 在最后一个例子中，未暂存区域是这样：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Changes not staged for <span class="keyword">commit</span>:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git add &lt;file&gt;..."</span> <span class="keyword">to</span> <span class="keyword">update</span> what will be committed)</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git checkout -- &lt;file&gt;..."</span> <span class="keyword">to</span> discard changes <span class="keyword">in</span> working <span class="keyword">directory</span>)</span><br><span class="line"></span><br><span class="line">    modified:   CONTRIBUTING.md</span><br></pre></td></tr></table></figure></p>
-<p>它非常清楚地告诉了你如何撤消之前所做的修改。 让我们来按照提示执行：<br><figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout <span class="comment">-- CONTRIBUTING.md</span></span><br><span class="line">$ git status</span><br><span class="line"><span class="keyword">On</span> branch master</span><br><span class="line">Changes <span class="keyword">to</span> be committed:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git reset HEAD &lt;file&gt;..."</span> <span class="keyword">to</span> unstage)</span><br><span class="line"></span><br><span class="line">    renamed:    README.md -&gt; README</span><br></pre></td></tr></table></figure></p>
-<p>可以看到那些修改已经被撤消了。</p>
-<blockquote>
-<p>Important: 你需要知道 git checkout – [file] 是一个危险的命令，这很重要。 你对那个文件做的任何修改都会消失 - 你只是拷贝了另一个文件来覆盖它。 除非你确实清楚不想要那个文件了，否则不要使用这个命令。</p>
-</blockquote>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/02/09/Git移除文件/">Git移除文件</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-02-09T02:10:00.000Z" itemprop="datePublished">2018-02-09</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Git/">Git</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="git-rm"><a href="#git-rm" class="headerlink" title="git rm"></a>git rm</h1><p>要从 Git 中移除某个文件，就必须要从已跟踪文件清单中移除（确切地说，是从暂存区域移除），然后提交。 可以用 git rm 命令完成此项工作，并连带从工作目录中删除指定的文件，这样以后就不会出现在未跟踪文件清单中了。</p>
-<p>如果只是简单地从工作目录中手工删除文件，运行 git status 时就会在 “Changes not staged for commit” 部分（也就是 未暂存清单）看到：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ rm PROJECTS.md</span><br><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line">Your branch is up-to-date <span class="keyword">with</span> <span class="string">'origin/master'</span>.</span><br><span class="line">Changes <span class="keyword">not</span> staged <span class="keyword">for</span> <span class="keyword">commit</span>:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git add/rm &lt;file&gt;..."</span> <span class="keyword">to</span> <span class="keyword">update</span> what will be committed)</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git checkout -- &lt;file&gt;..."</span> <span class="keyword">to</span> discard changes <span class="keyword">in</span> working <span class="keyword">directory</span>)</span><br><span class="line"></span><br><span class="line">        deleted:    PROJECTS.md</span><br><span class="line"></span><br><span class="line"><span class="keyword">no</span> changes added <span class="keyword">to</span> <span class="keyword">commit</span> (<span class="keyword">use</span> <span class="string">"git add"</span> <span class="keyword">and</span>/<span class="keyword">or</span> <span class="string">"git commit -a"</span>)</span><br></pre></td></tr></table></figure></p>
-<p>然后再运行 git rm 记录此次移除文件的操作：<br><figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ git rm PROJECTS.md</span><br><span class="line">rm <span class="symbol">'PROJECTS</span>.md'</span><br><span class="line">$ git status</span><br><span class="line"><span class="keyword">On</span> branch master</span><br><span class="line">Changes <span class="keyword">to</span> be committed:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git reset HEAD &lt;file&gt;..."</span> <span class="keyword">to</span> unstage)</span><br><span class="line"></span><br><span class="line">    deleted:    PROJECTS.md</span><br></pre></td></tr></table></figure></p>
-<p>下一次提交时，该文件就不再纳入版本管理了。如果删除之前修改过并且已经放到暂存区域的话，则必须要用强制删除选项 -f（译注：即force的首字母）。这是一种安全特性，用于防止误删还没有添加到快照的数据，这样的数据不能被 Git 恢复。</p>
-<p>另外一种情况是，我们想把文件从Git仓库中删除（亦即从暂存区域移除），但仍然希望保留在当前工作目录中。 换句话说，你想让文件保留在磁盘，但是并不想让 Git 继续跟踪。 当你忘记添加 .gitignore 文件，不小心把一个很大的日志文件或一堆.a这样的编译生成文件添加到暂存区时，这一做法尤其有用。 为达到这一目的，使用 –cached 选项：<br><figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git rm <span class="comment">--cached README</span></span><br></pre></td></tr></table></figure></p>
-<p>git rm 命令后面可以列出文件或者目录的名字，也可以使用 glob 模式。 比方说：<br><figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">$</span> git rm <span class="built-in">log</span>/\*.<span class="built-in">log</span></span><br></pre></td></tr></table></figure></p>
-<p>注意到星号 * 之前的反斜杠 \， 因为 Git 有它自己的文件模式扩展匹配方式，所以我们不用 shell 来帮忙展开。 此命令删除 log/ 目录下扩展名为 .log 的所有文件。 类似的比如：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>git rm \*~</span><br></pre></td></tr></table></figure></p>
-<p>该命令为删除以 ~ 结尾的所有文件。</p>
-
-        
-    </section>
-</article>
-
-
 
 
 <nav class="page-nav">
-    <a class="extend prev" rel="prev" href="/page/9/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/11/">下一页 &raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/9/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/11/">下一页 &raquo;</a>
 </nav>
 
 
