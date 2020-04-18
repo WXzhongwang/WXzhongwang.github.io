@@ -219,6 +219,50 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/02/24/4.0 Class文件/">JVM 4.0</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-24T02:10:00.000Z" itemprop="datePublished">2018-02-24</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Class文件"><a href="#Class文件" class="headerlink" title="Class文件"></a>Class文件</h1><p>Class文件是一组以8位字节为基础单位的二进制流，各个数据项目严格按照顺序紧凑地排列在Class文件中，<br>中间没有添加任何分隔符号。Class文件采用一种类似于C语言结构体的伪结构来存储数据，这种伪结构中只包含两种数据类型，<br>无符号数和表。无符号数属于基本的数据类型，以u1,u2,u4,u8分别代表1个字节，2个字节，4个字节和8个字节的无符号数，<br>可以用来描述数字、索引引用、数量值或者按照utf-8编码构成字符串值。表是由多个无符号数或者其他表作为数据项构成的<br>复合数据类型，所有表都习惯性地以“_info”结尾，用来描述有层次关系的复合结构数据。</p>
+<p>Class文件的内容包括：</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">ClassFile</span> &#123;</span><br><span class="line"></span><br><span class="line">   <span class="selector-tag">u4</span> <span class="selector-tag">magic</span>;                                     <span class="comment">//魔数：0xCAFEBABE，用来判断是否是Java class文件</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">minor_version</span>;                             <span class="comment">//次版本号</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">major_version</span>;                             <span class="comment">//主版本号</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">constant_pool_count</span>;                       <span class="comment">//常量池大小</span></span><br><span class="line">   <span class="selector-tag">cp_info</span> <span class="selector-tag">constant_pool</span><span class="selector-attr">[constant_pool_count-1]</span>; <span class="comment">//常量池</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">access_flags</span>;                              <span class="comment">//类和接口层次的访问标志（通过|运算得到）</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">this_class</span>;                                <span class="comment">//类索引（指向常量池中的类常量）</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">super_class</span>;                               <span class="comment">//父类索引（指向常量池中的类常量）</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">interfaces_count</span>;                          <span class="comment">//接口索引计数器</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">interfaces</span><span class="selector-attr">[interfaces_count]</span>;              <span class="comment">//接口索引集合</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">fields_count</span>;                              <span class="comment">//字段数量计数器</span></span><br><span class="line">   <span class="selector-tag">field_info</span> <span class="selector-tag">fields</span><span class="selector-attr">[fields_count]</span>;              <span class="comment">//字段表集合</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">methods_count</span>;                             <span class="comment">//方法数量计数器</span></span><br><span class="line">   <span class="selector-tag">method_info</span> <span class="selector-tag">methods</span><span class="selector-attr">[methods_count]</span>;           <span class="comment">//方法表集合</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">attributes_count</span>;                          <span class="comment">//属性个数</span></span><br><span class="line">   <span class="selector-tag">attribute_info</span> <span class="selector-tag">attributes</span><span class="selector-attr">[attributes_count]</span>;  <span class="comment">//属性表</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>访问标志：类还是接口；是否定义为public类型，abstract类型；若为类，是否声明为final。</li>
+<li>字段：用来描述接口或类中的变量，但不包括在方法内部的变量。</li>
+<li>字面量：文本字符串，声明为final的常量值等。</li>
+<li>符号引用：类和接口的全限定名；字段的名称和描述符；方法的名称和描述符。</li>
+<li>类索引，父类索引，接口索引：用来确定类的继承关系。</li>
+</ul>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/02/24/3.0 Java虚拟机的内部体系结构/">JVM 3.0</a>
         </h1>
         
@@ -286,50 +330,6 @@
 <h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><p>准备阶段正式为类变量在方法区中分配内存并且赋初始值，初始值一般为该类变量类型的零值。</p>
 <h3 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h3><p>解析阶段虚拟机将常量池内的符号引用替换为直接引用。<br>符号引用：以一组符号来描述所引用的目标，符号可以是任何形式的字面量，只要使用时能无歧义的定位到目标即可。<br>直接引用：是指能直接指向目标的指针，相对偏移量或是一个能间接定位到目标的句柄。</p>
 <h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>初始化是类加载过程的最后一个阶段，在前面的类加载过程中，除了在加载阶段用户可以自定义类加载器参与之外，其余动作完全由虚拟机主导和控制，到了初始化阶段，才真正开始执行类中定义的Java代码（字节码）。准备阶段为类变量分配内存并且赋初始值，赋值操作在初始化阶段执行。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/02/24/4.0 Class文件/">JVM 4.0</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/6/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-02-24T02:10:00.000Z" itemprop="datePublished">2018-02-24</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Class文件"><a href="#Class文件" class="headerlink" title="Class文件"></a>Class文件</h1><p>Class文件是一组以8位字节为基础单位的二进制流，各个数据项目严格按照顺序紧凑地排列在Class文件中，<br>中间没有添加任何分隔符号。Class文件采用一种类似于C语言结构体的伪结构来存储数据，这种伪结构中只包含两种数据类型，<br>无符号数和表。无符号数属于基本的数据类型，以u1,u2,u4,u8分别代表1个字节，2个字节，4个字节和8个字节的无符号数，<br>可以用来描述数字、索引引用、数量值或者按照utf-8编码构成字符串值。表是由多个无符号数或者其他表作为数据项构成的<br>复合数据类型，所有表都习惯性地以“_info”结尾，用来描述有层次关系的复合结构数据。</p>
-<p>Class文件的内容包括：</p>
-<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">ClassFile</span> &#123;</span><br><span class="line"></span><br><span class="line">   <span class="selector-tag">u4</span> <span class="selector-tag">magic</span>;                                     <span class="comment">//魔数：0xCAFEBABE，用来判断是否是Java class文件</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">minor_version</span>;                             <span class="comment">//次版本号</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">major_version</span>;                             <span class="comment">//主版本号</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">constant_pool_count</span>;                       <span class="comment">//常量池大小</span></span><br><span class="line">   <span class="selector-tag">cp_info</span> <span class="selector-tag">constant_pool</span><span class="selector-attr">[constant_pool_count-1]</span>; <span class="comment">//常量池</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">access_flags</span>;                              <span class="comment">//类和接口层次的访问标志（通过|运算得到）</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">this_class</span>;                                <span class="comment">//类索引（指向常量池中的类常量）</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">super_class</span>;                               <span class="comment">//父类索引（指向常量池中的类常量）</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">interfaces_count</span>;                          <span class="comment">//接口索引计数器</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">interfaces</span><span class="selector-attr">[interfaces_count]</span>;              <span class="comment">//接口索引集合</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">fields_count</span>;                              <span class="comment">//字段数量计数器</span></span><br><span class="line">   <span class="selector-tag">field_info</span> <span class="selector-tag">fields</span><span class="selector-attr">[fields_count]</span>;              <span class="comment">//字段表集合</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">methods_count</span>;                             <span class="comment">//方法数量计数器</span></span><br><span class="line">   <span class="selector-tag">method_info</span> <span class="selector-tag">methods</span><span class="selector-attr">[methods_count]</span>;           <span class="comment">//方法表集合</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">attributes_count</span>;                          <span class="comment">//属性个数</span></span><br><span class="line">   <span class="selector-tag">attribute_info</span> <span class="selector-tag">attributes</span><span class="selector-attr">[attributes_count]</span>;  <span class="comment">//属性表</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>访问标志：类还是接口；是否定义为public类型，abstract类型；若为类，是否声明为final。</li>
-<li>字段：用来描述接口或类中的变量，但不包括在方法内部的变量。</li>
-<li>字面量：文本字符串，声明为final的常量值等。</li>
-<li>符号引用：类和接口的全限定名；字段的名称和描述符；方法的名称和描述符。</li>
-<li>类索引，父类索引，接口索引：用来确定类的继承关系。</li>
-</ul>
 
         
     </section>
