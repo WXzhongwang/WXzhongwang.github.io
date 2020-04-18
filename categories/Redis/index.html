@@ -185,58 +185,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2017/09/12/Redis相关问题一/">Redis相关问题一</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Redis/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-09-12T10:33:59.000Z" itemprop="datePublished">2017-09-12</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Redis-相关问题一"><a href="#Redis-相关问题一" class="headerlink" title="Redis 相关问题一"></a>Redis 相关问题一</h1><ol>
-<li>Redis为什么那么快?</li>
-</ol>
-<blockquote>
-<p>完全基于内存，绝大部分请求是纯粹的内存操作，非常快速。数据存在内存中，类似于HashMap，HashMap的优势就是查找和操作的时间复杂度都是O(1)；</p>
-</blockquote>
-<blockquote>
-<p>数据结构简单，对数据操作也简单，Redis中的数据结构是专门进行设计的；</p>
-</blockquote>
-<blockquote>
-<p>采用单线程，避免了不必要的上下文切换和竞争条件，也不存在多进程或者多线程导致的切换而消耗 CPU，不用去考虑各种锁的问题，不存在加锁释放锁操作，没有因为可能出现死锁而导致的性能消耗；</p>
-</blockquote>
-<blockquote>
-<p>使用多路I/O复用模型，非阻塞IO；</p>
-</blockquote>
-<blockquote>
-<p>使用底层模型不同，它们之间底层实现方式以及与客户端之间通信的应用协议不一样，Redis直接自己构建了VM 机制，因为一般的系统调用系统函数的话，会浪费一定的时间去移动和请求；</p>
-</blockquote>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2017/09/12/Redis相关问题三/">Redis相关问题三</a>
         </h1>
         
@@ -274,6 +222,109 @@
 <p>3) 如果用户不停地查询一条不存在的数据，缓存没有，数据库也没有，那么会出现什么?</p>
 <p>如果数据不存在，缓存中没有，数据库也没有，当然如果不设置判断，会一直调用数据库，使数据库效率降低，访问量大时甚至会宕机。</p>
 <p>解决方案：从数据库查询，如果数据库没有，则返回值为Null，判断数据库返回的值，如果为Null，则自定义把标识的字段存到Redis中，用key,value的方法，jedis.setex(key,”empty”)，设置失效时间跟具体情况而定，然后调用String json=jedis.get(key),判断是否获取的值”empty”.equal(json),如果相等，则抛出自定义异常，给用户提示，或者直接return null。这样用户再次查询的时候由于先从reids缓存中查询，redis会有对应的Key获取之前设置的value值，这样就不会再次调用数据库，影响效率等问题。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2017/09/12/Redis相关问题四/">相关问题四</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Redis/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-09-12T10:33:59.000Z" itemprop="datePublished">2017-09-12</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Redis-相关问题四"><a href="#Redis-相关问题四" class="headerlink" title="Redis 相关问题四"></a>Redis 相关问题四</h1><ol>
+<li><p>Redis跳跃表问题。</p>
+</li>
+<li><p>Redis单进程单线程的Redis如何能够高并发？</p>
+</li>
+<li><p>如何使用Redis实现分布式锁？</p>
+</li>
+<li><p>Redis分布式锁操作的原子性，Redis内部如何实现？</p>
+</li>
+</ol>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2017/09/12/Redis和Memcached比较/">Redis和Memcached比较</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Redis/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-09-12T10:33:59.000Z" itemprop="datePublished">2017-09-12</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>Redis和Memcache都是将数据存放在内存中，都是内存数据库。本文介绍两者的区别。</p>
+<h1 id="Redis和Memcached比较"><a href="#Redis和Memcached比较" class="headerlink" title="Redis和Memcached比较"></a>Redis和Memcached比较</h1><ul>
+<li><p>Memcached是多线程，而Redis使用单线程.</p>
+</li>
+<li><p>Memcached使用预分配的内存池的方式，Redis使用现场申请内存的方式来存储数据，并且可以配置虚拟内存。</p>
+</li>
+<li><p>Redis可以实现持久化，主从复制，实现故障恢复。</p>
+</li>
+<li><p>Memcached只是简单的key与value,但是Redis支持数据类型比较多。</p>
+</li>
+</ul>
+<p>Redis的存储分为内存存储、磁盘存储 .从这一点，也说明了Redis与Memcached是有区别的。Redis 与Memcached一样，为了保证效率，数据都是缓存在内存中。区别的是redis会周期性的把更新的数据写入磁盘或者把修改 操作写入追加的记录文件，并且在此基础上实现了master-slave(主从)同步。</p>
+<p>Redis有两种存储方式(默认:snapshot)</p>
+<ol>
+<li>snapshot<blockquote>
+<p>实现方法是定时将内存的快照(snapshot)持久化到硬盘，<br>这种方法缺点是持久化之后如果出现crash则会丢失一段数据。<br>因此在完美主义者的推动下作者增加了aof方式。</p>
+</blockquote>
+</li>
+</ol>
+<ol start="2">
+<li>aof<blockquote>
+<p>即append only mode，在写入内存数据的同时将操作命令保存到日志文件，在一个并发更改上万的系统中，命令日志是一个非常庞大的数据，管理维护成本非常高，恢复重建时间会非常长，这样导致失去aof高可用性本意。另外更重要的是Redis是一个内存数据结构模型，所有的优势都是建立在对内存复杂数据结构高效的原子操作</p>
+</blockquote>
+</li>
+</ol>
 
         
     </section>
@@ -380,7 +431,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2017/09/12/Redis相关问题四/">相关问题四</a>
+            <a href="/2017/09/12/Redis相关问题一/">Redis相关问题一</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -403,75 +454,24 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="Redis-相关问题四"><a href="#Redis-相关问题四" class="headerlink" title="Redis 相关问题四"></a>Redis 相关问题四</h1><ol>
-<li><p>Redis跳跃表问题。</p>
-</li>
-<li><p>Redis单进程单线程的Redis如何能够高并发？</p>
-</li>
-<li><p>如何使用Redis实现分布式锁？</p>
-</li>
-<li><p>Redis分布式锁操作的原子性，Redis内部如何实现？</p>
-</li>
+        <h1 id="Redis-相关问题一"><a href="#Redis-相关问题一" class="headerlink" title="Redis 相关问题一"></a>Redis 相关问题一</h1><ol>
+<li>Redis为什么那么快?</li>
 </ol>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/09/12/Redis和Memcached比较/">Redis和Memcached比较</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Redis/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-09-12T10:33:59.000Z" itemprop="datePublished">2017-09-12</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>Redis和Memcache都是将数据存放在内存中，都是内存数据库。本文介绍两者的区别。</p>
-<h1 id="Redis和Memcached比较"><a href="#Redis和Memcached比较" class="headerlink" title="Redis和Memcached比较"></a>Redis和Memcached比较</h1><ul>
-<li><p>Memcached是多线程，而Redis使用单线程.</p>
-</li>
-<li><p>Memcached使用预分配的内存池的方式，Redis使用现场申请内存的方式来存储数据，并且可以配置虚拟内存。</p>
-</li>
-<li><p>Redis可以实现持久化，主从复制，实现故障恢复。</p>
-</li>
-<li><p>Memcached只是简单的key与value,但是Redis支持数据类型比较多。</p>
-</li>
-</ul>
-<p>Redis的存储分为内存存储、磁盘存储 .从这一点，也说明了Redis与Memcached是有区别的。Redis 与Memcached一样，为了保证效率，数据都是缓存在内存中。区别的是redis会周期性的把更新的数据写入磁盘或者把修改 操作写入追加的记录文件，并且在此基础上实现了master-slave(主从)同步。</p>
-<p>Redis有两种存储方式(默认:snapshot)</p>
-<ol>
-<li>snapshot<blockquote>
-<p>实现方法是定时将内存的快照(snapshot)持久化到硬盘，<br>这种方法缺点是持久化之后如果出现crash则会丢失一段数据。<br>因此在完美主义者的推动下作者增加了aof方式。</p>
+<blockquote>
+<p>完全基于内存，绝大部分请求是纯粹的内存操作，非常快速。数据存在内存中，类似于HashMap，HashMap的优势就是查找和操作的时间复杂度都是O(1)；</p>
 </blockquote>
-</li>
-</ol>
-<ol start="2">
-<li>aof<blockquote>
-<p>即append only mode，在写入内存数据的同时将操作命令保存到日志文件，在一个并发更改上万的系统中，命令日志是一个非常庞大的数据，管理维护成本非常高，恢复重建时间会非常长，这样导致失去aof高可用性本意。另外更重要的是Redis是一个内存数据结构模型，所有的优势都是建立在对内存复杂数据结构高效的原子操作</p>
+<blockquote>
+<p>数据结构简单，对数据操作也简单，Redis中的数据结构是专门进行设计的；</p>
 </blockquote>
-</li>
-</ol>
+<blockquote>
+<p>采用单线程，避免了不必要的上下文切换和竞争条件，也不存在多进程或者多线程导致的切换而消耗 CPU，不用去考虑各种锁的问题，不存在加锁释放锁操作，没有因为可能出现死锁而导致的性能消耗；</p>
+</blockquote>
+<blockquote>
+<p>使用多路I/O复用模型，非阻塞IO；</p>
+</blockquote>
+<blockquote>
+<p>使用底层模型不同，它们之间底层实现方式以及与客户端之间通信的应用协议不一样，Redis直接自己构建了VM 机制，因为一般的系统调用系统函数的话，会浪费一定的时间去移动和请求；</p>
+</blockquote>
 
         
     </section>

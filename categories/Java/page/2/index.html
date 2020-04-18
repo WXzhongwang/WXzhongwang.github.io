@@ -173,6 +173,44 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/09/15/JVM课程五/">JVM课程五</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/2/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-09-15T02:55:00.000Z" itemprop="datePublished">2018-09-15</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="垃圾回收算法和收集器"><a href="#垃圾回收算法和收集器" class="headerlink" title="垃圾回收算法和收集器"></a>垃圾回收算法和收集器</h1><h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><h3 id="引用计数（reference-counting）"><a href="#引用计数（reference-counting）" class="headerlink" title="引用计数（reference counting）"></a>引用计数（reference counting）</h3><p>古老的算法。此对象有一个引用，增加一个计数，删除一个引用减少一个引用。垃圾回收时，只用收集为0的对象。<br>致命问题是无法解决循环引用的问题。</p>
+<h3 id="复制（copying）"><a href="#复制（copying）" class="headerlink" title="复制（copying）"></a>复制（copying）</h3><p>eg：survivor from to<br>此算法将内存空间分为两份。每次使用其中一个区域。（占用空间）<br>垃圾回收时，遍历当前使用的区域，把正在使用中的对象复制到另一个区域中。</p>
+<h3 id="标记清楚（Mark-Sweep）"><a href="#标记清楚（Mark-Sweep）" class="headerlink" title="标记清楚（Mark-Sweep）"></a>标记清楚（Mark-Sweep）</h3><p>执行分为两阶段。<br>第一阶段：从对象根节点开始标记所有被引用的对象。<br>第二阶段：遍历整个堆，把未标记的对象清除，此算法需要暂停整个应用(Stop the world)。<br>同时会产生内存碎片。<br>缺点：<br>1）未使用的内存空间不连续，浪费。<br>2）暂停整个应用。</p>
+<h3 id="标记整理（Mark-Compact）"><a href="#标记整理（Mark-Compact）" class="headerlink" title="标记整理（Mark-Compact）"></a>标记整理（Mark-Compact）</h3><p>执行分为两阶段。<br>第一阶段：从对象根节点开始标记所有被引用的对象。<br>第二阶段：遍历整个堆，把未标记的对象清除，同时把存活的对象压缩到一块，顺序排放，避免碎片问题。<br>避免了复制算法的空间问题。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/09/15/JVM课程四/">JVM课程四</a>
         </h1>
         
@@ -209,44 +247,6 @@
 </blockquote>
 <h2 id="老年代"><a href="#老年代" class="headerlink" title="老年代"></a>老年代</h2><p>在新生代中经历了多次的GC后存活下来的对象会进入老年代。<br>老年代的对象生命周期较长，存活率比较高，在老年代中进行GC的频率较低，效率也较低。</p>
 <h2 id="永久代"><a href="#永久代" class="headerlink" title="永久代"></a>永久代</h2><p>永久代中存放类信息，常量，静态变量，即时编译器编译后的代码等数据。<br>对此区域，Java虚拟机规范指出可以不进行垃圾收集。一般而言不会进行垃圾回收。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/09/15/JVM课程五/">JVM课程五</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/2/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-09-15T02:55:00.000Z" itemprop="datePublished">2018-09-15</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="垃圾回收算法和收集器"><a href="#垃圾回收算法和收集器" class="headerlink" title="垃圾回收算法和收集器"></a>垃圾回收算法和收集器</h1><h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><h3 id="引用计数（reference-counting）"><a href="#引用计数（reference-counting）" class="headerlink" title="引用计数（reference counting）"></a>引用计数（reference counting）</h3><p>古老的算法。此对象有一个引用，增加一个计数，删除一个引用减少一个引用。垃圾回收时，只用收集为0的对象。<br>致命问题是无法解决循环引用的问题。</p>
-<h3 id="复制（copying）"><a href="#复制（copying）" class="headerlink" title="复制（copying）"></a>复制（copying）</h3><p>eg：survivor from to<br>此算法将内存空间分为两份。每次使用其中一个区域。（占用空间）<br>垃圾回收时，遍历当前使用的区域，把正在使用中的对象复制到另一个区域中。</p>
-<h3 id="标记清楚（Mark-Sweep）"><a href="#标记清楚（Mark-Sweep）" class="headerlink" title="标记清楚（Mark-Sweep）"></a>标记清楚（Mark-Sweep）</h3><p>执行分为两阶段。<br>第一阶段：从对象根节点开始标记所有被引用的对象。<br>第二阶段：遍历整个堆，把未标记的对象清除，此算法需要暂停整个应用(Stop the world)。<br>同时会产生内存碎片。<br>缺点：<br>1）未使用的内存空间不连续，浪费。<br>2）暂停整个应用。</p>
-<h3 id="标记整理（Mark-Compact）"><a href="#标记整理（Mark-Compact）" class="headerlink" title="标记整理（Mark-Compact）"></a>标记整理（Mark-Compact）</h3><p>执行分为两阶段。<br>第一阶段：从对象根节点开始标记所有被引用的对象。<br>第二阶段：遍历整个堆，把未标记的对象清除，同时把存活的对象压缩到一块，顺序排放，避免碎片问题。<br>避免了复制算法的空间问题。</p>
 
         
     </section>
@@ -306,6 +306,44 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/09/12/JVM课程一/">JVM课程一</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/2/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-09-12T14:55:00.000Z" itemprop="datePublished">2018-09-12</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>JDK 编译Java文件为Class文件<br>Class文件由JVM解释为Native Code</p>
+<p>Java HotSpot:<br>热点代码，（类似于缓存）避免jvm频繁将class文件转换为cpu可以直接理解的代码（native code 本地代码）。</p>
+<p>Client VM 是默认启用的版本，更适合C/S 在为客户端环境中启动减少启动时间而优化<br>Server VM 在内存分配上更大，更适合于B/S 在为服务端环境中最大化程序执行速度而优化</p>
+<p>-client KNOWN<br>-server KNOWN</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/09/12/JVM课程三/">JVM课程三</a>
         </h1>
         
@@ -349,44 +387,6 @@ Eden   From   To
 
 `
 </code></pre>
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/09/12/JVM课程一/">JVM课程一</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/page/2/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-09-12T14:55:00.000Z" itemprop="datePublished">2018-09-12</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>JDK 编译Java文件为Class文件<br>Class文件由JVM解释为Native Code</p>
-<p>Java HotSpot:<br>热点代码，（类似于缓存）避免jvm频繁将class文件转换为cpu可以直接理解的代码（native code 本地代码）。</p>
-<p>Client VM 是默认启用的版本，更适合C/S 在为客户端环境中启动减少启动时间而优化<br>Server VM 在内存分配上更大，更适合于B/S 在为服务端环境中最大化程序执行速度而优化</p>
-<p>-client KNOWN<br>-server KNOWN</p>
-
         
     </section>
 </article>
@@ -491,7 +491,7 @@ Eden   From   To
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/08/15/HashMap 的长度为什么是2的幂次方/">HashMap 的长度为什么是2的幂次方?</a>
+            <a href="/2018/08/15/Java容器（一）/">Java容器（一）</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -514,18 +514,40 @@ Eden   From   To
     
     <section class="article-body markdown-body">
         
-        <h1 id="HashMap-的长度为什么是2的幂次方"><a href="#HashMap-的长度为什么是2的幂次方" class="headerlink" title="HashMap 的长度为什么是2的幂次方?"></a>HashMap 的长度为什么是2的幂次方?</h1><h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>为了能让 HashMap 存取高效，尽量较少碰撞，也就是要尽量把数据分配均匀。我们上面也讲到了过了，<br>Hash 值的范围值-2147483648到2147483647，前后加起来大概40亿的映射空间，只要哈希函数映射得比较均匀松散，<br>一般应用是很难出现碰撞的。但问题是一个40亿长度的数组，内存是放不下的。所以这个散列值是不能直接拿来用的。<br>用之前还要先做对数组的长度取模运算，得到的余数才能用来要存放的位置也就是对应的数组下标。</p>
-<h2 id="这个算法应该如何设计呢？"><a href="#这个算法应该如何设计呢？" class="headerlink" title="这个算法应该如何设计呢？"></a>这个算法应该如何设计呢？</h2><p>我们首先可能会想到采用%取余的操作来实现。重点来了：<br>“取余(%)操作中如果除数是2的幂次则等价于<br>与其除数减一的与(&amp;)操作（也就是说 hash%length==hash&amp;(length-1)的前提是 length 是2的 n 次方；）。”<br>并且采用二进制位操作 &amp;，相对于%能够提高运算效率，这就解释了 HashMap 的长度为什么是2的幂次方。</p>
-<h2 id="通俗版本"><a href="#通俗版本" class="headerlink" title="通俗版本"></a>通俗版本</h2><p>Hash值取值范围很大40亿，不可能用这么大的数组存Hash表。所以想到取模，将Hash值局限在一个小的数组中。<br>针对取模运算，有公式： hash % length  = hash &amp; (length - 1) 能够显著提高取模的效率问题。<br>前提是 length 必须是2的幂次方。可以解释这就解释了 HashMap 的长度为什么是2的幂次方。</p>
-<h2 id="HashMap的底层实现"><a href="#HashMap的底层实现" class="headerlink" title="HashMap的底层实现"></a>HashMap的底层实现</h2><p>JDK1.8 之前 HashMap底层是数组和链表 结合在一起使用也就是链表散列。<br>1)HashMap 通过 key 的 hashCode 经过扰动函数处理过后得到 hash 值，<br>2)然后通过 (n - 1) &amp; hash 判断当前元素存放的位置（这里的 n 指的是数组的长度），<br>3)如果当前位置存在元素的话，就判断该元素与要存入的元素的 hash 值以及 key 是否相同，如果相同的话，直接覆盖，<br>不相同就通过拉链法解决冲突。</p>
-<p>所谓扰动函数指的就是 HashMap 的 hash 方法。使用 hash 方法也就是扰动函数是为了防止一些实现比较差的 hashCode() 方法。<br>换句话说使用扰动函数之后可以减少碰撞。<br><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.8</span>：</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">final</span> <span class="built_in">int</span> hash(<span class="keyword">Object</span> <span class="built_in">key</span>) &#123;</span><br><span class="line">      <span class="built_in">int</span> h;</span><br><span class="line">      <span class="comment">// key.hashCode()：返回散列值也就是hashcode</span></span><br><span class="line">      <span class="comment">// ^ ：按位异或</span></span><br><span class="line">      <span class="comment">// &gt;&gt;&gt;:无符号右移，忽略符号位，空位都以0补齐</span></span><br><span class="line">      <span class="keyword">return</span> (<span class="built_in">key</span> == <span class="keyword">null</span>) ? <span class="number">0</span> : (h = <span class="built_in">key</span>.hashCode()) ^ (h &gt;&gt;&gt; <span class="number">16</span>);</span><br><span class="line">  &#125;</span><br><span class="line"> </span><br><span class="line"><span class="number">1.7</span>:</span><br><span class="line">	<span class="keyword">static</span> <span class="built_in">int</span> hash(<span class="built_in">int</span> h) &#123;</span><br><span class="line">		<span class="comment">// This function ensures that hashCodes that differ only by</span></span><br><span class="line">		<span class="comment">// constant multiples at each bit position have a bounded</span></span><br><span class="line">		<span class="comment">// number of collisions (approximately 8 at default load factor).</span></span><br><span class="line"></span><br><span class="line">		h ^= (h &gt;&gt;&gt; <span class="number">20</span>) ^ (h &gt;&gt;&gt; <span class="number">12</span>);</span><br><span class="line">		<span class="keyword">return</span> h ^ (h &gt;&gt;&gt; <span class="number">7</span>) ^ (h &gt;&gt;&gt; <span class="number">4</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">相比于 JDK1<span class="number">.8</span> 的 hash 方法 ，JDK <span class="number">1.7</span> 的 hash 方法的性能会稍差一点点，因为毕竟扰动了 <span class="number">4</span> 次。</span><br></pre></td></tr></table></figure></p>
-<p>所谓 <strong>“拉链法”</strong> 就是：将链表和数组相结合。也就是说创建一个链表数组，数组中每一格就是一个链表。若遇到哈希冲突，则将冲突的值加到链表中即可。</p>
-<p><img src="https://my-blog-to-use.oss-cn-beijing.aliyuncs.com/2019-6/jdk1.8之前的内部结构-HashMap.jpg" alt="jdk1.8之前的内部结构-HashMap"></p>
-<h3 id="JDK1-8之后"><a href="#JDK1-8之后" class="headerlink" title="JDK1.8之后"></a>JDK1.8之后</h3><p>相比于之前的版本， JDK1.8之后在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为8）时，将链表转化为红黑树，以减少搜索时间。</p>
-<p><img src="https://my-blog-to-use.oss-cn-beijing.aliyuncs.com/2019-6/JDK1.8之后的HashMap底层数据结构.jpg" alt="jdk1.8之后的内部结构-HashMap"></p>
-<blockquote>
-<p>TreeMap、TreeSet以及JDK1.8之后的HashMap底层都用到了红黑树。红黑树就是为了解决二叉查找树的缺陷，因为二叉查找树在某些情况下会退化成一个线性结构。</p>
-</blockquote>
+        <h1 id="Java容器（一）"><a href="#Java容器（一）" class="headerlink" title="Java容器（一）"></a>Java容器（一）</h1><h2 id="说说List-Set-Map三者的区别？"><a href="#说说List-Set-Map三者的区别？" class="headerlink" title="说说List,Set,Map三者的区别？"></a>说说List,Set,Map三者的区别？</h2><ul>
+<li>List 有序</li>
+<li>Set  唯一</li>
+<li>Map  使用键值对存储。</li>
+</ul>
+<h2 id="Arraylist-与-LinkedList-区别"><a href="#Arraylist-与-LinkedList-区别" class="headerlink" title="Arraylist 与 LinkedList 区别?"></a>Arraylist 与 LinkedList 区别?</h2><ol>
+<li>是否保证线程安全</li>
+</ol>
+<p>ArrayList 和 LinkedList 都是不同步的，也就是不保证线程安全；</p>
+<ol start="2">
+<li>底层数据结构</li>
+</ol>
+<p>Arraylist 底层使用的是 Object 数组；LinkedList 底层使用的是 双向链表 数据结构 （JDK1.6还是双向循环链表）</p>
+<ol start="3">
+<li>插入和删除是否受元素位置的影响</li>
+</ol>
+<p>Arraylist插入和删除受元素所在的位置的影响。</p>
+<p>① ArrayList 采用数组存储，所以插入和删除元素的时间复杂度受元素位置的影响。<br>比如：执行add(E e)方法的时候， ArrayList 会默认在将指定的元素追加到此列表的末尾，这种情况时间复杂度就是O(1)。<br>但是如果要在指定位置 i 插入和删除元素的话（add(int index, E element)）时间复杂度就为 O(n-i)。因为在进行上述操作的时候集合中第 i 和第 i 个元素之后的(n-i)个元素都要执行向后位/向前移一位的操作。</p>
+<p>② LinkedList 采用链表存储，所以插入，删除元素时间复杂度不受元素位置的影响，都是近似 O（1）而数组为近似 O（n）。</p>
+<ol start="4">
+<li>是否支持快速随机访问</li>
+</ol>
+<p>基于数组结构的ArrayList是可以的。快速随机访问就是通过元素的序号快速获取元素对象(对应于get(int index)方法)。</p>
+<p>LinkedList 不支持高效的随机元素访问。</p>
+<ol start="5">
+<li>内存空间占用</li>
+</ol>
+<p>ArrayList的空间浪费主要体现在在list列表的结尾会预留一定的容量空间，而LinkedList的空间花费则体现在它的每一个元素都需要消耗比ArrayList更多的空间（因为要存放直接后继和直接前驱以及数据）。</p>
+<h2 id="快速随机访问接口：RandomAccess"><a href="#快速随机访问接口：RandomAccess" class="headerlink" title="快速随机访问接口：RandomAccess"></a>快速随机访问接口：RandomAccess</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">public<span class="built_in"> interface </span>RandomAccess &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>查看源码我们发现实际上 RandomAccess 接口中什么都没有定义。所以，在我看来 RandomAccess 接口不过是一个标识罢了。标识什么？ 标识实现这个接口的类具有随机访问功能。</p>
+<p>RandomAccess 接口只是标识，并不是说 ArrayList 实现 RandomAccess 接口才具有快速随机访问功能的！</p>
+<p>List遍历<br><figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">实现了 RandomAccess 接口的<span class="built_in">list</span>，优先选择普通 <span class="keyword">for</span> 循环 ，其次 <span class="keyword">foreach</span>,</span><br><span class="line">未实现 RandomAccess 接口的<span class="built_in">list</span>，优先选择iterator遍历（<span class="keyword">foreach</span>遍历底层也是通过iterator实现的,），大<span class="built_in">size</span>的数据，千万不要使用普通<span class="keyword">for</span>循环</span><br></pre></td></tr></table></figure></p>
+<h2 id="ArrayList-与-Vector-区别呢-为什么要用Arraylist取代Vector呢？"><a href="#ArrayList-与-Vector-区别呢-为什么要用Arraylist取代Vector呢？" class="headerlink" title="ArrayList 与 Vector 区别呢?为什么要用Arraylist取代Vector呢？"></a>ArrayList 与 Vector 区别呢?为什么要用Arraylist取代Vector呢？</h2><p>Vector类的所有方法都是同步的。可以由两个线程安全地访问一个Vector对象、但是一个线程访问Vector的话代码要在同步操作上耗费大量的时间。</p>
+<p>Arraylist不是同步的，所以在不需要保证线程安全时建议使用Arraylist。</p>
 
         
     </section>
