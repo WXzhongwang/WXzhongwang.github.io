@@ -198,7 +198,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/03/01/Java 并发进阶常见面试题总结/">Java 并发进阶常见面试题总结</a>
+            <a href="/2019/03/01/字符型常量和字符串常量的区别/">字符型常量和字符串常量的区别</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -212,7 +212,7 @@
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
+    <a class="article-tag-link" href="/tags/Java/">Java</a>
 </div>
 
 
@@ -221,23 +221,10 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="Java-并发进阶常见面试题总结"><a href="#Java-并发进阶常见面试题总结" class="headerlink" title="Java 并发进阶常见面试题总结"></a>Java 并发进阶常见面试题总结</h1><h2 id="synchronized-关键字"><a href="#synchronized-关键字" class="headerlink" title="synchronized 关键字"></a>synchronized 关键字</h2><p>synchronized关键字解决的是多个线程之间访问资源的同步性，synchronized关键字可以保证被它修饰的方法或者代码块在任意时刻只能有一个线程执行。<br>(后半句) 任意时刻只有一个线程在访问</p>
-<p>在 Java 早期版本中，synchronized属于重量级锁，效率低下，因为监视器锁（monitor）是依赖于底层的操作系统的 Mutex Lock 来实现的，Java 的线程是映射到操作系统的原生线程之上的。如果要挂起或者唤醒一个线程，都需要操作系统帮忙完成，而操作系统实现线程之间的切换时需要从用户态转换到内核态，这个状态之间的转换需要相对比较长的时间，时间成本相对较高，这也是为什么早期的 synchronized 效率低的原因。庆幸的是在 Java 6 之后 Java 官方对从JVM层面对synchronized较大优化，所以现在的 synchronized 锁效率也优化得很不错了。JDK1.6对锁的实现引入了大量的优化，如自旋锁、适应性自旋锁、锁消除、锁粗化、偏向锁、轻量级锁等技术来减少锁操作的开销。</p>
-<h2 id="项目中怎么使用-synchronized-关键字"><a href="#项目中怎么使用-synchronized-关键字" class="headerlink" title="项目中怎么使用 synchronized 关键字"></a>项目中怎么使用 synchronized 关键字</h2><p>synchronized关键字最主要的三种使用方式：</p>
-<p>修饰实例方法:<br>作用于当前对象实例加锁，进入同步代码前要获得当前对象实例的锁</p>
-<p>修饰静态方法: 也就是给当前类加锁，会作用于类的所有对象实例，因为静态成员不属于任何一个实例对象，是类成员（ static 表明这是该类的一个静态资源，不管new了多少个对象，只有一份）。所以如果一个线程A调用一个实例对象的非静态 synchronized 方法，而线程B需要调用这个实例对象所属类的静态 synchronized 方法，是允许的，不会发生互斥现象，因为访问静态 synchronized 方法占用的锁是当前类的锁，而访问非静态 synchronized 方法占用的锁是当前实例对象锁。</p>
-<p>修饰代码块: 指定加锁对象，对给定对象加锁，进入同步代码块前要获得给定对象的锁。</p>
-<p>比如以下的：双重校验锁实现单例<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> Singleton uniqueInstance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getUniqueInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="comment">//先判断对象是否已经实例过，没有实例化过才进入加锁代码</span></span><br><span class="line">        <span class="keyword">if</span> (uniqueInstance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">//类对象加锁</span></span><br><span class="line">            <span class="keyword">synchronized</span> (Singleton.class) &#123;</span><br><span class="line">                <span class="keyword">if</span> (uniqueInstance == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    uniqueInstance = <span class="keyword">new</span> Singleton();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> uniqueInstance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<hr>
-<p>另外，需要注意 uniqueInstance 采用 volatile 关键字修饰也是很有必要。</p>
-<p>uniqueInstance 采用 volatile 关键字修饰也是很有必要的， uniqueInstance = new Singleton(); 这段代码其实是分为三步执行：</p>
-<ul>
-<li>为 uniqueInstance 分配内存空间</li>
-<li>初始化 uniqueInstance</li>
-<li>将 uniqueInstance 指向分配的内存地址</li>
-</ul>
-<p>但是由于 JVM 具有指令重排的特性，执行顺序有可能变成 1-&gt;3-&gt;2。指令重排在单线程环境下不会出先问题，但是在多线程环境下会导致一个线程获得还没有初始化的实例。例如，线程 T1 执行了 1 和 3，此时 T2 调用 getUniqueInstance() 后发现 uniqueInstance 不为空，因此返回 uniqueInstance，但此时 uniqueInstance 还未被初始化。</p>
-<p>使用 volatile 可以禁止 JVM 的指令重排，保证在多线程环境下也能正常运行。</p>
+        <h1 id="字符型常量和字符串常量的区别"><a href="#字符型常量和字符串常量的区别" class="headerlink" title="字符型常量和字符串常量的区别"></a>字符型常量和字符串常量的区别</h1><p>形式上: 字符常量是单引号引起的一个字符; 字符串常量是双引号引起的若干个字符</p>
+<p>含义上: 字符常量相当于一个整型值( ASCII 值),可以参加表达式运算; 字符串常量代表一个地址值(该字符串在内存中存放位置)</p>
+<p>占内存大小: 字符常量只占2个字节; 字符串常量占若干个字节(至少一个字符结束标志) (注意： char在Java中占两个字节)</p>
+<p>数据类型     大小        包装器类型<br>boolean      -           Boolean<br>char       16bits        Character<br>byte        8bits        Byte<br>short      16bits        Short<br>int        32bits        Integer<br>long       64bits        Long<br>float      32bits        Float<br>double     64bits        Double</p>
 
         
     </section>
@@ -638,7 +625,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/01/08/流处理、批处理、交互式查询/">流处理、批处理、交互式查询</a>
+            <a href="/2019/01/08/大数据相关技术（Hadoop体系）/">Hadoop技术体系</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -661,14 +648,39 @@
     
     <section class="article-body markdown-body">
         
-        <pre><code>我们将大数据处理按处理时间的跨度要求分为以下几类
+        <p>Hadoop 里面包括几个组件<strong>HDFS</strong>、<strong>MapReduce</strong>、<strong>YARN</strong>和<strong>ZooKeeper</strong>等一系列技术，HDFS是存储数据的地方就像我们电脑的硬盘一样文件都存储在这个上面，MapReduce是对数据进行处理计算的，YARN是体现Hadoop平台概念的重要组件，有了它大数据生态体系的其它软件就能在hadoop上运行了，这样能更好的利用HDFS大存储的优势和节省更多的资源比如我们就不用再单独建一个spark的集群了，让它直接跑在现有的hadoop yarn上面就可以了。ZooKeeper本身是一个非常牢靠的记事本，用于记录一些概要信息。Hadoop依靠这个记事本来记录当前哪些节点正在用，哪些已掉线，哪些是备用等，以此来管理机群。</p>
+<h1 id="Hadoop技术体系"><a href="#Hadoop技术体系" class="headerlink" title="Hadoop技术体系"></a>Hadoop技术体系</h1><h2 id="Hadoop"><a href="#Hadoop" class="headerlink" title="Hadoop"></a>Hadoop</h2><p>Hadoop 里面包括几个组件<strong>HDFS</strong>、<strong>MapReduce</strong>、<strong>YARN</strong>和<strong>ZooKeeper</strong>等一系列技术，HDFS是存储数据的地方就像我们电脑的硬盘一样文件都存储在这个上面，MapReduce是对数据进行处理计算的，YARN是体现Hadoop平台概念的重要组件，有了它大数据生态体系的其它软件就能在hadoop上运行了，这样能更好的利用HDFS大存储的优势和节省更多的资源比如我们就不用再单独建一个spark的集群了，让它直接跑在现有的hadoop yarn上面就可以了。ZooKeeper本身是一个非常牢靠的记事本，用于记录一些概要信息。Hadoop依靠这个记事本来记录当前哪些节点正在用，哪些已掉线，哪些是备用等，以此来管理机群。</p>
+<h2 id="HDFS"><a href="#HDFS" class="headerlink" title="HDFS"></a>HDFS</h2><p>Hadoop Distributed File System，Hadoop 分布式文件系统<br>高度容错性的系统，适合部署在廉价的机器上，HDFS能提供高吞吐量的数据访问，适合那些有着超大数据集（large data set）的应用程序。</p>
+<h2 id="MapReduce"><a href="#MapReduce" class="headerlink" title="MapReduce"></a>MapReduce</h2><p>Mapreduce是一个计算框架，一个处理分布式海量数据的软件框架及计算集群。</p>
+<p>Map （映射） Reduce (简化)<br>举个例子：假设你的手机通话信息保存在一个HDFS的文件callList.txt中，你想找到你与同事A的所有通话记录并排序。因为HDFS会把callLst.txt分成几块分别存，比如说5块，那么对应的Map过程就是找到这5块所在的5个节点，让它们分别找自己存的那块中关于同事A的通话记录，对应的Reduce过程就是把5个节点过滤后的通话记录合并在一块并按时间排序。MapReduce的计算模型通常把HDFS作为数据来源，很少会用到其它数据来源比如HBase。</p>
+<h2 id="Hbase"><a href="#Hbase" class="headerlink" title="Hbase"></a>Hbase</h2><p>这是Hadoop生态体系中的NOSQL数据库，他的数据是按照key和value的形式存储的并且key是唯一的，所以它能用来做数据的排重，它与MYSQL相比能存储的数据量大很多。所以他常被用于大数据处理完成之后的存储目的地。</p>
+<blockquote>
+<p>HDFS和HBase是依靠外存（即硬盘）的分布式文件存储实现和分布式表存储实现。HDFS是一个分布式的“云存储”文件系统，它会把一个文件分块并分别保存，取用时分别再取出、合并。重要的是，这些分块通常会在3个节点（即集群内的服务器）上各有1个备份，因此即使出现少数节点的失效（如硬盘损坏、掉电等），文件也不会失效。如果说HDFS是文件级别的存储，那HBase则是表级别的存储。HBase是表模型，但比SQL数据库的表要简单的多，没有连接、聚集等功能。HBase的表是物理存储到HDFS的，比如把一个表分成4个HDFS文件并存储。由于HDFS级会做备份，所以HBase级不再备份。MapReduce则是一个计算模型，而不是存储模型；MapReduce通常与HDFS紧密配合。</p>
+</blockquote>
+<h2 id="Hive"><a href="#Hive" class="headerlink" title="Hive"></a>Hive</h2><p>Hive 是一种底层封装了Hadoop 的数据仓库处理工具，使用类SQL的HiveQL语言实现数据查询，所有Hive 的数据都存储在Hadoop 兼容的文件系统（如HDFS）中。Hive在加载数据过程中不会对数据进行任何的修改，只是将数据移动到HDFS中Hive设定的目录下，++因此，Hive不支持对数据的改写和添加，所有的数据都是在加载的时候确定的++。对于会SQL语法的来说就是神器，它能让你处理大数据变的很简单，不会再费劲的编写MapReduce程序。</p>
+<h2 id="Spark"><a href="#Spark" class="headerlink" title="Spark"></a>Spark</h2><p>它是用来弥补基于MapReduce处理数据速度上的缺点，它的特点是把数据装载到内存中计算而不是去读慢的要死进化还特别慢的硬盘。特别适合做迭代运算，所以算法流们特别稀饭它。它是用scala编写的。Java语言或者Scala都可以操作它，因为它们都是用JVM的。</p>
+<h1 id="其他相关技术"><a href="#其他相关技术" class="headerlink" title="其他相关技术"></a>其他相关技术</h1><h2 id="Sqoop"><a href="#Sqoop" class="headerlink" title="Sqoop"></a>Sqoop</h2><p>这个是用于把Mysql里的数据导入到Hadoop里的。当然你也可以不用这个，直接把Mysql数据表导出成文件再放到HDFS上也是一样的，当然生产环境中使用要注意Mysql的压力。</p>
+<h2 id="Flume"><a href="#Flume" class="headerlink" title="Flume"></a>Flume</h2><p> apache Flume 是一个从可以收集例如日志，事件等数据资源，并将这些数量庞大的数据从各项数据资源中集中起来存储的工具/服务，或者数集中机制。flume具有高可用，分布式，配置工具，其设计的原理也是基于数据流，如日志数据从各种网站服务器上汇集起来存储到HDFS，HBase等集中存储器中。</p>
+<h3 id="一般实时系统，所选用组件如下"><a href="#一般实时系统，所选用组件如下" class="headerlink" title="一般实时系统，所选用组件如下"></a>一般实时系统，所选用组件如下</h3><ul>
+<li>数据采集 ：负责从各节点上实时采集数据，选用Flume来实现  </li>
+<li>数据接入 ：由于采集数据的速度和数据处理的速度不一定同步，因此添加一个消息中间件来作为缓冲，选用apache的kafka  </li>
+<li>流式计算 ：对采集到的数据进行实时分析，选用apache的storm  </li>
+<li>数据输出 ：对分析后的结果持久化，暂定用mysql，另一方面是模块化之后，假如当Storm挂掉了之后，数据采集和数据接入还是继续在跑着，数据不会丢失，storm起来之后可以继续进行流式计算； </li>
+</ul>
+<h2 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h2><p>Kafka的整体架构非常简单，是显式分布式架构，producer、broker（kafka）和consumer都可以有多个。Producer，consumer实现Kafka注册的接口，数据从producer发送到broker，broker承担一个中间缓存和分发的作用。broker分发注册到系统中的consumer。broker的作用类似于缓存，即活跃的数据和离线处理系统之间的缓存。客户端和服务器端的通信，是基于简单，高性能，且与编程语言无关的TCP协议。</p>
+<p>Kafka是一种分布式的、基于发布/订阅的消息系统。在流式计算中，Kafka一般用来缓存数据，Storm通过消费Kafka的数据进行计算（KAFKA+STORM+REDIS）。</p>
+<p>特点：</p>
+<ul>
+<li>消息持久化：通过O(1)的磁盘数据结构提供数据的持久化</li>
+<li>高吞吐量：每秒百万级的消息读写</li>
+<li>分布式：扩展能力强</li>
+<li>多客户端支持：java、php、python、c++ ……</li>
+<li>实时性：生产者生产的message立即被消费者可见</li>
+<li>Kafka是一个分布式消息队列：生产者、消费者的功能。它提供了类似于JMS的特性，但是在设计实   现上完全不同，此外它并不是JMS规范的实现。</li>
+<li>Kafka对消息保存时根据Topic进行归类，发送消息者称为Producer,消息接受者称为Consumer</li>
+<li>无论是kafka集群，还是producer和consumer都依赖于zookeeper集群保存一些meta信息，来保证系统可用性</li>
+</ul>
 
-基于实时数据流的处理，通常的时间跨度在数百毫秒到数秒之间
-
-基于历史数据的交互式查询，通常时间跨度在数十秒到数分钟之间
-
-复杂的批量数据处理，通常的时间跨度在几分钟到数小时之间
-</code></pre>
         
     </section>
 </article>

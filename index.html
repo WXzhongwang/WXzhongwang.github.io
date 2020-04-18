@@ -131,7 +131,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2020/02/02/【03期】如何决定使用 HashMap 还是 TreeMap/">【03期】如何决定使用 HashMap 还是 TreeMap？</a>
+            <a href="/2020/02/03/【05期】Redis常见问题理解/">【05期】Redis常见问题理解</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -139,71 +139,7 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2020-02-02T02:10:00.000Z" itemprop="datePublished">2020-02-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/整理/">整理</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="如何决定使用-HashMap-还是-TreeMap？"><a href="#如何决定使用-HashMap-还是-TreeMap？" class="headerlink" title="如何决定使用 HashMap 还是 TreeMap？"></a>如何决定使用 HashMap 还是 TreeMap？</h1><h2 id="问：如何决定使用-HashMap-还是-TreeMap？"><a href="#问：如何决定使用-HashMap-还是-TreeMap？" class="headerlink" title="问：如何决定使用 HashMap 还是 TreeMap？"></a>问：如何决定使用 HashMap 还是 TreeMap？</h2><p>介绍<br>TreeMap&lt;K,V&gt;的Key值是要求实现java.lang.Comparable，所以迭代的时候TreeMap默认是按照Key值升序排序的；TreeMap的实现是基于红黑树结构。适用于按自然顺序或自定义顺序遍历键（key）。</p>
-<p>HashMap&lt;K,V&gt;的Key值实现散列hashCode()，分布是散列的、均匀的，不支持排序；数据结构主要是桶(数组)，链表或红黑树。适用于在Map中插入、删除和定位元素。</p>
-<p>结论<br>如果你需要得到一个有序的结果时就应该使用TreeMap（因为HashMap中元素的排列顺序是不固定的）。除此之外，由于HashMap有更好的性能，所以大多不需要排序的时候我们会使用HashMap。</p>
-<h2 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h2><h3 id="1、HashMap-和-TreeMap-的实现"><a href="#1、HashMap-和-TreeMap-的实现" class="headerlink" title="1、HashMap 和 TreeMap 的实现"></a>1、HashMap 和 TreeMap 的实现</h3><p>HashMap：基于哈希表实现。使用HashMap要求添加的键类明确定义了hashCode()和equals()[可以重写hashCode()和equals()]，为了优化HashMap空间的使用，您可以调优==初始容量==和==负载因子==。</p>
-<p>HashMap(): 构建一个空的哈希映像</p>
-<p>HashMap(Map m): 构建一个哈希映像，并且添加映像m的所有映射</p>
-<p>HashMap(int initialCapacity): 构建一个拥有特定容量的空的哈希映像</p>
-<p>HashMap(int initialCapacity, float loadFactor): 构建一个拥有特定容量和加载因子的空的哈希映像</p>
-<p>TreeMap：基于红黑树实现。TreeMap没有调优选项，因为该树总处于平衡状态。</p>
-<p>TreeMap()：构建一个空的映像树</p>
-<p>TreeMap(Map m): 构建一个映像树，并且添加映像m中所有元素</p>
-<p>TreeMap(Comparator c): 构建一个映像树，并且使用特定的比较器对关键字进行排序</p>
-<p>TreeMap(SortedMap s): 构建一个映像树，添加映像树s中所有映射，并且使用与有序映像s相同的比较器排序</p>
-<h3 id="2、HashMap-和-TreeMap-都是非线程安全"><a href="#2、HashMap-和-TreeMap-都是非线程安全" class="headerlink" title="2、HashMap 和 TreeMap 都是非线程安全"></a>2、HashMap 和 TreeMap 都是非线程安全</h3><p>HashMap继承AbstractMap抽象类，TreeMap继承自SortedMap接口。</p>
-<p>AbstractMap抽象类：覆盖了equals()和hashCode()方法以确保两个相等映射返回相同的哈希码。如果两个映射大小相等、包含同样的键且每个键在这两个映射中对应的值都相同，则这两个映射相等。映射的哈希码是映射元素哈希码的总和，其中每个元素是Map.Entry接口的一个实现。因此，不论映射内部顺序如何，两个相等映射会报告相同的哈希码。</p>
-<p>SortedMap接口：它用来保持键的有序顺序。SortedMap接口为映像的视图(子集)，包括两个端点提供了访问方法。除了排序是作用于映射的键以外，处理SortedMap和处理SortedSet一样。添加到SortedMap实现类的元素必须实现Comparable接口，否则您必须给它的构造函数提供一个Comparator接口的实现。TreeMap类是它的唯一一个实现。</p>
-<h3 id="3、TreeMap中默认是按照升序进行排序的，如何让他降序"><a href="#3、TreeMap中默认是按照升序进行排序的，如何让他降序" class="headerlink" title="3、TreeMap中默认是按照升序进行排序的，如何让他降序"></a>3、TreeMap中默认是按照升序进行排序的，如何让他降序</h3><p>通过自定义的比较器来实现</p>
-<p>定义一个比较器类，实现Comparator接口，重写compare方法，有两个参数，这两个参数通过调用compareTo进行比较，而compareTo默认规则是：</p>
-<ul>
-<li><p>如果参数字符串等于此字符串，则返回 0 值；</p>
-</li>
-<li><p>如果此字符串小于字符串参数，则返回一个小于 0 的值；</p>
-</li>
-<li><p>如果此字符串大于字符串参数，则返回一个大于 0 的值。</p>
-</li>
-</ul>
-<p>自定义比较器时，在返回时多添加了个负号，就将比较的结果以相反的形式返回，代码如下：<br><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyComparator</span> <span class="keyword">implements</span> <span class="title">Comparator</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    public <span class="built_in">int</span> compare(<span class="built_in">Object</span> o1, <span class="built_in">Object</span> o2) &#123;</span><br><span class="line">        <span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">        <span class="built_in">String</span> param1 = (<span class="built_in">String</span>)o1;</span><br><span class="line">        <span class="built_in">String</span> param2 = (<span class="built_in">String</span>)o2;</span><br><span class="line">        <span class="keyword">return</span> -param1.compareTo(param2);</span><br><span class="line">    &#125;   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>之后，通过MyComparator类初始化一个比较器实例，将其作为参数传进TreeMap的构造方法中：</p>
-<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MyComparator comparator = <span class="keyword">new</span> <span class="type">MyComparator</span>();</span><br><span class="line"></span><br><span class="line">Map&lt;<span class="keyword">String</span>,<span class="keyword">String</span>&gt; map = <span class="keyword">new</span> <span class="type">TreeMap</span>&lt;<span class="keyword">String</span>,<span class="keyword">String</span>&gt;(comparator);</span><br></pre></td></tr></table></figure>
-<p>使用自定义比较器：<br><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> class MapTest &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">        <span class="comment">//初始化自定义比较器</span></span><br><span class="line">        MyComparator comparator = <span class="keyword">new</span> MyComparator();</span><br><span class="line">        <span class="comment">//初始化一个map集合</span></span><br><span class="line">        Map&lt;<span class="keyword">String</span>,<span class="keyword">String</span>&gt; <span class="built_in">map</span> = <span class="keyword">new</span> TreeMap&lt;<span class="keyword">String</span>,<span class="keyword">String</span>&gt;(comparator);</span><br><span class="line">        <span class="comment">//存入数据</span></span><br><span class="line">        <span class="built_in">map</span>.<span class="built_in">put</span>(<span class="string">"a"</span>, <span class="string">"a"</span>);</span><br><span class="line">        <span class="built_in">map</span>.<span class="built_in">put</span>(<span class="string">"b"</span>, <span class="string">"b"</span>);</span><br><span class="line">        <span class="built_in">map</span>.<span class="built_in">put</span>(<span class="string">"f"</span>, <span class="string">"f"</span>);</span><br><span class="line">        <span class="built_in">map</span>.<span class="built_in">put</span>(<span class="string">"d"</span>, <span class="string">"d"</span>);</span><br><span class="line">        <span class="built_in">map</span>.<span class="built_in">put</span>(<span class="string">"c"</span>, <span class="string">"c"</span>);</span><br><span class="line">        <span class="built_in">map</span>.<span class="built_in">put</span>(<span class="string">"g"</span>, <span class="string">"g"</span>);</span><br><span class="line">        <span class="comment">//遍历输出</span></span><br><span class="line">        Iterator iterator = <span class="built_in">map</span>.keySet().iterator();</span><br><span class="line">        <span class="built_in">while</span>(iterator.hasNext())&#123;</span><br><span class="line">            <span class="keyword">String</span> key = (<span class="keyword">String</span>)iterator.next();</span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="built_in">map</span>.<span class="built_in">get</span>(key));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> class MyComparator implements Comparator&#123;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">int</span> compare(Object o1, Object o2) &#123;</span><br><span class="line">            <span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">            <span class="keyword">String</span> param1 = (<span class="keyword">String</span>)o1;</span><br><span class="line">            <span class="keyword">String</span> param2 = (<span class="keyword">String</span>)o2;</span><br><span class="line">            <span class="built_in">return</span> -param1.compareTo(param2);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2020/02/02/【05期】Redis常见问题理解/">【05期】Redis常见问题理解</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2020-02-02T02:10:00.000Z" itemprop="datePublished">2020-02-02</time>
+    <time datetime="2020-02-03T02:10:00.000Z" itemprop="datePublished">2020-02-03</time>
 </a>
 
             
@@ -353,7 +289,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2020/02/01/【01期】Spring，SpringMVC，SpringBoot，SpringCloud有什么区别和联系/">【01期】Spring，SpringMVC，SpringBoot，SpringCloud有什么区别和联系？</a>
+            <a href="/2020/02/02/【03期】如何决定使用 HashMap 还是 TreeMap/">【03期】如何决定使用 HashMap 还是 TreeMap？</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -361,7 +297,7 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2020-02-01T02:10:00.000Z" itemprop="datePublished">2020-02-01</time>
+    <time datetime="2020-02-02T02:10:00.000Z" itemprop="datePublished">2020-02-02</time>
 </a>
 
             
@@ -376,20 +312,36 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="简单介绍"><a href="#简单介绍" class="headerlink" title="简单介绍"></a>简单介绍</h1><p>Spring是一个轻量级的控制反转(IoC)和面向切面(AOP)的容器框架。Spring使你能够编写更干净、更可管理、并且更易于测试的代码。</p>
-<p>Spring MVC是Spring的一个模块，一个web框架。通过DispatcherServlet, ModelAndView 和 View Resolver，开发web应用变得很容易。主要针对的是网站应用程序或者服务开发——URL路由、Session、模板引擎、静态Web资源等等。</p>
-<p>Spring配置复杂，繁琐，所以推出了Spring boot，约定优于配置，简化了spring的配置流程。</p>
-<p>Spring Cloud构建于Spring Boot之上，是一个关注全局的服务治理框架。</p>
-<h2 id="Spring-VS-SpringMVC："><a href="#Spring-VS-SpringMVC：" class="headerlink" title="Spring VS SpringMVC："></a>Spring VS SpringMVC：</h2><p>Spring是一个一站式的轻量级的java开发框架，核心是控制反转（IOC）和面向切面（AOP），针对于开发的WEB层(springMvc)、业务层(Ioc)、持久层(jdbcTemplate)等都提供了多种配置解决方案；</p>
-<p>SpringMVC是Spring基础之上的一个MVC框架，主要处理web开发的路径映射和视图渲染，属于Spring框架中WEB层开发的一部分；</p>
-<h2 id="SpringMVC-VS-SpringBoot："><a href="#SpringMVC-VS-SpringBoot：" class="headerlink" title="SpringMVC VS SpringBoot："></a>SpringMVC VS SpringBoot：</h2><p>SpringMVC属于一个企业WEB开发的MVC框架，涵盖面包括前端视图开发、文件配置、后台接口逻辑开发等，XML、config等配置相对比较繁琐复杂；</p>
-<p>SpringBoot框架相对于SpringMVC框架来说，更专注于开发微服务后台接口，不开发前端视图；</p>
-<h2 id="SpringBoot和SpringCloud："><a href="#SpringBoot和SpringCloud：" class="headerlink" title="SpringBoot和SpringCloud："></a>SpringBoot和SpringCloud：</h2><p>SpringBoot使用了约定大于配置的理念，集成了快速开发的Spring多个插件，同时自动过滤不需要配置的多余的插件，简化了项目的开发配置流程，一定程度上取消xml配置，是一套快速配置开发的脚手架，能快速开发单个微服务；</p>
-<p>SpringCloud大部分的功能插件都是基于SpringBoot去实现的，SpringCloud关注于全局的微服务整合和管理，将多个SpringBoot单体微服务进行整合以及管理；SpringCloud依赖于SpringBoot开发，而SpringBoot可以独立开发；</p>
-<h2 id="总结下来："><a href="#总结下来：" class="headerlink" title="总结下来："></a>总结下来：</h2><p>Spring是核心，提供了基础功能；</p>
-<p>Spring MVC 是基于Spring的一个 MVC 框架 ；</p>
-<p>Spring Boot 是为简化Spring配置的快速开发整合包；</p>
-<p>Spring Cloud是构建在Spring Boot之上的服务治理框架。</p>
+        <h1 id="如何决定使用-HashMap-还是-TreeMap？"><a href="#如何决定使用-HashMap-还是-TreeMap？" class="headerlink" title="如何决定使用 HashMap 还是 TreeMap？"></a>如何决定使用 HashMap 还是 TreeMap？</h1><h2 id="问：如何决定使用-HashMap-还是-TreeMap？"><a href="#问：如何决定使用-HashMap-还是-TreeMap？" class="headerlink" title="问：如何决定使用 HashMap 还是 TreeMap？"></a>问：如何决定使用 HashMap 还是 TreeMap？</h2><p>介绍<br>TreeMap&lt;K,V&gt;的Key值是要求实现java.lang.Comparable，所以迭代的时候TreeMap默认是按照Key值升序排序的；TreeMap的实现是基于红黑树结构。适用于按自然顺序或自定义顺序遍历键（key）。</p>
+<p>HashMap&lt;K,V&gt;的Key值实现散列hashCode()，分布是散列的、均匀的，不支持排序；数据结构主要是桶(数组)，链表或红黑树。适用于在Map中插入、删除和定位元素。</p>
+<p>结论<br>如果你需要得到一个有序的结果时就应该使用TreeMap（因为HashMap中元素的排列顺序是不固定的）。除此之外，由于HashMap有更好的性能，所以大多不需要排序的时候我们会使用HashMap。</p>
+<h2 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h2><h3 id="1、HashMap-和-TreeMap-的实现"><a href="#1、HashMap-和-TreeMap-的实现" class="headerlink" title="1、HashMap 和 TreeMap 的实现"></a>1、HashMap 和 TreeMap 的实现</h3><p>HashMap：基于哈希表实现。使用HashMap要求添加的键类明确定义了hashCode()和equals()[可以重写hashCode()和equals()]，为了优化HashMap空间的使用，您可以调优==初始容量==和==负载因子==。</p>
+<p>HashMap(): 构建一个空的哈希映像</p>
+<p>HashMap(Map m): 构建一个哈希映像，并且添加映像m的所有映射</p>
+<p>HashMap(int initialCapacity): 构建一个拥有特定容量的空的哈希映像</p>
+<p>HashMap(int initialCapacity, float loadFactor): 构建一个拥有特定容量和加载因子的空的哈希映像</p>
+<p>TreeMap：基于红黑树实现。TreeMap没有调优选项，因为该树总处于平衡状态。</p>
+<p>TreeMap()：构建一个空的映像树</p>
+<p>TreeMap(Map m): 构建一个映像树，并且添加映像m中所有元素</p>
+<p>TreeMap(Comparator c): 构建一个映像树，并且使用特定的比较器对关键字进行排序</p>
+<p>TreeMap(SortedMap s): 构建一个映像树，添加映像树s中所有映射，并且使用与有序映像s相同的比较器排序</p>
+<h3 id="2、HashMap-和-TreeMap-都是非线程安全"><a href="#2、HashMap-和-TreeMap-都是非线程安全" class="headerlink" title="2、HashMap 和 TreeMap 都是非线程安全"></a>2、HashMap 和 TreeMap 都是非线程安全</h3><p>HashMap继承AbstractMap抽象类，TreeMap继承自SortedMap接口。</p>
+<p>AbstractMap抽象类：覆盖了equals()和hashCode()方法以确保两个相等映射返回相同的哈希码。如果两个映射大小相等、包含同样的键且每个键在这两个映射中对应的值都相同，则这两个映射相等。映射的哈希码是映射元素哈希码的总和，其中每个元素是Map.Entry接口的一个实现。因此，不论映射内部顺序如何，两个相等映射会报告相同的哈希码。</p>
+<p>SortedMap接口：它用来保持键的有序顺序。SortedMap接口为映像的视图(子集)，包括两个端点提供了访问方法。除了排序是作用于映射的键以外，处理SortedMap和处理SortedSet一样。添加到SortedMap实现类的元素必须实现Comparable接口，否则您必须给它的构造函数提供一个Comparator接口的实现。TreeMap类是它的唯一一个实现。</p>
+<h3 id="3、TreeMap中默认是按照升序进行排序的，如何让他降序"><a href="#3、TreeMap中默认是按照升序进行排序的，如何让他降序" class="headerlink" title="3、TreeMap中默认是按照升序进行排序的，如何让他降序"></a>3、TreeMap中默认是按照升序进行排序的，如何让他降序</h3><p>通过自定义的比较器来实现</p>
+<p>定义一个比较器类，实现Comparator接口，重写compare方法，有两个参数，这两个参数通过调用compareTo进行比较，而compareTo默认规则是：</p>
+<ul>
+<li><p>如果参数字符串等于此字符串，则返回 0 值；</p>
+</li>
+<li><p>如果此字符串小于字符串参数，则返回一个小于 0 的值；</p>
+</li>
+<li><p>如果此字符串大于字符串参数，则返回一个大于 0 的值。</p>
+</li>
+</ul>
+<p>自定义比较器时，在返回时多添加了个负号，就将比较的结果以相反的形式返回，代码如下：<br><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyComparator</span> <span class="keyword">implements</span> <span class="title">Comparator</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    public <span class="built_in">int</span> compare(<span class="built_in">Object</span> o1, <span class="built_in">Object</span> o2) &#123;</span><br><span class="line">        <span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">        <span class="built_in">String</span> param1 = (<span class="built_in">String</span>)o1;</span><br><span class="line">        <span class="built_in">String</span> param2 = (<span class="built_in">String</span>)o2;</span><br><span class="line">        <span class="keyword">return</span> -param1.compareTo(param2);</span><br><span class="line">    &#125;   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>之后，通过MyComparator类初始化一个比较器实例，将其作为参数传进TreeMap的构造方法中：</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MyComparator comparator = <span class="keyword">new</span> <span class="type">MyComparator</span>();</span><br><span class="line"></span><br><span class="line">Map&lt;<span class="keyword">String</span>,<span class="keyword">String</span>&gt; map = <span class="keyword">new</span> <span class="type">TreeMap</span>&lt;<span class="keyword">String</span>,<span class="keyword">String</span>&gt;(comparator);</span><br></pre></td></tr></table></figure>
+<p>使用自定义比较器：<br><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> class MapTest &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">        <span class="comment">//初始化自定义比较器</span></span><br><span class="line">        MyComparator comparator = <span class="keyword">new</span> MyComparator();</span><br><span class="line">        <span class="comment">//初始化一个map集合</span></span><br><span class="line">        Map&lt;<span class="keyword">String</span>,<span class="keyword">String</span>&gt; <span class="built_in">map</span> = <span class="keyword">new</span> TreeMap&lt;<span class="keyword">String</span>,<span class="keyword">String</span>&gt;(comparator);</span><br><span class="line">        <span class="comment">//存入数据</span></span><br><span class="line">        <span class="built_in">map</span>.<span class="built_in">put</span>(<span class="string">"a"</span>, <span class="string">"a"</span>);</span><br><span class="line">        <span class="built_in">map</span>.<span class="built_in">put</span>(<span class="string">"b"</span>, <span class="string">"b"</span>);</span><br><span class="line">        <span class="built_in">map</span>.<span class="built_in">put</span>(<span class="string">"f"</span>, <span class="string">"f"</span>);</span><br><span class="line">        <span class="built_in">map</span>.<span class="built_in">put</span>(<span class="string">"d"</span>, <span class="string">"d"</span>);</span><br><span class="line">        <span class="built_in">map</span>.<span class="built_in">put</span>(<span class="string">"c"</span>, <span class="string">"c"</span>);</span><br><span class="line">        <span class="built_in">map</span>.<span class="built_in">put</span>(<span class="string">"g"</span>, <span class="string">"g"</span>);</span><br><span class="line">        <span class="comment">//遍历输出</span></span><br><span class="line">        Iterator iterator = <span class="built_in">map</span>.keySet().iterator();</span><br><span class="line">        <span class="built_in">while</span>(iterator.hasNext())&#123;</span><br><span class="line">            <span class="keyword">String</span> key = (<span class="keyword">String</span>)iterator.next();</span><br><span class="line">            System.out.<span class="built_in">println</span>(<span class="built_in">map</span>.<span class="built_in">get</span>(key));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> class MyComparator implements Comparator&#123;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">int</span> compare(Object o1, Object o2) &#123;</span><br><span class="line">            <span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">            <span class="keyword">String</span> param1 = (<span class="keyword">String</span>)o1;</span><br><span class="line">            <span class="keyword">String</span> param2 = (<span class="keyword">String</span>)o2;</span><br><span class="line">            <span class="built_in">return</span> -param1.compareTo(param2);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
         
     </section>
@@ -435,6 +387,54 @@
 <p>注：以上工作完成以后就可以应用这个Bean了，那这个Bean是一个Singleton的，所以一般情况下我们调用同一个id的Bean会是在内容地址相同的实例，当然在Spring配置文件中也可以配置非Singleton，这里我们不做赘述。</p>
 <p>9、当Bean不再需要时，会经过清理阶段，如果Bean实现了DisposableBean这个接口，会调用那个其实现的destroy()方法；</p>
 <p>10、最后，如果这个Bean的Spring配置中配置了destroy-method属性，会自动调用其配置的销毁方法。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2020/02/01/【01期】Spring，SpringMVC，SpringBoot，SpringCloud有什么区别和联系/">【01期】Spring，SpringMVC，SpringBoot，SpringCloud有什么区别和联系？</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2020-02-01T02:10:00.000Z" itemprop="datePublished">2020-02-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/整理/">整理</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="简单介绍"><a href="#简单介绍" class="headerlink" title="简单介绍"></a>简单介绍</h1><p>Spring是一个轻量级的控制反转(IoC)和面向切面(AOP)的容器框架。Spring使你能够编写更干净、更可管理、并且更易于测试的代码。</p>
+<p>Spring MVC是Spring的一个模块，一个web框架。通过DispatcherServlet, ModelAndView 和 View Resolver，开发web应用变得很容易。主要针对的是网站应用程序或者服务开发——URL路由、Session、模板引擎、静态Web资源等等。</p>
+<p>Spring配置复杂，繁琐，所以推出了Spring boot，约定优于配置，简化了spring的配置流程。</p>
+<p>Spring Cloud构建于Spring Boot之上，是一个关注全局的服务治理框架。</p>
+<h2 id="Spring-VS-SpringMVC："><a href="#Spring-VS-SpringMVC：" class="headerlink" title="Spring VS SpringMVC："></a>Spring VS SpringMVC：</h2><p>Spring是一个一站式的轻量级的java开发框架，核心是控制反转（IOC）和面向切面（AOP），针对于开发的WEB层(springMvc)、业务层(Ioc)、持久层(jdbcTemplate)等都提供了多种配置解决方案；</p>
+<p>SpringMVC是Spring基础之上的一个MVC框架，主要处理web开发的路径映射和视图渲染，属于Spring框架中WEB层开发的一部分；</p>
+<h2 id="SpringMVC-VS-SpringBoot："><a href="#SpringMVC-VS-SpringBoot：" class="headerlink" title="SpringMVC VS SpringBoot："></a>SpringMVC VS SpringBoot：</h2><p>SpringMVC属于一个企业WEB开发的MVC框架，涵盖面包括前端视图开发、文件配置、后台接口逻辑开发等，XML、config等配置相对比较繁琐复杂；</p>
+<p>SpringBoot框架相对于SpringMVC框架来说，更专注于开发微服务后台接口，不开发前端视图；</p>
+<h2 id="SpringBoot和SpringCloud："><a href="#SpringBoot和SpringCloud：" class="headerlink" title="SpringBoot和SpringCloud："></a>SpringBoot和SpringCloud：</h2><p>SpringBoot使用了约定大于配置的理念，集成了快速开发的Spring多个插件，同时自动过滤不需要配置的多余的插件，简化了项目的开发配置流程，一定程度上取消xml配置，是一套快速配置开发的脚手架，能快速开发单个微服务；</p>
+<p>SpringCloud大部分的功能插件都是基于SpringBoot去实现的，SpringCloud关注于全局的微服务整合和管理，将多个SpringBoot单体微服务进行整合以及管理；SpringCloud依赖于SpringBoot开发，而SpringBoot可以独立开发；</p>
+<h2 id="总结下来："><a href="#总结下来：" class="headerlink" title="总结下来："></a>总结下来：</h2><p>Spring是核心，提供了基础功能；</p>
+<p>Spring MVC 是基于Spring的一个 MVC 框架 ；</p>
+<p>Spring Boot 是为简化Spring配置的快速开发整合包；</p>
+<p>Spring Cloud是构建在Spring Boot之上的服务治理框架。</p>
 
         
     </section>

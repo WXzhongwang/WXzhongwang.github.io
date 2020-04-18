@@ -131,7 +131,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/02/12/2.0 Java虚拟机/">JVM 2.0</a>
+            <a href="/2018/02/12/Git撤销操作/">Git 撤销操作</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -145,7 +145,7 @@
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+    <a class="article-tag-link" href="/tags/Git/">Git</a>
 </div>
 
 
@@ -154,13 +154,23 @@
     
     <section class="article-body markdown-body">
         
-        <p>#Java虚拟机</p>
-<p>作用：</p>
+        <h1 id="Git-撤销操作"><a href="#Git-撤销操作" class="headerlink" title="Git 撤销操作"></a>Git 撤销操作</h1><p>在任何一个阶段，你都有可能想要撤消某些操作。 注意，有些撤消操作是不可逆的。 这是在使用 Git 的过程中，会因为操作失误而导致之前的工作丢失的少有的几个地方之一。</p>
+<h2 id="撤销操作"><a href="#撤销操作" class="headerlink" title="撤销操作"></a>撤销操作</h2><p>有时候我们提交完了才发现漏掉了几个文件没有添加，或者提交信息写错了。 此时，可以运行带有 –amend 选项的提交命令尝试重新提交：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="keyword">commit</span> <span class="comment">--amend</span></span><br></pre></td></tr></table></figure></p>
+<p>这个命令会将暂存区中的文件提交。如果自上次提交以来你还未做任何修改（例如，在上次提交后马上执行了此命令），那么快照会保持不变，而你所修改的只是提交信息。</p>
+<p>例如，你提交后发现忘记了暂存某些需要的修改，可以像下面这样操作：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="keyword">commit</span> -m <span class="string">'initial commit'</span></span><br><span class="line">$ git <span class="keyword">add</span> forgotten_file</span><br><span class="line">$ git <span class="keyword">commit</span> <span class="comment">--amend</span></span><br></pre></td></tr></table></figure></p>
+<p>最终你只会有一个提交 - 第二次提交将代替第一次提交的结果。</p>
+<h2 id="取消暂存的文件"><a href="#取消暂存的文件" class="headerlink" title="取消暂存的文件"></a>取消暂存的文件</h2><p>接下来的两个小节演示如何操作暂存区域与工作目录中已修改的文件。 这些命令在修改文件状态的同时，也会提示如何撤消操作。 例如，你已经修改了两个文件并且想要将它们作为两次独立的修改提交，但是却意外地输入了 git add * 暂存了它们两个。 如何只取消暂存两个中的一个呢？ git status 命令提示了你：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>git add *</span><br><span class="line"><span class="variable">$ </span>git status</span><br><span class="line">On branch master</span><br><span class="line">Changes to be <span class="symbol">committed:</span></span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git reset HEAD &lt;file&gt;..."</span> to unstage)</span><br><span class="line"></span><br><span class="line">    <span class="symbol">renamed:</span>    README.md -&gt; README</span><br><span class="line">    <span class="symbol">modified:</span>   CONTRIBUTING.md</span><br></pre></td></tr></table></figure></p>
+<p>在 “Changes to be committed” 文字正下方，提示使用 git reset HEAD <file>… 来取消暂存。 所以，我们可以这样来取消暂存 CONTRIBUTING.md 文件：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="keyword">reset</span> <span class="keyword">HEAD</span> CONTRIBUTING.md</span><br><span class="line">Unstaged changes <span class="keyword">after</span> <span class="keyword">reset</span>:</span><br><span class="line">M	CONTRIBUTING.md</span><br><span class="line">$ git <span class="keyword">status</span></span><br><span class="line"><span class="keyword">On</span> branch <span class="keyword">master</span></span><br><span class="line">Changes <span class="keyword">to</span> be committed:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git reset HEAD &lt;file&gt;..."</span> <span class="keyword">to</span> unstage)</span><br><span class="line"></span><br><span class="line">    renamed:    README.md -&gt; README</span><br><span class="line"></span><br><span class="line">Changes <span class="keyword">not</span> staged <span class="keyword">for</span> <span class="keyword">commit</span>:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git add &lt;file&gt;..."</span> <span class="keyword">to</span> <span class="keyword">update</span> what will be committed)</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git checkout -- &lt;file&gt;..."</span> <span class="keyword">to</span> discard changes <span class="keyword">in</span> working <span class="keyword">directory</span>)</span><br><span class="line"></span><br><span class="line">    modified:   CONTRIBUTING.md</span><br></pre></td></tr></table></figure></file></p>
+<p>这个命令有点儿奇怪，但是起作用了。 CONTRIBUTING.md 文件已经是修改未暂存的状态了。</p>
 <blockquote>
-<p>Java虚拟机的主要任务是装载class文件并且执行其中的字节码。<br>Java虚拟机包含一个类装载器（class loader），它可以从程序和API中装载class文件，<br>Java API中只有程序执行时需要的类才会被装载，字节码由执行引擎来执行。</p>
+<p>Note：虽然在调用时加上 –hard 选项可以令 git reset 成为一个危险的命令（译注：可能导致工作目录中所有当前进度丢失！）不加选项地调用 git reset 并不危险 — 它只会修改暂存区域。</p>
 </blockquote>
-<p>当Java虚拟机由主机操作系统上的软件实现时，Java程序通过调用本地方法和主机进行交互。<br>Java方法由Java语言编写，编译成字节码，存储在class文件中。<br>本地方法由C/C++/汇编语言编写，编译成和处理器相关的机器代码，存储在动态链接库中，格式是各个平台专有。<br>所以本地方法是联系Java程序和底层主机操作系统的连接方式。（跨平台）</p>
-<p><img src="https://www.javazhiyin.com/wp-content/uploads/2019/01/java8-1547432465.png" alt="image"></p>
+<h2 id="撤消对文件的修改"><a href="#撤消对文件的修改" class="headerlink" title="撤消对文件的修改"></a>撤消对文件的修改</h2><p>如果你并不想保留对 CONTRIBUTING.md 文件的修改怎么办？ 你该如何方便地撤消修改 - 将它还原成上次提交时的样子（或者刚克隆完的样子，或者刚把它放入工作目录时的样子）？ 幸运的是，git status 也告诉了你应该如何做。 在最后一个例子中，未暂存区域是这样：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Changes not staged for <span class="keyword">commit</span>:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git add &lt;file&gt;..."</span> <span class="keyword">to</span> <span class="keyword">update</span> what will be committed)</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git checkout -- &lt;file&gt;..."</span> <span class="keyword">to</span> discard changes <span class="keyword">in</span> working <span class="keyword">directory</span>)</span><br><span class="line"></span><br><span class="line">    modified:   CONTRIBUTING.md</span><br></pre></td></tr></table></figure></p>
+<p>它非常清楚地告诉了你如何撤消之前所做的修改。 让我们来按照提示执行：<br><figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout <span class="comment">-- CONTRIBUTING.md</span></span><br><span class="line">$ git status</span><br><span class="line"><span class="keyword">On</span> branch master</span><br><span class="line">Changes <span class="keyword">to</span> be committed:</span><br><span class="line">  (<span class="keyword">use</span> <span class="string">"git reset HEAD &lt;file&gt;..."</span> <span class="keyword">to</span> unstage)</span><br><span class="line"></span><br><span class="line">    renamed:    README.md -&gt; README</span><br></pre></td></tr></table></figure></p>
+<p>可以看到那些修改已经被撤消了。</p>
+<blockquote>
+<p>Important: 你需要知道 git checkout – [file] 是一个危险的命令，这很重要。 你对那个文件做的任何修改都会消失 - 你只是拷贝了另一个文件来覆盖它。 除非你确实清楚不想要那个文件了，否则不要使用这个命令。</p>
+</blockquote>
 
         
     </section>
@@ -281,6 +291,60 @@
 <p>注意是删掉文件夹里面的内容, 而不是把文件夹删了</p>
 </blockquote>
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.metadata/.plugins/org<span class="selector-class">.eclipse</span><span class="selector-class">.debug</span><span class="selector-class">.core</span>/.launches</span><br><span class="line"></span><br><span class="line">eg:</span><br><span class="line">E:\JavaWorkSpace\.metadata\.plugins\org<span class="selector-class">.eclipse</span><span class="selector-class">.debug</span><span class="selector-class">.core</span>\.launches</span><br></pre></td></tr></table></figure>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/02/08/IO复用技术/">IO复用技术</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/11/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-08T04:18:45.000Z" itemprop="datePublished">2018-02-08</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/IO/">IO</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="IO复用技术"><a href="#IO复用技术" class="headerlink" title="IO复用技术"></a>IO复用技术</h1><p>多进程方式实现的服务器端，一次创建多个工作子进程来给客户端提供服务。其实这种方式是存在问题的。</p>
+<p>可以打个比方：如果我们先前创建的几个进程承载不了目前快速发展的业务的话，是不是还得增加进程数？我们都知道系统创建进程是需要消耗大量资源的，所以这样就会导致系统资源不足的情况。</p>
+<p>那么有没有一种方式可以让一个进程同时为多个客户端端提供服务？</p>
+<p>接下来要讲的IO复用技术就是对于上述问题的最好解答。</p>
+<p>对于IO复用，我们可以通过一个例子来很好的理解它。（例子来自于《TCP/IP网络编程》）</p>
+<p>某教室有10名学生和1名老师，这些学生上课会不停的提问，所以一个老师处理不了这么多的问题。那么学校为每个学生都配一名老师，</p>
+<p>也就是这个教室目前有10名老师。此后，只要有新的转校生，那么就会为这个学生专门分配一个老师。</p>
+<p>如果把以上例子中的学生比作客户端，那么老师就是负责进行数据交换的服务端。则该例子可以比作是多进程的方式。</p>
+<p>后来有一天，来了一位具有超能力的老师，这位老师回答问题非常迅速，并且可以应对所有的问题。而这位老师采用的方式是学生提问前必须先举手，确认举手学生后在回答问题。则现在的情况就是IO复用。</p>
+<p>目前的常用的IO复用模型有三种：select，poll，epoll。</p>
+<h2 id="select模型"><a href="#select模型" class="headerlink" title="select模型"></a>select模型</h2><p>说的通俗一点就是各个客户端(连接的文件描述符)套接字，都被放到了一个集合中，调用select函数之后会一直监视这些文件描述符中有哪些可读，如果有可读的描述符那么我们的工作进程就去读取资源。</p>
+<h2 id="poll模型"><a href="#poll模型" class="headerlink" title="poll模型"></a>poll模型</h2><p>poll 和 select 的实现非常类似，本质上的区别就是存放 fd 集合的数据结构不一样。select 在一个进程内可以维持最多 1024 个连接，poll 在此基础上做了加强，可以维持任意数量的连接。</p>
+<p>但 select 和 poll 方式有一个很大的问题就是，我们不难看出来select是通过轮训的方式来查找是否可读或者可写，打个比方，如果同时有100万个连接都没有断开，而只有一个客户端发送了数据，所以这里它还是需要循环这么多次，造成资源浪费。所以后来出现了 epoll系统调用。</p>
+<h2 id="epoll模型"><a href="#epoll模型" class="headerlink" title="epoll模型"></a>epoll模型</h2><p>epoll是 select 和 poll 的增强版，epoll 同 poll 一样，文件描述符数量无限制。</p>
+<p>epoll是基于内核的反射机制，在有活跃的 socket 时，系统会调用我们提前设置的回调函数。而 poll 和 select 都是遍历。</p>
+<p>但是也并不是所有情况下 epoll 都比 select/poll 好，比如在如下场景：</p>
+<p>在大多数客户端都很活跃的情况下，系统会把所有的回调函数都唤醒，所以会导致负载较高。既然要处理这么多的连接，那倒不如 select 遍历简单有效。</p>
+<blockquote>
+<p>内核（kernel）利用文件描述符（file descriptor）来访问文件。文件描述符是非负整数。打开现存文件或新建文件时，内核会返回一个文件描述符。读写文件也需要使用文件描述符来指定待读写的文件。</p>
+</blockquote>
 
         
     </section>
@@ -562,60 +626,6 @@
 </tr>
 </tbody>
 </table>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/02/08/IO复用技术/">IO复用技术</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/11/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-02-08T04:18:45.000Z" itemprop="datePublished">2018-02-08</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/IO/">IO</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="IO复用技术"><a href="#IO复用技术" class="headerlink" title="IO复用技术"></a>IO复用技术</h1><p>多进程方式实现的服务器端，一次创建多个工作子进程来给客户端提供服务。其实这种方式是存在问题的。</p>
-<p>可以打个比方：如果我们先前创建的几个进程承载不了目前快速发展的业务的话，是不是还得增加进程数？我们都知道系统创建进程是需要消耗大量资源的，所以这样就会导致系统资源不足的情况。</p>
-<p>那么有没有一种方式可以让一个进程同时为多个客户端端提供服务？</p>
-<p>接下来要讲的IO复用技术就是对于上述问题的最好解答。</p>
-<p>对于IO复用，我们可以通过一个例子来很好的理解它。（例子来自于《TCP/IP网络编程》）</p>
-<p>某教室有10名学生和1名老师，这些学生上课会不停的提问，所以一个老师处理不了这么多的问题。那么学校为每个学生都配一名老师，</p>
-<p>也就是这个教室目前有10名老师。此后，只要有新的转校生，那么就会为这个学生专门分配一个老师。</p>
-<p>如果把以上例子中的学生比作客户端，那么老师就是负责进行数据交换的服务端。则该例子可以比作是多进程的方式。</p>
-<p>后来有一天，来了一位具有超能力的老师，这位老师回答问题非常迅速，并且可以应对所有的问题。而这位老师采用的方式是学生提问前必须先举手，确认举手学生后在回答问题。则现在的情况就是IO复用。</p>
-<p>目前的常用的IO复用模型有三种：select，poll，epoll。</p>
-<h2 id="select模型"><a href="#select模型" class="headerlink" title="select模型"></a>select模型</h2><p>说的通俗一点就是各个客户端(连接的文件描述符)套接字，都被放到了一个集合中，调用select函数之后会一直监视这些文件描述符中有哪些可读，如果有可读的描述符那么我们的工作进程就去读取资源。</p>
-<h2 id="poll模型"><a href="#poll模型" class="headerlink" title="poll模型"></a>poll模型</h2><p>poll 和 select 的实现非常类似，本质上的区别就是存放 fd 集合的数据结构不一样。select 在一个进程内可以维持最多 1024 个连接，poll 在此基础上做了加强，可以维持任意数量的连接。</p>
-<p>但 select 和 poll 方式有一个很大的问题就是，我们不难看出来select是通过轮训的方式来查找是否可读或者可写，打个比方，如果同时有100万个连接都没有断开，而只有一个客户端发送了数据，所以这里它还是需要循环这么多次，造成资源浪费。所以后来出现了 epoll系统调用。</p>
-<h2 id="epoll模型"><a href="#epoll模型" class="headerlink" title="epoll模型"></a>epoll模型</h2><p>epoll是 select 和 poll 的增强版，epoll 同 poll 一样，文件描述符数量无限制。</p>
-<p>epoll是基于内核的反射机制，在有活跃的 socket 时，系统会调用我们提前设置的回调函数。而 poll 和 select 都是遍历。</p>
-<p>但是也并不是所有情况下 epoll 都比 select/poll 好，比如在如下场景：</p>
-<p>在大多数客户端都很活跃的情况下，系统会把所有的回调函数都唤醒，所以会导致负载较高。既然要处理这么多的连接，那倒不如 select 遍历简单有效。</p>
-<blockquote>
-<p>内核（kernel）利用文件描述符（file descriptor）来访问文件。文件描述符是非负整数。打开现存文件或新建文件时，内核会返回一个文件描述符。读写文件也需要使用文件描述符来指定待读写的文件。</p>
-</blockquote>
 
         
     </section>
