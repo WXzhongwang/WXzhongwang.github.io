@@ -131,7 +131,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/12/02/Redis的“事务”及Lua脚本操作/">(十一)Redis的“事务”及Lua脚本操作</a>
+            <a href="/2018/12/02/Redis数据类型之List实现数据结构/">(四)Redis 数据类型之List实现数据结构</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -154,47 +154,12 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="十一-Redis的“事务”及Lua脚本操作"><a href="#十一-Redis的“事务”及Lua脚本操作" class="headerlink" title="(十一)Redis的“事务”及Lua脚本操作"></a>(十一)Redis的“事务”及Lua脚本操作</h1><h2 id="“事务”"><a href="#“事务”" class="headerlink" title="“事务”"></a>“事务”</h2><p>redis提供简单的事务命令，由multi和exec组成，实际上相当于将多个命令添加到一个执行的集合内，multi为begin，exec为commit，discard相当于rollback，watch相当于锁，对象若在事务执行前被修改则事务被打断。</p>
-<p>因此redis的事务机制为乐观锁，如果在高并发场景下，如果多个客户端同时对一个key进行了watch，只要有一个客户端提交成功，其他客户端的操作都是无效的，因此redis事务不适合在高并发场景下使用，使用lua脚本可以更好的解决事务解决不了的场景。</p>
-<p>Redis 事务可以一次执行多个命令， 并且带有以下三个重要的保证：</p>
-<ul>
-<li>批量操作在发送 EXEC 命令前被放入队列缓存。</li>
-<li>收到 EXEC 命令后进入事务执行，事务中任意命令执行失败，其余的命令依然被执行。</li>
-<li>在事务执行过程，其他客户端提交的命令请求不会插入到事务执行命令序列中。</li>
-</ul>
-<p>一个事务从开始到执行会经历以下三个阶段：</p>
-<ul>
-<li>开始事务。</li>
-<li>命令入队。</li>
-<li>执行事务。</li>
-</ul>
-<p>如果事务中出现错误：</p>
-<ol>
-<li>还未exec就报错：如果事务中出现语法错误，则事务会成功回滚，整个事务中的命令都不会提交；</li>
-<li>成功执行exec后才报错：如果事务中出现的不是语法错误，而是执行错误，不会触发回滚，该事务中仅有该错误命令不会提交，其他命令依旧会继续提交，因此这里的”事务”打了个引号，和我们通常理解的数据库事务完全不一样。</li>
-</ol>
-<figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#begin 开启一个redis事务</span></span><br><span class="line">multi</span><br><span class="line"> </span><br><span class="line"><span class="meta">#commit 提交事务里的命令队列</span></span><br><span class="line">exec</span><br><span class="line"> </span><br><span class="line"><span class="meta">#rollback 回滚</span></span><br><span class="line">discard</span><br><span class="line"> </span><br><span class="line"><span class="meta">#锁，监视一个或多个key，被监视的key若在提交事务前被修改，则事务被打断</span></span><br><span class="line">watch key [key ...</span><br><span class="line"> </span><br><span class="line"><span class="meta">#取消监视</span></span><br><span class="line">unwatch</span><br></pre></td></tr></table></figure>
-<h2 id="LUA脚本"><a href="#LUA脚本" class="headerlink" title="LUA脚本"></a>LUA脚本</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Redis2.6之后新增的功能，我们可以在redis中通过lua脚本操作redis。与事务不同的是事务是将多个命令添加到一个执行的集合，执行的时候仍然是多个命令，会受到其他客户端的影响，而脚本会将多个命令和操作当成一个命令在redis中执行，也就是说该脚本在执行的过程中，不会被任何其他脚本或命令打断干扰。正是因此这种原子性，lua脚本才可以代替multi和exec的事务功能。同时也是因此，在lua脚本中不宜进行过大的开销操作，避免影响后续的其他请求的正常执行。</p>
-<h3 id="使用lua脚本的好处"><a href="#使用lua脚本的好处" class="headerlink" title="使用lua脚本的好处"></a>使用lua脚本的好处</h3><ul>
-<li>lua脚本是作为一个整体执行的.所以中间不会被其他命令插入；</li>
-<li>可以把多条命令一次性打包,所以可以有效减少网络开销；</li>
-<li>lua脚本可以常驻在redis内存中,所以在使用的时候,可以直接拿来复用，也减少了代码。</li>
-</ul>
-<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><p>redis脚本使用eval命令执行lua脚本，其中numkeys表示lua script里有多少个key参数，redis脚本根据该数字从后面的key和arg中取前n个作为key参数，之后的都作为arg参数：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eval<span class="built_in"> script </span>numkeys key [key <span class="built_in">..</span>.] arg [arg <span class="built_in">..</span>.]</span><br></pre></td></tr></table></figure></p>
-<h4 id="场景1：记录IP登录次数"><a href="#场景1：记录IP登录次数" class="headerlink" title="场景1：记录IP登录次数"></a>场景1：记录IP登录次数</h4><p>利用hash记录所有登录的IP次数</p>
-<p>key参数的数量必须和numkey一致，使用key或者argv可以实现一样的效果。</p>
-<p>如下面第一个命令里用了三个key，代表后面的三个参数分别对应脚本里的key1 key2 key3.</p>
-<p>第二个命令里用了一个key，代表了后面第一个参数对应脚本里的key1，后面第二和第三个参数对应脚本里的argv1和argv2</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">eval <span class="string">"return redis.call('hincrby', KEYS[1], KEYS[2], KEYS[3])"</span> <span class="number">3</span> h_host host_192<span class="number">.168</span><span class="number">.145</span><span class="number">.1</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line">※ 可以看到存在<span class="number">3</span>个<span class="type">key</span></span><br><span class="line">eval <span class="string">"return redis.call('hincrby', KEYS[1], ARGV[1], ARGV[2])"</span> <span class="number">1</span> h_host host_192<span class="number">.168</span><span class="number">.145</span><span class="number">.1</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line">※ 配置了<span class="number">1</span>个<span class="type">key</span>, <span class="number">2</span>个argv参数</span><br></pre></td></tr></table></figure>
-<h4 id="场景2：当10秒内请求3次后拒绝访问"><a href="#场景2：当10秒内请求3次后拒绝访问" class="headerlink" title="场景2：当10秒内请求3次后拒绝访问"></a>场景2：当10秒内请求3次后拒绝访问</h4><ol>
-<li>给访问ip的key递增</li>
-<li>判断该访问次数若为首次登录则设置过期时间10秒</li>
-<li>若不是首次登录则判断是否大于3次，若大于则返回0，否则返回1。<figure class="highlight scilab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">eval <span class="string">"local request_times = redis.call('</span>incr',KEYS[<span class="number">1</span>]);</span><br><span class="line"><span class="keyword">if</span> request_times == <span class="number">1</span> <span class="keyword">then</span> redis.call(<span class="string">'expire'</span>,KEYS[<span class="number">1</span>], ARGV[<span class="number">1</span>]) <span class="keyword">end</span>;</span><br><span class="line"><span class="keyword">if</span> request_times &gt; tonumber(ARGV[<span class="number">2</span>]) <span class="keyword">then</span> <span class="keyword">return</span> <span class="number">0</span> <span class="keyword">end</span> <span class="keyword">return</span> <span class="number">1</span>;<span class="string">" 1 test_127.0.0.1 10 3</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>通过上面的例子也可以看出，我们可以在redis里使用eval命令调用lua脚本，且该脚本在redis里作为单条命令去执行不会受到其余命令的影响，非常适用于高并发场景下的事务处理。同样我们可以在lua脚本里实现任何想要实现的功能，迭代，循环，判断，赋值 都是可以的。</p>
-<h4 id="lua脚本缓存"><a href="#lua脚本缓存" class="headerlink" title="lua脚本缓存"></a>lua脚本缓存</h4><p>redis脚本也支持将脚本进行持久化，这样的话，下次再使用就不用输入那么长的lua脚本了。事实上使用eval执行的时候也会缓存，eval与load不同的是eval会将lua脚本执行并缓存，而load只会将脚本缓存。相同点是它们都使用sha算法进行缓存，因此只要lua脚本内容相同，eval与load缓存的sha码就是一样的。而缓存后的脚本，我们可以使用evalsha命令直接调用，极大的简化了我们的代码量，不用重复的将lua脚本写出来。</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#eval 执行脚本并缓存</span></span><br><span class="line">eval<span class="built_in"> script </span>numkeys key [key <span class="built_in">..</span>.] arg [arg <span class="built_in">..</span>.]</span><br><span class="line"> </span><br><span class="line"><span class="comment">#load 缓存lua脚本</span></span><br><span class="line">script load script</span><br><span class="line"> </span><br><span class="line"><span class="comment">#使用缓存的脚本sha码调用脚本</span></span><br><span class="line">evalsha sha1 numkeys key [key <span class="built_in">..</span>.] arg [arg <span class="built_in">..</span>.] </span><br><span class="line"> </span><br><span class="line"><span class="comment">#使用sha码判断脚本是否已缓存</span></span><br><span class="line">script exist sha1 [sha1 <span class="built_in">..</span>.]</span><br><span class="line"> </span><br><span class="line"><span class="comment">#清空所有缓存的脚本</span></span><br><span class="line">script flush</span><br><span class="line"> </span><br><span class="line"><span class="comment">#杀死当前正在执行的所有lua脚本</span></span><br><span class="line">script kill</span><br></pre></td></tr></table></figure>
+        <h1 id="四-Redis-数据类型之List实现数据结构"><a href="#四-Redis-数据类型之List实现数据结构" class="headerlink" title="(四)Redis 数据类型之List实现数据结构"></a>(四)Redis 数据类型之List实现数据结构</h1><h2 id="栈：先进后出"><a href="#栈：先进后出" class="headerlink" title="栈：先进后出"></a>栈：先进后出</h2><p>lpush + lpop</p>
+<p>左侧入栈，左侧出站</p>
+<h2 id="队列：先进先出"><a href="#队列：先进先出" class="headerlink" title="队列：先进先出"></a>队列：先进先出</h2><p>lpush + rpop<br>左侧入栈，右侧出栈，队列思想</p>
+<h2 id="有限集合"><a href="#有限集合" class="headerlink" title="有限集合"></a>有限集合</h2><p>lpush + ltrim</p>
+<h2 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h2><p>lpush + brpop</p>
+<p>左侧不断入栈，通过brpop不断消费List中数据</p>
 
         
     </section>
@@ -206,7 +171,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/12/01/Dubbo 负载均衡 集群容错 服务路由/">Dubbo 负载均衡 集群容错 服务路由</a>
+            <a href="/2018/12/01/Spark/">Spark的体系结构</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -220,7 +185,7 @@
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Dubbo/">Dubbo</a>
+    <a class="article-tag-link" href="/tags/Spark/">Spark</a>
 </div>
 
 
@@ -229,27 +194,9 @@
     
     <section class="article-body markdown-body">
         
-        <p>在讨论负载均衡之前，我想先解释一下这3个概念。</p>
-<p>负载均衡<br>集群容错<br>服务路由<br>这3个概念容易混淆。他们都描述了怎么从多个 Provider 中选择一个来进行调用。那他们到底有什么区别呢?下面我来举一个简单的例子，把这几个概念阐述清楚吧。</p>
-<p>有一个Dubbo的用户服务，在北京部署了10个，在上海部署了20个。一个杭州的服务消费方发起了一次调用，然后发生了以下的事情:</p>
-<ol>
-<li>根据配置的路由规则，如果杭州发起的调用，会路由到比较近的上海的20个 Provider。</li>
-<li>根据配置的随机负载均衡策略，在20个Provider中随机选择了一个来调用，假设随机到了第7个 Provider。</li>
-<li>结果调用第7个 Provider 失败了。</li>
-<li>根据配置的Failover集群容错模式，重试其他服务器。重试了第13个Provider，调用成功。</li>
-</ol>
-<ul>
-<li>上面的第1，2，4步骤就分别对应了路由，负载均衡和集群容错。 - Dubbo中，先通过路由，从多个 Provider 中按照路由规则，选出一个子集。再根据负载均衡从子集中选出一个 Provider 进行本次调用。</li>
-<li>如果调用失败了，根据集群容错策略，进行重试或定时重发或快速失败等。 </li>
-</ul>
-<blockquote>
-<p>可以看到Dubbo中的路由，负载均衡和集群容错发生在一次RPC调用的不同阶段。最先是路由，然后是负载均衡，最后是集群容错。 本文档只讨论负载均衡，路由和集群容错在其他的文档中进行说明。<br>顺序上：</p>
-<ul>
-<li>服务路由</li>
-<li>负载均衡</li>
-<li>集群容错</li>
-</ul>
-</blockquote>
+        <h1 id="Spark的体系结构"><a href="#Spark的体系结构" class="headerlink" title="Spark的体系结构"></a>Spark的体系结构</h1><p>Spark的体系结构不同于Hadoop的MapReduce和HDFS，Spark主要包括Spark Core和在Spark Core基础之上建立的应用框架Spark SQL、Spark Streaming、MLlib和GraphX。</p>
+<p>Core库中主要包括上下文（Spark Context）、抽象数据集（RDD）、调度器（Scheduler）、洗牌（shuffle）和序列化器（Serializer）等。Spark系统中的计算、IO、调度和shuffle等系统基本功能都在其中。在Core库之上就根据业务需求分为用于交互式查询的SQL、实时流处理Streaming、机器学习Mllib和图计算GraphX四大框架，除此外还有一些其他实验性项目如Tachyon、BlinkDB和Tungsten等。这些项目共同组成Spark体系结构，当然Hadoop中的存储系统HDFS迄今仍是不可被替代，一直被各分布式系统所使用，它也是Spark主要应用的持久化存储系统。</p>
+<p><img src="https://img-blog.csdn.net/20160406095548407" alt="spark"></p>
 
         
     </section>
@@ -311,7 +258,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/12/01/Spark/">Spark的体系结构</a>
+            <a href="/2018/12/01/Dubbo 负载均衡 集群容错 服务路由/">Dubbo 负载均衡 集群容错 服务路由</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -325,7 +272,7 @@
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Spark/">Spark</a>
+    <a class="article-tag-link" href="/tags/Dubbo/">Dubbo</a>
 </div>
 
 
@@ -334,9 +281,27 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="Spark的体系结构"><a href="#Spark的体系结构" class="headerlink" title="Spark的体系结构"></a>Spark的体系结构</h1><p>Spark的体系结构不同于Hadoop的MapReduce和HDFS，Spark主要包括Spark Core和在Spark Core基础之上建立的应用框架Spark SQL、Spark Streaming、MLlib和GraphX。</p>
-<p>Core库中主要包括上下文（Spark Context）、抽象数据集（RDD）、调度器（Scheduler）、洗牌（shuffle）和序列化器（Serializer）等。Spark系统中的计算、IO、调度和shuffle等系统基本功能都在其中。在Core库之上就根据业务需求分为用于交互式查询的SQL、实时流处理Streaming、机器学习Mllib和图计算GraphX四大框架，除此外还有一些其他实验性项目如Tachyon、BlinkDB和Tungsten等。这些项目共同组成Spark体系结构，当然Hadoop中的存储系统HDFS迄今仍是不可被替代，一直被各分布式系统所使用，它也是Spark主要应用的持久化存储系统。</p>
-<p><img src="https://img-blog.csdn.net/20160406095548407" alt="spark"></p>
+        <p>在讨论负载均衡之前，我想先解释一下这3个概念。</p>
+<p>负载均衡<br>集群容错<br>服务路由<br>这3个概念容易混淆。他们都描述了怎么从多个 Provider 中选择一个来进行调用。那他们到底有什么区别呢?下面我来举一个简单的例子，把这几个概念阐述清楚吧。</p>
+<p>有一个Dubbo的用户服务，在北京部署了10个，在上海部署了20个。一个杭州的服务消费方发起了一次调用，然后发生了以下的事情:</p>
+<ol>
+<li>根据配置的路由规则，如果杭州发起的调用，会路由到比较近的上海的20个 Provider。</li>
+<li>根据配置的随机负载均衡策略，在20个Provider中随机选择了一个来调用，假设随机到了第7个 Provider。</li>
+<li>结果调用第7个 Provider 失败了。</li>
+<li>根据配置的Failover集群容错模式，重试其他服务器。重试了第13个Provider，调用成功。</li>
+</ol>
+<ul>
+<li>上面的第1，2，4步骤就分别对应了路由，负载均衡和集群容错。 - Dubbo中，先通过路由，从多个 Provider 中按照路由规则，选出一个子集。再根据负载均衡从子集中选出一个 Provider 进行本次调用。</li>
+<li>如果调用失败了，根据集群容错策略，进行重试或定时重发或快速失败等。 </li>
+</ul>
+<blockquote>
+<p>可以看到Dubbo中的路由，负载均衡和集群容错发生在一次RPC调用的不同阶段。最先是路由，然后是负载均衡，最后是集群容错。 本文档只讨论负载均衡，路由和集群容错在其他的文档中进行说明。<br>顺序上：</p>
+<ul>
+<li>服务路由</li>
+<li>负载均衡</li>
+<li>集群容错</li>
+</ul>
+</blockquote>
 
         
     </section>
@@ -517,44 +482,6 @@ S0C S1C S0U S1U EC EU OC OU PC PU YGC YGCT FGC FGCT GCT
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/09/15/JVM课程五/">JVM课程五</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/11/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-09-15T02:55:00.000Z" itemprop="datePublished">2018-09-15</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="垃圾回收算法和收集器"><a href="#垃圾回收算法和收集器" class="headerlink" title="垃圾回收算法和收集器"></a>垃圾回收算法和收集器</h1><h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><h3 id="引用计数（reference-counting）"><a href="#引用计数（reference-counting）" class="headerlink" title="引用计数（reference counting）"></a>引用计数（reference counting）</h3><p>古老的算法。此对象有一个引用，增加一个计数，删除一个引用减少一个引用。垃圾回收时，只用收集为0的对象。<br>致命问题是无法解决循环引用的问题。</p>
-<h3 id="复制（copying）"><a href="#复制（copying）" class="headerlink" title="复制（copying）"></a>复制（copying）</h3><p>eg：survivor from to<br>此算法将内存空间分为两份。每次使用其中一个区域。（占用空间）<br>垃圾回收时，遍历当前使用的区域，把正在使用中的对象复制到另一个区域中。</p>
-<h3 id="标记清楚（Mark-Sweep）"><a href="#标记清楚（Mark-Sweep）" class="headerlink" title="标记清楚（Mark-Sweep）"></a>标记清楚（Mark-Sweep）</h3><p>执行分为两阶段。<br>第一阶段：从对象根节点开始标记所有被引用的对象。<br>第二阶段：遍历整个堆，把未标记的对象清除，此算法需要暂停整个应用(Stop the world)。<br>同时会产生内存碎片。<br>缺点：<br>1）未使用的内存空间不连续，浪费。<br>2）暂停整个应用。</p>
-<h3 id="标记整理（Mark-Compact）"><a href="#标记整理（Mark-Compact）" class="headerlink" title="标记整理（Mark-Compact）"></a>标记整理（Mark-Compact）</h3><p>执行分为两阶段。<br>第一阶段：从对象根节点开始标记所有被引用的对象。<br>第二阶段：遍历整个堆，把未标记的对象清除，同时把存活的对象压缩到一块，顺序排放，避免碎片问题。<br>避免了复制算法的空间问题。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2018/09/15/JVM课程四/">JVM课程四</a>
         </h1>
         
@@ -591,6 +518,44 @@ S0C S1C S0U S1U EC EU OC OU PC PU YGC YGCT FGC FGCT GCT
 </blockquote>
 <h2 id="老年代"><a href="#老年代" class="headerlink" title="老年代"></a>老年代</h2><p>在新生代中经历了多次的GC后存活下来的对象会进入老年代。<br>老年代的对象生命周期较长，存活率比较高，在老年代中进行GC的频率较低，效率也较低。</p>
 <h2 id="永久代"><a href="#永久代" class="headerlink" title="永久代"></a>永久代</h2><p>永久代中存放类信息，常量，静态变量，即时编译器编译后的代码等数据。<br>对此区域，Java虚拟机规范指出可以不进行垃圾收集。一般而言不会进行垃圾回收。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/09/15/JVM课程五/">JVM课程五</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/11/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-09-15T02:55:00.000Z" itemprop="datePublished">2018-09-15</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="垃圾回收算法和收集器"><a href="#垃圾回收算法和收集器" class="headerlink" title="垃圾回收算法和收集器"></a>垃圾回收算法和收集器</h1><h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><h3 id="引用计数（reference-counting）"><a href="#引用计数（reference-counting）" class="headerlink" title="引用计数（reference counting）"></a>引用计数（reference counting）</h3><p>古老的算法。此对象有一个引用，增加一个计数，删除一个引用减少一个引用。垃圾回收时，只用收集为0的对象。<br>致命问题是无法解决循环引用的问题。</p>
+<h3 id="复制（copying）"><a href="#复制（copying）" class="headerlink" title="复制（copying）"></a>复制（copying）</h3><p>eg：survivor from to<br>此算法将内存空间分为两份。每次使用其中一个区域。（占用空间）<br>垃圾回收时，遍历当前使用的区域，把正在使用中的对象复制到另一个区域中。</p>
+<h3 id="标记清楚（Mark-Sweep）"><a href="#标记清楚（Mark-Sweep）" class="headerlink" title="标记清楚（Mark-Sweep）"></a>标记清楚（Mark-Sweep）</h3><p>执行分为两阶段。<br>第一阶段：从对象根节点开始标记所有被引用的对象。<br>第二阶段：遍历整个堆，把未标记的对象清除，此算法需要暂停整个应用(Stop the world)。<br>同时会产生内存碎片。<br>缺点：<br>1）未使用的内存空间不连续，浪费。<br>2）暂停整个应用。</p>
+<h3 id="标记整理（Mark-Compact）"><a href="#标记整理（Mark-Compact）" class="headerlink" title="标记整理（Mark-Compact）"></a>标记整理（Mark-Compact）</h3><p>执行分为两阶段。<br>第一阶段：从对象根节点开始标记所有被引用的对象。<br>第二阶段：遍历整个堆，把未标记的对象清除，同时把存活的对象压缩到一块，顺序排放，避免碎片问题。<br>避免了复制算法的空间问题。</p>
 
         
     </section>

@@ -131,138 +131,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/12/02/线上排查基本操作/">线上排查基本操作</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/6/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="线上排查基本操作"><a href="#线上排查基本操作" class="headerlink" title="线上排查基本操作"></a>线上排查基本操作</h1><h2 id="1-CPU-飚高"><a href="#1-CPU-飚高" class="headerlink" title="1. CPU 飚高"></a>1. CPU 飚高</h2><p>线上 CPU 飚高问题大家应该都遇到过，那么如何定位问题呢？</p>
-<p>思路：首先找到 CPU 飚高的那个 Java 进程，因为你的服务器会有多个 JVM 进程。然后找到那个进程中的 “问题线程”，最后根据线程堆栈信息找到问题代码。最后对代码进行排查。</p>
-<p>如何操作呢？</p>
-<p>通过 top 命令找到 CPU 消耗最高的进程，并记住进程 ID。<br>再次通过 top -Hp [进程 ID] 找到 CPU 消耗最高的线程 ID，并记住线程 ID.<br><figure class="highlight prolog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">top -<span class="symbol">Hp</span> [进程 <span class="symbol">ID</span>]  -- 找到 <span class="symbol">CPU</span> 消耗最高的线程 <span class="symbol">ID</span>，并记住线程 <span class="symbol">ID</span>.</span><br></pre></td></tr></table></figure></p>
-<p>通过 JDK 提供的 jstack 工具 dump 线程堆栈信息到指定文件中。具体命令：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jstack -l [进程 ID] &gt;jstack.log。</span><br><span class="line"></span><br><span class="line">由于刚刚的线程 ID 是十进制的，而堆栈信息中的线程 ID 是<span class="number">16</span>进制的，因此我们需要将<span class="number">10</span>进制的转换成<span class="number">16</span>进制的，并用这个线程 ID 在堆栈中查找。使用 printf <span class="string">"%x<span class="subst">\n</span>"</span> [十进制数字] ，可以将<span class="number">10</span>进制转换成<span class="number">16</span>进制。</span><br></pre></td></tr></table></figure></p>
-<p>通过刚刚转换的16进制数字从堆栈信息里找到对应的线程堆栈。就可以从该堆栈中看出端倪。<br>从经验来看，一般是某个业务死循环没有出口，这种情况可以根据业务进行修复。<br>还有 C2 编译器执行编译时也会抢占 CPU，什么是 C2编译器呢？<br>当 Java 某一段代码执行次数超过10000次（默认）后，<br>就会将该段代码从解释执行改为编译执行，也就是编译成机器码以提高速度。<br>而这个 C2编译器就是做这个的。如何解决呢？项目上线后，可以先通过压测工具进行预热，<br>这样，等用户真正访问的时候，C2编译器就不会干扰应用程序了。<br>如果是 GC 线程导致的，那么极有可能是 Full GC ，那么就要进行 GC 的优化。</p>
-<h2 id="2-内存问题排查"><a href="#2-内存问题排查" class="headerlink" title="2. 内存问题排查"></a>2. 内存问题排查</h2><p>说完了 CPU 的问题排查，再说说内存的排查，通常，内存的问题就是 GC 的问题，因为 Java 的内存由 GC 管理。<br>有2种情况，一种是内存溢出了，一种是内存没有溢出，但 GC 不健康。</p>
-<h2 id="内存溢出OOM"><a href="#内存溢出OOM" class="headerlink" title="内存溢出OOM"></a>内存溢出OOM</h2><p>内存溢出的情况可以通过加上 -XX:+HeapDumpOnOutOfMemoryError 参数，该参数作用是：在程序内存溢出时输出 dump 文件。</p>
-<p>有了 dump 文件，就可以通过 dump 分析工具进行分析了，比如常用的MAT，Jprofile，jvisualvm 等工具都可以分析，这些工具都能够看出到底是哪里溢出，哪里创建了大量的对象等等信息。</p>
-<h2 id="GC-的健康问题-第二种情况就比较复杂了"><a href="#GC-的健康问题-第二种情况就比较复杂了" class="headerlink" title="GC 的健康问题(第二种情况就比较复杂了)"></a>GC 的健康问题(第二种情况就比较复杂了)</h2><p>通常一个健康的 GC 是什么状态呢？</p>
-<p>YGC 5秒一次左右，每次不超过50毫秒，FGC 最好没有，CMS GC 一天一次左右。</p>
-<p>而 GC 的优化有2个维度:</p>
-<blockquote>
-<p>一是频率，二是时长。</p>
-</blockquote>
-<h3 id="YGC-年轻代GC"><a href="#YGC-年轻代GC" class="headerlink" title="YGC 年轻代GC"></a>YGC 年轻代GC</h3><p>首先看频率，如果 YGC 超过5秒一次，甚至更长，说明系统内存过大，应该缩小容量<br>如果频率很高，说明 Eden 区过小，可以将 Eden 区增大，但整个新生代的容量应该在堆的 30% - 40%之间，<br>eden，from 和 to 的比例应该在 8：1：1左右，这个比例可根据对象晋升的大小进行调整。</p>
-<p>如果YGC时间过长呢？<br>YGC 有2个过程，一个是扫描，一个是复制，通常扫描速度很快，复制速度相比而言要慢一些，如果每次都有大量对象要复制，<br>就会将 STW 时间延长，还有一个情况就是 StringTable ，这个数据结构中存储着 String.intern 方法返回的常连池的引用，<br>YGC 每次都会扫描这个数据结构（HashTable），如果这个数据结构很大，且没有经过 FGC，那么也会拉长 STW 时长，<br>还有一种情况就是操作系统的虚拟内存，当 GC 时正巧操作系统正在交换内存，也会拉长 STW 时长。</p>
-<h3 id="FGC"><a href="#FGC" class="headerlink" title="FGC"></a>FGC</h3><p>实际上，FGC 我们只能优化频率，无法优化时长，因为这个时长无法控制。如何优化频率呢？</p>
-<p>首先，FGC 的原因有几个:<br>1.Old 区内存不够<br>2.元数据区内存不够<br>3.System.gc()<br>4.执行jmap 或者 jcmd，<br>5.是CMS Promotion failed 或者 concurrent mode failure，<br>6.JVM 基于悲观策略认为这次 YGC 后 Old 区无法容纳晋升的对象，因此取消 YGC，提前 FGC。</p>
-<p>通常优化的点是 Old 区内存不够导致 FGC。<br>如果 FGC 后还有大量对象，说明 Old 区过小，应该扩大 Old 区。<br>如果 FGC 后效果很好，说明 Old 区存在了大量短命的对象，优化的点应该是让这些对象在新生代就被 YGC 掉，<br>通常的做法是增大新生代，如果有大而短命的对象，通过参数设置对象的大小，不要让这些对象进入 Old 区，还需要检查晋升年龄是否过小。<br>如果 YGC 后，有大量对象因为无法进入 Survivor 区从而提前晋升，这时应该增大 Survivor 区，但不宜太大。</p>
-<p>上面说的都是优化的思路，我们也需要一些工具知道 GC 的状况。</p>
-<p>JDK 提供了很多的工具，比如 jmap ，jcmd 等，oracle 官方推荐使用 jcmd 代替 jmap，因为 jcmd 确实能代替 jmap 很多功能。<br>jmap 可以打印对象的分布信息，可以 dump 文件，注意，jmap 和 jcmd dump 文件的时候会触发 FGC ，使用的时候注意场景。</p>
-<p>还有一个比较常用的工具是 jstat，该工具可以查看GC 的详细信息，比如eden ，from，to，old 等区域的内存使用情况。<br>还有一个工具是 jinfo，该工具可以查看当前 jvm 使用了哪些参数，并且也可以在不停机的情况下修改参数。</p>
-<p>包括我们上面说的一些分析 dump 文件的可视化工具，MAT，Jprofile，jvisualvm 等，这些工具可以分析 jmap dump 下来的文件，看看哪个对象使用的内存较多，通常是能够查出问题的。</p>
-<p>还有很重要的一点就是，线上环境一定要带上 GC 日志！！！</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/12/02/Linux下高并发socket最大连接数所受的各种限制/">Linux下高并发socket最大连接数所受的各种限制</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/6/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Linux下高并发socket最大连接数所受的各种限制"><a href="#Linux下高并发socket最大连接数所受的各种限制" class="headerlink" title="Linux下高并发socket最大连接数所受的各种限制"></a>Linux下高并发socket最大连接数所受的各种限制</h1><h2 id="1、修改用户进程可打开文件数限制"><a href="#1、修改用户进程可打开文件数限制" class="headerlink" title="1、修改用户进程可打开文件数限制"></a>1、修改用户进程可打开文件数限制</h2><p>在Linux平台上，无论编写客户端程序还是服务端程序，在进行高并发TCP连接处理时，最高的并发数量都要受到系统对用户单一进程同时可打开文件数量的限制(这是因为系统为每个TCP连接都要创建一个socket句柄，每个socket句柄同时也是一个文件句柄)。可使用ulimit命令查看系统允许当前用户进程打开的文件数限制：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[xxxx<span class="variable">@xxx</span> ~]<span class="variable">$ </span>ulimit -n</span><br><span class="line"><span class="number">1024</span></span><br></pre></td></tr></table></figure></p>
-<p>这表示当前用户的每个进程最多允许同时打开1024个文件，这1024个文件中还得除去每个进程必然打开的标准输入，标准输出，标准错误，服务器监听 socket，进程间通讯的unix域socket等文件，那么剩下的可用于客户端socket连接的文件数就只有大概1024-10=1014个左右。也就是说缺省情况下，基于Linux的通讯程序最多允许同时1014个TCP并发连接。</p>
-<blockquote>
-<p>对于想支持更高数量的TCP并发连接的通讯处理程序，就必须修改Linux对当前用户的进程同时打开的文件数量的软限制(soft limit)和硬限制(hardlimit)。其中软限制是指Linux在当前系统能够承受的范围内进一步限制用户同时打开的文件数；硬限制则是根据系统硬件资源状况(主要是系统内存)计算出来的系统最多可同时打开的文件数量。通常软限制小于或等于硬限制。<br>修改上述限制的最简单的办法就是使用ulimit命令：</p>
-</blockquote>
-<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[xxxx<span class="variable">@xxx</span> ~]<span class="variable">$ </span>ulimit -n</span><br></pre></td></tr></table></figure>
-<p>上述命令中，在中指定要设置的单一进程允许打开的最大文件数。如果系统回显类似于“Operation notpermitted”之类的话，说明上述限制修改失败，实际上是因为在中指定的数值超过了Linux系统对该用户打开文件数的软限制或硬限制。因此，就需要修改Linux系统对用户的关于打开文件数的软限制和硬限制。</p>
-<h4 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h4><p>修改/etc/security/limits.conf文件，在文件中添加如下行：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">user soft nofile 10240</span><br><span class="line">user hard nofile 10240</span><br></pre></td></tr></table></figure></p>
-<p>其中user指定了要修改哪个用户的打开文件数限制，可用’*’号表示修改所有用户的限制；soft或hard指定要修改软限制还是硬限制；10240则指定了想要修改的新的限制值，即最大打开文件数(请注意软限制值要小于或等于硬限制)。修改完后保存文件。</p>
-<h4 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h4><p>修改/etc/pam.d/login文件，在文件中添加如下行：<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">session required /<span class="class"><span class="keyword">lib</span>/<span class="title">security</span>/<span class="title">pam_limits</span>.<span class="title">so</span></span></span><br></pre></td></tr></table></figure></p>
-<p>这是告诉Linux在用户完成系统登录后，应该调用pam_limits.so模块来设置系统对该用户可使用的各种资源数量的最大限制(包括用户可打开的最大文件数限制)，而pam_limits.so模块就会从/etc/security/limits.conf文件中读取配置来设置这些限制值。修改完后保存此文件。</p>
-<h4 id="第三步"><a href="#第三步" class="headerlink" title="第三步"></a>第三步</h4><p>查看Linux系统级的最大打开文件数限制，使用如下命令：<br><figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[xxxx@xxx ~]$ cat /<span class="keyword">proc</span>/sys/fs/<span class="keyword">file</span>-<span class="keyword">max</span></span><br><span class="line"><span class="number">12158</span></span><br></pre></td></tr></table></figure></p>
-<p>这表明这台Linux系统最多允许同时打开(即包含所有用户打开文件数总和)12158个文件，是Linux系统级硬限制，所有用户级的打开文件数限制都不应超过这个数值。通常这个系统级硬限制是Linux系统在启动时根据系统硬件资源状况计算出来的最佳的最大同时打开文件数限制，如果没有特殊需要，不应该修改此限制，除非想为用户级打开文件数限制设置超过此限制的值。修改此硬限制的方法是修改/etc/rc.local脚本，在脚本中添加如下行：<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo <span class="number">22158</span> &gt; <span class="regexp">/proc/</span>sys<span class="regexp">/fs/</span><span class="keyword">file</span>-max</span><br></pre></td></tr></table></figure></p>
-<p>这是让Linux在启动完成后强行将系统级打开文件数硬限制设置为22158。修改完后保存此文件。<br>完成上述步骤后重启系统，一般情况下就可以将Linux系统对指定用户的单一进程允许同时打开的最大文件数限制设为指定的数值。</p>
-<p>如果重启后用 ulimit-n命令查看用户可打开文件数限制仍然低于上述步骤中设置的最大值，这可能是因为在用户登录脚本/etc/profile中使用ulimit -n命令已经将用户可同时打开的文件数做了限制。由于通过ulimit-n修改系统对用户可同时打开文件的最大数限制时，新修改的值只能小于或等于上次 ulimit-n设置的值，因此想用此命令增大这个限制值是不可能的。所以，如果有上述问题存在，就只能去打开/etc/profile脚本文件，在文件中查找是否使用了ulimit-n限制了用户可同时打开的最大文件数量，如果找到，则删除这行命令，或者将其设置的值改为合适的值，然后保存文件，用户退出并重新登录系统即可。<br>通过上述步骤，就为支持高并发TCP连接处理的通讯处理程序解除关于打开文件数量方面的系统限制。</p>
-<h2 id="2、修改网络内核对TCP连接的有关限制"><a href="#2、修改网络内核对TCP连接的有关限制" class="headerlink" title="2、修改网络内核对TCP连接的有关限制"></a>2、修改网络内核对TCP连接的有关限制</h2><p>在Linux上编写支持高并发TCP连接的客户端通讯处理程序时，有时会发现尽管已经解除了系统对用户同时打开文件数的限制，但仍会出现并发TCP连接数增加到一定数量时，再也无法成功建立新的TCP连接的现象。出现这种现在的原因有多种。<br>第一种原因可能是因为Linux网络内核对本地端口号范围有限制。此时，进一步分析为什么无法建立TCP连接，会发现问题出在connect()调用返回失败，查看系统错误提示消息是“Can’t assign requestedaddress”。同时，如果在此时用tcpdump工具监视网络，会发现根本没有TCP连接时客户端发SYN包的网络流量。这些情况说明问题在于本地Linux系统内核中有限制。其实，问题的根本原因在于Linux内核的TCP/IP协议实现模块对系统中所有的客户端TCP连接对应的本地端口号的范围进行了限制(例如，内核限制本地端口号的范围为1024~32768之间)。当系统中某一时刻同时存在太多的TCP客户端连接时，由于每个TCP客户端连接都要占用一个唯一的本地端口号(此端口号在系统的本地端口号范围限制中)，如果现有的TCP客户端连接已将所有的本地端口号占满，则此时就无法为新的TCP客户端连接分配一个本地端口号了，因此系统会在这种情况下在connect()调用中返回失败，并将错误提示消息设为“Can’t assignrequested address”。有关这些控制逻辑可以查看Linux内核源代码，以linux2.6内核为例，可以查看tcp_ipv4.c文件中如下函数：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">tcp_v4_hash_connect</span>(<span class="params"><span class="keyword">struct</span> sock *sk</span>)</span></span><br></pre></td></tr></table></figure></p>
-<p>请注意上述函数中对变量sysctl_local_port_range的访问控制。变量sysctl_local_port_range的初始化则是在tcp.c文件中的如下函数中设置：<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> __init tcp_init(<span class="keyword">void</span>)</span><br></pre></td></tr></table></figure></p>
-<p>内核编译时默认设置的本地端口号范围可能太小，因此需要修改此本地端口范围限制。</p>
-<h5 id="第一步，修改-etc-sysctl-conf文件，在文件中添加如下行："><a href="#第一步，修改-etc-sysctl-conf文件，在文件中添加如下行：" class="headerlink" title="第一步，修改/etc/sysctl.conf文件，在文件中添加如下行："></a>第一步，修改/etc/sysctl.conf文件，在文件中添加如下行：</h5><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.ip_local_port_range</span> = <span class="number">1024</span> <span class="number">65000</span></span><br></pre></td></tr></table></figure>
-<p>这表明将系统对本地端口范围限制设置为1024~65000之间。请注意，本地端口范围的最小值必须大于或等于1024；而端口范围的最大值则应小于或等于65535。修改完后保存此文件。</p>
-<h5 id="第二步，执行sysctl命令："><a href="#第二步，执行sysctl命令：" class="headerlink" title="第二步，执行sysctl命令："></a>第二步，执行sysctl命令：</h5><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[speng<span class="variable">@as4</span> ~]<span class="variable">$ </span>sysctl -p</span><br></pre></td></tr></table></figure>
-<p>如果系统没有错误提示，就表明新的本地端口范围设置成功。如果按上述端口范围进行设置，则理论上单独一个进程最多可以同时建立60000多个TCP客户端连接。<br>第二种无法建立TCP连接的原因可能是因为Linux网络内核的IP_TABLE防火墙对最大跟踪的TCP连接数有限制。此时程序会表现为在 connect()调用中阻塞，如同死机，如果用tcpdump工具监视网络，也会发现根本没有TCP连接时客户端发SYN包的网络流量。由于 IP_TABLE防火墙在内核中会对每个TCP连接的状态进行跟踪，跟踪信息将会放在位于内核内存中的conntrackdatabase中，这个数据库的大小有限，当系统中存在过多的TCP连接时，数据库容量不足，IP_TABLE无法为新的TCP连接建立跟踪信息，于是表现为在connect()调用中阻塞。此时就必须修改内核对最大跟踪的TCP连接数的限制，方法同修改内核对本地端口号范围的限制是类似的：</p>
-<h5 id="第一步，修改-etc-sysctl-conf文件，在文件中添加如下行：-1"><a href="#第一步，修改-etc-sysctl-conf文件，在文件中添加如下行：-1" class="headerlink" title="第一步，修改/etc/sysctl.conf文件，在文件中添加如下行："></a>第一步，修改/etc/sysctl.conf文件，在文件中添加如下行：</h5><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.ip_conntrack_max</span> = <span class="number">10240</span></span><br></pre></td></tr></table></figure>
-<p>这表明将系统对最大跟踪的TCP连接数限制设置为10240。请注意，此限制值要尽量小，以节省对内核内存的占用。</p>
-<h5 id="第二步，执行sysctl命令：-1"><a href="#第二步，执行sysctl命令：-1" class="headerlink" title="第二步，执行sysctl命令："></a>第二步，执行sysctl命令：</h5><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[xxxx<span class="variable">@xx</span> ~]<span class="variable">$ </span>sysctl -p</span><br></pre></td></tr></table></figure>
-<p>如果系统没有错误提示，就表明系统对新的最大跟踪的TCP连接数限制修改成功。如果按上述参数进行设置，则理论上单独一个进程最多可以同时建立10000多个TCP客户端连接。</p>
-<h2 id="3-使用支持高并发网络I-O的编程技术"><a href="#3-使用支持高并发网络I-O的编程技术" class="headerlink" title="3.使用支持高并发网络I/O的编程技术"></a>3.使用支持高并发网络I/O的编程技术</h2><p>在Linux上编写高并发TCP连接应用程序时，必须使用合适的网络I/O技术和I/O事件分派机制。<br>可用的I/O技术有同步I/O，非阻塞式同步I/O(也称反应式I/O)，以及异步I/O。在高TCP并发的情形下，如果使用同步I/O，这会严重阻塞程序的运转，除非为每个TCP连接的I/O创建一个线程。但是，过多的线程又会因系统对线程的调度造成巨大开销。因此，在高TCP并发的情形下使用同步 I/O是不可取的，这时可以考虑使用非阻塞式同步I/O或异步I/O。非阻塞式同步I/O的技术包括使用select()，poll()，epoll等机制。异步I/O的技术就是使用AIO。</p>
-<p>从I/O事件分派机制来看，使用select()是不合适的，因为它所支持的并发连接数有限(通常在1024个以内)。如果考虑性能，poll()也是不合适的，尽管它可以支持的较高的TCP并发数，但是由于其采用“轮询”机制，当并发数较高时，其运行效率相当低，并可能存在I/O事件分派不均，导致部分TCP连接上的I/O出现“饥饿”现象。而如果使用epoll或AIO，则没有上述问题(早期Linux内核的AIO技术实现是通过在内核中为每个 I/O请求创建一个线程来实现的，这种实现机制在高并发TCP连接的情形下使用其实也有严重的性能问题。但在最新的Linux内核中，AIO的实现已经得到改进)。<br>综上所述，在开发支持高并发TCP连接的Linux应用程序时，应尽量使用epoll或AIO技术来实现并发的TCP连接上的I/O控制，这将为提升程序对高并发TCP连接的支持提供有效的I/O保证。</p>
-<p>内核参数sysctl.conf的优化</p>
-<p>/etc/sysctl.conf 是用来控制linux网络的配置文件，对于依赖网络的程序（如web服务器和cache服务器）非常重要，RHEL默认提供的最好调整。</p>
-<p>推荐配置（把原/etc/sysctl.conf内容清掉，把下面内容复制进去）：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.ip_local_port_range</span> = <span class="number">1024</span> <span class="number">65536</span></span><br><span class="line">net<span class="selector-class">.core</span><span class="selector-class">.rmem_max</span>=<span class="number">16777216</span></span><br><span class="line">net<span class="selector-class">.core</span><span class="selector-class">.wmem_max</span>=<span class="number">16777216</span></span><br><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_rmem</span>=<span class="number">4096</span> <span class="number">87380</span> <span class="number">16777216</span></span><br><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_wmem</span>=<span class="number">4096</span> <span class="number">65536</span> <span class="number">16777216</span></span><br><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_fin_timeout</span> = <span class="number">10</span></span><br><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_tw_recycle</span> = <span class="number">1</span></span><br><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_timestamps</span> = <span class="number">0</span></span><br><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_window_scaling</span> = <span class="number">0</span></span><br><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_sack</span> = <span class="number">0</span></span><br><span class="line">net<span class="selector-class">.core</span><span class="selector-class">.netdev_max_backlog</span> = <span class="number">30000</span></span><br><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_no_metrics_save</span>=<span class="number">1</span></span><br><span class="line">net<span class="selector-class">.core</span><span class="selector-class">.somaxconn</span> = <span class="number">262144</span></span><br><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_syncookies</span> = <span class="number">0</span></span><br><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_max_orphans</span> = <span class="number">262144</span></span><br><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_max_syn_backlog</span> = <span class="number">262144</span></span><br><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_synack_retries</span> = <span class="number">2</span></span><br><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_syn_retries</span> = <span class="number">2</span></span><br></pre></td></tr></table></figure></p>
-<p>这个配置参考于cache服务器varnish的推荐配置和SunOne 服务器系统优化的推荐配置。</p>
-<p>varnish调优推荐配置的地址为：<a href="http://varnish.projects.linpro.no/wiki/Performance" target="_blank" rel="noopener">http://varnish.projects.linpro.no/wiki/Performance</a></p>
-<p>不过varnish推荐的配置是有问题的，实际运行表明“net.ipv4.tcp_fin_timeout = 3”的配置会导致页面经常打不开；并且当网友使用的是IE6浏览器时，访问网站一段时间后，所有网页都会打不开，重启浏览器后正常。可能是国外的网速快吧，我们国情决定需要调整“net.ipv4.tcp_fin_timeout = 10”，在10s的情况下，一切正常（实际运行结论）。</p>
-<p>修改完毕后，执行：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/sbin/sysctl -<span class="selector-tag">p</span> /etc/sysctl.conf</span><br><span class="line">/sbin/sysctl -w net<span class="selector-class">.ipv4</span><span class="selector-class">.route</span><span class="selector-class">.flush</span>=<span class="number">1</span></span><br></pre></td></tr></table></figure></p>
-<p>命令生效。为了保险起见，也可以reboot系统。</p>
-<p>调整文件数：<br>linux系统优化完网络必须调高系统允许打开的文件数才能支持大的并发，默认1024是远远不够的。</p>
-<p>执行命令：<br>Shell代码<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="built_in">ulimit</span> -HSn 65536 &gt;&gt; /etc/rc.local</span><br><span class="line"><span class="built_in">echo</span> <span class="built_in">ulimit</span> -HSn 65536 &gt;&gt;/root/.bash_profile</span><br><span class="line"><span class="built_in">ulimit</span> -HSn 65536</span><br></pre></td></tr></table></figure></p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/12/02/用户UID生成策略/">用户UID生成策略</a>
+            <a href="/2018/12/02/fastjson autoType 问题/">fastjson enable_autotype</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -285,8 +154,31 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="用户UID生成策略"><a href="#用户UID生成策略" class="headerlink" title="用户UID生成策略"></a>用户UID生成策略</h1><p><a href="https://segmentfault.com/a/1190000023588832" target="_blank" rel="noopener">用户UID生成策略</a></p>
-<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">https:</span><span class="comment">//segmentfault.com/a/1190000023588832</span></span><br></pre></td></tr></table></figure>
+        <h1 id="fastjson-enable-autotype"><a href="#fastjson-enable-autotype" class="headerlink" title="fastjson enable_autotype"></a>fastjson enable_autotype</h1><p><a href="https://github.com/alibaba/fastjson/wiki/enable_autotype" target="_blank" rel="noopener">https://github.com/alibaba/fastjson/wiki/enable_autotype</a></p>
+<h2 id="打开AutoType功能"><a href="#打开AutoType功能" class="headerlink" title="打开AutoType功能"></a>打开AutoType功能</h2><p>在1.2.25之后的版本，以及所有的.sec01后缀版本中，autotype功能是受限的，和之前的版本不同，如果在升级的过程中遇到问题，可以通过以下方法配置。</p>
+<h2 id="一、添加autotype白名单"><a href="#一、添加autotype白名单" class="headerlink" title="一、添加autotype白名单"></a>一、添加autotype白名单</h2><p>添加白名单有三种方式，三选一，如下:<br></p>
+<h3 id="1-在代码中配置"><a href="#1-在代码中配置" class="headerlink" title="1. 在代码中配置"></a>1. 在代码中配置</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ParserConfig.getGlobalInstance().addAccept(<span class="string">"com.taobao.pac.client.sdk.dataobject."</span>);</span><br></pre></td></tr></table></figure>
+<p>如果有多个包名前缀，分多次addAccept</p>
+<h3 id="2-加上JVM启动参数"><a href="#2-加上JVM启动参数" class="headerlink" title="2. 加上JVM启动参数"></a>2. 加上JVM启动参数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Dfastjson.parser.autoTypeAccept=com.taobao.pac.client.sdk.dataobject.,com.cainiao.</span><br></pre></td></tr></table></figure>
+<p>如果有多个包名前缀，用逗号隔开</p>
+<h3 id="3-通过fastjson-properties文件配置。"><a href="#3-通过fastjson-properties文件配置。" class="headerlink" title="3. 通过fastjson.properties文件配置。"></a>3. 通过fastjson.properties文件配置。</h3><p>在1.2.25/1.2.26版本支持通过类路径的fastjson.properties文件来配置，配置方式如下：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastjson<span class="selector-class">.parser</span><span class="selector-class">.autoTypeAccept</span>=com<span class="selector-class">.taobao</span><span class="selector-class">.pac</span><span class="selector-class">.client</span><span class="selector-class">.sdk</span><span class="selector-class">.dataobject</span>.,com<span class="selector-class">.cainiao</span>. <span class="comment">// 如果有多个包名前缀，用逗号隔开</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="二、打开autotype功能"><a href="#二、打开autotype功能" class="headerlink" title="二、打开autotype功能"></a>二、打开autotype功能</h2><p>如果通过配置白名单解决不了问题，可以选择继续打开autotype功能，fastjson在新版本中内置了多重防护，但是还是可能会存在一定风险。两种方法打开autotype，二选一，如下：</p>
+<h3 id="1、JVM启动参数"><a href="#1、JVM启动参数" class="headerlink" title="1、JVM启动参数"></a>1、JVM启动参数</h3><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">-Dfastjson.parser.autoTypeSupport</span>=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<h3 id="2、代码中设置"><a href="#2、代码中设置" class="headerlink" title="2、代码中设置"></a>2、代码中设置</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ParserConfig.getGlobalInstance().setAutoTypeSupport(<span class="keyword">true</span>);</span><br></pre></td></tr></table></figure>
+<p>如果有使用非全局ParserConfig则用另外调用setAutoTypeSupport(true)；</p>
+<h2 id="三、配置autoType黑名单"><a href="#三、配置autoType黑名单" class="headerlink" title="三、配置autoType黑名单"></a>三、配置autoType黑名单</h2><p>打开AutoType之后，是基于内置黑名单来实现安全的，但黑名单是穷举不完的，如果发现了新的风险类，可以通过以下配置来增加黑名单：</p>
+<h3 id="1-配置JVM启动参数"><a href="#1-配置JVM启动参数" class="headerlink" title="1. 配置JVM启动参数"></a>1. 配置JVM启动参数</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Dfastjson<span class="selector-class">.parser</span><span class="selector-class">.deny</span>=xx.xxx</span><br></pre></td></tr></table></figure>
+<ul>
+<li>这里的xx.xxx是包名前缀，如果有多个包名前缀，用逗号隔开</li>
+</ul>
+<h3 id="2-通过fastjson-properties来配置"><a href="#2-通过fastjson-properties来配置" class="headerlink" title="2. 通过fastjson.properties来配置"></a>2. 通过fastjson.properties来配置</h3><p>在1.2.25之后的版本支持通过类路径的fastjson.properties文件来配置，配置方式如下：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Dfastjson<span class="selector-class">.parser</span><span class="selector-class">.deny</span>=xx.xxx</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>这里的xx.xxx是包名前缀，如果有多个包名前缀，用逗号隔开</li>
+</ul>
+<h3 id="3-代码中配置"><a href="#3-代码中配置" class="headerlink" title="3. 代码中配置"></a>3. 代码中配置</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ParserConfig.getGlobalInstance().addDeny(<span class="string">"xx.xxx"</span>);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>这里的xx.xxx是包名前缀，如果有多个包名前缀，用逗号隔开</li>
+</ul>
 
         
     </section>
@@ -334,54 +226,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/12/02/TPS和QPS到底搞明白了么/">TPS和QPS到底搞明白了么</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/6/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="TPS和QPS到底搞明白了么"><a href="#TPS和QPS到底搞明白了么" class="headerlink" title="TPS和QPS到底搞明白了么"></a>TPS和QPS到底搞明白了么</h1><h2 id="TPS"><a href="#TPS" class="headerlink" title="TPS"></a>TPS</h2><p>TPS：Transactions Per Second，意思是每秒事务数，具体事务的定义，都是人为的，可以一个接口、多个接口、一个业务流程等等。一个事务是指事务内第一个请求发送到接收到最后一个请求的响应的过程，以此来计算使用的时间和完成的事务个数。</p>
-<p>以单接口定义为事务为例，每个事务包括了如下3个过程：</p>
-<p>　　a.向服务器发请求</p>
-<p>　　b.服务器自己的内部处理（包含应用服务器、数据库服务器等）</p>
-<p>　　c.服务器返回结果给客户端</p>
-<p>　　如果每秒能够完成N次这三个过程，tps就是N；</p>
-<p>如果多个接口定义为一个事务，那么，会重复执行abc，完成一次这几个请求，算做一个tps。</p>
-<h2 id="QPS"><a href="#QPS" class="headerlink" title="QPS"></a>QPS</h2><p>QPS：Queries Per Second，意思是每秒查询率，是一台服务器每秒能够响应的查询次数（数据库中的每秒执行查询sql的次数），显然，这个不够全面，不能描述增删改，所以，不建议用qps来作为系统性能指标。</p>
-<h2 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h2><p>如果是对一个查询接口（单场景）压测，且这个接口内部不会再去请求其它接口，那么tps=qps，否则，tps≠qps</p>
-<p>如果是容量场景，假设n个接口都是查询接口，且这个接口内部不会再去请求其它接口，qps=n*tps</p>
-<p>jmeter聚合报告中，Throughput是用来衡量请求的吞吐量，也就是tps，tps=样本数/运行时间<br>如果没有定义事务，会把每个请求作为一个事务</p>
-<p>QPS是Query Per Second，是数据库中的概念，每秒执行条数（查询），被引申到压测中来了，但是不包括插入、更新、删除操作，所以不建议用qps来描述系统整体的性能；</p>
-<p>建议用tps，这个t，你可以随意的定义，可以是一个接口，也可以是一个业务流程等等。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/12/02/微服务下的事务管理/">（九）微服务下的事务管理</a>
+            <a href="/2018/12/02/XA协议 /">（六）XA协议</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -404,102 +249,27 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="微服务下的事务管理"><a href="#微服务下的事务管理" class="headerlink" title="微服务下的事务管理"></a>微服务下的事务管理</h1><p>分布式事务2PC或者3PC是否适合于微服务下的事务管理呢？答案是否定的，原因有三点</p>
-<ol>
-<li><p>由于微服务间无法直接进行数据访问，微服务间互相调用通常通过RPC（dubbo）或Http API（SpringCloud）进行，所以已经无法使用TM统一管理微服务的RM。</p>
-</li>
-<li><p>不同的微服务使用的数据源类型可能完全不同，如果微服务使用了NoSQL之类不支持事务的数据库，则事务根本无从谈起。</p>
-</li>
-<li><p>即使微服务使用的数据源都支持事务，那么如果使用一个大事务将许多微服务的事务管理起来，这个大事务维持的时间，将比本地事务长几个数量级。如此长时间的事务及跨服务的事务，将为产生很多锁及数据不可用，严重影响系统性能。</p>
-</li>
-</ol>
-<p>由此可见，传统的分布式事务已经无法满足微服务架构下的事务管理需求。那么，既然无法满足传统的ACID事务，在微服务下的事务管理必然要遵循新的法则－－BASE理论。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/12/02/常见分布式事务解决方案/">（四）常见分布式事务解决方案</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/6/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/分布式事务/">分布式事务</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="常见分布式事务解决方案"><a href="#常见分布式事务解决方案" class="headerlink" title="常见分布式事务解决方案"></a>常见分布式事务解决方案</h1><p>分布式事务实现方案从类型上去分刚性事务、柔型事务。刚性事务：通常无业务改造，强一致性，原生支持回滚/隔离性，低并发，适合短事务。柔性事务：有业务改造，最终一致性，实现补偿接口，实现资源锁定接口，高并发，适合长事务。</p>
-<p>刚性事务：XA 协议（2PC、JTA、JTS）、3PC</p>
-<p>柔型事务：TCC/FMT、Saga（状态机模式、Aop模式）、本地事务消息、消息事务（半消息）、最多努力通知型事务</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/12/02/Synchronized 原理/">Synchronized 原理</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/6/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Synchronized-原理"><a href="#Synchronized-原理" class="headerlink" title="Synchronized 原理"></a>Synchronized 原理</h1><p>JVM规范中描述：每个对象有一个监视器锁（monitor）。</p>
-<p>当monitor被占用时就会处于锁定状态，线程执行monitorenter指令时尝试获取monitor的所有权，过程如下：</p>
-<ol>
-<li><p>如果monitor的进入数为0，则该线程进入monitor，然后将进入数设置为1，该线程即为monitor的所有者。</p>
-</li>
-<li><p>如果线程已经占有该monitor，只是重新进入，则进入monitor的进入数加1.</p>
-</li>
-<li><p>如果其他线程已经占用了monitor，则该线程进入阻塞状态，直到monitor的进入数为0，再重新尝试获取monitor的所有权。</p>
-</li>
-</ol>
-<p>Synchronized的语义底层是通过一个monitor的对象来完成，其实wait/notify等方法也依赖于monitor对象，这就是为什么只有在同步的块或者方法中才能调用wait/notify等方法，否则会抛出java.lang.IllegalMonitorStateException的异常的原因。</p>
+        <h1 id="XA协议"><a href="#XA协议" class="headerlink" title="XA协议"></a>XA协议</h1><p>XA是由X/Open组织提出的分布式事务的规范。 XA规范主要定义了(全局)事务管理器(TM)和(局 部)资源管理器(RM)之间的接口。主流的关系型数据库产品都是实现了XA接口的。XA 的全称是 <code>eXtended Architecture</code>，它是一个分布式事务协议，通过二阶段提交协议保证强一致性。</p>
+<p>XA 规范中定义了分布式事务处理模型，这个模型中包含四个核心角色：</p>
+<ul>
+<li>RM (Resource Managers)：</li>
+</ul>
+<p>资源管理器，提供数据资源的操作、管理接口，保证数据的一致性和完整性。最有代表性的就是数据库管理系统，当然有的文件系统、MQ 系统也可以看作 RM。</p>
+<ul>
+<li>TM (Transaction Managers)：</li>
+</ul>
+<p>事务管理器，是一个协调者的角色，协调跨库事务关联的所有RM的行为。</p>
+<ul>
+<li>AP (Application Program)：</li>
+</ul>
+<p>应用程序，按照业务规则调用RM接口来完成对业务模型数据的变更，当数据的变更涉及多个RM且要保证事务时，AP就会通过TM来定义事务的边界，TM负责协调参与事务的各个RM一同完成一个全局事务。</p>
+<ul>
+<li>CRMs (Communication Resource Managers)：</li>
+</ul>
+<p>主要用来进行跨服务的事务的传播。</p>
 <blockquote>
-<p>Synchronized是通过对象内部的一个叫做监视器锁（monitor）来实现的。</p>
+<p>XA 不能自动提交</p>
 </blockquote>
-<p>但是监视器锁本质又是依赖于底层的操作系统的互斥锁（Mutex Lock）来实现的。而操作系统实现线程之间的切换这就需要从用户态转换到核心态，这个成本非常高，状态之间的转换需要相对比较长的时间，这就是为什么Synchronized效率低的原因。因此，这种依赖于操作系统互斥锁（Mutex Lock）所实现的锁我们称之为“重量级锁”。</p>
 
         
     </section>
@@ -511,7 +281,43 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/12/02/SpringCloud Alibaba 整体结构/">SpringCloud Alibaba</a>
+            <a href="/2018/12/02/用户UID生成策略/">用户UID生成策略</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java/">Java</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="用户UID生成策略"><a href="#用户UID生成策略" class="headerlink" title="用户UID生成策略"></a>用户UID生成策略</h1><p><a href="https://segmentfault.com/a/1190000023588832" target="_blank" rel="noopener">用户UID生成策略</a></p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">https:</span><span class="comment">//segmentfault.com/a/1190000023588832</span></span><br></pre></td></tr></table></figure>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/什么是 Nacos/">什么是 Nacos</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -534,39 +340,29 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="SpringCloud-Alibaba"><a href="#SpringCloud-Alibaba" class="headerlink" title="SpringCloud Alibaba"></a>SpringCloud Alibaba</h1><p><img src="https://img-blog.csdnimg.cn/20200612191916995.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NteDEwNjAyMjAyMTk=,size_16,color_FFFFFF,t_70" alt="SpringCloud Alibaba"></p>
-<p>官方文档：<br><a href="https://github.com/alibaba/spring-cloud-alibaba/blob/master/README-zh.md" target="_blank" rel="noopener">README</a></p>
+        <h1 id="什么是-Nacos"><a href="#什么是-Nacos" class="headerlink" title="什么是 Nacos"></a>什么是 Nacos</h1><p><a href="https://nacos.io/zh-cn/" target="_blank" rel="noopener">官方</a></p>
+<p><a href="https://nacos.io/zh-cn/docs/what-is-nacos.html" target="_blank" rel="noopener">使用手册</a></p>
+<p>Nacos 致力于帮助您发现、配置和管理微服务。Nacos 提供了一组简单易用的特性集，帮助您快速实现动态服务发现、服务配置、服务元数据及流量管理。</p>
+<p>Nacos 帮助您更敏捷和容易地构建、交付和管理微服务平台。 Nacos 是构建以“服务”为中心的现代应用架构 (例如微服务范式、云原生范式) 的服务基础设施。</p>
+<p>Nacos 的关键特性包括:</p>
 <ol>
-<li>服务限流降级</li>
+<li>服务发现和服务健康监测</li>
 </ol>
-<p>默认支持 WebServlet、WebFlux, OpenFeign、RestTemplate、Spring Cloud Gateway, Zuul, Dubbo 和 RocketMQ 限流降级功能的接入，可以在运行时通过控制台实时修改限流降级规则，还支持查看限流降级 Metrics 监控。</p>
+<p>Nacos 支持基于 DNS 和基于 RPC 的服务发现。服务提供者使用 原生SDK、OpenAPI、或一个独立的  <a href="https://nacos.io/zh-cn/docs/other-language.html" target="_blank" rel="noopener">Agent TODO</a> 注册Service后，服务消费者可以使用DNS TODO 或HTTP&amp;API查找和发现服务。</p>
+<p>Nacos 提供对服务的实时的健康检查，阻止向不健康的主机或服务实例发送请求。Nacos 支持传输层 (PING 或 TCP)和应用层 (如 HTTP、MySQL、用户自定义）的健康检查。 对于复杂的云环境和网络拓扑环境中（如 VPC、边缘网络等）服务的健康检查，Nacos 提供了 agent 上报模式和服务端主动检测2种健康检查模式。Nacos 还提供了统一的健康检查仪表盘，帮助您根据健康状态管理服务的可用性及流量。</p>
 <ol start="2">
-<li>服务注册与发现</li>
+<li>动态配置服务</li>
 </ol>
-<p>适配 Spring Cloud 服务注册与发现标准，默认集成了 Ribbon 的支持。</p>
+<p>动态配置服务可以让您以中心化、外部化和动态化的方式管理所有环境的应用配置和服务配置。动态配置消除了配置变更时重新部署应用和服务的需要，让配置管理变得更加高效和敏捷。配置中心化管理让实现无状态服务变得更简单，让服务按需弹性扩展变得更容易。<br>Nacos 提供了一个简洁易用的UI帮助您管理所有的服务和应用的配置。Nacos还提供包括配置版本跟踪、金丝雀发布、一键回滚配置以及客户端配置更新状态跟踪在内的一系列开箱即用的配置管理特性，帮助您安全地在生产环境中管理配置变更和降低配置变更带来的风险。</p>
 <ol start="3">
-<li>分布式配置管理</li>
+<li>动态 DNS 服务</li>
 </ol>
-<p>支持分布式系统中的外部化配置，配置更改时自动刷新。</p>
+<p>动态 DNS 服务支持权重路由，让您更容易地实现中间层负载均衡、更灵活的路由策略、流量控制以及数据中心内网的简单DNS解析服务。动态DNS服务还能让您更容易地实现以 DNS 协议为基础的服务发现，以帮助您消除耦合到厂商私有服务发现 API 上的风险。</p>
 <ol start="4">
-<li>消息驱动能力</li>
+<li>服务及其元数据管理</li>
 </ol>
-<p>基于 Spring Cloud Stream 为微服务应用构建消息驱动能力。</p>
-<ol start="5">
-<li><p>分布式事务<br>使用 @GlobalTransactional 注解， 高效并且对业务零侵入地解决分布式事务问题。</p>
-</li>
-<li><p>阿里云对象存储</p>
-</li>
-</ol>
-<p>阿里云提供的海量、安全、低成本、高可靠的云存储服务。支持在任何应用、任何时间、任何地点存储和访问任意类型的数据。</p>
-<ol start="7">
-<li>分布式任务调度</li>
-</ol>
-<p>提供秒级、精准、高可靠、高可用的定时（基于 Cron 表达式）任务调度服务。同时提供分布式的任务执行模型，如网格任务。网格任务支持海量子任务均匀分配到所有 Worker（schedulerx-client）上执行。</p>
-<ol start="8">
-<li>阿里云短信服务</li>
-</ol>
-<p>覆盖全球的短信服务，友好、高效、智能的互联化通讯能力，帮助企业迅速搭建客户触达通道。</p>
+<p>Nacos 能让您从微服务平台建设的视角管理数据中心的所有服务及元数据，包括管理服务的描述、生命周期、服务的静态依赖分析、服务的健康状态、服务的流量管理、路由及安全策略、服务的 SLA 以及最首要的 metrics 统计数据。</p>
+<p>Nacos 支持几乎所有主流类型的“服务”的发现、配置和管理：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Kubernetes Service</span><br><span class="line"></span><br><span class="line">gRPC &amp; Dubbo RPC Service</span><br><span class="line"></span><br><span class="line">Spring Cloud RESTful Service</span><br></pre></td></tr></table></figure></p>
 
         
     </section>
@@ -578,7 +374,245 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/12/02/Spring Cloud Alibaba 组件介绍/">Spring Cloud Alibaba 组件</a>
+            <a href="/2018/12/02/Redis数据持久化/">(十五)Redis数据持久化</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="十五-Redis数据持久化"><a href="#十五-Redis数据持久化" class="headerlink" title="(十五)Redis数据持久化"></a>(十五)Redis数据持久化</h1><p>Redis支持数据持久化，可以将内存中的数据持久化到磁盘中，重启的时候再次加载使用。Redis4之前的数据持久化有AOF和RDB两种，从Redis4之后新增了AOF+RDB混合持久化的方式。</p>
+<p>上面提到Redis持久化存储有两种持久化方案，RDB(Redis DataBase)和 AOF(Append-Only File)。</p>
+<ul>
+<li>RDB 内存快照（二进制）</li>
+</ul>
+<p>是将内存中的数据进行快照存储到磁盘。</p>
+<ul>
+<li>AOF 回放日志（文本）</li>
+</ul>
+<p>AOF则为可回放的命令日志记录redis内的所有操作。</p>
+<ul>
+<li>混合式 </li>
+</ul>
+<p>AOF 和 RDB各有特点也相互独立。Redis4之后支持RDB-AOF混合持久化的方式，结合了两者的优点，可以通过 aof-use-rdb-preamble 配置项可以打开混合开关。</p>
+<h2 id="RDB"><a href="#RDB" class="headerlink" title="RDB"></a>RDB</h2><p>RDB持久化是指在指定的时间间隔内将内存中的数据集快照写入磁盘，实际操作过程是fork一个子进程，先将数据集写入临时文件，写入成功后，再替换之前的文件，用二进制压缩存储。</p>
+<p><img src="http://img1.tuicool.com/NjYjYvF.png!web?_=6182478" alt="RDB"></p>
+<p>RDB(Redis DataBase)是将Redis内存中的数据进行Snaptshot快照存储在磁盘内，是Redis的==默认持久化方案==。使用RDB持久化默认有三种策略，该持久化策略在redis.conf中可配置，会以一段时间内有指定次数据修改的规则触发快照动作，快照文件名为dump.rdb，该文件默认使用LZF压缩算法 。每当Redis服务重启的时候会从该文件中加载数据进内存。</p>
+<p>RDB持久化除了可以根据配置中的策略触发，也可以手动触发，使用==save==和==bgsave==命令即可。这两个命令的区别的save会阻塞服务器进程，在进行save的过程中，服务器不能处理任何请求，而bgsave会通过一个子进程在后台处理rdb持久化。事实上save和bgsave调用的都是rdbSave函数，因此Redis不允许save和bgsave同时运行，这也是为了避免出现竞争导致rdb文件数据不准确。</p>
+<p>bgsave操作使用CopyOnWrite机制进行写时复制，是由一个子进程将内存中的最新数据遍历写入临时文件，此时父进程仍旧处理客户端的操作，当子进程操作完毕后再将该临时文件重命名为dump.rdb替换掉原来的dump.rdb文件，因此无论bgsave是否成功，dump.rdb都不会受到影响。</p>
+<p>另外在主从全量同步、debug reload以及shutdown的情况下也会触发RDB数据持久化。</p>
+<h3 id="配置RDB"><a href="#配置RDB" class="headerlink" title="配置RDB"></a>配置RDB</h3><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">vim $REDIS_HOME/bin/redis.conf</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#RDB持久化策略 默认三种方式，</span><br><span class="line">[<span class="number">900</span>秒内有<span class="number">1</span>次修改],</span><br><span class="line">[<span class="number">300</span>秒内有<span class="number">10</span>次修改],</span><br><span class="line">[<span class="number">60</span>秒内有<span class="number">10000</span>次修改]即触发RDB持久化，</span><br><span class="line">我们可以手动修改该参数或新增策略</span><br><span class="line"></span><br><span class="line">save <span class="number">900</span> <span class="number">1</span></span><br><span class="line">save <span class="number">300</span> <span class="number">10</span></span><br><span class="line">save <span class="number">60</span> <span class="number">10000</span></span><br><span class="line"> </span><br><span class="line">#RDB文件名</span><br><span class="line">dbfilename <span class="string">"dump.rdb"</span></span><br><span class="line"></span><br><span class="line">#RDB文件存储路径</span><br><span class="line">dir <span class="string">"/opt/app/redis6/data"</span></span><br></pre></td></tr></table></figure>
+<h2 id="AOF"><a href="#AOF" class="headerlink" title="AOF"></a>AOF</h2><p>AOF持久化以日志的形式记录服务器所处理的每一个写、删除操作，查询操作不会记录，以文本的方式记录，可以打开文件看到详细的操作记录。</p>
+<p><img src="http://img2.tuicool.com/YrqaY3f.png!web?_=6182478" alt="AOF"></p>
+<p>AOF(Append-Only File)记录Redis中每次的写命令，类似mysql中的binlog，服务重启时会重新执行AOF中的命令将数据恢复到内存中，RDB(按策略持久化)持久化方式记录的粒度不如AOF(记录每条写命令)，因此很多生产环境都是开启AOF持久化。</p>
+<p>AOF中记录了操作和数据，在日志文件中追加完成后才会将内存中的数据进行变更。</p>
+<p>AOF持久化流程：</p>
+<ol>
+<li>客户端的请求写命令会被append追加到AOF缓冲区内；</li>
+<li>AOF缓冲区根据AOF持久化策略[always,everysec,no]将操作sync同步到磁盘的AOF文件中；</li>
+<li>AOF文件大小超过重写策略或手动重写时，会对AOF文件rewrite重写，压缩AOF文件容量；</li>
+<li>Redis服务重启时，会重新load加载AOF文件中的写操作达到数据恢复的目的；</li>
+</ol>
+<h3 id="配置AOF"><a href="#配置AOF" class="headerlink" title="配置AOF"></a>配置AOF</h3><p>开启了AOF之后，RDB就默认不使用了。使用下面的配置开启AOF以及策略。(如果使用AOF，推荐选择always方式持久化，否则在高并发场景下，每秒钟会有几万甚至百万条请求，如果使用everysec的方式的话，万一服务器挂了那几万条数据就丢失了)。</p>
+<figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">vim $REDIS_HOME/bin/redis.conf</span><br><span class="line"></span><br><span class="line"><span class="meta">#开启AOF持久化</span></span><br><span class="line">appendonly yes</span><br><span class="line"> </span><br><span class="line"><span class="meta">#AOF文件名</span></span><br><span class="line">appendfilename <span class="string">"appendonly.aof"</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#AOF文件存储路径 与RDB是同一个参数</span></span><br><span class="line">dir <span class="string">"/opt/app/redis6/data"</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#AOF策略，一般都是选择第一种</span></span><br><span class="line">[always:每个命令都记录],</span><br><span class="line">[everysec:每秒记录一次],</span><br><span class="line">[no:看机器的心情高兴了就记录]</span><br><span class="line">appendfsync always</span><br><span class="line"><span class="meta">#appendfsync everysec</span></span><br><span class="line"><span class="meta"># appendfsync no</span></span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="meta">#aof文件大小比起上次重写时的大小,增长100%(配置可以大于100%)时,触发重写。</span></span><br><span class="line">[假如上次重写后大小为<span class="number">10</span>MB，当AOF文件达到<span class="number">20</span>MB时也会再次触发重写，以此类推]</span><br><span class="line">auto-aof-rewrite-percentage <span class="number">100</span> </span><br><span class="line"> </span><br><span class="line"><span class="meta">#aof文件大小超过64MB时,触发重写</span></span><br><span class="line">auto-aof-rewrite-min-size <span class="number">64</span>mb</span><br></pre></td></tr></table></figure>
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><h3 id="RDB-1"><a href="#RDB-1" class="headerlink" title="RDB"></a>RDB</h3><h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><p>1). 一旦采用该方式，那么你的整个Redis数据库将只包含一个文件，这对于文件备份而言是非常完美的。比如，你可能打算每个小时归档一次最近24小时的数据，同时还要每天归档一次最近30天的数据。通过这样的备份策略，一旦系统出现灾难性故障，我们可以非常容易的进行恢复。</p>
+<p>2). 对于灾难恢复而言，RDB是非常不错的选择。因为我们可以非常轻松的将一个单独的文件压缩后再转移到其它存储介质上。</p>
+<p>3). 性能最大化。对于Redis的服务进程而言，在开始持久化时，它唯一需要做的只是fork出子进程，之后再由子进程完成这些持久化的工作，这样就可以极大的避免服务进程执行IO操作了。</p>
+<p>4). 相比于AOF机制，如果数据集很大，RDB的启动效率会更高。</p>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><p>1). 如果你想保证数据的高可用性，即最大限度的避免数据丢失，那么RDB将不是一个很好的选择。因为系统一旦在定时持久化之前出现宕机现象，此前没有来得及写入磁盘的数据都将丢失。</p>
+<p>2). 由于RDB是通过fork子进程来协助完成数据持久化工作的，因此，如果当数据集较大时，可能会导致整个服务器停止服务几百毫秒，甚至是1秒钟。</p>
+<h3 id="AOF-1"><a href="#AOF-1" class="headerlink" title="AOF"></a>AOF</h3><h4 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h4><p>1). 该机制可以带来更高的数据安全性，即数据持久性。Redis中提供了3中同步策略，即每秒同步、每修改同步和不同步。事实上，每秒同步也是异步完成的，其效率也是非常高的，所差的是一旦系统出现宕机现象，那么这一秒钟之内修改的数据将会丢失。而每修改同步，我们可以将其视为同步持久化，即每次发生的数据变化都会被立即记录到磁盘中。可以预见，这种方式在效率上是最低的。至于无同步，无需多言，我想大家都能正确的理解它。</p>
+<p>2). 由于该机制对日志文件的写入操作采用的是append模式，因此在写入过程中即使出现宕机现象，也不会破坏日志文件中已经存在的内容。然而如果我们本次操作只是写入了一半数据就出现了系统崩溃问题，不用担心，在Redis下一次启动之前，我们可以通过redis-check-aof工具来帮助我们解决数据一致性的问题。</p>
+<p>3). 如果日志过大，Redis可以自动启用rewrite机制。即Redis以append模式不断的将修改数据写入到老的磁盘文件中，同时Redis还会创建一个新的文件用于记录此期间有哪些修改命令被执行。因此在进行rewrite切换时可以更好的保证数据安全性。</p>
+<p>4). AOF包含一个格式清晰、易于理解的日志文件用于记录所有的修改操作。事实上，我们也可以通过该文件完成数据的重建。</p>
+<h4 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h4><p>1). 对于相同数量的数据集而言，AOF文件通常要大于RDB文件。RDB 在恢复大数据集时的速度比 AOF 的恢复速度要快。</p>
+<p>2). 根据同步策略的不同，AOF在运行效率上往往会慢于RDB。总之，每秒同步策略的效率是比较高的，同步禁用策略的效率和RDB一样高效。</p>
+<p>二者选择的标准，就是看系统是愿意牺牲一些性能，换取更高的缓存一致性（aof），还是愿意写操作频繁的时候，不启用备份来换取更高的性能，待手动运行save的时候，再做备份（rdb）。rdb这个就更有些 eventually consistent的意思了。不过生产环境其实更多都是二者结合使用的。</p>
+<h2 id="常用配置"><a href="#常用配置" class="headerlink" title="常用配置"></a>常用配置</h2><h4 id="RDB持久化配置"><a href="#RDB持久化配置" class="headerlink" title="RDB持久化配置"></a>RDB持久化配置</h4><p>Redis会将数据集的快照dump到dump.rdb文件中。此外，我们也可以通过配置文件来修改Redis服务器dump快照的频率，在打开6379.conf文件之后，我们搜索save，可以看到下面的配置信息：</p>
+<p>save 900 1              #在900秒(15分钟)之后，如果至少有1个key发生变化，则dump内存快照。</p>
+<p>save 300 10            #在300秒(5分钟)之后，如果至少有10个key发生变化，则dump内存快照。</p>
+<p>save 60 10000        #在60秒(1分钟)之后，如果至少有10000个key发生变化，则dump内存快照。</p>
+<h4 id="AOF持久化配置"><a href="#AOF持久化配置" class="headerlink" title="AOF持久化配置"></a>AOF持久化配置</h4><p>在Redis的配置文件中存在三种同步方式，它们分别是：</p>
+<p>appendfsync always     #每次有数据修改发生时都会写入AOF文件。</p>
+<p>appendfsync everysec  #每秒钟同步一次，该策略为AOF的缺省策略。</p>
+<p>appendfsync no          #从不同步。高效但是数据不会被持久化。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/事务/">（一）什么是事务</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/分布式事务/">分布式事务</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h2 id="什么是事务？"><a href="#什么是事务？" class="headerlink" title="什么是事务？"></a>什么是事务？</h2><p>事务由一组操作构成，我们希望这组操作能够全部正确执行，如果这一组操作中的任意一个步骤发生错误，那么就需要回滚之前已经完成的操作。也就是同一个事务中的所有操作，要么全都正确执行，要么全都不要执行。</p>
+<h2 id="事务的四大特性-ACID"><a href="#事务的四大特性-ACID" class="headerlink" title="事务的四大特性 ACID"></a>事务的四大特性 ACID</h2><p>说到事务，就不得不提一下事务著名的四大特性。</p>
+<h3 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h3><p>原子性要求，事务是一个不可分割的执行单元，事务中的所有操作要么全都执行，要么全都不执行。</p>
+<h3 id="一致性"><a href="#一致性" class="headerlink" title="一致性"></a>一致性</h3><p>一致性要求，事务在开始前和结束后，数据库的完整性约束没有被破坏。</p>
+<h3 id="隔离性"><a href="#隔离性" class="headerlink" title="隔离性"></a>隔离性</h3><p>事务的执行是相互独立的，它们不会相互干扰，一个事务不会看到另一个正在运行过程中的事务的数据。</p>
+<h3 id="持久性"><a href="#持久性" class="headerlink" title="持久性"></a>持久性</h3><p>持久性要求，一个事务完成之后，事务的执行结果必须是持久化保存的。即使数据库发生崩溃，在数据库恢复后事务提交的结果仍然不会丢失。</p>
+<p>注意：事务只能保证数据库的高可靠性，即数据库本身发生问题后，事务提交后的数据仍然能恢复；而如果不是数据库本身的故障，如硬盘损坏了，那么事务提交的数据可能就丢失了。这属于『高可用性』的范畴。因此，事务只能保证数据库的『高可靠性』，而『高可用性』需要整个系统共同配合实现。</p>
+<h2 id="事务的隔离级别"><a href="#事务的隔离级别" class="headerlink" title="事务的隔离级别"></a>事务的隔离级别</h2><p>这里扩展一下，对事务的隔离性做一个详细的解释。</p>
+<p>在事务的四大特性ACID中，要求的隔离性是一种严格意义上的隔离，也就是多个事务是串行执行的，彼此之间不会受到任何干扰。这确实能够完全保证数据的安全性，但在实际业务系统中，这种方式性能不高。因此，数据库定义了四种隔离级别，隔离级别和数据库的性能是呈反比的，隔离级别越低，数据库性能越高，而隔离级别越高，数据库性能越差。</p>
+<p>事务并发执行会出现的问题<br>我们先来看一下在不同的隔离级别下，数据库可能会出现的问题：</p>
+<h3 id="更新丢失"><a href="#更新丢失" class="headerlink" title="更新丢失"></a>更新丢失</h3><p>当有两个并发执行的事务，更新同一行数据，那么有可能一个事务会把另一个事务的更新覆盖掉。<br>当数据库没有加任何锁操作的情况下会发生。</p>
+<h3 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h3><p>一个事务读到另一个尚未提交的事务中的数据。<br>该数据可能会被回滚从而失效。<br>如果第一个事务拿着失效的数据去处理那就发生错误了。</p>
+<h3 id="不可重复读"><a href="#不可重复读" class="headerlink" title="不可重复读"></a>不可重复读</h3><p>不可重复度的含义：一个事务对同一行数据读了两次，却得到了不同的结果。</p>
+<p>在事务1两次读取同一记录的过程中，事务2对该记录进行了修改，从而事务1第二次读到了不一样的记录。</p>
+<h3 id="幻读"><a href="#幻读" class="headerlink" title="幻读"></a>幻读</h3><p>事务1在两次查询的过程中，事务2对该表进行了插入、删除操作，从而事务1第二次查询的结果发生了变化。</p>
+<blockquote>
+<p>不可重复读 与 脏读 的区别？</p>
+<ul>
+<li>脏读读到的是尚未提交的数据，而不可重复读读到的是已经提交的数据，只不过在两次读的过程中数据被另一个事务改过了。</li>
+</ul>
+</blockquote>
+<h2 id="数据库的四种隔离级别"><a href="#数据库的四种隔离级别" class="headerlink" title="数据库的四种隔离级别"></a>数据库的四种隔离级别</h2><p>数据库一共有如下四种隔离级别：</p>
+<h3 id="Read-uncommitted-读未提交"><a href="#Read-uncommitted-读未提交" class="headerlink" title="Read uncommitted 读未提交"></a>Read uncommitted 读未提交</h3><p>在该级别下，一个事务对一行数据修改的过程中，不允许另一个事务对该行数据进行修改，但允许另一个事务对该行数据读。<br>因此本级别下，不会出现更新丢失，但会出现脏读、不可重复读。</p>
+<h3 id="Read-committed-读提交"><a href="#Read-committed-读提交" class="headerlink" title="Read committed 读提交"></a>Read committed 读提交</h3><p>在该级别下，未提交的写事务不允许其他事务访问该行，因此不会出现脏读；但是读取数据的事务允许其他事务的访问该行数据，因此会出现不可重复读的情况。</p>
+<h3 id="Repeatable-read-重复读"><a href="#Repeatable-read-重复读" class="headerlink" title="Repeatable read 重复读"></a>Repeatable read 重复读</h3><p>在该级别下，读事务禁止写事务，但允许读事务，因此不会出现同一事务两次读到不同的数据的情况（不可重复读），且写事务禁止其他一切事务。</p>
+<h3 id="Serializable-序列化"><a href="#Serializable-序列化" class="headerlink" title="Serializable 序列化"></a>Serializable 序列化</h3><p>该级别要求所有事务都必须串行执行，因此能避免一切因并发引起的问题，但效率很低。</p>
+<p>隔离级别越高，越能保证数据的完整性和一致性，但是对并发性能的影响也越大。对于多数应用程序，可以优先考虑把数据库系统的隔离级别设为Read Committed。它能够避免脏读取，而且具有较好的并发性能。尽管它会导致不可重复读、幻读和第二类丢失更新这些并发问题，在可能出现这类问题的个别场合，可以由应用程序采用悲观锁或乐观锁来控制。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/事务简介/">（二）事务简介</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/分布式事务/">分布式事务</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="事务简介"><a href="#事务简介" class="headerlink" title="事务简介"></a>事务简介</h1><p>事务(Transaction)是访问并可能更新数据库中各种数据项的一个程序执行单元(unit)。在关系数据库中，一个事务由一组SQL语句组成。事务应该具有4个属性：原子性、一致性、隔离性、持久性。这四个属性通常称为ACID特性。</p>
+<h2 id="原子性（atomicity）"><a href="#原子性（atomicity）" class="headerlink" title="原子性（atomicity）"></a>原子性（atomicity）</h2><p>一个事务是一个不可分割的工作单位，事务中包括的诸操作要么都做，要么都不做。</p>
+<h2 id="一致性（consistency）"><a href="#一致性（consistency）" class="headerlink" title="一致性（consistency）"></a>一致性（consistency）</h2><p>事务必须是使数据库从一个一致性状态变到另一个一致性状态，事务的中间状态不能被观察到的。</p>
+<h2 id="隔离性（isolation）"><a href="#隔离性（isolation）" class="headerlink" title="隔离性（isolation）"></a>隔离性（isolation）</h2><p>一个事务的执行不能被其他事务干扰。即一个事务内部的操作及使用的数据对并发的其他事务是隔离的，并发执行的各个事务之间不能互相干扰。隔离性又分为四个级别：读未提交(read uncommitted)、读已提交(read committed，解决脏读)、可重复读(repeatable read，解决虚读)、串行化(serializable，解决幻读)。</p>
+<h2 id="持久性（durability）"><a href="#持久性（durability）" class="headerlink" title="持久性（durability）"></a>持久性（durability）</h2><p>持久性也称永久性（permanence），指一个事务一旦提交，它对数据库中数据的改变就应该是永久性的。接下来的其他操作或故障不应该对其有任何影响。</p>
+<p>任何事务机制在实现时，都应该考虑事务的ACID特性，包括：本地事务、分布式事务，即使不能都很好的满足，也要考虑支持到什么程度。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/个人面试遇到的一些问题/">个人面试遇到的一些问题</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/6/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="1-Dubbo-Zk-如何实现动态选择负载均衡策略"><a href="#1-Dubbo-Zk-如何实现动态选择负载均衡策略" class="headerlink" title="1. Dubbo + Zk 如何实现动态选择负载均衡策略"></a>1. Dubbo + Zk 如何实现动态选择负载均衡策略</h1><h1 id="2-Nginx-能实现哪些功能？-如何修改请求头？"><a href="#2-Nginx-能实现哪些功能？-如何修改请求头？" class="headerlink" title="2. Nginx 能实现哪些功能？ 如何修改请求头？"></a>2. Nginx 能实现哪些功能？ 如何修改请求头？</h1><pre><code>静态代理（资源托管）
+反向代理（请求转发）
+
+方式一：proxy_set_header
+proxy_set_header   iden    &quot;student&quot;;
+proxy_set_header   age     &quot;21&quot;;
+
+方式二：set 方式
+set $iden &quot;student&quot;;
+set $age &quot;21&quot;;
+</code></pre><h1 id="3-Java-什么时候会发生锁升级为重量级锁？"><a href="#3-Java-什么时候会发生锁升级为重量级锁？" class="headerlink" title="3. Java 什么时候会发生锁升级为重量级锁？"></a>3. Java 什么时候会发生锁升级为重量级锁？</h1><pre><code>（锁膨胀）
+</code></pre><h1 id="4-HashMap并发过程中出现CPU崩溃？什么原因？"><a href="#4-HashMap并发过程中出现CPU崩溃？什么原因？" class="headerlink" title="4. HashMap并发过程中出现CPU崩溃？什么原因？"></a>4. HashMap并发过程中出现CPU崩溃？什么原因？</h1><pre><code>https://blog.csdn.net/c929833623lvcha/article/details/8924414?utm_source=jiancool
+</code></pre><h1 id="5-ConcurrentHashMap-锁具体实现原理？"><a href="#5-ConcurrentHashMap-锁具体实现原理？" class="headerlink" title="5. ConcurrentHashMap 锁具体实现原理？"></a>5. ConcurrentHashMap 锁具体实现原理？</h1><h1 id="6-SpringCloud-熔断机制，客户端如何捕获异常？"><a href="#6-SpringCloud-熔断机制，客户端如何捕获异常？" class="headerlink" title="6. SpringCloud 熔断机制，客户端如何捕获异常？"></a>6. SpringCloud 熔断机制，客户端如何捕获异常？</h1><h1 id="7-Zookeeper的选举机制？一定是过半选举么？"><a href="#7-Zookeeper的选举机制？一定是过半选举么？" class="headerlink" title="7. Zookeeper的选举机制？一定是过半选举么？"></a>7. Zookeeper的选举机制？一定是过半选举么？</h1><h1 id="8-Redis-实现分布式锁？"><a href="#8-Redis-实现分布式锁？" class="headerlink" title="8. Redis 实现分布式锁？"></a>8. Redis 实现分布式锁？</h1><pre><code>SETNX 原理
+</code></pre><h1 id="9-MySQL-索引在什么场景下使用会发生失效？原因是什么？"><a href="#9-MySQL-索引在什么场景下使用会发生失效？原因是什么？" class="headerlink" title="9. MySQL 索引在什么场景下使用会发生失效？原因是什么？"></a>9. MySQL 索引在什么场景下使用会发生失效？原因是什么？</h1><h1 id="10-MySQL-MVCC"><a href="#10-MySQL-MVCC" class="headerlink" title="10. MySQL MVCC"></a>10. MySQL MVCC</h1><h1 id="11-MySQL-一张表-没有主键，但是有一列聚集索引，底层是怎么样？"><a href="#11-MySQL-一张表-没有主键，但是有一列聚集索引，底层是怎么样？" class="headerlink" title="11. MySQL 一张表 没有主键，但是有一列聚集索引，底层是怎么样？"></a>11. MySQL 一张表 没有主键，但是有一列聚集索引，底层是怎么样？</h1><pre><code>延伸: 如果是非InnoDB存储引擎，是怎么实现的。
+</code></pre>
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/总览/">SpringCloud总览</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -601,26 +635,328 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="Spring-Cloud-Alibaba-组件"><a href="#Spring-Cloud-Alibaba-组件" class="headerlink" title="Spring Cloud Alibaba 组件"></a>Spring Cloud Alibaba 组件</h1><ol>
-<li><p>Sentinel：把流量作为切入点，从流量控制、熔断降级、系统负载保护等多个维度保护服务的稳定性。</p>
+        <h2 id="总览"><a href="#总览" class="headerlink" title="总览"></a>总览</h2><p>Spring Cloud 为开发人员提供了快速构建分布式系统中一些常见模式的工具（例如配置管理、服务发现、断路器、智能路由、微代理、控制总线、一次性令牌、全局锁、leader选举、分布式session、集群状态）。<br>分布式系统的协调导致了样板模式, 使用 Spring Cloud 开发人员可以快速地支持实现这些模式的服务和应用程序。它们可以在任何分布式环境中很好地工作，包括开发人员自己的笔记本电脑，裸机数据中心，<br>以及Cloud Foundry等托管平台。</p>
+<p>Spring Cloud专注于为典型用例提供良好的开箱即用体验，并为其他用户提供可扩展性机制。</p>
+<h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h2><table>
+<thead>
+<tr>
+<th>功能（english）</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Distributed/versioned configuration</td>
+<td>分布式/版本化配置</td>
+</tr>
+<tr>
+<td>Service registration and discovery</td>
+<td>服务注册和发现</td>
+</tr>
+<tr>
+<td>Routing</td>
+<td>智能路由</td>
+</tr>
+<tr>
+<td>Service-to-service calls</td>
+<td>service-to-service调用</td>
+</tr>
+<tr>
+<td>Load balancing</td>
+<td>负载均衡</td>
+</tr>
+<tr>
+<td>Circuit Breakers</td>
+<td>断路器</td>
+</tr>
+<tr>
+<td>Global locks</td>
+<td>全局锁</td>
+</tr>
+<tr>
+<td>Leadership election and cluster state</td>
+<td>leader选举和集群状态管理</td>
+</tr>
+<tr>
+<td>Distributed messaging</td>
+<td>分布式消息</td>
+</tr>
+</tbody>
+</table>
+<h2 id="主要项目"><a href="#主要项目" class="headerlink" title="主要项目"></a>主要项目</h2><table>
+<thead>
+<tr>
+<th>项目名称</th>
+<th>项目职能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Spring Cloud Config</td>
+<td>Spring Cloud提供的分布式配置中心，为外部配置提供了客户端和服务端的支持。</td>
+</tr>
+<tr>
+<td>Spring Cloud Netflix</td>
+<td>与各种NetflixOSS组件集成（Eureka，Hystrix，Zuul，Archaius等）。</td>
+</tr>
+<tr>
+<td>Spring Cloud Bus</td>
+<td>用于将服务和服务实例与分布式消息传递连接在一起的事件总线。用于跨群集传播状态更改（例如，配置更改事件）。</td>
+</tr>
+<tr>
+<td>Spring Cloud Cloudfoundry</td>
+<td>提供应用程序与 Pivotal Cloud Foundry 集成。提供服务发现实现，还可以轻松实现受SSO和OAuth2保护的资源。</td>
+</tr>
+<tr>
+<td>Spring Cloud Open Service Broker</td>
+<td>为构建实现 Open service broker API 的服务代理提供了一个起点。    </td>
+</tr>
+<tr>
+<td>Spring Cloud Cluster</td>
+<td>提供Leadership选举，如：Zookeeper, Redis, Hazelcast, Consul等常见状态模式的抽象和实现。</td>
+</tr>
+<tr>
+<td>Spring Cloud Consul</td>
+<td>封装了Consul操作，consul 是一个服务发现与配置工具，与Docker容器可以无缝集成。</td>
+</tr>
+<tr>
+<td>Spring Cloud Security</td>
+<td>基于Spring security的安全工具包，为你的应用程序添加安全控制。在Zuul代理中为负载平衡的OAuth2 rest客户端和身份验证头中继提供支持。</td>
+</tr>
+<tr>
+<td>Spring Cloud Sleuth</td>
+<td>Spring Cloud 提供的分布式链路跟踪组件，兼容zipkin、HTracer和基于日志的跟踪（ELK）</td>
+</tr>
+<tr>
+<td>Spring Cloud Data Flow</td>
+<td>大数据操作工具，作为Spring XD的替代产品，它是一个混合计算模型，结合了流数据与批量数据的处理方式。</td>
+</tr>
+<tr>
+<td>Spring Cloud Stream</td>
+<td>数据流操作开发包，封装了与Redis,Rabbit、Kafka等发送接收消息。</td>
+</tr>
+<tr>
+<td>Spring Cloud CLI</td>
+<td>基于 Spring Boot CLI，可以让你以命令行方式快速建立云组件。</td>
+</tr>
+<tr>
+<td>Spring Cloud OpenFeign</td>
+<td>一个http client客户端，致力于减少http client客户端构建的复杂性。</td>
+</tr>
+<tr>
+<td>Spring Cloud Gateway</td>
+<td>Spring Cloud 提供的网关服务组件</td>
+</tr>
+<tr>
+<td>Spring Cloud Stream App Starters</td>
+<td>Spring Cloud Stream App Starters是基于Spring Boot的Spring 集成应用程序，可提供与外部系统的集成。</td>
+</tr>
+<tr>
+<td>Spring Cloud Task</td>
+<td>提供云端计划任务管理、任务调度。</td>
+</tr>
+<tr>
+<td>Spring Cloud Task App Starters</td>
+<td>SpringCloud任务应用程序启动器是SpringBoot应用程序，它可以是任何进程，包括不会永远运行的Spring批处理作业，并且在有限的数据处理周期后结束/停止。</td>
+</tr>
+<tr>
+<td>Spring Cloud Zookeeper</td>
+<td>操作Zookeeper的工具包，用于使用zookeeper方式的服务发现和配置管理。</td>
+</tr>
+<tr>
+<td>Spring Cloud AWS</td>
+<td>提供与托管的AWS集成</td>
+</tr>
+<tr>
+<td>Spring Cloud Connectors</td>
+<td>便于云端应用程序在各种PaaS平台连接到后端，如：数据库和消息代理服务。</td>
+</tr>
+<tr>
+<td>Spring Cloud Starters</td>
+<td>Spring Boot式的启动项目，为Spring Cloud提供开箱即用的依赖管理。</td>
+</tr>
+<tr>
+<td>Spring Cloud Contract</td>
+<td>Spring Cloud Contract是一个总体项目，其中包含帮助用户成功实施消费者驱动合同方法的解决方案。</td>
+</tr>
+<tr>
+<td>Spring Cloud Pipelines</td>
+<td>Spring Cloud Pipelines提供了一个固定意见的部署管道，其中包含确保您的应用程序可以零停机方式部署并轻松回滚出错的步骤。</td>
+</tr>
+<tr>
+<td>Spring Cloud Function</td>
+<td>Spring Cloud Function通过函数促进业务逻辑的实现。 它支持Serverless 提供商之间的统一编程模型，以及独立运行（本地或PaaS）的能力。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="SpringCloud-与-SpringBoot-版本兼容关系"><a href="#SpringCloud-与-SpringBoot-版本兼容关系" class="headerlink" title="SpringCloud 与 SpringBoot 版本兼容关系"></a>SpringCloud 与 SpringBoot 版本兼容关系</h2><table>
+<thead>
+<tr>
+<th>Release Train</th>
+<th>Boot Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Greenwich</td>
+<td>2.1.x</td>
+</tr>
+<tr>
+<td>Finchley</td>
+<td>2.0.x</td>
+</tr>
+<tr>
+<td>Edgware</td>
+<td>1.5.x</td>
+</tr>
+<tr>
+<td>Dalston</td>
+<td>1.5.x</td>
+</tr>
+</tbody>
+</table>
+<h2 id="SpringCloud-与子工程版本关系"><a href="#SpringCloud-与子工程版本关系" class="headerlink" title="SpringCloud 与子工程版本关系"></a>SpringCloud 与子工程版本关系</h2><table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Edgware.SR5</th>
+<th>Finchley.SR2</th>
+<th>Finchley.BUILD-SNAPSHOT</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>spring-cloud-aws</td>
+<td>1.2.3.RELEASE</td>
+<td>2.0.1.RELEASE</td>
+<td>2.0.1.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-bus</td>
+<td>1.3.3.RELEASE</td>
+<td>2.0.0.RELEASE</td>
+<td>2.0.1.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-cli</td>
+<td>1.4.1.RELEASE</td>
+<td>2.0.0.RELEASE</td>
+<td>2.0.1.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-commons</td>
+<td>1.3.5.RELEASE</td>
+<td>2.0.2.RELEASE</td>
+<td>2.0.2.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-contract</td>
+<td>1.2.6.RELEASE</td>
+<td>2.0.2.RELEASE</td>
+<td>2.0.2.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-config</td>
+<td>1.4.5.RELEASE</td>
+<td>2.0.2.RELEASE</td>
+<td>2.0.2.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-netflix</td>
+<td>1.4.6.RELEASE</td>
+<td>2.0.2.RELEASE</td>
+<td>2.0.2.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-security</td>
+<td>1.2.3.RELEASE</td>
+<td>2.0.1.RELEASE</td>
+<td>2.0.1.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-cloudfoundry</td>
+<td>1.1.2.RELEASE</td>
+<td>2.0.1.RELEASE</td>
+<td>2.0.1.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-consul</td>
+<td>1.3.5.RELEASE</td>
+<td>2.0.1.RELEASE</td>
+<td>2.0.2.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-sleuth</td>
+<td>1.3.5.RELEASE</td>
+<td>2.0.2.RELEASE</td>
+<td>2.0.2.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-stream</td>
+<td>Ditmars.SR4</td>
+<td>Elmhurst.SR1</td>
+<td>Elmhurst.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-zookeeper</td>
+<td>1.2.2.RELEASE</td>
+<td>2.0.0.RELEASE</td>
+<td>2.0.1.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-boot</td>
+<td>1.5.16.RELEASE</td>
+<td>2.0.6.RELEASE</td>
+<td>2.0.7.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-task</td>
+<td>1.2.3.RELEASE</td>
+<td>2.0.0.RELEASE</td>
+<td>2.0.1.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-vault</td>
+<td>1.1.2.RELEASE</td>
+<td>2.0.2.RELEASE</td>
+<td>2.0.2.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-gateway</td>
+<td>1.0.2.RELEASE</td>
+<td>2.0.2.RELEASE</td>
+<td>2.0.2.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-openfeign</td>
+<td></td>
+<td>2.0.2.RELEASE</td>
+<td>2.0.2.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-function</td>
+<td>1.0.1.RELEASE</td>
+<td>1.0.0.RELEASE</td>
+<td>1.0.1.BUILD-SNAPSHOT</td>
+</tr>
+</tbody>
+</table>
+<h2 id="兼容"><a href="#兼容" class="headerlink" title="兼容"></a>兼容</h2><ul>
+<li><p>Finchley 构建并使用Spring Boot 2.0.x，与 Spring Boot 1.5.x 不兼容。</p>
 </li>
-<li><p>Nacos：一个更易于构建云原生应用的动态服务发现、配置管理和服务管理平台。</p>
+<li><p>Dalston 和 Edgware 基于 Spring Boot 1.5.x 构建，不兼容 SpringBoot 2.0.x</p>
 </li>
-<li><p>RocketMQ：一款开源的分布式消息系统，基于高可用分布式集群技术，提供低延时的、高可靠的消息发布与订阅服务。</p>
+<li><p>Camden 版本迭代正式结束，Dalston 将于2018年12月结束使用，Edgware 将遵循 Spring Boot 1.5.x 的生命周期结束。</p>
 </li>
-<li><p>Dubbo：Apache Dubbo™ 是一款高性能 Java RPC 框架。</p>
+<li><p>Camden 基于SpringBoot 1.4.x 构建，但是也会支持 1.5.x 版本</p>
 </li>
-<li><p>Seata：阿里巴巴开源产品，一个易于使用的高性能微服务分布式事务解决方案。</p>
+<li><p>Brixton 和 Angel 迭代结束时间是2017年7月，Brixton 基于SpringBoot 1.3.x ，同时也支持 1.4.x 版本</p>
 </li>
-<li><p>Alibaba Cloud ACM：一款在分布式架构环境中对应用配置进行集中管理和推送的应用配置中心产品。</p>
+<li><p>Angel 基于 SpringBoot 1.2.x ,在某些方式不兼容 SpringBoot 1.3.x 。</p>
 </li>
-<li><p>Alibaba Cloud OSS: 阿里云对象存储服务（Object Storage Service，简称 OSS），是阿里云提供的海量、安全、低成本、高可靠的云存储服务。您可以在任何应用、任何时间、任何地点存储和访问任意类型的数据。</p>
+<li><p>Brixton 构建在SpringBoot 1.3.x ，不兼容 SpringBoot 1.2.x 。一些基于Angel的库和大多数应用程序可以在Brixton上正常运行，但如果OAuth2具备spring-cloud-security 1.0的特性，则需要在任何地方进行更改。x被使用(它们大多在1.3.0中被移到Spring Boot中)。</p>
 </li>
-<li><p>Alibaba Cloud SchedulerX: 阿里中间件团队开发的一款分布式任务调度产品，提供秒级、精准、高可靠、高可用的定时（基于 Cron 表达式）任务调度服务。</p>
-</li>
-<li><p>Alibaba Cloud SMS: 覆盖全球的短信服务，友好、高效、智能的互联化通讯能力，帮助企业迅速搭建客户触达通道。</p>
-</li>
-</ol>
+</ul>
 
         
     </section>

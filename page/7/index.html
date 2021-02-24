@@ -131,7 +131,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/12/02/Spring Cloud Alibaba 的学习之熔断篇/">熔断</a>
+            <a href="/2018/12/02/Granafa + Prometheus监控MySQL.md/">Granafa + Prometheus监控MySQL</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -145,7 +145,7 @@
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
+    <a class="article-tag-link" href="/tags/Prometheus/">Prometheus</a>
 </div>
 
 
@@ -154,17 +154,25 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="熔断"><a href="#熔断" class="headerlink" title="熔断"></a>熔断</h1><h2 id="什么是服务雪崩"><a href="#什么是服务雪崩" class="headerlink" title="什么是服务雪崩"></a>什么是服务雪崩</h2><p>在微服务架构中，根据业务来拆分成一个个的服务，服务与服务之间可以通过 HTTP/RPC 相互调用，在 Spring Cloud 中可以用 ==RestTemplate== + ==LoadBalanceClient== 和 ==Feign== 来调用。为了保证其高可用，单个服务通常会集群部署。由于网络原因或者自身的原因，服务并不能保证 100% 可用，如果单个服务出现问题，调用这个服务就会出现线程阻塞，此时若有大量的请求涌入，Servlet 容器的线程资源会被消耗完毕，导致服务瘫痪。服务与服务之间的依赖性，故障会传播，会对整个微服务系统造成灾难性的严重后果，这就是服务故障的 “雪崩” 效应。为了解决这个问题，业界提出了 ++熔断器模型++。</p>
-<h2 id="Spring-Cloud微服务设计中如何才能实现这样的机制呢？这里涉及到几个问题："><a href="#Spring-Cloud微服务设计中如何才能实现这样的机制呢？这里涉及到几个问题：" class="headerlink" title="Spring Cloud微服务设计中如何才能实现这样的机制呢？这里涉及到几个问题："></a>Spring Cloud微服务设计中如何才能实现这样的机制呢？这里涉及到几个问题：</h2><ul>
-<li><p>微服务如何定义为故障，熔断的条件是什么？如何确定当前调用的微服务不可用，从而可以实现熔断操作；</p>
-</li>
-<li><p>被定义为故障的微服务恢复后如何让熔断方感知？当前微服务何时才可以继续正常的调用需要调用的其他微服务，实现故障恢复；</p>
-</li>
-</ul>
-<p>Spring Cloud的代码实现机制是什么样的？</p>
-<blockquote>
-<p>在Spring Cloud微服务设计中需要通过集成Hystrix框架来实现微服务间的熔断保护机制，Hystrix框架会通过监控微服务之间的调用情况，来决定是否启动熔断保护。</p>
-</blockquote>
+        <h1 id="Granafa-Prometheus监控MySQL"><a href="#Granafa-Prometheus监控MySQL" class="headerlink" title="Granafa + Prometheus监控MySQL"></a>Granafa + Prometheus监控MySQL</h1><h2 id="0-安装mysql-exporter"><a href="#0-安装mysql-exporter" class="headerlink" title="0.安装mysql_exporter"></a>0.安装mysql_exporter</h2><p>1、下载到被监控端解压压缩包</p>
+<p>tar zxvf mysqld_exporter-0.11.0.linux-amd64.tar.gz </p>
+<p>2、改名并移动到指定目录<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mv mysqld_exporter-0.11.0.linux-amd64 /usr/<span class="built_in">local</span>/mysql_exporter</span><br><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/mysql_exporter</span><br></pre></td></tr></table></figure></p>
+<p>3、登录mysql为exporter创建账号并授权</p>
+<h2 id="创建数据库用户。"><a href="#创建数据库用户。" class="headerlink" title="创建数据库用户。"></a>创建数据库用户。</h2><figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; <span class="keyword">CREATE</span> USER <span class="string">'exporter'</span>@<span class="string">'localhost'</span> IDENTIFIED <span class="keyword">BY</span> <span class="string">'XXXXXXXX'</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="可查看主从运行情况查看线程，及所有数据库。"><a href="#可查看主从运行情况查看线程，及所有数据库。" class="headerlink" title="可查看主从运行情况查看线程，及所有数据库。"></a>可查看主从运行情况查看线程，及所有数据库。</h2><figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; GRANT <span class="keyword">PROCESS</span>, REPLICATION CLIENT, <span class="keyword">SELECT</span> <span class="keyword">ON</span> *.* <span class="keyword">TO</span> <span class="symbol">'exporter</span>'@<span class="symbol">'localhost</span>';</span><br></pre></td></tr></table></figure>
+<h2 id="4、创建mysql配置文件、运行时可免密码连接数据库：vim-usr-local-mysql-exporter-my-cnf"><a href="#4、创建mysql配置文件、运行时可免密码连接数据库：vim-usr-local-mysql-exporter-my-cnf" class="headerlink" title="4、创建mysql配置文件、运行时可免密码连接数据库：vim /usr/local/mysql_exporter/.my.cnf"></a>4、创建mysql配置文件、运行时可免密码连接数据库：vim /usr/local/mysql_exporter/.my.cnf</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[client]</span></span><br><span class="line"><span class="attr">user</span>=exporter</span><br><span class="line"><span class="attr">password</span>=xxxxx</span><br></pre></td></tr></table></figure>
+<h2 id="5、启动exporter客户端"><a href="#5、启动exporter客户端" class="headerlink" title="5、启动exporter客户端"></a>5、启动exporter客户端</h2><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">./mysqld_exporter</span> <span class="params">--config</span>.my-cnf=<span class="string">.my.cnf</span></span><br></pre></td></tr></table></figure>
+<p>常用参数：<br><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 选择采集innodb</span></span><br><span class="line"><span class="params">--collect</span>.info_schema.innodb_cmp</span><br><span class="line"><span class="comment"># innodb存储引擎状态</span></span><br><span class="line"><span class="params">--collect</span>.engine_innodb_status</span><br><span class="line"><span class="comment"># 指定配置文件</span></span><br><span class="line"><span class="params">--config</span>.my-cnf=<span class="string">".my.cnf"</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="6、添加系统服务"><a href="#6、添加系统服务" class="headerlink" title="6、添加系统服务"></a>6、添加系统服务</h2><p>vi /usr/lib/systemd/system/mysql_exporter.service<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[Unit]</span></span><br><span class="line"><span class="attr">Description</span>=https://prometheus.io</span><br><span class="line"></span><br><span class="line"><span class="section">[Service]</span></span><br><span class="line"><span class="attr">Restart</span>=<span class="literal">on</span>-failure</span><br><span class="line"><span class="attr">ExecStart</span>=/usr/local/mysql_exporter/mysqld_exporter --config.my-cnf=.my.cnf </span><br><span class="line"></span><br><span class="line"><span class="section">[Install]</span></span><br><span class="line"><span class="attr">WantedBy</span>=multi-user.target</span><br></pre></td></tr></table></figure></p>
+<h2 id="7、启动添加后的系统服务"><a href="#7、启动添加后的系统服务" class="headerlink" title="7、启动添加后的系统服务"></a>7、启动添加后的系统服务</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">systemctl</span> <span class="selector-tag">daemon-reload</span></span><br><span class="line"><span class="selector-tag">systemctl</span> <span class="selector-tag">restart</span> <span class="selector-tag">mysql_exporter</span><span class="selector-class">.service</span></span><br></pre></td></tr></table></figure>
+<h2 id="8、网站查看捕获mysql数据"><a href="#8、网站查看捕获mysql数据" class="headerlink" title="8、网站查看捕获mysql数据"></a>8、网站查看捕获mysql数据</h2><p>访问：<a href="http://172.16.129.98:9104/metrics" target="_blank" rel="noopener">http://172.16.129.98:9104/metrics</a></p>
+<h2 id="9、使用prometheus监控修改监控端配置文件：vim-prometheus-yml"><a href="#9、使用prometheus监控修改监控端配置文件：vim-prometheus-yml" class="headerlink" title="9、使用prometheus监控修改监控端配置文件：vim prometheus.yml"></a>9、使用prometheus监控修改监控端配置文件：vim prometheus.yml</h2><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">scrape_configs:</span></span><br><span class="line">  <span class="comment"># 添加作业并命名</span></span><br><span class="line"><span class="attr">  - job_name:</span> <span class="string">'mysql'</span></span><br><span class="line">    <span class="comment"># 静态添加node</span></span><br><span class="line"><span class="attr">    static_configs:</span></span><br><span class="line">    <span class="comment"># 指定监控端</span></span><br><span class="line"><span class="attr">    - targets:</span> <span class="string">['47.98.138.176:9104']</span></span><br></pre></td></tr></table></figure>
+<h2 id="10、检查并重启服务"><a href="#10、检查并重启服务" class="headerlink" title="10、检查并重启服务"></a>10、检查并重启服务</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./promtool check<span class="built_in"> config </span>prometheus.yml </span><br><span class="line">kill -hup 5997</span><br></pre></td></tr></table></figure>
+<h2 id="11、查看监控端是否接入"><a href="#11、查看监控端是否接入" class="headerlink" title="11、查看监控端是否接入"></a>11、查看监控端是否接入</h2><p>访问 promethues<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">http:</span><span class="comment">//172.16.129.98:9090/targets</span></span><br></pre></td></tr></table></figure></p>
+<p>这时候能看到mMySQL已经接入成功 </p>
+<h2 id="12、使用promSQL查看mysql监控信息"><a href="#12、使用promSQL查看mysql监控信息" class="headerlink" title="12、使用promSQL查看mysql监控信息"></a>12、使用promSQL查看mysql监控信息</h2><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">在promethues控制台查看指定参数 ：</span><br><span class="line"></span><br><span class="line">测试查看mysqlglobal状态信息</span><br><span class="line">mysql_global_status_aborted_clients</span><br><span class="line"></span><br><span class="line"><span class="symbol">http:</span><span class="comment">//172.16.129.98:9090/graph</span></span><br></pre></td></tr></table></figure>
+<h2 id="13、Granfana-导入Mysql-监控图表"><a href="#13、Granfana-导入Mysql-监控图表" class="headerlink" title="13、Granfana 导入Mysql 监控图表"></a>13、Granfana 导入Mysql 监控图表</h2><p>推荐图标ID：<a href="https://grafana.com/dashboards/7362" target="_blank" rel="noopener">https://grafana.com/dashboards/7362</a></p>
+<h2 id="推荐教程"><a href="#推荐教程" class="headerlink" title="推荐教程"></a>推荐教程</h2><p><a href="https://www.cnblogs.com/xiangsikai/p/11289675.html" target="_blank" rel="noopener">https://www.cnblogs.com/xiangsikai/p/11289675.html</a></p>
 
         
     </section>
@@ -176,7 +184,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/12/02/Sentinel工作原理/">Sentinel工作原理</a>
+            <a href="/2018/12/02/微服务下的事务管理/">（九）微服务下的事务管理</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -190,7 +198,7 @@
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
+    <a class="article-tag-link" href="/tags/分布式事务/">分布式事务</a>
 </div>
 
 
@@ -199,96 +207,17 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="Sentinel"><a href="#Sentinel" class="headerlink" title="Sentinel"></a>Sentinel</h1><p>英 [ˈsentɪnl]</p>
-<p><a href="https://github.com/alibaba/Sentinel/wiki/%E4%BB%8B%E7%BB%8D" target="_blank" rel="noopener">官方文档</a></p>
-<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>资源是 Sentinel 的关键概念。它可以是 Java 应用程序中的任何内容，例如，由应用程序提供的服务，或由应用程序调用的其它应用提供的服务，甚至可以是一段代码。<br>在接下来的文档中，我们都会用资源来描述代码块。</p>
-<p>只要通过 Sentinel API 定义的代码，就是资源，能够被 Sentinel 保护起来。<br>大部分情况下，可以使用方法签名，URL，甚至服务名称作为资源名来标示资源。</p>
-<h2 id="规则"><a href="#规则" class="headerlink" title="规则"></a>规则</h2><p>围绕资源的实时状态设定的规则，可以包括流量控制规则、熔断降级规则以及系统保护规则。所有规则可以动态实时调整。</p>
-<h2 id="Sentinel-功能和设计理念"><a href="#Sentinel-功能和设计理念" class="headerlink" title="Sentinel 功能和设计理念"></a>Sentinel 功能和设计理念</h2><h3 id="流量控制"><a href="#流量控制" class="headerlink" title="流量控制"></a>流量控制</h3><h4 id="什么是流量控制"><a href="#什么是流量控制" class="headerlink" title="什么是流量控制"></a>什么是流量控制</h4><p>流量控制在网络传输中是一个常用的概念，它用于调整网络包的发送数据。<br>然而，从系统稳定性角度考虑，在处理请求的速度上，也有非常多的讲究。<br>任意时间到来的请求往往是随机不可控的，而系统的处理能力是有限的。我们需要根据系统的处理能力对流量进行控制。<br>Sentinel 作为一个调配器，可以根据需要把随机的请求调整成合适的形状，如下图所示：</p>
-<h3 id="流量控制设计理念"><a href="#流量控制设计理念" class="headerlink" title="流量控制设计理念"></a>流量控制设计理念</h3><p>资源的调用关系，例如资源的调用链路，资源和资源之间的关系；<br>运行指标，例如 QPS、线程池、系统负载等；<br>控制的效果，例如直接限流、冷启动、排队等。</p>
-<p>Sentinel 的设计理念是让您自由选择控制的角度，并进行灵活组合，从而达到想要的效果。</p>
-<h2 id="熔断降级"><a href="#熔断降级" class="headerlink" title="熔断降级"></a>熔断降级</h2><h3 id="什么是熔断降级"><a href="#什么是熔断降级" class="headerlink" title="什么是熔断降级"></a>什么是熔断降级</h3><p>除了流量控制以外，及时对调用链路中的不稳定因素进行熔断也是 Sentinel 的使命之一。<br>由于调用关系的复杂性，如果调用链路中的某个资源出现了不稳定，可能会导致请求发生堆积，进而导致级联错误。</p>
-<p>Sentinel 和 Hystrix 的原则是一致的: 当检测到调用链路中某个资源出现不稳定的表现，<br>例如请求响应时间长或异常比例升高的时候，则对这个资源的调用进行限制，<br>让请求快速失败，避免影响到其它的资源而导致级联故障。</p>
-<h3 id="熔断降级设计理念"><a href="#熔断降级设计理念" class="headerlink" title="熔断降级设计理念"></a>熔断降级设计理念</h3><p>在限制的手段上，Sentinel 和 Hystrix 采取了完全不一样的方法。</p>
-<h4 id="Hystrix"><a href="#Hystrix" class="headerlink" title="Hystrix"></a>Hystrix</h4><p>Hystrix 通过 ==线程池隔离== 的方式，来对依赖（在 Sentinel 的概念中对应 资源）进行了隔离。<br>这样做的好处是资源和资源之间做到了最彻底的隔离。缺点是除了增加了线程切换的成本（过多的线程池导致线程数目过多），<br>还需要预先给各个资源做线程池大小的分配，并且对于一些使用了 ThreadLocal 的场景来说会有问题（如 Spring 事务）。</p>
-<h4 id="Sentinel-1"><a href="#Sentinel-1" class="headerlink" title="Sentinel"></a>Sentinel</h4><blockquote>
-<p>通过==并发线程数==进行限制</p>
-</blockquote>
-<p>和资源池隔离的方法不同，Sentinel 通过限制资源并发线程的数量，来减少不稳定资源对其它资源的影响。<br>这样不但没有线程切换的损耗，也不需要您预先分配线程池的大小。当某个资源出现不稳定的情况下，例如响应时间变长，<br>对资源的直接影响就是会造成线程数的逐步堆积。当线程数在特定资源上堆积到一定的数量之后，对该资源的新请求就会被拒绝。<br>堆积的线程完成任务后才开始继续接收请求。</p>
-<blockquote>
-<p>针对==慢调用和异常==对资源进行降级</p>
-</blockquote>
-<p>除了对并发线程数进行控制以外，Sentinel 还可以根据响应时间和异常等不稳定因素来快速对不稳定的调用进行熔断。<br>当依赖的资源出现响应时间过长后，所有对该资源的访问都会被直接拒绝，直到过了指定的时间窗口之后才重新渐进式地恢复。</p>
-<h3 id="系统自适应保护"><a href="#系统自适应保护" class="headerlink" title="系统自适应保护"></a>系统自适应保护</h3><p>Sentinel 同时提供系统维度的自适应保护能力。防止雪崩，是系统防护中重要的一环。<br>当系统负载较高的时候，如果还持续让请求进入，可能会导致系统崩溃，无法响应。<br>在集群环境下，网络负载均衡会把本应这台机器承载的流量转发到其它的机器上去。<br>如果这个时候其它的机器也处在一个边缘状态的时候，这个增加的流量就会导致这台机器也崩溃，最后导致整个集群不可用。</p>
-<p>针对这个情况，Sentinel 提供了对应的保护机制，让系统的入口流量和系统的负载达到一个平衡，保证系统在能力范围之内处理最多的请求。</p>
-<h2 id="Sentinel-工作机制"><a href="#Sentinel-工作机制" class="headerlink" title="Sentinel 工作机制"></a>Sentinel 工作机制</h2><p>Sentinel 的主要工作机制如下：</p>
-<p>对主流框架提供适配或者显示的 API，来定义需要保护的资源，并提供设施对资源进行实时统计和调用链路分析。</p>
-<p>根据预设的规则，结合对资源的实时统计信息，对流量进行控制。同时，Sentinel 提供开放的接口，方便您定义及改变规则。</p>
-<p>Sentinel 提供实时的监控系统，方便您快速了解目前系统的状态。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/12/02/Sentinel 注解式支持/">Sentinel 注解式支持</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Sentinel-注解式支持"><a href="#Sentinel-注解式支持" class="headerlink" title="Sentinel 注解式支持"></a>Sentinel 注解式支持</h1><p>@SentinelResource 用于定义资源，并提供可选的异常处理和 fallback 配置项。 @SentinelResource 注解包含以下属性：</p>
-<ul>
-<li>value：资源名称，必需项（不能为空）</li>
-<li>entryType：entry 类型，可选项（默认为 EntryType.OUT）</li>
-<li>blockHandler / blockHandlerClass</li>
-</ul>
-<p>blockHandler 对应处理 BlockException 的函数名称，可选项。blockHandler 函数访问范围需要是 public，返回类型需要与原方法相匹配，参数类型需要和原方法相匹配并且最后加一个额外的参数，类型为 BlockException。blockHandler 函数默认需要和原方法在同一个类中。若希望使用其他类的函数，则可以指定 blockHandlerClass 为对应的类的 Class 对象，注意对应的函数必需为 static 函数，否则无法解析。</p>
-<ul>
-<li>fallback / fallbackClass</li>
-</ul>
-<p>fallback 函数名称，可选项，用于在抛出异常的时候提供 fallback 处理逻辑。fallback 函数可以针对所有类型的异常（除了exceptionsToIgnore里面排除掉的异常类型）进行处理。<br>fallback 函数签名和位置要求：</p>
+        <h1 id="微服务下的事务管理"><a href="#微服务下的事务管理" class="headerlink" title="微服务下的事务管理"></a>微服务下的事务管理</h1><p>分布式事务2PC或者3PC是否适合于微服务下的事务管理呢？答案是否定的，原因有三点</p>
 <ol>
-<li>返回值类型必须与原函数返回值类型一致；</li>
-<li>方法参数列表需要和原函数一致，或者可以额外多一个Throwable类型的参数用于接收对应的异常。</li>
-<li>fallback 函数默认需要和原方法在同一个类中。若希望使用其他类的函数，则可以指定 fallbackClass 为对应的类的 Class 对象，注意对应的函数必需为 static 函数，否则无法解析。</li>
+<li><p>由于微服务间无法直接进行数据访问，微服务间互相调用通常通过RPC（dubbo）或Http API（SpringCloud）进行，所以已经无法使用TM统一管理微服务的RM。</p>
+</li>
+<li><p>不同的微服务使用的数据源类型可能完全不同，如果微服务使用了NoSQL之类不支持事务的数据库，则事务根本无从谈起。</p>
+</li>
+<li><p>即使微服务使用的数据源都支持事务，那么如果使用一个大事务将许多微服务的事务管理起来，这个大事务维持的时间，将比本地事务长几个数量级。如此长时间的事务及跨服务的事务，将为产生很多锁及数据不可用，严重影响系统性能。</p>
+</li>
 </ol>
-<ul>
-<li>defaultFallback（since 1.6.0）：</li>
-</ul>
-<p>默认的 fallback 函数名称，可选项，通常用于通用的 fallback 逻辑（即可以用于很多服务或方法）。默认 fallback 函数可以针对所有类型的异常（除了 exceptionsToIgnore 里面排除掉的异常类型）进行处理。若同时配置了 fallback 和 defaultFallback，则只有 fallback 会生效。</p>
-<p>defaultFallback 函数签名要求：</p>
-<ol>
-<li>返回值类型必须与原函数返回值类型一致；</li>
-<li>方法参数列表需要为空，或者可以额外多一个Throwable类型的参数用于接收对应的异常。</li>
-<li>defaultFallback 函数默认需要和原方法在同一个类中。若希望使用其他类的函数，则可以指定 fallbackClass 为对应的类的 Class 对象，注意对应的函数必需为 static 函数，否则无法解析。</li>
-</ol>
-<ul>
-<li>exceptionsToIgnore：用于指定哪些异常被排除掉，不会计入异常统计中，也不会进入 fallback 逻辑中，而是会原样抛出。</li>
-</ul>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 对应的 `handleException` 函数需要位于 `ExceptionUtil` 类中，并且必须为 static 函数.</span></span><br><span class="line">    <span class="meta">@SentinelResource</span>(value = <span class="string">"test"</span>, blockHandler = <span class="string">"handleException"</span>, blockHandlerClass = &#123;ExceptionUtil.class&#125;)</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Test"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 原函数</span></span><br><span class="line">    <span class="meta">@SentinelResource</span>(value = <span class="string">"hello"</span>, blockHandler = <span class="string">"exceptionHandler"</span>, fallback = <span class="string">"helloFallback"</span>)</span><br><span class="line">    <span class="keyword">public</span> <span class="function">String <span class="title">hello</span><span class="params">(<span class="keyword">long</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">return</span> String.<span class="title">format</span><span class="params">(<span class="string">"Hello at %d"</span>, s)</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Fallback 函数，函数签名与原函数一致或加一个 Throwable 类型的参数.</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function">String <span class="title">helloFallback</span><span class="params">(<span class="keyword">long</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">return</span> String.<span class="title">format</span><span class="params">(<span class="string">"Halooooo %d"</span>, s)</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Block 异常处理函数，参数最后多一个 BlockException，其余与原函数一致.</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function">String <span class="title">exceptionHandler</span><span class="params">(<span class="keyword">long</span> s, BlockException ex)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Do some log here.</span></span><br><span class="line">        ex.printStackTrace();</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Oops, error occurred at "</span> + s;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由此可见，传统的分布式事务已经无法满足微服务架构下的事务管理需求。那么，既然无法满足传统的ACID事务，在微服务下的事务管理必然要遵循新的法则－－BASE理论。</p>
+
         
     </section>
 </article>
@@ -299,7 +228,140 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/12/02/Sentinel 主流框架的适配/">Sentinel 主流框架的适配</a>
+            <a href="/2018/12/02/Synchronized 原理/">Synchronized 原理</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java/">Java</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Synchronized-原理"><a href="#Synchronized-原理" class="headerlink" title="Synchronized 原理"></a>Synchronized 原理</h1><p>JVM规范中描述：每个对象有一个监视器锁（monitor）。</p>
+<p>当monitor被占用时就会处于锁定状态，线程执行monitorenter指令时尝试获取monitor的所有权，过程如下：</p>
+<ol>
+<li><p>如果monitor的进入数为0，则该线程进入monitor，然后将进入数设置为1，该线程即为monitor的所有者。</p>
+</li>
+<li><p>如果线程已经占有该monitor，只是重新进入，则进入monitor的进入数加1.</p>
+</li>
+<li><p>如果其他线程已经占用了monitor，则该线程进入阻塞状态，直到monitor的进入数为0，再重新尝试获取monitor的所有权。</p>
+</li>
+</ol>
+<p>Synchronized的语义底层是通过一个monitor的对象来完成，其实wait/notify等方法也依赖于monitor对象，这就是为什么只有在同步的块或者方法中才能调用wait/notify等方法，否则会抛出java.lang.IllegalMonitorStateException的异常的原因。</p>
+<blockquote>
+<p>Synchronized是通过对象内部的一个叫做监视器锁（monitor）来实现的。</p>
+</blockquote>
+<p>但是监视器锁本质又是依赖于底层的操作系统的互斥锁（Mutex Lock）来实现的。而操作系统实现线程之间的切换这就需要从用户态转换到核心态，这个成本非常高，状态之间的转换需要相对比较长的时间，这就是为什么Synchronized效率低的原因。因此，这种依赖于操作系统互斥锁（Mutex Lock）所实现的锁我们称之为“重量级锁”。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/TPS和QPS到底搞明白了么/">TPS和QPS到底搞明白了么</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java/">Java</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="TPS和QPS到底搞明白了么"><a href="#TPS和QPS到底搞明白了么" class="headerlink" title="TPS和QPS到底搞明白了么"></a>TPS和QPS到底搞明白了么</h1><h2 id="TPS"><a href="#TPS" class="headerlink" title="TPS"></a>TPS</h2><p>TPS：Transactions Per Second，意思是每秒事务数，具体事务的定义，都是人为的，可以一个接口、多个接口、一个业务流程等等。一个事务是指事务内第一个请求发送到接收到最后一个请求的响应的过程，以此来计算使用的时间和完成的事务个数。</p>
+<p>以单接口定义为事务为例，每个事务包括了如下3个过程：</p>
+<p>　　a.向服务器发请求</p>
+<p>　　b.服务器自己的内部处理（包含应用服务器、数据库服务器等）</p>
+<p>　　c.服务器返回结果给客户端</p>
+<p>　　如果每秒能够完成N次这三个过程，tps就是N；</p>
+<p>如果多个接口定义为一个事务，那么，会重复执行abc，完成一次这几个请求，算做一个tps。</p>
+<h2 id="QPS"><a href="#QPS" class="headerlink" title="QPS"></a>QPS</h2><p>QPS：Queries Per Second，意思是每秒查询率，是一台服务器每秒能够响应的查询次数（数据库中的每秒执行查询sql的次数），显然，这个不够全面，不能描述增删改，所以，不建议用qps来作为系统性能指标。</p>
+<h2 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h2><p>如果是对一个查询接口（单场景）压测，且这个接口内部不会再去请求其它接口，那么tps=qps，否则，tps≠qps</p>
+<p>如果是容量场景，假设n个接口都是查询接口，且这个接口内部不会再去请求其它接口，qps=n*tps</p>
+<p>jmeter聚合报告中，Throughput是用来衡量请求的吞吐量，也就是tps，tps=样本数/运行时间<br>如果没有定义事务，会把每个请求作为一个事务</p>
+<p>QPS是Query Per Second，是数据库中的概念，每秒执行条数（查询），被引申到压测中来了，但是不包括插入、更新、删除操作，所以不建议用qps来描述系统整体的性能；</p>
+<p>建议用tps，这个t，你可以随意的定义，可以是一个接口，也可以是一个业务流程等等。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/常见分布式事务解决方案/">（四）常见分布式事务解决方案</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/分布式事务/">分布式事务</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="常见分布式事务解决方案"><a href="#常见分布式事务解决方案" class="headerlink" title="常见分布式事务解决方案"></a>常见分布式事务解决方案</h1><p>分布式事务实现方案从类型上去分刚性事务、柔型事务。刚性事务：通常无业务改造，强一致性，原生支持回滚/隔离性，低并发，适合短事务。柔性事务：有业务改造，最终一致性，实现补偿接口，实现资源锁定接口，高并发，适合长事务。</p>
+<p>刚性事务：XA 协议（2PC、JTA、JTS）、3PC</p>
+<p>柔型事务：TCC/FMT、Saga（状态机模式、Aop模式）、本地事务消息、消息事务（半消息）、最多努力通知型事务</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/SpringCloud Alibaba 整体结构/">SpringCloud Alibaba</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -322,235 +384,39 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="Sentinel-主流框架的适配"><a href="#Sentinel-主流框架的适配" class="headerlink" title="Sentinel 主流框架的适配"></a>Sentinel 主流框架的适配</h1><p><a href="https://github.com/alibaba/Sentinel/wiki/%E4%B8%BB%E6%B5%81%E6%A1%86%E6%9E%B6%E7%9A%84%E9%80%82%E9%85%8D" target="_blank" rel="noopener">适配</a></p>
-<p>为了减少开发的复杂程度，Sentinel对大部分的主流框架，例如 Web Servlet、Dubbo、Spring Cloud、gRPC、Spring WebFlux、Reactor 等都做了适配。您只需要引入对应的依赖即可方便地整合 Sentinel。<br>包括以下配置：</p>
-<h3 id="Web-适配"><a href="#Web-适配" class="headerlink" title="Web 适配"></a>Web 适配</h3><ul>
-<li>Spring Boot/Spring Cloud</li>
-<li>Web Servlet</li>
-<li>Spring WebFlux<h3 id="RPC-适配"><a href="#RPC-适配" class="headerlink" title="RPC 适配"></a>RPC 适配</h3></li>
-<li>Apache Dubbo</li>
-<li>gRPC</li>
-<li>Feign</li>
-<li>SOFARPC<h3 id="HTTP-client-适配"><a href="#HTTP-client-适配" class="headerlink" title="HTTP client 适配"></a>HTTP client 适配</h3></li>
-<li>Apache HttpClient</li>
-<li>OkHttp</li>
-<li>Reactive 适配</li>
-<li>Reactor<h3 id="API-Gateway-适配"><a href="#API-Gateway-适配" class="headerlink" title="API Gateway 适配"></a>API Gateway 适配</h3></li>
-<li>Spring Cloud Gateway</li>
-<li>Netflix Zuul 1.x</li>
-<li>Netflix Zuul 2.x</li>
-<li>Apache RocketMQ</li>
-</ul>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/12/02/Sentinel quick start/">Sentinel快速入门</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Sentinel快速入门"><a href="#Sentinel快速入门" class="headerlink" title="Sentinel快速入门"></a>Sentinel快速入门</h1><p>如下的代码任然是侵入式的使用方式，也提供了<a href="https://github.com/alibaba/Sentinel/wiki/%E6%B3%A8%E8%A7%A3%E6%94%AF%E6%8C%81" target="_blank" rel="noopener">注解支持模块</a>。</p>
-<p>应用使用 pom 工程，则在 pom.xml 文件中加入以下代码即可：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.csp<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>sentinel-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>First Demo 代码：</p>
-<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> sentinel;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.alibaba.csp.sentinel.Entry;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.csp.sentinel.SphU;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.csp.sentinel.slots.block.BlockException;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.csp.sentinel.slots.block.RuleConstant;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.csp.sentinel.slots.block.flow.FlowRule;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.csp.sentinel.slots.block.flow.FlowRuleManager;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> class SentinelDemo &#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">		initFlowRules();</span><br><span class="line">		<span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">			Entry entry = <span class="keyword">null</span>;</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				entry = SphU.entry(<span class="string">"HelloWorld"</span>);</span><br><span class="line">				<span class="comment">/* 您的业务逻辑 - 开始 */</span></span><br><span class="line">				System.out.<span class="built_in">println</span>(<span class="string">"hello world"</span>);</span><br><span class="line">				<span class="comment">/* 您的业务逻辑 - 结束 */</span></span><br><span class="line">			&#125; <span class="keyword">catch</span> (BlockException e1) &#123;</span><br><span class="line">				<span class="comment">/* 流控逻辑处理 - 开始 */</span></span><br><span class="line">				System.out.<span class="built_in">println</span>(<span class="string">"block!"</span>);</span><br><span class="line">				<span class="comment">/* 流控逻辑处理 - 结束 */</span></span><br><span class="line">			&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">				<span class="keyword">if</span> (entry != <span class="keyword">null</span>) &#123;</span><br><span class="line">					entry.<span class="built_in">exit</span>();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 接下来，通过规则来指定允许该资源通过的请求次数</span></span><br><span class="line"><span class="comment">// 例如下面的代码定义了资源 HelloWorld 每秒最多只能通过 20 个请求。</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> initFlowRules() &#123;</span><br><span class="line">		List&lt;FlowRule&gt; rules = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">		FlowRule rule = <span class="keyword">new</span> FlowRule();</span><br><span class="line">		rule.setResource(<span class="string">"HelloWorld"</span>);</span><br><span class="line">		rule.setGrade(RuleConstant.FLOW_GRADE_QPS);</span><br><span class="line">		<span class="comment">// Set limit QPS to 20.</span></span><br><span class="line">		rule.setCount(<span class="number">20</span>);</span><br><span class="line">		rules.<span class="built_in">add</span>(rule);</span><br><span class="line">		FlowRuleManager.loadRules(rules);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Demo 运行之后，我们可以在日志里看到下面的输出:<br><figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">window机器位于 C:\Users\shengwangzhong\logs\xxxx</span><br><span class="line">~/logs/csp/$&#123;appName&#125;-metrics.log.xxx</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">|<span class="type">--timestamp</span>-|<span class="type">------date</span> <span class="built_in">time</span>----|<span class="type">-resource</span>-|<span class="type">p</span> |<span class="type">block</span>|<span class="type">s</span> |<span class="type">e</span>|<span class="type">rt</span></span><br><span class="line"><span class="number">1529998904000</span>|<span class="type">2018</span><span class="number">-06</span><span class="number">-26</span> <span class="number">15</span>:<span class="number">41</span>:<span class="number">44</span>|<span class="type">HelloWorld</span>|<span class="type">20</span>|<span class="type">0</span>    |<span class="type">20</span>|<span class="type">0</span>|<span class="type">0</span></span><br><span class="line"><span class="number">1529998905000</span>|<span class="type">2018</span><span class="number">-06</span><span class="number">-26</span> <span class="number">15</span>:<span class="number">41</span>:<span class="number">45</span>|<span class="type">HelloWorld</span>|<span class="type">20</span>|<span class="type">5579</span> |<span class="type">20</span>|<span class="type">0</span>|<span class="type">728</span></span><br><span class="line"><span class="number">1529998906000</span>|<span class="type">2018</span><span class="number">-06</span><span class="number">-26</span> <span class="number">15</span>:<span class="number">41</span>:<span class="number">46</span>|<span class="type">HelloWorld</span>|<span class="type">20</span>|<span class="type">15698</span>|<span class="type">20</span>|<span class="type">0</span>|<span class="type">0</span></span><br><span class="line"><span class="number">1529998907000</span>|<span class="type">2018</span><span class="number">-06</span><span class="number">-26</span> <span class="number">15</span>:<span class="number">41</span>:<span class="number">47</span>|<span class="type">HelloWorld</span>|<span class="type">20</span>|<span class="type">19262</span>|<span class="type">20</span>|<span class="type">0</span>|<span class="type">0</span></span><br><span class="line"><span class="number">1529998908000</span>|<span class="type">2018</span><span class="number">-06</span><span class="number">-26</span> <span class="number">15</span>:<span class="number">41</span>:<span class="number">48</span>|<span class="type">HelloWorld</span>|<span class="type">20</span>|<span class="type">19502</span>|<span class="type">20</span>|<span class="type">0</span>|<span class="type">0</span></span><br><span class="line"><span class="number">1529998909000</span>|<span class="type">2018</span><span class="number">-06</span><span class="number">-26</span> <span class="number">15</span>:<span class="number">41</span>:<span class="number">49</span>|<span class="type">HelloWorld</span>|<span class="type">20</span>|<span class="type">18386</span>|<span class="type">20</span>|<span class="type">0</span>|<span class="type">0</span></span><br></pre></td></tr></table></figure></p>
-<p>其中 p 代表通过的请求, block 代表被阻止的请求, s 代表成功执行完成的请求个数, e 代表用户自定义的异常, rt 代表平均响应时长。</p>
-<p>结合控制台使用：</p>
-<p>首先需要保证控制台处于启动状态：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -Dserver.<span class="attribute">port</span>=8080 -Dcsp.sentinel.dashboard.<span class="attribute">server</span>=localhost:8080 -Dproject.<span class="attribute">name</span>=sentinel-dashboard -jar sentinel-dashboard.jar</span><br></pre></td></tr></table></figure></p>
-<p>其中 -Dserver.port=8080 用于指定 Sentinel 控制台端口为 8080</p>
-<p>此外针对上面的应用需要添加依赖：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.csp<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>sentinel-transport-simple-http<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>同时需要添加程序启动参数：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-Dcsp<span class="selector-class">.sentinel</span><span class="selector-class">.dashboard</span><span class="selector-class">.server</span>=consoleIp:port</span><br><span class="line">                ↓↓↓↓↓↓↓</span><br><span class="line">-Dcsp<span class="selector-class">.sentinel</span><span class="selector-class">.dashboard</span><span class="selector-class">.server</span>=localhost:<span class="number">8080</span></span><br></pre></td></tr></table></figure></p>
-<p>若启动多个应用，则需要通过 -Dcsp.sentinel.api.port=xxxx 指定客户端监控 API 的端口（默认是 8719）。</p>
-<p>这时候，在启动程序以后，可以再dashboard页面能对具体的应用进行实时监控。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/12/02/Redis的过期策略和内存淘汰机制/">Redis的过期策略和内存淘汰机制</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h2 id="Redis的过期策略和内存淘汰机制"><a href="#Redis的过期策略和内存淘汰机制" class="headerlink" title="Redis的过期策略和内存淘汰机制"></a>Redis的过期策略和内存淘汰机制</h2><p>一、背景<br>线上你写代码的时候，想当然的认为写进 redis 的数据就一定会存在，后面导致系统各种 bug，谁来负责？<br>常见的有两个问题：<br>往 redis 写入的数据怎么没了？<br>可能有同学会遇到，在生产环境的 redis 经常会丢掉一些数据，写进去了，过一会儿可能就没了。我的天，同学，你问这个问题就说明 redis 你就没用对啊。redis 是缓存，你给当存储了是吧？<br>啥叫缓存？用内存当缓存。内存是无限的吗，内存是很宝贵而且是有限的，磁盘是廉价而且是大量的。可能一台机器就几十个 G 的内存，但是可以有几个 T 的硬盘空间。redis 主要是基于内存来进行高性能、高并发的读写操作的。<br>那既然内存是有限的，比如 redis 就只能用 10G，你要是往里面写了 20G 的数据，会咋办？当然会干掉 10G 的数据，然后就保留 10G 的数据了。那干掉哪些数据？保留哪些数据？当然是干掉不常用的数据，保留常用的数据了。<br>数据明明过期了，怎么还占用着内存？<br>这是由 redis 的过期策略来决定。</p>
-<blockquote>
-<p>3种过期策略</p>
-</blockquote>
-<h2 id="定时删除"><a href="#定时删除" class="headerlink" title="定时删除"></a>定时删除</h2><h3 id="含义："><a href="#含义：" class="headerlink" title="含义："></a>含义：</h3><p>在设置key的过期时间的同时，为该key创建一个定时器，让定时器在key的过期时间来临时，对key进行删除</p>
-<h3 id="优点："><a href="#优点：" class="headerlink" title="优点："></a>优点：</h3><p>保证内存被尽快释放</p>
-<h3 id="缺点："><a href="#缺点：" class="headerlink" title="缺点："></a>缺点：</h3><ol>
-<li>若过期key很多，删除这些key会占用很多的CPU时间，在CPU时间紧张的情况下，CPU不能把所有的时间用来做要紧的事儿，还需要去花时间删除这些key</li>
-<li>定时器的创建耗时，若为每一个设置过期时间的key创建一个定时器（将会有大量的定时器产生），性能影响严重</li>
-<li>没人用</li>
-</ol>
-<h2 id="惰性删除"><a href="#惰性删除" class="headerlink" title="惰性删除"></a>惰性删除</h2><h3 id="含义：-1"><a href="#含义：-1" class="headerlink" title="含义："></a>含义：</h3><p>key过期的时候不删除，每次从数据库获取key的时候去检查是否过期，若过期，则删除，返回null。</p>
-<h3 id="优点：-1"><a href="#优点：-1" class="headerlink" title="优点："></a>优点：</h3><p>删除操作只发生在从数据库取出key的时候发生，而且只删除当前key，所以对CPU时间的占用是比较少的，而且此时的删除是已经到了非做不可的地步（如果此时还不删除的话，我们就会获取到了已经过期的key了）</p>
-<h3 id="缺点：-1"><a href="#缺点：-1" class="headerlink" title="缺点："></a>缺点：</h3><p>若大量的key在超出超时时间后，很久一段时间内，都没有被获取过，那么可能发生内存泄露（无用的垃圾占用了大量的内存）</p>
-<h2 id="定期删除"><a href="#定期删除" class="headerlink" title="定期删除"></a>定期删除</h2><h3 id="含义：-2"><a href="#含义：-2" class="headerlink" title="含义："></a>含义：</h3><p>每隔一段时间执行一次删除(在redis.conf配置文件设置hz，1s刷新的频率)过期key操作</p>
-<h3 id="优点：-2"><a href="#优点：-2" class="headerlink" title="优点："></a>优点：</h3><p>通过限制删除操作的时长和频率，来减少删除操作对CPU时间的占用–处理”定时删除”的缺点<br>定期删除过期key–处理”惰性删除”的缺点</p>
-<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点:"></a>缺点:</h3><p>在内存友好方面，不如”定时删除”<br>在CPU时间友好方面，不如”惰性删除”</p>
-<h3 id="难点"><a href="#难点" class="headerlink" title="难点:"></a>难点:</h3><p>合理设置删除操作的执行时长（每次删除执行多长时间）和执行频率（每隔多长时间做一次删除）（这个要根据服务器运行情况来定了）</p>
-<h2 id="redis的过期策略和内存淘汰机制"><a href="#redis的过期策略和内存淘汰机制" class="headerlink" title="redis的过期策略和内存淘汰机制"></a>redis的过期策略和内存淘汰机制</h2><p>1、定期删除+惰性删除</p>
-<p>定期删除：指的是redis默认是每隔100ms就随机抽取一些设置了过期时间的key，检查其是否过期，如果过期就删除</p>
-<p>惰性删除：在你获取某个key的时候，redis会检查一下 ，这个key如果设置了过期时间那么是否过期了，如果过期了此时就会删除，不会给你返回任何东西</p>
-<p>2、如果大量过期key堆积在内存里，导致redis内存块耗尽了，怎么办？</p>
-<blockquote>
-<p>内存淘汰机制：</p>
-</blockquote>
-<p>redis.conf中配置：<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># maxmemory-policy noeviction</span></span><br></pre></td></tr></table></figure></p>
-<ul>
-<li><p>noeviction：当内存使用达到阈值的时候，所有引起申请内存的命令会报错。</p>
-</li>
-<li><p>allkeys-lru：在主键空间中，优先移除最近未使用的key。</p>
-</li>
-<li><p>volatile-lru：在设置了过期时间的键空间中，优先移除最近未使用的key。</p>
-</li>
-<li><p>allkeys-random：在主键空间中，随机移除某个key。</p>
-</li>
-<li><p>volatile-random：在设置了过期时间的键空间中，随机移除某个key。</p>
-</li>
-<li><p>volatile-ttl：在设置了过期时间的键空间中，具有更早过期时间的key优先移除。</p>
-</li>
-</ul>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/12/02/Redis数据持久化/">(十五)Redis数据持久化</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="十五-Redis数据持久化"><a href="#十五-Redis数据持久化" class="headerlink" title="(十五)Redis数据持久化"></a>(十五)Redis数据持久化</h1><p>Redis支持数据持久化，可以将内存中的数据持久化到磁盘中，重启的时候再次加载使用。Redis4之前的数据持久化有AOF和RDB两种，从Redis4之后新增了AOF+RDB混合持久化的方式。</p>
-<p>上面提到Redis持久化存储有两种持久化方案，RDB(Redis DataBase)和 AOF(Append-Only File)。</p>
-<ul>
-<li>RDB 内存快照（二进制）</li>
-</ul>
-<p>是将内存中的数据进行快照存储到磁盘。</p>
-<ul>
-<li>AOF 回放日志（文本）</li>
-</ul>
-<p>AOF则为可回放的命令日志记录redis内的所有操作。</p>
-<ul>
-<li>混合式 </li>
-</ul>
-<p>AOF 和 RDB各有特点也相互独立。Redis4之后支持RDB-AOF混合持久化的方式，结合了两者的优点，可以通过 aof-use-rdb-preamble 配置项可以打开混合开关。</p>
-<h2 id="RDB"><a href="#RDB" class="headerlink" title="RDB"></a>RDB</h2><p>RDB持久化是指在指定的时间间隔内将内存中的数据集快照写入磁盘，实际操作过程是fork一个子进程，先将数据集写入临时文件，写入成功后，再替换之前的文件，用二进制压缩存储。</p>
-<p><img src="http://img1.tuicool.com/NjYjYvF.png!web?_=6182478" alt="RDB"></p>
-<p>RDB(Redis DataBase)是将Redis内存中的数据进行Snaptshot快照存储在磁盘内，是Redis的==默认持久化方案==。使用RDB持久化默认有三种策略，该持久化策略在redis.conf中可配置，会以一段时间内有指定次数据修改的规则触发快照动作，快照文件名为dump.rdb，该文件默认使用LZF压缩算法 。每当Redis服务重启的时候会从该文件中加载数据进内存。</p>
-<p>RDB持久化除了可以根据配置中的策略触发，也可以手动触发，使用==save==和==bgsave==命令即可。这两个命令的区别的save会阻塞服务器进程，在进行save的过程中，服务器不能处理任何请求，而bgsave会通过一个子进程在后台处理rdb持久化。事实上save和bgsave调用的都是rdbSave函数，因此Redis不允许save和bgsave同时运行，这也是为了避免出现竞争导致rdb文件数据不准确。</p>
-<p>bgsave操作使用CopyOnWrite机制进行写时复制，是由一个子进程将内存中的最新数据遍历写入临时文件，此时父进程仍旧处理客户端的操作，当子进程操作完毕后再将该临时文件重命名为dump.rdb替换掉原来的dump.rdb文件，因此无论bgsave是否成功，dump.rdb都不会受到影响。</p>
-<p>另外在主从全量同步、debug reload以及shutdown的情况下也会触发RDB数据持久化。</p>
-<h3 id="配置RDB"><a href="#配置RDB" class="headerlink" title="配置RDB"></a>配置RDB</h3><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">vim $REDIS_HOME/bin/redis.conf</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#RDB持久化策略 默认三种方式，</span><br><span class="line">[<span class="number">900</span>秒内有<span class="number">1</span>次修改],</span><br><span class="line">[<span class="number">300</span>秒内有<span class="number">10</span>次修改],</span><br><span class="line">[<span class="number">60</span>秒内有<span class="number">10000</span>次修改]即触发RDB持久化，</span><br><span class="line">我们可以手动修改该参数或新增策略</span><br><span class="line"></span><br><span class="line">save <span class="number">900</span> <span class="number">1</span></span><br><span class="line">save <span class="number">300</span> <span class="number">10</span></span><br><span class="line">save <span class="number">60</span> <span class="number">10000</span></span><br><span class="line"> </span><br><span class="line">#RDB文件名</span><br><span class="line">dbfilename <span class="string">"dump.rdb"</span></span><br><span class="line"></span><br><span class="line">#RDB文件存储路径</span><br><span class="line">dir <span class="string">"/opt/app/redis6/data"</span></span><br></pre></td></tr></table></figure>
-<h2 id="AOF"><a href="#AOF" class="headerlink" title="AOF"></a>AOF</h2><p>AOF持久化以日志的形式记录服务器所处理的每一个写、删除操作，查询操作不会记录，以文本的方式记录，可以打开文件看到详细的操作记录。</p>
-<p><img src="http://img2.tuicool.com/YrqaY3f.png!web?_=6182478" alt="AOF"></p>
-<p>AOF(Append-Only File)记录Redis中每次的写命令，类似mysql中的binlog，服务重启时会重新执行AOF中的命令将数据恢复到内存中，RDB(按策略持久化)持久化方式记录的粒度不如AOF(记录每条写命令)，因此很多生产环境都是开启AOF持久化。</p>
-<p>AOF中记录了操作和数据，在日志文件中追加完成后才会将内存中的数据进行变更。</p>
-<p>AOF持久化流程：</p>
+        <h1 id="SpringCloud-Alibaba"><a href="#SpringCloud-Alibaba" class="headerlink" title="SpringCloud Alibaba"></a>SpringCloud Alibaba</h1><p><img src="https://img-blog.csdnimg.cn/20200612191916995.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NteDEwNjAyMjAyMTk=,size_16,color_FFFFFF,t_70" alt="SpringCloud Alibaba"></p>
+<p>官方文档：<br><a href="https://github.com/alibaba/spring-cloud-alibaba/blob/master/README-zh.md" target="_blank" rel="noopener">README</a></p>
 <ol>
-<li>客户端的请求写命令会被append追加到AOF缓冲区内；</li>
-<li>AOF缓冲区根据AOF持久化策略[always,everysec,no]将操作sync同步到磁盘的AOF文件中；</li>
-<li>AOF文件大小超过重写策略或手动重写时，会对AOF文件rewrite重写，压缩AOF文件容量；</li>
-<li>Redis服务重启时，会重新load加载AOF文件中的写操作达到数据恢复的目的；</li>
+<li>服务限流降级</li>
 </ol>
-<h3 id="配置AOF"><a href="#配置AOF" class="headerlink" title="配置AOF"></a>配置AOF</h3><p>开启了AOF之后，RDB就默认不使用了。使用下面的配置开启AOF以及策略。(如果使用AOF，推荐选择always方式持久化，否则在高并发场景下，每秒钟会有几万甚至百万条请求，如果使用everysec的方式的话，万一服务器挂了那几万条数据就丢失了)。</p>
-<figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">vim $REDIS_HOME/bin/redis.conf</span><br><span class="line"></span><br><span class="line"><span class="meta">#开启AOF持久化</span></span><br><span class="line">appendonly yes</span><br><span class="line"> </span><br><span class="line"><span class="meta">#AOF文件名</span></span><br><span class="line">appendfilename <span class="string">"appendonly.aof"</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#AOF文件存储路径 与RDB是同一个参数</span></span><br><span class="line">dir <span class="string">"/opt/app/redis6/data"</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#AOF策略，一般都是选择第一种</span></span><br><span class="line">[always:每个命令都记录],</span><br><span class="line">[everysec:每秒记录一次],</span><br><span class="line">[no:看机器的心情高兴了就记录]</span><br><span class="line">appendfsync always</span><br><span class="line"><span class="meta">#appendfsync everysec</span></span><br><span class="line"><span class="meta"># appendfsync no</span></span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="meta">#aof文件大小比起上次重写时的大小,增长100%(配置可以大于100%)时,触发重写。</span></span><br><span class="line">[假如上次重写后大小为<span class="number">10</span>MB，当AOF文件达到<span class="number">20</span>MB时也会再次触发重写，以此类推]</span><br><span class="line">auto-aof-rewrite-percentage <span class="number">100</span> </span><br><span class="line"> </span><br><span class="line"><span class="meta">#aof文件大小超过64MB时,触发重写</span></span><br><span class="line">auto-aof-rewrite-min-size <span class="number">64</span>mb</span><br></pre></td></tr></table></figure>
-<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><h3 id="RDB-1"><a href="#RDB-1" class="headerlink" title="RDB"></a>RDB</h3><h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><p>1). 一旦采用该方式，那么你的整个Redis数据库将只包含一个文件，这对于文件备份而言是非常完美的。比如，你可能打算每个小时归档一次最近24小时的数据，同时还要每天归档一次最近30天的数据。通过这样的备份策略，一旦系统出现灾难性故障，我们可以非常容易的进行恢复。</p>
-<p>2). 对于灾难恢复而言，RDB是非常不错的选择。因为我们可以非常轻松的将一个单独的文件压缩后再转移到其它存储介质上。</p>
-<p>3). 性能最大化。对于Redis的服务进程而言，在开始持久化时，它唯一需要做的只是fork出子进程，之后再由子进程完成这些持久化的工作，这样就可以极大的避免服务进程执行IO操作了。</p>
-<p>4). 相比于AOF机制，如果数据集很大，RDB的启动效率会更高。</p>
-<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><p>1). 如果你想保证数据的高可用性，即最大限度的避免数据丢失，那么RDB将不是一个很好的选择。因为系统一旦在定时持久化之前出现宕机现象，此前没有来得及写入磁盘的数据都将丢失。</p>
-<p>2). 由于RDB是通过fork子进程来协助完成数据持久化工作的，因此，如果当数据集较大时，可能会导致整个服务器停止服务几百毫秒，甚至是1秒钟。</p>
-<h3 id="AOF-1"><a href="#AOF-1" class="headerlink" title="AOF"></a>AOF</h3><h4 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h4><p>1). 该机制可以带来更高的数据安全性，即数据持久性。Redis中提供了3中同步策略，即每秒同步、每修改同步和不同步。事实上，每秒同步也是异步完成的，其效率也是非常高的，所差的是一旦系统出现宕机现象，那么这一秒钟之内修改的数据将会丢失。而每修改同步，我们可以将其视为同步持久化，即每次发生的数据变化都会被立即记录到磁盘中。可以预见，这种方式在效率上是最低的。至于无同步，无需多言，我想大家都能正确的理解它。</p>
-<p>2). 由于该机制对日志文件的写入操作采用的是append模式，因此在写入过程中即使出现宕机现象，也不会破坏日志文件中已经存在的内容。然而如果我们本次操作只是写入了一半数据就出现了系统崩溃问题，不用担心，在Redis下一次启动之前，我们可以通过redis-check-aof工具来帮助我们解决数据一致性的问题。</p>
-<p>3). 如果日志过大，Redis可以自动启用rewrite机制。即Redis以append模式不断的将修改数据写入到老的磁盘文件中，同时Redis还会创建一个新的文件用于记录此期间有哪些修改命令被执行。因此在进行rewrite切换时可以更好的保证数据安全性。</p>
-<p>4). AOF包含一个格式清晰、易于理解的日志文件用于记录所有的修改操作。事实上，我们也可以通过该文件完成数据的重建。</p>
-<h4 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h4><p>1). 对于相同数量的数据集而言，AOF文件通常要大于RDB文件。RDB 在恢复大数据集时的速度比 AOF 的恢复速度要快。</p>
-<p>2). 根据同步策略的不同，AOF在运行效率上往往会慢于RDB。总之，每秒同步策略的效率是比较高的，同步禁用策略的效率和RDB一样高效。</p>
-<p>二者选择的标准，就是看系统是愿意牺牲一些性能，换取更高的缓存一致性（aof），还是愿意写操作频繁的时候，不启用备份来换取更高的性能，待手动运行save的时候，再做备份（rdb）。rdb这个就更有些 eventually consistent的意思了。不过生产环境其实更多都是二者结合使用的。</p>
-<h2 id="常用配置"><a href="#常用配置" class="headerlink" title="常用配置"></a>常用配置</h2><h4 id="RDB持久化配置"><a href="#RDB持久化配置" class="headerlink" title="RDB持久化配置"></a>RDB持久化配置</h4><p>Redis会将数据集的快照dump到dump.rdb文件中。此外，我们也可以通过配置文件来修改Redis服务器dump快照的频率，在打开6379.conf文件之后，我们搜索save，可以看到下面的配置信息：</p>
-<p>save 900 1              #在900秒(15分钟)之后，如果至少有1个key发生变化，则dump内存快照。</p>
-<p>save 300 10            #在300秒(5分钟)之后，如果至少有10个key发生变化，则dump内存快照。</p>
-<p>save 60 10000        #在60秒(1分钟)之后，如果至少有10000个key发生变化，则dump内存快照。</p>
-<h4 id="AOF持久化配置"><a href="#AOF持久化配置" class="headerlink" title="AOF持久化配置"></a>AOF持久化配置</h4><p>在Redis的配置文件中存在三种同步方式，它们分别是：</p>
-<p>appendfsync always     #每次有数据修改发生时都会写入AOF文件。</p>
-<p>appendfsync everysec  #每秒钟同步一次，该策略为AOF的缺省策略。</p>
-<p>appendfsync no          #从不同步。高效但是数据不会被持久化。</p>
+<p>默认支持 WebServlet、WebFlux, OpenFeign、RestTemplate、Spring Cloud Gateway, Zuul, Dubbo 和 RocketMQ 限流降级功能的接入，可以在运行时通过控制台实时修改限流降级规则，还支持查看限流降级 Metrics 监控。</p>
+<ol start="2">
+<li>服务注册与发现</li>
+</ol>
+<p>适配 Spring Cloud 服务注册与发现标准，默认集成了 Ribbon 的支持。</p>
+<ol start="3">
+<li>分布式配置管理</li>
+</ol>
+<p>支持分布式系统中的外部化配置，配置更改时自动刷新。</p>
+<ol start="4">
+<li>消息驱动能力</li>
+</ol>
+<p>基于 Spring Cloud Stream 为微服务应用构建消息驱动能力。</p>
+<ol start="5">
+<li><p>分布式事务<br>使用 @GlobalTransactional 注解， 高效并且对业务零侵入地解决分布式事务问题。</p>
+</li>
+<li><p>阿里云对象存储</p>
+</li>
+</ol>
+<p>阿里云提供的海量、安全、低成本、高可靠的云存储服务。支持在任何应用、任何时间、任何地点存储和访问任意类型的数据。</p>
+<ol start="7">
+<li>分布式任务调度</li>
+</ol>
+<p>提供秒级、精准、高可靠、高可用的定时（基于 Cron 表达式）任务调度服务。同时提供分布式的任务执行模型，如网格任务。网格任务支持海量子任务均匀分配到所有 Worker（schedulerx-client）上执行。</p>
+<ol start="8">
+<li>阿里云短信服务</li>
+</ol>
+<p>覆盖全球的短信服务，友好、高效、智能的互联化通讯能力，帮助企业迅速搭建客户触达通道。</p>
 
         
     </section>
@@ -562,7 +428,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/12/02/Redis服务器相关命令/">(九)Redis服务器相关命令</a>
+            <a href="/2018/12/02/Java锁膨胀/">Java锁膨胀</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -576,7 +442,7 @@
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
+    <a class="article-tag-link" href="/tags/Java/">Java</a>
 </div>
 
 
@@ -585,71 +451,12 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="九-Redis服务器相关命令"><a href="#九-Redis服务器相关命令" class="headerlink" title="(九)Redis服务器相关命令"></a>(九)Redis服务器相关命令</h1><h4 id="验证密码是否正确"><a href="#验证密码是否正确" class="headerlink" title="验证密码是否正确"></a>验证密码是否正确</h4><p> 使用auth命令验证密码是否正确，如果当前未登陆进行验证通过后会转为登陆状态，如果当前已登陆，会返回验证结果成功或失败：</p>
-<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">auth password</span></span><br></pre></td></tr></table></figure>
-<h4 id="查看服务器信息"><a href="#查看服务器信息" class="headerlink" title="查看服务器信息"></a>查看服务器信息</h4><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">INFO [section]</span><br><span class="line"></span><br><span class="line">info cpu</span><br><span class="line"></span><br><span class="line"><span class="meta"># CPU</span></span><br><span class="line"><span class="symbol">used_cpu_sys:</span><span class="number">5495.206247</span></span><br><span class="line"><span class="symbol">used_cpu_user:</span><span class="number">5338.722012</span></span><br><span class="line"><span class="symbol">used_cpu_sys_children:</span><span class="number">0.627837</span></span><br><span class="line"><span class="symbol">used_cpu_user_children:</span><span class="number">0.214709</span></span><br></pre></td></tr></table></figure>
-<h4 id="统计当前库下key的数量"><a href="#统计当前库下key的数量" class="headerlink" title="统计当前库下key的数量"></a>统计当前库下key的数量</h4><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">dbsize</span></span><br></pre></td></tr></table></figure>
-<h4 id="查看配置信息"><a href="#查看配置信息" class="headerlink" title="查看配置信息"></a>查看配置信息</h4><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">config <span class="builtin-name">get</span> patten</span><br><span class="line"></span><br><span class="line">config <span class="builtin-name">get</span> port</span><br><span class="line"></span><br><span class="line">config <span class="builtin-name">get</span> max*</span><br><span class="line"></span><br><span class="line">config <span class="builtin-name">get</span> *</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Docker:0&gt;config <span class="builtin-name">get</span> port</span><br><span class="line"> 1)  <span class="string">"port"</span></span><br><span class="line"> 2)  <span class="string">"6379"</span></span><br><span class="line"></span><br><span class="line">Docker:0&gt;config <span class="builtin-name">get</span> max*</span><br><span class="line"> 1)  <span class="string">"maxmemory"</span></span><br><span class="line"> 2)  <span class="string">"0"</span></span><br><span class="line"> 3)  <span class="string">"maxmemory-samples"</span></span><br><span class="line"> 4)  <span class="string">"5"</span></span><br><span class="line"> 5)  <span class="string">"maxclients"</span></span><br><span class="line"> 6)  <span class="string">"10000"</span></span><br><span class="line"> 7)  <span class="string">"maxmemory-policy"</span></span><br><span class="line"> 8)  <span class="string">"noeviction"</span></span><br></pre></td></tr></table></figure>
-<h4 id="修改当前配置信息-动态修改"><a href="#修改当前配置信息-动态修改" class="headerlink" title="修改当前配置信息(动态修改)"></a>修改当前配置信息(动态修改)</h4><p>Config Set 命令可以动态地调整 Redis 服务器的配置(configuration)而无须重启，但此时配置文件中仍是修改前的配置，可搭配config rewrite命令一起使用：<br><figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">config <span class="keyword">set</span> <span class="keyword">parameter</span> <span class="comment">value</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="重写配置文件"><a href="#重写配置文件" class="headerlink" title="重写配置文件"></a>重写配置文件</h4><p>Config rewrite 命令对启动 Redis 服务器时所指定的 redis.conf 配置文件进行改写。与config<br>set不同，set之后会将配置信息修改而无需重启服务，但此时redis.conf配置文件里记录的参数仍是set之前的值，如果将redis服务重启后会读取conf文件中的配置，这时候读到的还是set之前的配置，因此我们可以在set配置之后使用rewrite命令将当前的配置回写至配置文件内，这样就能不停机修改配置信息了，因此config set和config rewrite是配合使用的：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">config rewrite</span><br><span class="line"></span><br><span class="line">config <span class="builtin-name">set</span> slowlog-max-len 256</span><br><span class="line"></span><br><span class="line">config <span class="builtin-name">get</span> slowlog-max-len</span><br><span class="line"></span><br><span class="line">config rewrite </span><br><span class="line"></span><br><span class="line">config rewrite 命令对启动 Redis 服务器时所指定的 redis.conf 配置文件进行改写写回配置文件 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">cat /opt/redis6/</span><br></pre></td></tr></table></figure></p>
-<h4 id="config-resetstat"><a href="#config-resetstat" class="headerlink" title="config resetstat"></a>config resetstat</h4><p>使用Config Resetstat 命令重置 INFO 命令中的某些统计数据，包括：</p>
-<ul>
-<li>Keyspace hits (键空间命中次数)</li>
-<li>Keyspace misses (键空间不命中次数)</li>
-<li>Number of commands processed (执行命令的次数)</li>
-<li>Number of connections received (连接服务器的次数)</li>
-<li>Number of expired keys (过期key的数量)</li>
-<li>Number of rejected connections (被拒绝的连接数量)</li>
-<li>Latest fork(2) time(最后执行 fork(2) 的时间)</li>
-<li>The aof_delayed_fsync counter(aof_delayed_fsync 计数器的值)</li>
-</ul>
-<h4 id="切换数据库"><a href="#切换数据库" class="headerlink" title="切换数据库"></a>切换数据库</h4><p>redis共有16个db，从db0~db15，使用select index命令在数据库之间进行切换：<br><figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="built_in">index</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="time"><a href="#time" class="headerlink" title="time"></a>time</h4><p>Time 命令用于返回当前服务器时间，返回一个包含两个字符串的列表： 第一个字符串是当前时间(以 UNIX 时间戳格式表示)，而第二个字符串是当前这一秒钟已经逝去的微秒数。</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">time</span><br><span class="line"></span><br><span class="line">Docker:<span class="number">0</span>&gt;time</span><br><span class="line"> <span class="number">1</span>)  <span class="string">"1597122706"</span></span><br><span class="line"> <span class="number">2</span>)  <span class="string">"914251"</span></span><br></pre></td></tr></table></figure>
-<h4 id="DEBUG"><a href="#DEBUG" class="headerlink" title="DEBUG"></a>DEBUG</h4><p>debug object key获取 key 的调试信息，当key不存在时返回错误信息。</p>
-<p>debug segfault 命令执行一个非法的内存访问从而让 Redis 崩溃，仅在开发时用于 BUG 调试，执行后需要重启服务。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="builtin-name">debug</span> object key</span><br><span class="line"></span><br><span class="line"><span class="builtin-name">debug</span> segfault bengku崩溃，需要重启服务</span><br></pre></td></tr></table></figure></p>
-<h4 id="清空库"><a href="#清空库" class="headerlink" title="清空库"></a>清空库</h4><p>flushdb清空当前数据库下的所有数据。<br>flushall清空所有库下的所有数据。<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">flushdb</span></span><br><span class="line"><span class="attribute">flushall</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="监控"><a href="#监控" class="headerlink" title="监控"></a>监控</h4><p>monitor命令用于监听redis服务器接收到的所有命令：<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">monitor</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="关闭"><a href="#关闭" class="headerlink" title="关闭"></a>关闭</h4><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHUTDOWN [NOSAVE<span class="string">|SAVE]</span></span><br></pre></td></tr></table></figure>
-<h4 id="command"><a href="#command" class="headerlink" title="command"></a>command</h4><p>查看当前Redis中所有可用命令，使用Command 命令用于返回所有的Redis命令的详细信息，以数组形式展示：<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">command</span></span><br></pre></td></tr></table></figure></p>
-<p>使用command count命令查看当前Redis中命令的数量：<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">command</span> <span class="title">count</span></span><br></pre></td></tr></table></figure></p>
-<p>使用command info命令查看当前Redis中指定的命令的详细信息：<br><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">COMMAND</span> INFO <span class="keyword">command</span>-name [<span class="keyword">command</span>-name ...]</span><br></pre></td></tr></table></figure></p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/12/02/Redis日活BitMap高阶使用/">Redis BitMap高阶使用</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Redis-BitMap高阶使用"><a href="#Redis-BitMap高阶使用" class="headerlink" title="Redis BitMap高阶使用"></a>Redis BitMap高阶使用</h1><h2 id="redis-setbit-应用场景"><a href="#redis-setbit-应用场景" class="headerlink" title="redis setbit 应用场景"></a>redis setbit 应用场景</h2><p><a href="https://blog.csdn.net/wade1010/article/details/109545263" target="_blank" rel="noopener">https://blog.csdn.net/wade1010/article/details/109545263</a></p>
-<h2 id="BitMap-学习"><a href="#BitMap-学习" class="headerlink" title="BitMap 学习"></a>BitMap 学习</h2><p><a href="https://www.jianshu.com/p/4c8e119f35db" target="_blank" rel="noopener">https://www.jianshu.com/p/4c8e119f35db</a></p>
+        <h1 id="Java锁膨胀"><a href="#Java锁膨胀" class="headerlink" title="Java锁膨胀"></a>Java锁膨胀</h1><blockquote>
+<p>偏所锁，轻量级锁都是乐观锁，重量级锁是悲观锁。</p>
+</blockquote>
+<p>一个对象刚开始实例化的时候，没有任何线程来访问它的时候。它是可偏向的，意味着，它现在认为只可能有一个线程来访问它，所以当第一个线程来访问它的时候，它会偏向这个线程，此时，对象持有==偏向锁==。偏向第一个线程，这个线程在修改对象头成为偏向锁的时候使用CAS操作，并将对象头中的ThreadID改成自己的ID，之后再次访问这个对象时，只需要对比ID，不需要再使用CAS在进行操作。</p>
+<p>一旦有第二个线程访问这个对象，因为偏向锁不会主动释放，所以第二个线程可以看到对象时偏向状态，这时表明在这个对象上已经存在竞争了，检查原来持有该对象锁的线程是否依然存活，如果挂了，则可以将对象变为==无锁状态==，然后重新偏向新的线程，如果原来的线程依然存活，则马上执行那个线程的操作栈，检查该对象的使用情况，如果仍然需要持有偏向锁，则偏向锁升级为==轻量级锁==，（偏向锁就是这个时候升级为轻量级锁的）。如果不存在使用了，则可以将对象回复成无锁状态，然后重新偏向。轻量级锁认为竞争存在，但是竞争的程度很轻，一般两个线程对于同一个锁的操作都会错开，或者说稍微等待一下（自旋），另一个线程就会释放锁。但是当自旋超过一定的次数，或者一个线程在持有锁，一个在自旋，又有第三个来访时，轻量级锁膨胀为重量级锁，重量级锁使除了拥有锁的线程以外的线程都阻塞，防止CPU空转。</p>
+<p><img src="https://oscimg.oschina.net/oscnet/2bcc8161c52eb100d2c7c4c96c70d3c5823.jpg" alt="锁膨胀"></p>
 
         
     </section>
@@ -701,6 +508,123 @@
 <li>ConsistentHashLoadBalance: </li>
 </ul>
 <p>一致性哈希负载均衡。相同参数的请求总是落在同一台机器上。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/Linux下高并发socket最大连接数所受的各种限制/">Linux下高并发socket最大连接数所受的各种限制</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Linux下高并发socket最大连接数所受的各种限制"><a href="#Linux下高并发socket最大连接数所受的各种限制" class="headerlink" title="Linux下高并发socket最大连接数所受的各种限制"></a>Linux下高并发socket最大连接数所受的各种限制</h1><h2 id="1、修改用户进程可打开文件数限制"><a href="#1、修改用户进程可打开文件数限制" class="headerlink" title="1、修改用户进程可打开文件数限制"></a>1、修改用户进程可打开文件数限制</h2><p>在Linux平台上，无论编写客户端程序还是服务端程序，在进行高并发TCP连接处理时，最高的并发数量都要受到系统对用户单一进程同时可打开文件数量的限制(这是因为系统为每个TCP连接都要创建一个socket句柄，每个socket句柄同时也是一个文件句柄)。可使用ulimit命令查看系统允许当前用户进程打开的文件数限制：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[xxxx<span class="variable">@xxx</span> ~]<span class="variable">$ </span>ulimit -n</span><br><span class="line"><span class="number">1024</span></span><br></pre></td></tr></table></figure></p>
+<p>这表示当前用户的每个进程最多允许同时打开1024个文件，这1024个文件中还得除去每个进程必然打开的标准输入，标准输出，标准错误，服务器监听 socket，进程间通讯的unix域socket等文件，那么剩下的可用于客户端socket连接的文件数就只有大概1024-10=1014个左右。也就是说缺省情况下，基于Linux的通讯程序最多允许同时1014个TCP并发连接。</p>
+<blockquote>
+<p>对于想支持更高数量的TCP并发连接的通讯处理程序，就必须修改Linux对当前用户的进程同时打开的文件数量的软限制(soft limit)和硬限制(hardlimit)。其中软限制是指Linux在当前系统能够承受的范围内进一步限制用户同时打开的文件数；硬限制则是根据系统硬件资源状况(主要是系统内存)计算出来的系统最多可同时打开的文件数量。通常软限制小于或等于硬限制。<br>修改上述限制的最简单的办法就是使用ulimit命令：</p>
+</blockquote>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[xxxx<span class="variable">@xxx</span> ~]<span class="variable">$ </span>ulimit -n</span><br></pre></td></tr></table></figure>
+<p>上述命令中，在中指定要设置的单一进程允许打开的最大文件数。如果系统回显类似于“Operation notpermitted”之类的话，说明上述限制修改失败，实际上是因为在中指定的数值超过了Linux系统对该用户打开文件数的软限制或硬限制。因此，就需要修改Linux系统对用户的关于打开文件数的软限制和硬限制。</p>
+<h4 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h4><p>修改/etc/security/limits.conf文件，在文件中添加如下行：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">user soft nofile 10240</span><br><span class="line">user hard nofile 10240</span><br></pre></td></tr></table></figure></p>
+<p>其中user指定了要修改哪个用户的打开文件数限制，可用’*’号表示修改所有用户的限制；soft或hard指定要修改软限制还是硬限制；10240则指定了想要修改的新的限制值，即最大打开文件数(请注意软限制值要小于或等于硬限制)。修改完后保存文件。</p>
+<h4 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h4><p>修改/etc/pam.d/login文件，在文件中添加如下行：<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">session required /<span class="class"><span class="keyword">lib</span>/<span class="title">security</span>/<span class="title">pam_limits</span>.<span class="title">so</span></span></span><br></pre></td></tr></table></figure></p>
+<p>这是告诉Linux在用户完成系统登录后，应该调用pam_limits.so模块来设置系统对该用户可使用的各种资源数量的最大限制(包括用户可打开的最大文件数限制)，而pam_limits.so模块就会从/etc/security/limits.conf文件中读取配置来设置这些限制值。修改完后保存此文件。</p>
+<h4 id="第三步"><a href="#第三步" class="headerlink" title="第三步"></a>第三步</h4><p>查看Linux系统级的最大打开文件数限制，使用如下命令：<br><figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[xxxx@xxx ~]$ cat /<span class="keyword">proc</span>/sys/fs/<span class="keyword">file</span>-<span class="keyword">max</span></span><br><span class="line"><span class="number">12158</span></span><br></pre></td></tr></table></figure></p>
+<p>这表明这台Linux系统最多允许同时打开(即包含所有用户打开文件数总和)12158个文件，是Linux系统级硬限制，所有用户级的打开文件数限制都不应超过这个数值。通常这个系统级硬限制是Linux系统在启动时根据系统硬件资源状况计算出来的最佳的最大同时打开文件数限制，如果没有特殊需要，不应该修改此限制，除非想为用户级打开文件数限制设置超过此限制的值。修改此硬限制的方法是修改/etc/rc.local脚本，在脚本中添加如下行：<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo <span class="number">22158</span> &gt; <span class="regexp">/proc/</span>sys<span class="regexp">/fs/</span><span class="keyword">file</span>-max</span><br></pre></td></tr></table></figure></p>
+<p>这是让Linux在启动完成后强行将系统级打开文件数硬限制设置为22158。修改完后保存此文件。<br>完成上述步骤后重启系统，一般情况下就可以将Linux系统对指定用户的单一进程允许同时打开的最大文件数限制设为指定的数值。</p>
+<p>如果重启后用 ulimit-n命令查看用户可打开文件数限制仍然低于上述步骤中设置的最大值，这可能是因为在用户登录脚本/etc/profile中使用ulimit -n命令已经将用户可同时打开的文件数做了限制。由于通过ulimit-n修改系统对用户可同时打开文件的最大数限制时，新修改的值只能小于或等于上次 ulimit-n设置的值，因此想用此命令增大这个限制值是不可能的。所以，如果有上述问题存在，就只能去打开/etc/profile脚本文件，在文件中查找是否使用了ulimit-n限制了用户可同时打开的最大文件数量，如果找到，则删除这行命令，或者将其设置的值改为合适的值，然后保存文件，用户退出并重新登录系统即可。<br>通过上述步骤，就为支持高并发TCP连接处理的通讯处理程序解除关于打开文件数量方面的系统限制。</p>
+<h2 id="2、修改网络内核对TCP连接的有关限制"><a href="#2、修改网络内核对TCP连接的有关限制" class="headerlink" title="2、修改网络内核对TCP连接的有关限制"></a>2、修改网络内核对TCP连接的有关限制</h2><p>在Linux上编写支持高并发TCP连接的客户端通讯处理程序时，有时会发现尽管已经解除了系统对用户同时打开文件数的限制，但仍会出现并发TCP连接数增加到一定数量时，再也无法成功建立新的TCP连接的现象。出现这种现在的原因有多种。<br>第一种原因可能是因为Linux网络内核对本地端口号范围有限制。此时，进一步分析为什么无法建立TCP连接，会发现问题出在connect()调用返回失败，查看系统错误提示消息是“Can’t assign requestedaddress”。同时，如果在此时用tcpdump工具监视网络，会发现根本没有TCP连接时客户端发SYN包的网络流量。这些情况说明问题在于本地Linux系统内核中有限制。其实，问题的根本原因在于Linux内核的TCP/IP协议实现模块对系统中所有的客户端TCP连接对应的本地端口号的范围进行了限制(例如，内核限制本地端口号的范围为1024~32768之间)。当系统中某一时刻同时存在太多的TCP客户端连接时，由于每个TCP客户端连接都要占用一个唯一的本地端口号(此端口号在系统的本地端口号范围限制中)，如果现有的TCP客户端连接已将所有的本地端口号占满，则此时就无法为新的TCP客户端连接分配一个本地端口号了，因此系统会在这种情况下在connect()调用中返回失败，并将错误提示消息设为“Can’t assignrequested address”。有关这些控制逻辑可以查看Linux内核源代码，以linux2.6内核为例，可以查看tcp_ipv4.c文件中如下函数：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">tcp_v4_hash_connect</span>(<span class="params"><span class="keyword">struct</span> sock *sk</span>)</span></span><br></pre></td></tr></table></figure></p>
+<p>请注意上述函数中对变量sysctl_local_port_range的访问控制。变量sysctl_local_port_range的初始化则是在tcp.c文件中的如下函数中设置：<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> __init tcp_init(<span class="keyword">void</span>)</span><br></pre></td></tr></table></figure></p>
+<p>内核编译时默认设置的本地端口号范围可能太小，因此需要修改此本地端口范围限制。</p>
+<h5 id="第一步，修改-etc-sysctl-conf文件，在文件中添加如下行："><a href="#第一步，修改-etc-sysctl-conf文件，在文件中添加如下行：" class="headerlink" title="第一步，修改/etc/sysctl.conf文件，在文件中添加如下行："></a>第一步，修改/etc/sysctl.conf文件，在文件中添加如下行：</h5><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.ip_local_port_range</span> = <span class="number">1024</span> <span class="number">65000</span></span><br></pre></td></tr></table></figure>
+<p>这表明将系统对本地端口范围限制设置为1024~65000之间。请注意，本地端口范围的最小值必须大于或等于1024；而端口范围的最大值则应小于或等于65535。修改完后保存此文件。</p>
+<h5 id="第二步，执行sysctl命令："><a href="#第二步，执行sysctl命令：" class="headerlink" title="第二步，执行sysctl命令："></a>第二步，执行sysctl命令：</h5><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[speng<span class="variable">@as4</span> ~]<span class="variable">$ </span>sysctl -p</span><br></pre></td></tr></table></figure>
+<p>如果系统没有错误提示，就表明新的本地端口范围设置成功。如果按上述端口范围进行设置，则理论上单独一个进程最多可以同时建立60000多个TCP客户端连接。<br>第二种无法建立TCP连接的原因可能是因为Linux网络内核的IP_TABLE防火墙对最大跟踪的TCP连接数有限制。此时程序会表现为在 connect()调用中阻塞，如同死机，如果用tcpdump工具监视网络，也会发现根本没有TCP连接时客户端发SYN包的网络流量。由于 IP_TABLE防火墙在内核中会对每个TCP连接的状态进行跟踪，跟踪信息将会放在位于内核内存中的conntrackdatabase中，这个数据库的大小有限，当系统中存在过多的TCP连接时，数据库容量不足，IP_TABLE无法为新的TCP连接建立跟踪信息，于是表现为在connect()调用中阻塞。此时就必须修改内核对最大跟踪的TCP连接数的限制，方法同修改内核对本地端口号范围的限制是类似的：</p>
+<h5 id="第一步，修改-etc-sysctl-conf文件，在文件中添加如下行：-1"><a href="#第一步，修改-etc-sysctl-conf文件，在文件中添加如下行：-1" class="headerlink" title="第一步，修改/etc/sysctl.conf文件，在文件中添加如下行："></a>第一步，修改/etc/sysctl.conf文件，在文件中添加如下行：</h5><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.ip_conntrack_max</span> = <span class="number">10240</span></span><br></pre></td></tr></table></figure>
+<p>这表明将系统对最大跟踪的TCP连接数限制设置为10240。请注意，此限制值要尽量小，以节省对内核内存的占用。</p>
+<h5 id="第二步，执行sysctl命令：-1"><a href="#第二步，执行sysctl命令：-1" class="headerlink" title="第二步，执行sysctl命令："></a>第二步，执行sysctl命令：</h5><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[xxxx<span class="variable">@xx</span> ~]<span class="variable">$ </span>sysctl -p</span><br></pre></td></tr></table></figure>
+<p>如果系统没有错误提示，就表明系统对新的最大跟踪的TCP连接数限制修改成功。如果按上述参数进行设置，则理论上单独一个进程最多可以同时建立10000多个TCP客户端连接。</p>
+<h2 id="3-使用支持高并发网络I-O的编程技术"><a href="#3-使用支持高并发网络I-O的编程技术" class="headerlink" title="3.使用支持高并发网络I/O的编程技术"></a>3.使用支持高并发网络I/O的编程技术</h2><p>在Linux上编写高并发TCP连接应用程序时，必须使用合适的网络I/O技术和I/O事件分派机制。<br>可用的I/O技术有同步I/O，非阻塞式同步I/O(也称反应式I/O)，以及异步I/O。在高TCP并发的情形下，如果使用同步I/O，这会严重阻塞程序的运转，除非为每个TCP连接的I/O创建一个线程。但是，过多的线程又会因系统对线程的调度造成巨大开销。因此，在高TCP并发的情形下使用同步 I/O是不可取的，这时可以考虑使用非阻塞式同步I/O或异步I/O。非阻塞式同步I/O的技术包括使用select()，poll()，epoll等机制。异步I/O的技术就是使用AIO。</p>
+<p>从I/O事件分派机制来看，使用select()是不合适的，因为它所支持的并发连接数有限(通常在1024个以内)。如果考虑性能，poll()也是不合适的，尽管它可以支持的较高的TCP并发数，但是由于其采用“轮询”机制，当并发数较高时，其运行效率相当低，并可能存在I/O事件分派不均，导致部分TCP连接上的I/O出现“饥饿”现象。而如果使用epoll或AIO，则没有上述问题(早期Linux内核的AIO技术实现是通过在内核中为每个 I/O请求创建一个线程来实现的，这种实现机制在高并发TCP连接的情形下使用其实也有严重的性能问题。但在最新的Linux内核中，AIO的实现已经得到改进)。<br>综上所述，在开发支持高并发TCP连接的Linux应用程序时，应尽量使用epoll或AIO技术来实现并发的TCP连接上的I/O控制，这将为提升程序对高并发TCP连接的支持提供有效的I/O保证。</p>
+<p>内核参数sysctl.conf的优化</p>
+<p>/etc/sysctl.conf 是用来控制linux网络的配置文件，对于依赖网络的程序（如web服务器和cache服务器）非常重要，RHEL默认提供的最好调整。</p>
+<p>推荐配置（把原/etc/sysctl.conf内容清掉，把下面内容复制进去）：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.ip_local_port_range</span> = <span class="number">1024</span> <span class="number">65536</span></span><br><span class="line">net<span class="selector-class">.core</span><span class="selector-class">.rmem_max</span>=<span class="number">16777216</span></span><br><span class="line">net<span class="selector-class">.core</span><span class="selector-class">.wmem_max</span>=<span class="number">16777216</span></span><br><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_rmem</span>=<span class="number">4096</span> <span class="number">87380</span> <span class="number">16777216</span></span><br><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_wmem</span>=<span class="number">4096</span> <span class="number">65536</span> <span class="number">16777216</span></span><br><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_fin_timeout</span> = <span class="number">10</span></span><br><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_tw_recycle</span> = <span class="number">1</span></span><br><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_timestamps</span> = <span class="number">0</span></span><br><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_window_scaling</span> = <span class="number">0</span></span><br><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_sack</span> = <span class="number">0</span></span><br><span class="line">net<span class="selector-class">.core</span><span class="selector-class">.netdev_max_backlog</span> = <span class="number">30000</span></span><br><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_no_metrics_save</span>=<span class="number">1</span></span><br><span class="line">net<span class="selector-class">.core</span><span class="selector-class">.somaxconn</span> = <span class="number">262144</span></span><br><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_syncookies</span> = <span class="number">0</span></span><br><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_max_orphans</span> = <span class="number">262144</span></span><br><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_max_syn_backlog</span> = <span class="number">262144</span></span><br><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_synack_retries</span> = <span class="number">2</span></span><br><span class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_syn_retries</span> = <span class="number">2</span></span><br></pre></td></tr></table></figure></p>
+<p>这个配置参考于cache服务器varnish的推荐配置和SunOne 服务器系统优化的推荐配置。</p>
+<p>varnish调优推荐配置的地址为：<a href="http://varnish.projects.linpro.no/wiki/Performance" target="_blank" rel="noopener">http://varnish.projects.linpro.no/wiki/Performance</a></p>
+<p>不过varnish推荐的配置是有问题的，实际运行表明“net.ipv4.tcp_fin_timeout = 3”的配置会导致页面经常打不开；并且当网友使用的是IE6浏览器时，访问网站一段时间后，所有网页都会打不开，重启浏览器后正常。可能是国外的网速快吧，我们国情决定需要调整“net.ipv4.tcp_fin_timeout = 10”，在10s的情况下，一切正常（实际运行结论）。</p>
+<p>修改完毕后，执行：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/sbin/sysctl -<span class="selector-tag">p</span> /etc/sysctl.conf</span><br><span class="line">/sbin/sysctl -w net<span class="selector-class">.ipv4</span><span class="selector-class">.route</span><span class="selector-class">.flush</span>=<span class="number">1</span></span><br></pre></td></tr></table></figure></p>
+<p>命令生效。为了保险起见，也可以reboot系统。</p>
+<p>调整文件数：<br>linux系统优化完网络必须调高系统允许打开的文件数才能支持大的并发，默认1024是远远不够的。</p>
+<p>执行命令：<br>Shell代码<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="built_in">ulimit</span> -HSn 65536 &gt;&gt; /etc/rc.local</span><br><span class="line"><span class="built_in">echo</span> <span class="built_in">ulimit</span> -HSn 65536 &gt;&gt;/root/.bash_profile</span><br><span class="line"><span class="built_in">ulimit</span> -HSn 65536</span><br></pre></td></tr></table></figure></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/Spring Cloud Alibaba 的学习之熔断篇/">熔断</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="熔断"><a href="#熔断" class="headerlink" title="熔断"></a>熔断</h1><h2 id="什么是服务雪崩"><a href="#什么是服务雪崩" class="headerlink" title="什么是服务雪崩"></a>什么是服务雪崩</h2><p>在微服务架构中，根据业务来拆分成一个个的服务，服务与服务之间可以通过 HTTP/RPC 相互调用，在 Spring Cloud 中可以用 ==RestTemplate== + ==LoadBalanceClient== 和 ==Feign== 来调用。为了保证其高可用，单个服务通常会集群部署。由于网络原因或者自身的原因，服务并不能保证 100% 可用，如果单个服务出现问题，调用这个服务就会出现线程阻塞，此时若有大量的请求涌入，Servlet 容器的线程资源会被消耗完毕，导致服务瘫痪。服务与服务之间的依赖性，故障会传播，会对整个微服务系统造成灾难性的严重后果，这就是服务故障的 “雪崩” 效应。为了解决这个问题，业界提出了 ++熔断器模型++。</p>
+<h2 id="Spring-Cloud微服务设计中如何才能实现这样的机制呢？这里涉及到几个问题："><a href="#Spring-Cloud微服务设计中如何才能实现这样的机制呢？这里涉及到几个问题：" class="headerlink" title="Spring Cloud微服务设计中如何才能实现这样的机制呢？这里涉及到几个问题："></a>Spring Cloud微服务设计中如何才能实现这样的机制呢？这里涉及到几个问题：</h2><ul>
+<li><p>微服务如何定义为故障，熔断的条件是什么？如何确定当前调用的微服务不可用，从而可以实现熔断操作；</p>
+</li>
+<li><p>被定义为故障的微服务恢复后如何让熔断方感知？当前微服务何时才可以继续正常的调用需要调用的其他微服务，实现故障恢复；</p>
+</li>
+</ul>
+<p>Spring Cloud的代码实现机制是什么样的？</p>
+<blockquote>
+<p>在Spring Cloud微服务设计中需要通过集成Hystrix框架来实现微服务间的熔断保护机制，Hystrix框架会通过监控微服务之间的调用情况，来决定是否启动熔断保护。</p>
+</blockquote>
 
         
     </section>

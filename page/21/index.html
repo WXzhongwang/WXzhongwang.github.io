@@ -231,7 +231,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2017/09/12/Redis相关问题四/">相关问题四</a>
+            <a href="/2017/09/12/Redis相关问题二/">Redis相关问题二</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -254,119 +254,14 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="Redis-相关问题四"><a href="#Redis-相关问题四" class="headerlink" title="Redis 相关问题四"></a>Redis 相关问题四</h1><ol>
-<li><p>Redis跳跃表问题。</p>
-</li>
-<li><p>Redis单进程单线程的Redis如何能够高并发？</p>
-</li>
-<li><p>如何使用Redis实现分布式锁？</p>
-</li>
-<li><p>Redis分布式锁操作的原子性，Redis内部如何实现？</p>
-</li>
+        <h1 id="Redis-相关问题二"><a href="#Redis-相关问题二" class="headerlink" title="Redis 相关问题二"></a>Redis 相关问题二</h1><ol start="2">
+<li>Redis采用多线程会有哪些问题？</li>
 </ol>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/06/01/Linux 绝对路径 、 相对路径/">Linux绝对路径 、 相对路径</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/21/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-06-01T08:18:02.000Z" itemprop="datePublished">2017-06-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h2 id="Linux绝对路径-、-相对路径"><a href="#Linux绝对路径-、-相对路径" class="headerlink" title="Linux绝对路径 、 相对路径"></a>Linux绝对路径 、 相对路径</h2><p>Linux的目录结构为树状结构，最顶级的目录为根目录 /。</p>
-<p>其他目录通过挂载可以将它们添加到树中，通过解除挂载可以移除它们。</p>
-<p>绝对路径：<br>路径的写法，由根目录 / 写起，例如： /usr/share/doc 这个目录。</p>
-<p>相对路径：<br>路径的写法，不是由 / 写起，例如由 /usr/share/doc 要切换到 /usr/share/man 底下时，可以写成： cd ../man 这就是相对路径。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2017/06/01/Linux 目录结构/">Linux 目录结构</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/21/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2017-06-01T08:18:02.000Z" itemprop="datePublished">2017-06-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h2 id="Linux目录结构"><a href="#Linux目录结构" class="headerlink" title="Linux目录结构"></a>Linux目录结构</h2><p>/bin：<br>bin是Binary的缩写, 这个目录存放着最经常使用的命令。</p>
-<p>/boot：<br>这里存放的是启动Linux时使用的一些核心文件，包括一些连接文件以及镜像文件。</p>
-<p>/dev ：<br>dev是Device(设备)的缩写, 该目录下存放的是Linux的外部设备，在Linux中访问设备的方式和访问文件的方式是相同的。</p>
-<p>/etc：<br>这个目录用来存放所有的系统管理所需要的配置文件和子目录。</p>
-<p>/home：<br>用户的主目录，在Linux中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的。</p>
-<p>/lib：<br>这个目录里存放着系统最基本的动态连接共享库，其作用类似于Windows里的DLL文件。几乎所有的应用程序都需要用到这些共享库。</p>
-<p>/lost+found：<br>这个目录一般情况下是空的，当系统非法关机后，这里就存放了一些文件。</p>
-<p>/media：<br>linux系统会自动识别一些设备，例如U盘、光驱等等，当识别后，linux会把识别的设备挂载到这个目录下。</p>
-<p>/mnt：<br>系统提供该目录是为了让用户临时挂载别的文件系统的，我们可以将光驱挂载在/mnt/上，然后进入该目录就可以查看光驱里的内容了。</p>
-<p>/opt：<br> 这是给主机额外安装软件所摆放的目录。比如你安装一个ORACLE数据库则就可以放到这个目录下。默认是空的。</p>
-<p>/proc：<br>这个目录是一个虚拟的目录，它是系统内存的映射，我们可以通过直接访问这个目录来获取系统信息。<br>这个目录的内容不在硬盘上而是在内存里，我们也可以直接修改里面的某些文件，比如可以通过下面的命令来屏蔽主机的ping命令，使别人无法ping你的机器：</p>
-<p>echo 1 &gt; /proc/sys/net/ipv4/icmp_echo_ignore_all<br>/root：<br>该目录为系统管理员，也称作超级权限者的用户主目录。</p>
-<p>/sbin：<br>s就是Super User的意思，这里存放的是系统管理员使用的系统管理程序。</p>
-<p>/selinux：<br> 这个目录是Redhat/CentOS所特有的目录，Selinux是一个安全机制，类似于windows的防火墙，但是这套机制比较复杂，这个目录就是存放selinux相关的文件的。</p>
-<p>/srv：<br> 该目录存放一些服务启动之后需要提取的数据。</p>
-<p>/sys：</p>
-<p> 这是linux2.6内核的一个很大的变化。该目录下安装了2.6内核中新出现的一个文件系统 sysfs 。</p>
-<p>sysfs文件系统集成了下面3种文件系统的信息：针对进程信息的proc文件系统、针对设备的devfs文件系统以及针对伪终端的devpts文件系统。<br>该文件系统是内核设备树的一个直观反映。</p>
-<p>当一个内核对象被创建的时候，对应的文件和目录也在内核对象子系统中被创建。</p>
-<p>/tmp：<br>这个目录是用来存放一些临时文件的。</p>
-<p>/usr：<br> 这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似于windows下的program files目录。</p>
-<p>/usr/bin：<br>系统用户使用的应用程序。</p>
-<p>/usr/sbin：<br>超级用户使用的比较高级的管理程序和系统守护程序。</p>
-<p>/usr/src：<br>内核源代码默认的放置目录。</p>
-<p>/var：<br>这个目录中存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。包括各种日志文件。</p>
-<p>/run：<br>是一个临时文件系统，存储系统启动以来的信息。当系统重启时，这个目录下的文件应该被删掉或清除。如果你的系统上有 /var/run 目录，应该让它指向 run。</p>
-<h2 id="note"><a href="#note" class="headerlink" title="note"></a>note</h2><p>在 Linux 系统中，有几个目录是比较重要的，平时需要注意不要误删除或者随意更改内部文件。</p>
-<p>/etc： 上边也提到了，这个是系统中的配置文件，如果你更改了该目录下的某个文件可能会导致系统不能启动。</p>
-<p>/bin, /sbin, /usr/bin, /usr/sbin: 这是系统预设的执行文件的放置目录，比如 ls 就是在/bin/ls 目录下的。</p>
-<p>值得提出的是，/bin, /usr/bin 是给系统用户使用的指令（除root外的通用户），而/sbin, /usr/sbin 则是给root使用的指令。</p>
-<p>/var： 这是一个非常重要的目录，系统上跑了很多程序，那么每个程序都会有相应的日志产生，而这些日志就被记录到这个目录下，具体在/var/log 目录下，另外mail的预设放置也是在这里。</p>
+<p>公司某个项目使用了redis进行数据的快速写入与查询,但在测试中发现它的查询速度完全不敌MySQL.经过代码分析发现,我们的架构师来了个奇葩操作.Redis与MySQL的关联,也就是先从Redis中查出相关数据在循环查询MySQL来获取完整数据,对于这种操作只能认为架构的脑袋被电梯夹了,在没有什么借口可以解释。好多人都是这样,对新技术有点皮毛了解就想”大显身手”,结果就闹得很是尴尬。</p>
+<p>大家知道Redis是非关系型数据库,特点就是”快”,那我们直接把想要的数据全部存入Redis中,不做任何关联。</p>
+<p>这个问题解决之后又发现了一个新问题,Redis在多线程高并发下出现数据错乱,也就是A的数据给了B,B的数据给到了C….</p>
+<p>分析:程序是多线程并且高并发情况,而Redis是单线程,也就是程序在Redis驱动返回结果时发生了张冠李戴的现象.</p>
+<p>解决方法:Redis操作方法添加线程锁(lock),让其他线程排队.</p>
 
         
     </section>
@@ -626,7 +521,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2017/05/11/实现最小值函数/">Java 实现最小值函数</a>
+            <a href="/2017/06/01/Linux 目录结构/">Linux 目录结构</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -634,13 +529,13 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2017-05-11T15:30:00.000Z" itemprop="datePublished">2017-05-11</time>
+    <time datetime="2017-06-01T08:18:02.000Z" itemprop="datePublished">2017-06-01</time>
 </a>
 
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/程序设计题/">程序设计题</a>
+    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
 </div>
 
 
@@ -649,9 +544,75 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="实现最小值函数"><a href="#实现最小值函数" class="headerlink" title="实现最小值函数"></a>实现最小值函数</h1><p>自己设计一个泛型的获取数组最小值的函数.并且这个方法只能接受Number的子类并且实现了Comparable接口。</p>
-<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//注意：Number并没有实现Comparable</span><br><span class="line">private static &lt;T extends Number &amp; Comparable&lt;? super T&gt;&gt; T <span class="built_in">min</span>(T[] <span class="built_in">values</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">values</span> == null || <span class="built_in">values</span>.<span class="built_in">length</span> == <span class="number">0</span>) <span class="built_in">return</span> null;</span><br><span class="line">    T <span class="built_in">min</span> = <span class="built_in">values</span>[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span> (int i = <span class="number">1</span>; i &lt; <span class="built_in">values</span>.<span class="built_in">length</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">min</span>.compareTo(<span class="built_in">values</span>[i]) &gt; <span class="number">0</span>) <span class="built_in">min</span> = <span class="built_in">values</span>[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">return</span> <span class="built_in">min</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>测试：<br><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> minInteger = <span class="built_in">min</span>(<span class="keyword">new</span> Integer[]&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;);<span class="comment">//result:1</span></span><br><span class="line"><span class="keyword">double</span> minDouble = <span class="built_in">min</span>(<span class="keyword">new</span> Double[]&#123;<span class="number">1.2</span>, <span class="number">2.2</span>, <span class="number">-1</span>d&#125;);<span class="comment">//result:-1d</span></span><br><span class="line"><span class="keyword">String</span> typeError = <span class="built_in">min</span>(<span class="keyword">new</span> <span class="keyword">String</span>[]&#123;<span class="string">"1"</span>,<span class="string">"3"</span>&#125;);<span class="comment">//报错</span></span><br></pre></td></tr></table></figure></p>
+        <h2 id="Linux目录结构"><a href="#Linux目录结构" class="headerlink" title="Linux目录结构"></a>Linux目录结构</h2><p>/bin：<br>bin是Binary的缩写, 这个目录存放着最经常使用的命令。</p>
+<p>/boot：<br>这里存放的是启动Linux时使用的一些核心文件，包括一些连接文件以及镜像文件。</p>
+<p>/dev ：<br>dev是Device(设备)的缩写, 该目录下存放的是Linux的外部设备，在Linux中访问设备的方式和访问文件的方式是相同的。</p>
+<p>/etc：<br>这个目录用来存放所有的系统管理所需要的配置文件和子目录。</p>
+<p>/home：<br>用户的主目录，在Linux中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的。</p>
+<p>/lib：<br>这个目录里存放着系统最基本的动态连接共享库，其作用类似于Windows里的DLL文件。几乎所有的应用程序都需要用到这些共享库。</p>
+<p>/lost+found：<br>这个目录一般情况下是空的，当系统非法关机后，这里就存放了一些文件。</p>
+<p>/media：<br>linux系统会自动识别一些设备，例如U盘、光驱等等，当识别后，linux会把识别的设备挂载到这个目录下。</p>
+<p>/mnt：<br>系统提供该目录是为了让用户临时挂载别的文件系统的，我们可以将光驱挂载在/mnt/上，然后进入该目录就可以查看光驱里的内容了。</p>
+<p>/opt：<br> 这是给主机额外安装软件所摆放的目录。比如你安装一个ORACLE数据库则就可以放到这个目录下。默认是空的。</p>
+<p>/proc：<br>这个目录是一个虚拟的目录，它是系统内存的映射，我们可以通过直接访问这个目录来获取系统信息。<br>这个目录的内容不在硬盘上而是在内存里，我们也可以直接修改里面的某些文件，比如可以通过下面的命令来屏蔽主机的ping命令，使别人无法ping你的机器：</p>
+<p>echo 1 &gt; /proc/sys/net/ipv4/icmp_echo_ignore_all<br>/root：<br>该目录为系统管理员，也称作超级权限者的用户主目录。</p>
+<p>/sbin：<br>s就是Super User的意思，这里存放的是系统管理员使用的系统管理程序。</p>
+<p>/selinux：<br> 这个目录是Redhat/CentOS所特有的目录，Selinux是一个安全机制，类似于windows的防火墙，但是这套机制比较复杂，这个目录就是存放selinux相关的文件的。</p>
+<p>/srv：<br> 该目录存放一些服务启动之后需要提取的数据。</p>
+<p>/sys：</p>
+<p> 这是linux2.6内核的一个很大的变化。该目录下安装了2.6内核中新出现的一个文件系统 sysfs 。</p>
+<p>sysfs文件系统集成了下面3种文件系统的信息：针对进程信息的proc文件系统、针对设备的devfs文件系统以及针对伪终端的devpts文件系统。<br>该文件系统是内核设备树的一个直观反映。</p>
+<p>当一个内核对象被创建的时候，对应的文件和目录也在内核对象子系统中被创建。</p>
+<p>/tmp：<br>这个目录是用来存放一些临时文件的。</p>
+<p>/usr：<br> 这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似于windows下的program files目录。</p>
+<p>/usr/bin：<br>系统用户使用的应用程序。</p>
+<p>/usr/sbin：<br>超级用户使用的比较高级的管理程序和系统守护程序。</p>
+<p>/usr/src：<br>内核源代码默认的放置目录。</p>
+<p>/var：<br>这个目录中存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。包括各种日志文件。</p>
+<p>/run：<br>是一个临时文件系统，存储系统启动以来的信息。当系统重启时，这个目录下的文件应该被删掉或清除。如果你的系统上有 /var/run 目录，应该让它指向 run。</p>
+<h2 id="note"><a href="#note" class="headerlink" title="note"></a>note</h2><p>在 Linux 系统中，有几个目录是比较重要的，平时需要注意不要误删除或者随意更改内部文件。</p>
+<p>/etc： 上边也提到了，这个是系统中的配置文件，如果你更改了该目录下的某个文件可能会导致系统不能启动。</p>
+<p>/bin, /sbin, /usr/bin, /usr/sbin: 这是系统预设的执行文件的放置目录，比如 ls 就是在/bin/ls 目录下的。</p>
+<p>值得提出的是，/bin, /usr/bin 是给系统用户使用的指令（除root外的通用户），而/sbin, /usr/sbin 则是给root使用的指令。</p>
+<p>/var： 这是一个非常重要的目录，系统上跑了很多程序，那么每个程序都会有相应的日志产生，而这些日志就被记录到这个目录下，具体在/var/log 目录下，另外mail的预设放置也是在这里。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2017/06/01/Linux 绝对路径 、 相对路径/">Linux绝对路径 、 相对路径</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/21/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-06-01T08:18:02.000Z" itemprop="datePublished">2017-06-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h2 id="Linux绝对路径-、-相对路径"><a href="#Linux绝对路径-、-相对路径" class="headerlink" title="Linux绝对路径 、 相对路径"></a>Linux绝对路径 、 相对路径</h2><p>Linux的目录结构为树状结构，最顶级的目录为根目录 /。</p>
+<p>其他目录通过挂载可以将它们添加到树中，通过解除挂载可以移除它们。</p>
+<p>绝对路径：<br>路径的写法，由根目录 / 写起，例如： /usr/share/doc 这个目录。</p>
+<p>相对路径：<br>路径的写法，不是由 / 写起，例如由 /usr/share/doc 要切换到 /usr/share/man 底下时，可以写成： cd ../man 这就是相对路径。</p>
 
         
     </section>
@@ -688,6 +649,43 @@
         
         <h1 id="使用数组实现栈"><a href="#使用数组实现栈" class="headerlink" title="使用数组实现栈"></a>使用数组实现栈</h1><figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">自己实现一个栈，要求这个栈具有push<span class="comment">()</span>、pop<span class="comment">()</span>（返回栈顶元素并出栈）、peek<span class="comment">()</span> （返回栈顶元素不出栈）、isEmpty<span class="comment">()</span>、size<span class="comment">()</span></span><br><span class="line">这些基本的方法。</span><br><span class="line"></span><br><span class="line">提示：每次入栈之前先判断栈的容量是否够用，如果不够用就用Arrays.copyOf<span class="comment">()</span>进行扩容；</span><br></pre></td></tr></table></figure>
 <figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">package</span> program;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> MyStack &#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * 使用数组实现栈： 自己实现一个栈，要求这个栈具有push()、pop()（返回栈顶元素并出栈）、peek()</span></span><br><span class="line"><span class="comment">	 * （返回栈顶元素不出栈）、isEmpty()、size()这些基本的方法。</span></span><br><span class="line"><span class="comment">	 * 提示：每次入栈之前先判断栈的容量是否够用，如果不够用就用Arrays.copyOf()进行扩容；</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * 存数据的数组</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span>[] storage;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * 容量</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> capacity;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * 元素个数</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> <span class="keyword">count</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * 每次以当前容量进行扩容</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> GROW_FACTOR = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// TODO：默认构造函数</span></span><br><span class="line">	<span class="keyword">public</span> MyStack() &#123;</span><br><span class="line">		<span class="keyword">this</span>.capacity = <span class="number">8</span>;</span><br><span class="line">		<span class="keyword">this</span>.<span class="keyword">count</span> = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">this</span>.storage = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">8</span>];</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// TODO：带初始容量的构造方法</span></span><br><span class="line">	<span class="keyword">public</span> MyStack(<span class="keyword">int</span> initialCapacity) &#123;</span><br><span class="line">		<span class="keyword">if</span> (initialCapacity &lt; <span class="number">1</span>)</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Capacity too small."</span>);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">this</span>.capacity = initialCapacity;</span><br><span class="line">		<span class="keyword">this</span>.storage = <span class="keyword">new</span> <span class="keyword">int</span>[initialCapacity];</span><br><span class="line">		<span class="keyword">this</span>.<span class="keyword">count</span> = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// TODO： 入栈</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="keyword">push</span>(<span class="keyword">int</span> value) &#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="keyword">count</span> == capacity) &#123;</span><br><span class="line">			scrollUpCapacity();</span><br><span class="line">		&#125;</span><br><span class="line">		storage[<span class="keyword">count</span>++] = value;		</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// <span class="doctag">TODO:</span> 扩容</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">void</span> scrollUpCapacity() &#123;</span><br><span class="line">		<span class="keyword">int</span> newCapacity = capacity * GROW_FACTOR;</span><br><span class="line">		storage = Arrays.copyOf(storage, newCapacity);</span><br><span class="line">		capacity = newCapacity;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// TODO： 返回栈顶元素(出栈)</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> <span class="keyword">pop</span>() &#123;</span><br><span class="line">		<span class="keyword">count</span>--;</span><br><span class="line">		<span class="keyword">if</span> (<span class="keyword">count</span> == -<span class="number">1</span>) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Stack is empty."</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> storage[<span class="keyword">count</span>];</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// TODO： 返回栈顶元素(不出栈)</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> peek() &#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="keyword">count</span> == <span class="number">0</span>) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Stack is empty."</span>);</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="keyword">return</span> storage[<span class="keyword">count</span> - <span class="number">1</span>];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// <span class="doctag">TODO:</span> 判断是否为空</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">boolean</span> isEmpty() &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">count</span> == <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// <span class="doctag">TODO:</span> 返回长度(元素个数)</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> <span class="keyword">size</span>() &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">count</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args) &#123;</span><br><span class="line">		MyStack myStack = <span class="keyword">new</span> MyStack(<span class="number">3</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">1</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">2</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">3</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">4</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">5</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">6</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">7</span>);</span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">8</span>);</span><br><span class="line">		System.out.<span class="keyword">println</span>(myStack.peek());<span class="comment">// 8</span></span><br><span class="line">		System.out.<span class="keyword">println</span>(myStack.<span class="keyword">size</span>());<span class="comment">// 8</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++) &#123;</span><br><span class="line">			System.out.<span class="keyword">println</span>(myStack.<span class="keyword">pop</span>());</span><br><span class="line">		&#125;</span><br><span class="line">		System.out.<span class="keyword">println</span>(myStack.isEmpty());<span class="comment">// true</span></span><br><span class="line">		myStack.<span class="keyword">pop</span>();<span class="comment">// 报错：java.lang.IllegalArgumentException: Stack is empty.</span></span><br><span class="line"></span><br><span class="line">		myStack.<span class="keyword">push</span>(<span class="number">520</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2017/05/11/实现最小值函数/">Java 实现最小值函数</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/21/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2017-05-11T15:30:00.000Z" itemprop="datePublished">2017-05-11</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/程序设计题/">程序设计题</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="实现最小值函数"><a href="#实现最小值函数" class="headerlink" title="实现最小值函数"></a>实现最小值函数</h1><p>自己设计一个泛型的获取数组最小值的函数.并且这个方法只能接受Number的子类并且实现了Comparable接口。</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//注意：Number并没有实现Comparable</span><br><span class="line">private static &lt;T extends Number &amp; Comparable&lt;? super T&gt;&gt; T <span class="built_in">min</span>(T[] <span class="built_in">values</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">values</span> == null || <span class="built_in">values</span>.<span class="built_in">length</span> == <span class="number">0</span>) <span class="built_in">return</span> null;</span><br><span class="line">    T <span class="built_in">min</span> = <span class="built_in">values</span>[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span> (int i = <span class="number">1</span>; i &lt; <span class="built_in">values</span>.<span class="built_in">length</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">min</span>.compareTo(<span class="built_in">values</span>[i]) &gt; <span class="number">0</span>) <span class="built_in">min</span> = <span class="built_in">values</span>[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">return</span> <span class="built_in">min</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试：<br><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> minInteger = <span class="built_in">min</span>(<span class="keyword">new</span> Integer[]&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;);<span class="comment">//result:1</span></span><br><span class="line"><span class="keyword">double</span> minDouble = <span class="built_in">min</span>(<span class="keyword">new</span> Double[]&#123;<span class="number">1.2</span>, <span class="number">2.2</span>, <span class="number">-1</span>d&#125;);<span class="comment">//result:-1d</span></span><br><span class="line"><span class="keyword">String</span> typeError = <span class="built_in">min</span>(<span class="keyword">new</span> <span class="keyword">String</span>[]&#123;<span class="string">"1"</span>,<span class="string">"3"</span>&#125;);<span class="comment">//报错</span></span><br></pre></td></tr></table></figure></p>
+
         
     </section>
 </article>

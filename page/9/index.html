@@ -131,7 +131,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/12/02/Redis数据类型之Hash/">(五)Redis数据类型之Hash</a>
+            <a href="/2018/12/02/Redis的过期策略和内存淘汰机制/">Redis的过期策略和内存淘汰机制</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -154,317 +154,46 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="五-Redis数据类型之Hash"><a href="#五-Redis数据类型之Hash" class="headerlink" title="(五)Redis数据类型之Hash"></a>(五)Redis数据类型之Hash</h1><h4 id="hexists"><a href="#hexists" class="headerlink" title="hexists"></a>hexists</h4><blockquote>
-<p>hexists key field</p>
+        <h2 id="Redis的过期策略和内存淘汰机制"><a href="#Redis的过期策略和内存淘汰机制" class="headerlink" title="Redis的过期策略和内存淘汰机制"></a>Redis的过期策略和内存淘汰机制</h2><p>一、背景<br>线上你写代码的时候，想当然的认为写进 redis 的数据就一定会存在，后面导致系统各种 bug，谁来负责？<br>常见的有两个问题：<br>往 redis 写入的数据怎么没了？<br>可能有同学会遇到，在生产环境的 redis 经常会丢掉一些数据，写进去了，过一会儿可能就没了。我的天，同学，你问这个问题就说明 redis 你就没用对啊。redis 是缓存，你给当存储了是吧？<br>啥叫缓存？用内存当缓存。内存是无限的吗，内存是很宝贵而且是有限的，磁盘是廉价而且是大量的。可能一台机器就几十个 G 的内存，但是可以有几个 T 的硬盘空间。redis 主要是基于内存来进行高性能、高并发的读写操作的。<br>那既然内存是有限的，比如 redis 就只能用 10G，你要是往里面写了 20G 的数据，会咋办？当然会干掉 10G 的数据，然后就保留 10G 的数据了。那干掉哪些数据？保留哪些数据？当然是干掉不常用的数据，保留常用的数据了。<br>数据明明过期了，怎么还占用着内存？<br>这是由 redis 的过期策略来决定。</p>
+<blockquote>
+<p>3种过期策略</p>
 </blockquote>
-<p>查看hash类型的key中指定的field是否存在，返回true / false, 1/0</p>
-<h4 id="hset"><a href="#hset" class="headerlink" title="hset"></a>hset</h4><blockquote>
-<p>hset key field value [field value …]</p>
+<h2 id="定时删除"><a href="#定时删除" class="headerlink" title="定时删除"></a>定时删除</h2><h3 id="含义："><a href="#含义：" class="headerlink" title="含义："></a>含义：</h3><p>在设置key的过期时间的同时，为该key创建一个定时器，让定时器在key的过期时间来临时，对key进行删除</p>
+<h3 id="优点："><a href="#优点：" class="headerlink" title="优点："></a>优点：</h3><p>保证内存被尽快释放</p>
+<h3 id="缺点："><a href="#缺点：" class="headerlink" title="缺点："></a>缺点：</h3><ol>
+<li>若过期key很多，删除这些key会占用很多的CPU时间，在CPU时间紧张的情况下，CPU不能把所有的时间用来做要紧的事儿，还需要去花时间删除这些key</li>
+<li>定时器的创建耗时，若为每一个设置过期时间的key创建一个定时器（将会有大量的定时器产生），性能影响严重</li>
+<li>没人用</li>
+</ol>
+<h2 id="惰性删除"><a href="#惰性删除" class="headerlink" title="惰性删除"></a>惰性删除</h2><h3 id="含义：-1"><a href="#含义：-1" class="headerlink" title="含义："></a>含义：</h3><p>key过期的时候不删除，每次从数据库获取key的时候去检查是否过期，若过期，则删除，返回null。</p>
+<h3 id="优点：-1"><a href="#优点：-1" class="headerlink" title="优点："></a>优点：</h3><p>删除操作只发生在从数据库取出key的时候发生，而且只删除当前key，所以对CPU时间的占用是比较少的，而且此时的删除是已经到了非做不可的地步（如果此时还不删除的话，我们就会获取到了已经过期的key了）</p>
+<h3 id="缺点：-1"><a href="#缺点：-1" class="headerlink" title="缺点："></a>缺点：</h3><p>若大量的key在超出超时时间后，很久一段时间内，都没有被获取过，那么可能发生内存泄露（无用的垃圾占用了大量的内存）</p>
+<h2 id="定期删除"><a href="#定期删除" class="headerlink" title="定期删除"></a>定期删除</h2><h3 id="含义：-2"><a href="#含义：-2" class="headerlink" title="含义："></a>含义：</h3><p>每隔一段时间执行一次删除(在redis.conf配置文件设置hz，1s刷新的频率)过期key操作</p>
+<h3 id="优点：-2"><a href="#优点：-2" class="headerlink" title="优点："></a>优点：</h3><p>通过限制删除操作的时长和频率，来减少删除操作对CPU时间的占用–处理”定时删除”的缺点<br>定期删除过期key–处理”惰性删除”的缺点</p>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点:"></a>缺点:</h3><p>在内存友好方面，不如”定时删除”<br>在CPU时间友好方面，不如”惰性删除”</p>
+<h3 id="难点"><a href="#难点" class="headerlink" title="难点:"></a>难点:</h3><p>合理设置删除操作的执行时长（每次删除执行多长时间）和执行频率（每隔多长时间做一次删除）（这个要根据服务器运行情况来定了）</p>
+<h2 id="redis的过期策略和内存淘汰机制"><a href="#redis的过期策略和内存淘汰机制" class="headerlink" title="redis的过期策略和内存淘汰机制"></a>redis的过期策略和内存淘汰机制</h2><p>1、定期删除+惰性删除</p>
+<p>定期删除：指的是redis默认是每隔100ms就随机抽取一些设置了过期时间的key，检查其是否过期，如果过期就删除</p>
+<p>惰性删除：在你获取某个key的时候，redis会检查一下 ，这个key如果设置了过期时间那么是否过期了，如果过期了此时就会删除，不会给你返回任何东西</p>
+<p>2、如果大量过期key堆积在内存里，导致redis内存块耗尽了，怎么办？</p>
+<blockquote>
+<p>内存淘汰机制：</p>
 </blockquote>
-<p>可设置单个field, 也可以设置多个值</p>
-<h4 id="hsetnx"><a href="#hsetnx" class="headerlink" title="hsetnx"></a>hsetnx</h4><blockquote>
-<p>hsetnx key field value</p>
-</blockquote>
-<p>只有不存在的field才会被创建，若field已存在则不做任何动作</p>
-<h4 id="hdel"><a href="#hdel" class="headerlink" title="hdel"></a>hdel</h4><blockquote>
-<p>hdel key field[field2 …]</p>
-</blockquote>
-<p>删除map中指定field的数据, 可以删除多个</p>
-<h4 id="hget"><a href="#hget" class="headerlink" title="hget"></a>hget</h4><blockquote>
-<p>hget key field</p>
-</blockquote>
-<p>获取指定field的值</p>
-<h4 id="hmget"><a href="#hmget" class="headerlink" title="hmget"></a>hmget</h4><blockquote>
-<p>hmget key field1 [field2 …]</p>
-</blockquote>
-<p>获取指定多个field的值</p>
-<h4 id="hgetall"><a href="#hgetall" class="headerlink" title="hgetall"></a>hgetall</h4><blockquote>
-<p>hgetall key</p>
-</blockquote>
-<p>获取指定hashmap的全部field和value</p>
-<h4 id="hkeys"><a href="#hkeys" class="headerlink" title="hkeys"></a>hkeys</h4><blockquote>
-<p>hkeys key</p>
-</blockquote>
-<p>获取指定hash类型对象的全部field</p>
-<h4 id="hvals"><a href="#hvals" class="headerlink" title="hvals"></a>hvals</h4><blockquote>
-<p>hvals key</p>
-</blockquote>
-<p>获取指定hash类型对象的全部value</p>
-<h4 id="hincrby"><a href="#hincrby" class="headerlink" title="hincrby"></a>hincrby</h4><blockquote>
-<p>hincrby key field increment</p>
-</blockquote>
-<p>对HashMap指定的field对应的value做增加操作，increment是整数， increment为负数，则为减少操作，value必须是integer类型。</p>
-<h4 id="hincrbyfloat"><a href="#hincrbyfloat" class="headerlink" title="hincrbyfloat"></a>hincrbyfloat</h4><blockquote>
-<p>hincrbyfloat key field increment</p>
-</blockquote>
-<p>对HashMap指定的field对应的value做增加操作，increment是整s数或者浮点数， increment为负数，则为减少操作，value必须是数字类型。</p>
-<h4 id="hlen"><a href="#hlen" class="headerlink" title="hlen"></a>hlen</h4><blockquote>
-<p>hlen key </p>
-</blockquote>
-<p>计算field数量</p>
-<h4 id="hstrlen"><a href="#hstrlen" class="headerlink" title="hstrlen"></a>hstrlen</h4><blockquote>
-<p>hstrlen key field</p>
-</blockquote>
-<p>获取map中指定field对应value的字符长度</p>
-<h4 id="expire"><a href="#expire" class="headerlink" title="expire"></a>expire</h4><blockquote>
-<p>expire key seconds</p>
-</blockquote>
-<p>我们可以看到hash类型没有hsetex hpsetex一类的方法，想对hash对象做过期策略可以使用全局函数expire，单位为秒。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/12/02/Redis实现分布式锁/">如何使用 Redis 实现分布式锁</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/9/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="如何使用-Redis-实现分布式锁"><a href="#如何使用-Redis-实现分布式锁" class="headerlink" title="如何使用 Redis 实现分布式锁"></a>如何使用 Redis 实现分布式锁</h1><p>锁是我们在设计和实现大多数系统时绕不过的话题。一旦有竞争条件出现，在没有保护的操作的前提下，可能会出现不可预知的问题。</p>
-<p>而现代系统大多为分布式系统，这就引入了分布式锁，要求具有在分布各处的服务上保护资源的能力。</p>
-<p>而实现分布式锁，目前大多有以下三种方式：</p>
+<p>redis.conf中配置：<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># maxmemory-policy noeviction</span></span><br></pre></td></tr></table></figure></p>
 <ul>
-<li>使用数据库实现。</li>
-<li>使用 Redis 等缓存系统实现。</li>
-<li>使用 Zookeeper 等分布式协调系统实现。</li>
-</ul>
-<p>其中 Redis 简便灵活，高可用分布式，且支持持久化。</p>
-<h2 id="设计锁"><a href="#设计锁" class="headerlink" title="设计锁"></a>设计锁</h2><p>锁本身是很简单的，就是redis数据库中一个简单的key。建立和释放锁，并保证绝对的安全，是这个锁的设计比较棘手的地方。有两个潜在的陷阱：</p>
-<ul>
-<li><p>应用程序通过网络和redis交互，这意味着从应用程序发出命令到redis结果返回之间会有延迟。这段时间内，redis可能正在运行其他的命令，而redis内数据的状态可能不是你的程序所期待的。如果保证程序中获取锁的线程和其他线程不发生冲突？</p>
+<li><p>noeviction：当内存使用达到阈值的时候，所有引起申请内存的命令会报错。</p>
 </li>
-<li><p>如果程序在获取锁后突然crash，而无法释放它？这个锁会一直存在而导致程序进入“饿死”(原文成为“死锁”，感觉不太准确)。</p>
+<li><p>allkeys-lru：在主键空间中，优先移除最近未使用的key。</p>
+</li>
+<li><p>volatile-lru：在设置了过期时间的键空间中，优先移除最近未使用的key。</p>
+</li>
+<li><p>allkeys-random：在主键空间中，随机移除某个key。</p>
+</li>
+<li><p>volatile-random：在设置了过期时间的键空间中，随机移除某个key。</p>
+</li>
+<li><p>volatile-ttl：在设置了过期时间的键空间中，具有更早过期时间的key优先移除。</p>
 </li>
 </ul>
-<h2 id="建立锁"><a href="#建立锁" class="headerlink" title="建立锁"></a>建立锁</h2><p>可能想到的最简单的方法是“用GET方法检查锁，如果锁不存在，就用SET方式设置一个值”。</p>
-<p>这个方法虽然简单，但是不能保证独占锁。</p>
-<p>回顾前面所说的第1个陷阱：因为在GET和SET操作之间有延迟，我们没法知道从“发送命令”到“redis服务器返回结果”之间的这段时间内是否有其他线程也去建立锁。当然，这些都在几毫秒之内，发生的可能性相当低。但是如果在一个繁忙的环境中运行着大量的并发线程和命令，重叠的可能性并不是微不足道的。</p>
-<p>为了解决这个问题，应该用SETNX命令。SETNX消除了GET命令需要等待返回值的问题，SETNX只有在key不存在时才返回成功。这意味着只有一个线程可以成功运行SETNX命令，而其他线程会失败，然后不断重试，直到它们能建立锁。</p>
-<h2 id="释放锁"><a href="#释放锁" class="headerlink" title="释放锁"></a>释放锁</h2><p>一旦线程成功执行了SETNX命令，它就建立了锁并且可以基于资源进行工作。工作完成后，线程需要通过删除redis的key来释放这个锁，从而允许其他线程能尽快的获取锁。</p>
-<p>尽管如此，也有需要小心的地方！回顾前面说的第2个陷阱：如果线程crash了，它永远都不会删除redis的key，所以这个锁会一直存在，从而导致“饿死”现象。那么如何避免这个问题呢？</p>
-<h2 id="锁的存活时间"><a href="#锁的存活时间" class="headerlink" title="锁的存活时间"></a>锁的存活时间</h2><p>我们可以给锁加一个存活时间(TTL)，这样一旦TTL超时，这个锁的key会被redis自动删除。任何由于线程错误而遗留下来的锁在一个合适的时间之后都会被释放，从而避免了“饿死”。这纯粹是一个安全特性，更有效的方式仍然是确保尽量在线程里面释放锁。</p>
-<p>可以通过PEXPIRE命令为Redis的key设置TTL，而且线程里可以通过MULTI/EXEC事务的方式在SETNX命令后立即执行，例如：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">MULTI</span><br><span class="line">SETNX <span class="keyword">lock</span>-<span class="keyword">key</span></span><br><span class="line">PEXPIRE <span class="number">10000</span> <span class="keyword">lock</span>-<span class="keyword">key</span></span><br><span class="line">EXEC</span><br></pre></td></tr></table></figure></p>
-<p>尽管如此，这会产生另外一个问题。PEXPIRE命令没有判断SETNX命令的返回结果，无论如何都会设置key的TTL。如果这个地方无法获取到锁或有异常，那么多个线程每次想获取锁时，都会频繁更新key的TTL，这样会一直延长key的TTL，导致key永远都不会过期。为了解决这个问题，我们需要Redis在一个命令里面处理这个逻辑。我们可以通过Redis脚本的方式来实现。</p>
-<p>注意-如果不采用脚本的方式来实现，可以使用Redis 2.6.12之后版本SET命令的PX和NX参数来实现。为了考虑兼容2.6.0之前的版本，我们还是采用脚本的方式来实现。</p>
-<p>Redis脚本<br>由于Redis支持脚本，我们可以写一个Lua脚本在Redis服务端运行多个Redis命令。应用程序通过一条EVALSHA命令就可以调用被Redis服务端缓存的脚本。这里强大的地方在于你的程序只需要运行一条命令(脚本)就可以以事务的方式运行多个redis命令，还能避免并发冲突，因为一个redis脚本同一时刻只能运行一次。</p>
-<p>这是Redis里面一个设置带TTL的锁的Lua脚本：<br><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- Set a lock</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- KEYS[1]   - key</span></span><br><span class="line"><span class="comment">-- KEYS[2]   - ttl in ms</span></span><br><span class="line"><span class="comment">-- KEYS[3]   - lock content</span></span><br><span class="line"><span class="keyword">local</span> key     = KEYS[<span class="number">1</span>]</span><br><span class="line"><span class="keyword">local</span> ttl     = KEYS[<span class="number">2</span>]</span><br><span class="line"><span class="keyword">local</span> content = KEYS[<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> lockSet = redis.call(<span class="string">'setnx'</span>, key, content)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> lockSet == <span class="number">1</span> <span class="keyword">then</span></span><br><span class="line">  redis.call(<span class="string">'pexpire'</span>, key, ttl)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> lockSet</span><br></pre></td></tr></table></figure></p>
-<p>从这个脚本可以很清楚的看到，我们通过在锁上只运行PEXPIRE命令就解决了前面提到的“无休止的TTL”问题。</p>
-<h2 id="释放锁-1"><a href="#释放锁-1" class="headerlink" title="释放锁"></a>释放锁</h2><p>原文中还缺少一个释放锁的脚本，如果一直依赖TTL来释放锁，效率会很低。Redis的SET操作文档就提供了一个释放锁的脚本：</p>
-<figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> redis.<span class="keyword">call</span>(<span class="string">"get"</span>, KEYS[<span class="number">1</span>]) == ARGV[<span class="number">1</span>]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">    <span class="keyword">return</span> redis.<span class="keyword">call</span>(<span class="string">"del"</span>, KEYS[<span class="number">1</span>])</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-<p>应用程序中只要加锁的时候指定一个随机数或特定的value作为key的值，解锁的时候用这个value去解锁就可以了。当然，每次加锁时的value必须要保证是唯一的。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/12/02/Redis持久化命令/">（十）Redis持久化命令</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/9/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="（十）Redis持久化命令"><a href="#（十）Redis持久化命令" class="headerlink" title="（十）Redis持久化命令"></a>（十）Redis持久化命令</h1><p>数据持久化</p>
-<h4 id="异步AOF"><a href="#异步AOF" class="headerlink" title="异步AOF"></a>异步AOF</h4><p>执行一个异步的AOF(append only file)文件重写<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">bgrewriteaof</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="同步RDB"><a href="#同步RDB" class="headerlink" title="同步RDB"></a>同步RDB</h4><p>同步RDB持久化数据到磁盘，同步地将redis中的数据持久化到磁盘<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">save</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="异步RDB"><a href="#异步RDB" class="headerlink" title="异步RDB"></a>异步RDB</h4><p>异步RDB持久化数据到磁盘，异步将redis中的数据持久化到磁盘<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">bgsave</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="查看上次RDB持久化时间"><a href="#查看上次RDB持久化时间" class="headerlink" title="查看上次RDB持久化时间"></a>查看上次RDB持久化时间</h4><p>使用lastsave命令查看上次持久化到磁盘的时间：<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">lastsave</span></span><br></pre></td></tr></table></figure></p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/12/02/Redis实现分布式锁方案比较/">(十四)Redis实现分布式锁方案比较</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/9/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="十四-Redis实现分布式锁方案比较"><a href="#十四-Redis实现分布式锁方案比较" class="headerlink" title="(十四)Redis实现分布式锁方案比较"></a>(十四)Redis实现分布式锁方案比较</h1><h2 id="SETNX-语义"><a href="#SETNX-语义" class="headerlink" title="SETNX 语义"></a>SETNX 语义</h2><figure class="highlight q"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SETNX <span class="built_in">key</span> <span class="built_in">value</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>命令执行时，如果 ==key== 不存在，则设置 key 值为 value（同set）；如果 key 已经存在，则不执行赋值操作。并使用不同的返回值标识。</p>
-</blockquote>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SET</span> <span class="keyword">key</span> <span class="keyword">value</span> [expiration EX <span class="keyword">seconds</span>|PX milliseconds] [NX|XX]</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>==NX== - 仅在 key 不存在时执行赋值操作。命令描述文档 而如下文所述，通过SET的NX选项使用，可同时使用其它选项，如EX/PX设置超时时间，是更好的方式。</p>
-</blockquote>
-<h2 id="SETNX-实现分布式锁"><a href="#SETNX-实现分布式锁" class="headerlink" title="SETNX 实现分布式锁"></a>SETNX 实现分布式锁</h2><h3 id="方案1：SETNX-delete"><a href="#方案1：SETNX-delete" class="headerlink" title="方案1：SETNX + delete"></a>方案1：SETNX + delete</h3><p>伪代码如下：<br><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">setnx lock_a random_value</span><br><span class="line"><span class="regexp">//</span> <span class="keyword">do</span> sth</span><br><span class="line"><span class="keyword">delete</span> lock_a</span><br></pre></td></tr></table></figure></p>
-<p>此实现方式的问题在于：一旦服务获取锁之后，因某种原因挂掉，则锁一直无法自动释放。从而导致死锁。</p>
-<h3 id="方案2：SETNX-SETEX"><a href="#方案2：SETNX-SETEX" class="headerlink" title="方案2：SETNX + SETEX"></a>方案2：SETNX + SETEX</h3><p>伪代码如下：<br><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">setnx lock_a random_value</span><br><span class="line">setex lock_a <span class="number">10</span> random_value <span class="regexp">//</span> <span class="number">10</span>s超时</span><br><span class="line"><span class="regexp">//</span> <span class="keyword">do</span> sth</span><br><span class="line"><span class="keyword">delete</span> lock_a</span><br></pre></td></tr></table></figure></p>
-<p>按需设置超时时间。此方案解决了方案1死锁的问题，但同时引入了新的死锁问题： 如果setnx之后，setex 之前服务挂掉，会陷入死锁。 根本原因为 setnx/setex 分为了两个步骤，非原子操作。</p>
-<h3 id="方案3：SET-NX-PX"><a href="#方案3：SET-NX-PX" class="headerlink" title="方案3：SET NX PX"></a>方案3：SET NX PX</h3><p>伪代码如下：<br><figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SET</span> lock_a <span class="comment">random_value NX PX 10000</span> //<span class="comment"> 10s</span>超时</span><br><span class="line"><span class="comment">// do sth</span></span><br><span class="line">delete <span class="comment">lock_a</span></span><br></pre></td></tr></table></figure></p>
-<p>此方案通过 set 的 NX/PX 选项，将加锁、设置超时两个步骤合并为一个原子操作，从而解决方案1、2的问题。(PX与EX选项的语义相同，差异仅在单位。)<br>此方案目前大多数 sdk、redis 部署方案都支持，因此是推荐使用的方式。<br>但此方案也有如下问题：<br>如果锁被错误的释放（如超时），或被错误的抢占，或因redis问题等导致锁丢失，无法很快的感知到。</p>
-<h3 id="SET-key-randomvalue-NX-PX"><a href="#SET-key-randomvalue-NX-PX" class="headerlink" title="SET key randomvalue NX PX"></a>SET key randomvalue NX PX</h3><p>方案4在3的基础上，增加对 value 的检查，只解除自己加的锁。<br>类似于 CAS，不过是 compare-and-delete。<br>此方案 redis 原生命令不支持，为保证原子性，需要通过lua脚本实现:。<br>伪代码如下：<br><figure class="highlight scilab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SET lock_a random_value NX PX <span class="number">10000</span></span><br><span class="line"><span class="comment">// do sth</span></span><br><span class="line">eval <span class="string">"if redis.call('</span>get',KEYS[<span class="number">1</span>]) == ARGV[<span class="number">1</span>] <span class="keyword">then</span> <span class="keyword">return</span> redis.call(<span class="string">'del'</span>,KEYS[<span class="number">1</span>]) <span class="keyword">else</span> <span class="keyword">return</span> <span class="number">0</span> <span class="keyword">end</span><span class="string">" 1 lock_a random_value</span></span><br></pre></td></tr></table></figure></p>
-<p>此方案更严谨：即使因为某些异常导致锁被错误的抢占，也能部分保证锁的正确释放。并且在释放锁时能检测到锁是否被错误抢占、错误释放，从而进行特殊处理。</p>
-<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><h3 id="超时时间"><a href="#超时时间" class="headerlink" title="超时时间"></a>超时时间</h3><p>从上述描述可看出，超时时间是一个比较重要的变量：<br>超时时间不能太短，否则在任务执行完成前就自动释放了锁，导致资源暴露在锁保护之外。<br>超时时间不能太长，否则会导致意外死锁后长时间的等待。除非人为接入处理。<br>因此建议是根据任务内容，合理衡量超时时间，将超时时间设置为任务内容的几倍即可。<br>如果实在无法确定而又要求比较严格，可以采用定期 setex/expire 更新超时时间实现。</p>
-<h3 id="重试"><a href="#重试" class="headerlink" title="重试"></a>重试</h3><p>如果拿不到锁，建议根据任务性质、业务形式进行轮询等待。<br>等待次数需要参考任务执行时间。</p>
-<h3 id="与redis事务的比较"><a href="#与redis事务的比较" class="headerlink" title="与redis事务的比较"></a>与redis事务的比较</h3><p>setnx 使用更为灵活方案。multi/exec 的事务实现形式更为复杂。<br>且部分redis集群方案(如codis)，不支持multi/exec 事务。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/12/02/单机版本Nacos/">nacos单机模式支持mysql</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/9/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="单机模式支持mysql"><a href="#单机模式支持mysql" class="headerlink" title="单机模式支持mysql"></a>单机模式支持mysql</h1><p>在0.7版本之前，在单机模式时nacos使用嵌入式数据库实现数据的存储，不方便观察数据存储的基本情况。0.7版本增加了支持mysql数据源能力，具体的操作步骤：</p>
-<ol>
-<li>安装数据库，版本要求：5.6.5+</li>
-<li>初始化mysql数据库，数据库初始化文件：nacos-mysql.sql</li>
-<li>修改conf/application.properties文件，增加支持mysql数据源配置（目前只支持mysql），添加mysql数据源的url、用户名和密码。</li>
-</ol>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring.datasource.platform</span>=mysql</span><br><span class="line"></span><br><span class="line"><span class="attr">db.num</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">db.url.0</span>=jdbc:mysql://<span class="number">11.162</span>.<span class="number">196.16</span>:<span class="number">3306</span>/nacos_devtest?characterEncoding=utf8&amp;connectTimeout=<span class="number">1000</span>&amp;socketTimeout=<span class="number">3000</span>&amp;autoReconnect=<span class="literal">true</span></span><br><span class="line"><span class="attr">db.user</span>=nacos_devtest</span><br><span class="line"><span class="attr">db.password</span>=youdontknow</span><br></pre></td></tr></table></figure>
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/12/02/什么是 Nacos/">什么是 Nacos</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/9/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="什么是-Nacos"><a href="#什么是-Nacos" class="headerlink" title="什么是 Nacos"></a>什么是 Nacos</h1><p><a href="https://nacos.io/zh-cn/" target="_blank" rel="noopener">官方</a></p>
-<p><a href="https://nacos.io/zh-cn/docs/what-is-nacos.html" target="_blank" rel="noopener">使用手册</a></p>
-<p>Nacos 致力于帮助您发现、配置和管理微服务。Nacos 提供了一组简单易用的特性集，帮助您快速实现动态服务发现、服务配置、服务元数据及流量管理。</p>
-<p>Nacos 帮助您更敏捷和容易地构建、交付和管理微服务平台。 Nacos 是构建以“服务”为中心的现代应用架构 (例如微服务范式、云原生范式) 的服务基础设施。</p>
-<p>Nacos 的关键特性包括:</p>
-<ol>
-<li>服务发现和服务健康监测</li>
-</ol>
-<p>Nacos 支持基于 DNS 和基于 RPC 的服务发现。服务提供者使用 原生SDK、OpenAPI、或一个独立的  <a href="https://nacos.io/zh-cn/docs/other-language.html" target="_blank" rel="noopener">Agent TODO</a> 注册Service后，服务消费者可以使用DNS TODO 或HTTP&amp;API查找和发现服务。</p>
-<p>Nacos 提供对服务的实时的健康检查，阻止向不健康的主机或服务实例发送请求。Nacos 支持传输层 (PING 或 TCP)和应用层 (如 HTTP、MySQL、用户自定义）的健康检查。 对于复杂的云环境和网络拓扑环境中（如 VPC、边缘网络等）服务的健康检查，Nacos 提供了 agent 上报模式和服务端主动检测2种健康检查模式。Nacos 还提供了统一的健康检查仪表盘，帮助您根据健康状态管理服务的可用性及流量。</p>
-<ol start="2">
-<li>动态配置服务</li>
-</ol>
-<p>动态配置服务可以让您以中心化、外部化和动态化的方式管理所有环境的应用配置和服务配置。动态配置消除了配置变更时重新部署应用和服务的需要，让配置管理变得更加高效和敏捷。配置中心化管理让实现无状态服务变得更简单，让服务按需弹性扩展变得更容易。<br>Nacos 提供了一个简洁易用的UI帮助您管理所有的服务和应用的配置。Nacos还提供包括配置版本跟踪、金丝雀发布、一键回滚配置以及客户端配置更新状态跟踪在内的一系列开箱即用的配置管理特性，帮助您安全地在生产环境中管理配置变更和降低配置变更带来的风险。</p>
-<ol start="3">
-<li>动态 DNS 服务</li>
-</ol>
-<p>动态 DNS 服务支持权重路由，让您更容易地实现中间层负载均衡、更灵活的路由策略、流量控制以及数据中心内网的简单DNS解析服务。动态DNS服务还能让您更容易地实现以 DNS 协议为基础的服务发现，以帮助您消除耦合到厂商私有服务发现 API 上的风险。</p>
-<ol start="4">
-<li>服务及其元数据管理</li>
-</ol>
-<p>Nacos 能让您从微服务平台建设的视角管理数据中心的所有服务及元数据，包括管理服务的描述、生命周期、服务的静态依赖分析、服务的健康状态、服务的流量管理、路由及安全策略、服务的 SLA 以及最首要的 metrics 统计数据。</p>
-<p>Nacos 支持几乎所有主流类型的“服务”的发现、配置和管理：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Kubernetes Service</span><br><span class="line"></span><br><span class="line">gRPC &amp; Dubbo RPC Service</span><br><span class="line"></span><br><span class="line">Spring Cloud RESTful Service</span><br></pre></td></tr></table></figure></p>
 
         
     </section>
@@ -513,7 +242,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/12/02/Redis使用Lua的注意点/">Redis使用Lua脚本的注意点</a>
+            <a href="/2018/12/02/Redis的“事务”及Lua脚本操作/">(十一)Redis的“事务”及Lua脚本操作</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -536,18 +265,156 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="Redis使用Lua脚本的注意点"><a href="#Redis使用Lua脚本的注意点" class="headerlink" title="Redis使用Lua脚本的注意点"></a>Redis使用Lua脚本的注意点</h1><ol>
-<li><p>Lua脚本的bug特别可怕，由于Redis的单线程特点，一旦Lua脚本出现不会返回（不是返回值）得问题，那么这个脚本就会阻塞整个redis实例。</p>
-</li>
-<li><p>Lua脚本应该尽量短小实现关键步骤即可。（原因同上）</p>
-</li>
-<li><p>Lua脚本中不应该出现常量Key，这样会导致每次执行时都会在脚本字典中新建一个条目，应该使用全局变量数组KEYS和ARGV, KEYS和ARGV的索引都从1开始</p>
-</li>
-<li><p>传递给lua脚本的的键和参数：传递给lua脚本的键列表应该包括可能会读取或者写入的所有键。传入全部的键使得在使用各种分片或者集群技术时，其他软件可以在应用层检查所有的数据是不是都在同一个分片里面。另外集群版redis也会对将要访问的key进行检查，如果不在同一个服务器里面，那么redis将会返回一个错误。（决定使用集群版之前应该考虑业务拆分），参数列表无所谓。</p>
-</li>
-<li><p>Lua脚本跟单个redis命令和事务段一样都是原子的已经进行了数据写入的lua脚本将无法中断，只能使用SHUTDOWN NOSAVE杀死Redis服务器，所以lua脚本一定要测试好。</p>
+        <h1 id="十一-Redis的“事务”及Lua脚本操作"><a href="#十一-Redis的“事务”及Lua脚本操作" class="headerlink" title="(十一)Redis的“事务”及Lua脚本操作"></a>(十一)Redis的“事务”及Lua脚本操作</h1><h2 id="“事务”"><a href="#“事务”" class="headerlink" title="“事务”"></a>“事务”</h2><p>redis提供简单的事务命令，由multi和exec组成，实际上相当于将多个命令添加到一个执行的集合内，multi为begin，exec为commit，discard相当于rollback，watch相当于锁，对象若在事务执行前被修改则事务被打断。</p>
+<p>因此redis的事务机制为乐观锁，如果在高并发场景下，如果多个客户端同时对一个key进行了watch，只要有一个客户端提交成功，其他客户端的操作都是无效的，因此redis事务不适合在高并发场景下使用，使用lua脚本可以更好的解决事务解决不了的场景。</p>
+<p>Redis 事务可以一次执行多个命令， 并且带有以下三个重要的保证：</p>
+<ul>
+<li>批量操作在发送 EXEC 命令前被放入队列缓存。</li>
+<li>收到 EXEC 命令后进入事务执行，事务中任意命令执行失败，其余的命令依然被执行。</li>
+<li>在事务执行过程，其他客户端提交的命令请求不会插入到事务执行命令序列中。</li>
+</ul>
+<p>一个事务从开始到执行会经历以下三个阶段：</p>
+<ul>
+<li>开始事务。</li>
+<li>命令入队。</li>
+<li>执行事务。</li>
+</ul>
+<p>如果事务中出现错误：</p>
+<ol>
+<li>还未exec就报错：如果事务中出现语法错误，则事务会成功回滚，整个事务中的命令都不会提交；</li>
+<li>成功执行exec后才报错：如果事务中出现的不是语法错误，而是执行错误，不会触发回滚，该事务中仅有该错误命令不会提交，其他命令依旧会继续提交，因此这里的”事务”打了个引号，和我们通常理解的数据库事务完全不一样。</li>
+</ol>
+<figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#begin 开启一个redis事务</span></span><br><span class="line">multi</span><br><span class="line"> </span><br><span class="line"><span class="meta">#commit 提交事务里的命令队列</span></span><br><span class="line">exec</span><br><span class="line"> </span><br><span class="line"><span class="meta">#rollback 回滚</span></span><br><span class="line">discard</span><br><span class="line"> </span><br><span class="line"><span class="meta">#锁，监视一个或多个key，被监视的key若在提交事务前被修改，则事务被打断</span></span><br><span class="line">watch key [key ...</span><br><span class="line"> </span><br><span class="line"><span class="meta">#取消监视</span></span><br><span class="line">unwatch</span><br></pre></td></tr></table></figure>
+<h2 id="LUA脚本"><a href="#LUA脚本" class="headerlink" title="LUA脚本"></a>LUA脚本</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Redis2.6之后新增的功能，我们可以在redis中通过lua脚本操作redis。与事务不同的是事务是将多个命令添加到一个执行的集合，执行的时候仍然是多个命令，会受到其他客户端的影响，而脚本会将多个命令和操作当成一个命令在redis中执行，也就是说该脚本在执行的过程中，不会被任何其他脚本或命令打断干扰。正是因此这种原子性，lua脚本才可以代替multi和exec的事务功能。同时也是因此，在lua脚本中不宜进行过大的开销操作，避免影响后续的其他请求的正常执行。</p>
+<h3 id="使用lua脚本的好处"><a href="#使用lua脚本的好处" class="headerlink" title="使用lua脚本的好处"></a>使用lua脚本的好处</h3><ul>
+<li>lua脚本是作为一个整体执行的.所以中间不会被其他命令插入；</li>
+<li>可以把多条命令一次性打包,所以可以有效减少网络开销；</li>
+<li>lua脚本可以常驻在redis内存中,所以在使用的时候,可以直接拿来复用，也减少了代码。</li>
+</ul>
+<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><p>redis脚本使用eval命令执行lua脚本，其中numkeys表示lua script里有多少个key参数，redis脚本根据该数字从后面的key和arg中取前n个作为key参数，之后的都作为arg参数：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eval<span class="built_in"> script </span>numkeys key [key <span class="built_in">..</span>.] arg [arg <span class="built_in">..</span>.]</span><br></pre></td></tr></table></figure></p>
+<h4 id="场景1：记录IP登录次数"><a href="#场景1：记录IP登录次数" class="headerlink" title="场景1：记录IP登录次数"></a>场景1：记录IP登录次数</h4><p>利用hash记录所有登录的IP次数</p>
+<p>key参数的数量必须和numkey一致，使用key或者argv可以实现一样的效果。</p>
+<p>如下面第一个命令里用了三个key，代表后面的三个参数分别对应脚本里的key1 key2 key3.</p>
+<p>第二个命令里用了一个key，代表了后面第一个参数对应脚本里的key1，后面第二和第三个参数对应脚本里的argv1和argv2</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">eval <span class="string">"return redis.call('hincrby', KEYS[1], KEYS[2], KEYS[3])"</span> <span class="number">3</span> h_host host_192<span class="number">.168</span><span class="number">.145</span><span class="number">.1</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line">※ 可以看到存在<span class="number">3</span>个<span class="type">key</span></span><br><span class="line">eval <span class="string">"return redis.call('hincrby', KEYS[1], ARGV[1], ARGV[2])"</span> <span class="number">1</span> h_host host_192<span class="number">.168</span><span class="number">.145</span><span class="number">.1</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line">※ 配置了<span class="number">1</span>个<span class="type">key</span>, <span class="number">2</span>个argv参数</span><br></pre></td></tr></table></figure>
+<h4 id="场景2：当10秒内请求3次后拒绝访问"><a href="#场景2：当10秒内请求3次后拒绝访问" class="headerlink" title="场景2：当10秒内请求3次后拒绝访问"></a>场景2：当10秒内请求3次后拒绝访问</h4><ol>
+<li>给访问ip的key递增</li>
+<li>判断该访问次数若为首次登录则设置过期时间10秒</li>
+<li>若不是首次登录则判断是否大于3次，若大于则返回0，否则返回1。<figure class="highlight scilab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">eval <span class="string">"local request_times = redis.call('</span>incr',KEYS[<span class="number">1</span>]);</span><br><span class="line"><span class="keyword">if</span> request_times == <span class="number">1</span> <span class="keyword">then</span> redis.call(<span class="string">'expire'</span>,KEYS[<span class="number">1</span>], ARGV[<span class="number">1</span>]) <span class="keyword">end</span>;</span><br><span class="line"><span class="keyword">if</span> request_times &gt; tonumber(ARGV[<span class="number">2</span>]) <span class="keyword">then</span> <span class="keyword">return</span> <span class="number">0</span> <span class="keyword">end</span> <span class="keyword">return</span> <span class="number">1</span>;<span class="string">" 1 test_127.0.0.1 10 3</span></span><br></pre></td></tr></table></figure>
 </li>
 </ol>
+<p>通过上面的例子也可以看出，我们可以在redis里使用eval命令调用lua脚本，且该脚本在redis里作为单条命令去执行不会受到其余命令的影响，非常适用于高并发场景下的事务处理。同样我们可以在lua脚本里实现任何想要实现的功能，迭代，循环，判断，赋值 都是可以的。</p>
+<h4 id="lua脚本缓存"><a href="#lua脚本缓存" class="headerlink" title="lua脚本缓存"></a>lua脚本缓存</h4><p>redis脚本也支持将脚本进行持久化，这样的话，下次再使用就不用输入那么长的lua脚本了。事实上使用eval执行的时候也会缓存，eval与load不同的是eval会将lua脚本执行并缓存，而load只会将脚本缓存。相同点是它们都使用sha算法进行缓存，因此只要lua脚本内容相同，eval与load缓存的sha码就是一样的。而缓存后的脚本，我们可以使用evalsha命令直接调用，极大的简化了我们的代码量，不用重复的将lua脚本写出来。</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#eval 执行脚本并缓存</span></span><br><span class="line">eval<span class="built_in"> script </span>numkeys key [key <span class="built_in">..</span>.] arg [arg <span class="built_in">..</span>.]</span><br><span class="line"> </span><br><span class="line"><span class="comment">#load 缓存lua脚本</span></span><br><span class="line">script load script</span><br><span class="line"> </span><br><span class="line"><span class="comment">#使用缓存的脚本sha码调用脚本</span></span><br><span class="line">evalsha sha1 numkeys key [key <span class="built_in">..</span>.] arg [arg <span class="built_in">..</span>.] </span><br><span class="line"> </span><br><span class="line"><span class="comment">#使用sha码判断脚本是否已缓存</span></span><br><span class="line">script exist sha1 [sha1 <span class="built_in">..</span>.]</span><br><span class="line"> </span><br><span class="line"><span class="comment">#清空所有缓存的脚本</span></span><br><span class="line">script flush</span><br><span class="line"> </span><br><span class="line"><span class="comment">#杀死当前正在执行的所有lua脚本</span></span><br><span class="line">script kill</span><br></pre></td></tr></table></figure>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/Redis服务器相关命令/">(九)Redis服务器相关命令</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/9/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="九-Redis服务器相关命令"><a href="#九-Redis服务器相关命令" class="headerlink" title="(九)Redis服务器相关命令"></a>(九)Redis服务器相关命令</h1><h4 id="验证密码是否正确"><a href="#验证密码是否正确" class="headerlink" title="验证密码是否正确"></a>验证密码是否正确</h4><p> 使用auth命令验证密码是否正确，如果当前未登陆进行验证通过后会转为登陆状态，如果当前已登陆，会返回验证结果成功或失败：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">auth password</span></span><br></pre></td></tr></table></figure>
+<h4 id="查看服务器信息"><a href="#查看服务器信息" class="headerlink" title="查看服务器信息"></a>查看服务器信息</h4><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">INFO [section]</span><br><span class="line"></span><br><span class="line">info cpu</span><br><span class="line"></span><br><span class="line"><span class="meta"># CPU</span></span><br><span class="line"><span class="symbol">used_cpu_sys:</span><span class="number">5495.206247</span></span><br><span class="line"><span class="symbol">used_cpu_user:</span><span class="number">5338.722012</span></span><br><span class="line"><span class="symbol">used_cpu_sys_children:</span><span class="number">0.627837</span></span><br><span class="line"><span class="symbol">used_cpu_user_children:</span><span class="number">0.214709</span></span><br></pre></td></tr></table></figure>
+<h4 id="统计当前库下key的数量"><a href="#统计当前库下key的数量" class="headerlink" title="统计当前库下key的数量"></a>统计当前库下key的数量</h4><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">dbsize</span></span><br></pre></td></tr></table></figure>
+<h4 id="查看配置信息"><a href="#查看配置信息" class="headerlink" title="查看配置信息"></a>查看配置信息</h4><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">config <span class="builtin-name">get</span> patten</span><br><span class="line"></span><br><span class="line">config <span class="builtin-name">get</span> port</span><br><span class="line"></span><br><span class="line">config <span class="builtin-name">get</span> max*</span><br><span class="line"></span><br><span class="line">config <span class="builtin-name">get</span> *</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Docker:0&gt;config <span class="builtin-name">get</span> port</span><br><span class="line"> 1)  <span class="string">"port"</span></span><br><span class="line"> 2)  <span class="string">"6379"</span></span><br><span class="line"></span><br><span class="line">Docker:0&gt;config <span class="builtin-name">get</span> max*</span><br><span class="line"> 1)  <span class="string">"maxmemory"</span></span><br><span class="line"> 2)  <span class="string">"0"</span></span><br><span class="line"> 3)  <span class="string">"maxmemory-samples"</span></span><br><span class="line"> 4)  <span class="string">"5"</span></span><br><span class="line"> 5)  <span class="string">"maxclients"</span></span><br><span class="line"> 6)  <span class="string">"10000"</span></span><br><span class="line"> 7)  <span class="string">"maxmemory-policy"</span></span><br><span class="line"> 8)  <span class="string">"noeviction"</span></span><br></pre></td></tr></table></figure>
+<h4 id="修改当前配置信息-动态修改"><a href="#修改当前配置信息-动态修改" class="headerlink" title="修改当前配置信息(动态修改)"></a>修改当前配置信息(动态修改)</h4><p>Config Set 命令可以动态地调整 Redis 服务器的配置(configuration)而无须重启，但此时配置文件中仍是修改前的配置，可搭配config rewrite命令一起使用：<br><figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">config <span class="keyword">set</span> <span class="keyword">parameter</span> <span class="comment">value</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="重写配置文件"><a href="#重写配置文件" class="headerlink" title="重写配置文件"></a>重写配置文件</h4><p>Config rewrite 命令对启动 Redis 服务器时所指定的 redis.conf 配置文件进行改写。与config<br>set不同，set之后会将配置信息修改而无需重启服务，但此时redis.conf配置文件里记录的参数仍是set之前的值，如果将redis服务重启后会读取conf文件中的配置，这时候读到的还是set之前的配置，因此我们可以在set配置之后使用rewrite命令将当前的配置回写至配置文件内，这样就能不停机修改配置信息了，因此config set和config rewrite是配合使用的：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">config rewrite</span><br><span class="line"></span><br><span class="line">config <span class="builtin-name">set</span> slowlog-max-len 256</span><br><span class="line"></span><br><span class="line">config <span class="builtin-name">get</span> slowlog-max-len</span><br><span class="line"></span><br><span class="line">config rewrite </span><br><span class="line"></span><br><span class="line">config rewrite 命令对启动 Redis 服务器时所指定的 redis.conf 配置文件进行改写写回配置文件 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">cat /opt/redis6/</span><br></pre></td></tr></table></figure></p>
+<h4 id="config-resetstat"><a href="#config-resetstat" class="headerlink" title="config resetstat"></a>config resetstat</h4><p>使用Config Resetstat 命令重置 INFO 命令中的某些统计数据，包括：</p>
+<ul>
+<li>Keyspace hits (键空间命中次数)</li>
+<li>Keyspace misses (键空间不命中次数)</li>
+<li>Number of commands processed (执行命令的次数)</li>
+<li>Number of connections received (连接服务器的次数)</li>
+<li>Number of expired keys (过期key的数量)</li>
+<li>Number of rejected connections (被拒绝的连接数量)</li>
+<li>Latest fork(2) time(最后执行 fork(2) 的时间)</li>
+<li>The aof_delayed_fsync counter(aof_delayed_fsync 计数器的值)</li>
+</ul>
+<h4 id="切换数据库"><a href="#切换数据库" class="headerlink" title="切换数据库"></a>切换数据库</h4><p>redis共有16个db，从db0~db15，使用select index命令在数据库之间进行切换：<br><figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="built_in">index</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="time"><a href="#time" class="headerlink" title="time"></a>time</h4><p>Time 命令用于返回当前服务器时间，返回一个包含两个字符串的列表： 第一个字符串是当前时间(以 UNIX 时间戳格式表示)，而第二个字符串是当前这一秒钟已经逝去的微秒数。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">time</span><br><span class="line"></span><br><span class="line">Docker:<span class="number">0</span>&gt;time</span><br><span class="line"> <span class="number">1</span>)  <span class="string">"1597122706"</span></span><br><span class="line"> <span class="number">2</span>)  <span class="string">"914251"</span></span><br></pre></td></tr></table></figure>
+<h4 id="DEBUG"><a href="#DEBUG" class="headerlink" title="DEBUG"></a>DEBUG</h4><p>debug object key获取 key 的调试信息，当key不存在时返回错误信息。</p>
+<p>debug segfault 命令执行一个非法的内存访问从而让 Redis 崩溃，仅在开发时用于 BUG 调试，执行后需要重启服务。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="builtin-name">debug</span> object key</span><br><span class="line"></span><br><span class="line"><span class="builtin-name">debug</span> segfault bengku崩溃，需要重启服务</span><br></pre></td></tr></table></figure></p>
+<h4 id="清空库"><a href="#清空库" class="headerlink" title="清空库"></a>清空库</h4><p>flushdb清空当前数据库下的所有数据。<br>flushall清空所有库下的所有数据。<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">flushdb</span></span><br><span class="line"><span class="attribute">flushall</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="监控"><a href="#监控" class="headerlink" title="监控"></a>监控</h4><p>monitor命令用于监听redis服务器接收到的所有命令：<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">monitor</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="关闭"><a href="#关闭" class="headerlink" title="关闭"></a>关闭</h4><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHUTDOWN [NOSAVE<span class="string">|SAVE]</span></span><br></pre></td></tr></table></figure>
+<h4 id="command"><a href="#command" class="headerlink" title="command"></a>command</h4><p>查看当前Redis中所有可用命令，使用Command 命令用于返回所有的Redis命令的详细信息，以数组形式展示：<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">command</span></span><br></pre></td></tr></table></figure></p>
+<p>使用command count命令查看当前Redis中命令的数量：<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">command</span> <span class="title">count</span></span><br></pre></td></tr></table></figure></p>
+<p>使用command info命令查看当前Redis中指定的命令的详细信息：<br><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">COMMAND</span> INFO <span class="keyword">command</span>-name [<span class="keyword">command</span>-name ...]</span><br></pre></td></tr></table></figure></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/MySQL 主从复制和Canal 工作原理/">MySQL主备复制原理</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/9/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Canal/">Canal</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="MySQL主备复制原理"><a href="#MySQL主备复制原理" class="headerlink" title="MySQL主备复制原理"></a>MySQL主备复制原理</h1><ul>
+<li><p>MySQL master 将数据变更写入二进制日志( binary log, 其中记录叫做二进制日志事件binary log events，可以通过 show binlog events 进行查看)</p>
+</li>
+<li><p>MySQL slave 将 master 的 binary log events 拷贝到它的中继日志(relay log)</p>
+</li>
+<li>MySQL slave 重放 relay log 中事件，将数据变更反映它自己的数据</li>
+</ul>
+<h1 id="canal-工作原理"><a href="#canal-工作原理" class="headerlink" title="canal 工作原理"></a>canal 工作原理</h1><ul>
+<li>canal 模拟 MySQL slave 的交互协议，伪装自己为 MySQL slave ，向 MySQL master 发送dump 协议</li>
+<li>MySQL master 收到 dump 请求，开始推送 binary log 给 slave (即 canal )</li>
+<li>canal 解析 binary log 对象(原始为 byte 流)</li>
+</ul>
 
         
     </section>
@@ -611,7 +478,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/12/02/MySQL 主从复制和Canal 工作原理/">MySQL主备复制原理</a>
+            <a href="/2018/12/02/两阶段提交2PC/">（七）两阶段提交2PC</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -625,7 +492,7 @@
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Canal/">Canal</a>
+    <a class="article-tag-link" href="/tags/分布式事务/">分布式事务</a>
 </div>
 
 
@@ -634,18 +501,154 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="MySQL主备复制原理"><a href="#MySQL主备复制原理" class="headerlink" title="MySQL主备复制原理"></a>MySQL主备复制原理</h1><ul>
-<li><p>MySQL master 将数据变更写入二进制日志( binary log, 其中记录叫做二进制日志事件binary log events，可以通过 show binlog events 进行查看)</p>
-</li>
-<li><p>MySQL slave 将 master 的 binary log events 拷贝到它的中继日志(relay log)</p>
-</li>
-<li>MySQL slave 重放 relay log 中事件，将数据变更反映它自己的数据</li>
-</ul>
-<h1 id="canal-工作原理"><a href="#canal-工作原理" class="headerlink" title="canal 工作原理"></a>canal 工作原理</h1><ul>
-<li>canal 模拟 MySQL slave 的交互协议，伪装自己为 MySQL slave ，向 MySQL master 发送dump 协议</li>
-<li>MySQL master 收到 dump 请求，开始推送 binary log 给 slave (即 canal )</li>
-<li>canal 解析 binary log 对象(原始为 byte 流)</li>
-</ul>
+        <h1 id="两阶段提交2PC"><a href="#两阶段提交2PC" class="headerlink" title="两阶段提交2PC"></a>两阶段提交2PC</h1><p>当应用逐渐扩展，出现一个应用使用多个数据源的情况，这个时候本地事务已经无法满足数据一致性的要求。由于多个数据源的同时访问，事务需要跨多个数据源管理，分布式事务应运而生。其中最流行的就是两阶段提交（2PC），分布式事务由事务管理器（TM）统一管理。</p>
+<p>两阶段提交分为准备阶段和提交阶段。</p>
+<h2 id="两阶段提交-commit"><a href="#两阶段提交-commit" class="headerlink" title="两阶段提交-commit"></a>两阶段提交-commit</h2><p><img src="https://mmbiz.qpic.cn/mmbiz_png/Baq5lYpIw7UAmRmz9SHwLAkkzYRj8FzeUN50QbiarIoDfZSgLKjbgwuQ68PUcWBicrYrELotBJpZKKsxfialIyyvw/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="image"></p>
+<h2 id="两阶段提交-rollback"><a href="#两阶段提交-rollback" class="headerlink" title="两阶段提交-rollback"></a>两阶段提交-rollback</h2><p><img src="https://mmbiz.qpic.cn/mmbiz_png/Baq5lYpIw7UAmRmz9SHwLAkkzYRj8FzeTeCibYLNibQW4CmBvPPejjyR39W2vF2UdTF5o50Qb0rJbW2YwvCWJPJw/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="image"></p>
+<blockquote>
+<p>然而两阶段提交也不能完全保证数据一致性问题，并且有==同步阻塞==的问题，所以其优化版本三阶段提交（3PC）被发明了出来。</p>
+</blockquote>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/三阶段提交3PC/">（八）三阶段提交3PC</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/9/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/分布式事务/">分布式事务</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="三阶段提交3PC"><a href="#三阶段提交3PC" class="headerlink" title="三阶段提交3PC"></a>三阶段提交3PC</h1><blockquote>
+<p>3PC也只能保证绝大多数情况下的数据一致性</p>
+</blockquote>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/Baq5lYpIw7UAmRmz9SHwLAkkzYRj8Fze4Qp8szvXcnwialHTwHoLKHvoYQCfWcF2gEWDKM4gibFxfIve5qNx15mQ/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="image"></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/Redis日活BitMap高阶使用/">Redis BitMap高阶使用</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/9/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Redis-BitMap高阶使用"><a href="#Redis-BitMap高阶使用" class="headerlink" title="Redis BitMap高阶使用"></a>Redis BitMap高阶使用</h1><h2 id="redis-setbit-应用场景"><a href="#redis-setbit-应用场景" class="headerlink" title="redis setbit 应用场景"></a>redis setbit 应用场景</h2><p><a href="https://blog.csdn.net/wade1010/article/details/109545263" target="_blank" rel="noopener">https://blog.csdn.net/wade1010/article/details/109545263</a></p>
+<h2 id="BitMap-学习"><a href="#BitMap-学习" class="headerlink" title="BitMap 学习"></a>BitMap 学习</h2><p><a href="https://www.jianshu.com/p/4c8e119f35db" target="_blank" rel="noopener">https://www.jianshu.com/p/4c8e119f35db</a></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/Redis数据类型之ZSet/">(七)Redis数据类型之ZSet(sorted_set)</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/9/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="七-Redis数据类型之ZSet-sorted-set"><a href="#七-Redis数据类型之ZSet-sorted-set" class="headerlink" title="(七)Redis数据类型之ZSet(sorted_set)"></a>(七)Redis数据类型之ZSet(sorted_set)</h1><h4 id="zadd"><a href="#zadd" class="headerlink" title="zadd"></a>zadd</h4><blockquote>
+<p>zadd key [NX|XX] [CH] [INCR] score member [score member …]</p>
+</blockquote>
+<p>往有序集合中新增成员，需要指定该成员的分数，分数可以是整形或浮点型，当分数相同时候，索引下标按照字典排序。</p>
+<figure class="highlight ceylon"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">zadd zset <span class="number">1</span> <span class="keyword">value</span><span class="number">1</span> <span class="number">2</span> <span class="keyword">value</span><span class="number">2</span> <span class="number">3</span> <span class="keyword">value</span><span class="number">3</span> <span class="number">4</span> <span class="keyword">value</span><span class="number">4</span></span><br><span class="line"></span><br><span class="line"><span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span> 表示的是各个元素的分数</span><br><span class="line"></span><br><span class="line">Docker:<span class="number">0</span>&gt;zrange zset <span class="number">0</span> -<span class="number">1</span> </span><br><span class="line"> <span class="number">1</span>)  <span class="string">"value1"</span></span><br><span class="line"> <span class="number">2</span>)  <span class="string">"value2"</span></span><br><span class="line"> <span class="number">3</span>)  <span class="string">"value3"</span></span><br><span class="line"> <span class="number">4</span>)  <span class="string">"value4"</span></span><br><span class="line"></span><br><span class="line">Docker:<span class="number">0</span>&gt;zrange zset <span class="number">0</span> -<span class="number">1</span> withscores</span><br><span class="line"> <span class="number">1</span>)  <span class="string">"value1"</span></span><br><span class="line"> <span class="number">2</span>)  <span class="string">"1"</span></span><br><span class="line"> <span class="number">3</span>)  <span class="string">"value2"</span></span><br><span class="line"> <span class="number">4</span>)  <span class="string">"2"</span></span><br><span class="line"> <span class="number">5</span>)  <span class="string">"value3"</span></span><br><span class="line"> <span class="number">6</span>)  <span class="string">"3"</span></span><br><span class="line"> <span class="number">7</span>)  <span class="string">"value4"</span></span><br><span class="line"> <span class="number">8</span>)  <span class="string">"4"</span></span><br></pre></td></tr></table></figure>
+<h4 id="zrange"><a href="#zrange" class="headerlink" title="zrange"></a>zrange</h4><blockquote>
+<p>zrange key start stop [WITHSCORES]</p>
+</blockquote>
+<p>根据下标查看集合内所有成员(及分数)，[start,stop]<br>[0 -1] 表示全部元素</p>
+<h4 id="zcard"><a href="#zcard" class="headerlink" title="zcard"></a>zcard</h4><blockquote>
+<p>zcard key</p>
+</blockquote>
+<p>获取有序集合的成员数。<br><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">Docker:</span><span class="number">0</span>&gt;zrange zset <span class="number">0</span> <span class="number">-1</span> </span><br><span class="line"> <span class="number">1</span>)  <span class="string">"value1"</span></span><br><span class="line"> <span class="number">2</span>)  <span class="string">"value2"</span></span><br><span class="line"> <span class="number">3</span>)  <span class="string">"value3"</span></span><br><span class="line"> <span class="number">4</span>)  <span class="string">"value4"</span></span><br><span class="line"><span class="symbol">Docker:</span><span class="number">0</span>&gt;zrange zset <span class="number">0</span> <span class="number">-1</span> withscores</span><br><span class="line"> <span class="number">1</span>)  <span class="string">"value1"</span></span><br><span class="line"> <span class="number">2</span>)  <span class="string">"1"</span></span><br><span class="line"> <span class="number">3</span>)  <span class="string">"value2"</span></span><br><span class="line"> <span class="number">4</span>)  <span class="string">"2"</span></span><br><span class="line"> <span class="number">5</span>)  <span class="string">"value3"</span></span><br><span class="line"> <span class="number">6</span>)  <span class="string">"3"</span></span><br><span class="line"> <span class="number">7</span>)  <span class="string">"value4"</span></span><br><span class="line"> <span class="number">8</span>)  <span class="string">"4"</span></span><br><span class="line"><span class="symbol">Docker:</span><span class="number">0</span>&gt;zcard zset</span><br><span class="line"><span class="string">"4"</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="zcount"><a href="#zcount" class="headerlink" title="zcount"></a>zcount</h4><blockquote>
+<p>ZCOUNT key min max</p>
+</blockquote>
+<p>从有序集合内获取指定分数区间内的成员数。<br><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">Docker:</span><span class="number">0</span>&gt;zrange zset <span class="number">0</span> <span class="number">-1</span> withscores</span><br><span class="line"> <span class="number">1</span>)  <span class="string">"value1"</span></span><br><span class="line"> <span class="number">2</span>)  <span class="string">"1"</span></span><br><span class="line"> <span class="number">3</span>)  <span class="string">"value2"</span></span><br><span class="line"> <span class="number">4</span>)  <span class="string">"2"</span></span><br><span class="line"> <span class="number">5</span>)  <span class="string">"value3"</span></span><br><span class="line"> <span class="number">6</span>)  <span class="string">"3"</span></span><br><span class="line"> <span class="number">7</span>)  <span class="string">"value4"</span></span><br><span class="line"> <span class="number">8</span>)  <span class="string">"4"</span></span><br><span class="line"><span class="symbol">Docker:</span><span class="number">0</span>&gt;zcount zset <span class="number">2</span> <span class="number">3</span></span><br><span class="line"><span class="string">"2"</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="zrank"><a href="#zrank" class="headerlink" title="zrank"></a>zrank</h4><blockquote>
+<p>ZRANK key member</p>
+</blockquote>
+<p>返回有序集合中指定成员的索引(下标)：</p>
+<h4 id="zrevrange"><a href="#zrevrange" class="headerlink" title="zrevrange"></a>zrevrange</h4><blockquote>
+<p>zrevrange key start stop [WITHSCORES]</p>
+</blockquote>
+<p>与zrange功能类似，不同的是zrevrange会将集合先反序[reverse]之后再执行zrange返回。</p>
+<h4 id="zincrby"><a href="#zincrby" class="headerlink" title="zincrby"></a>zincrby</h4><p>修改有序集合内成员的分数，将有序集合内成员的分数增加increment分值，increment可以为浮点型整型也可以为负数或正数。</p>
+<blockquote>
+<p>zincrby key increment member</p>
+</blockquote>
+<h4 id="zrem"><a href="#zrem" class="headerlink" title="zrem"></a>zrem</h4><blockquote>
+<p>zrem key member [member …]</p>
+</blockquote>
+<p>从集合中移除指定的成员。</p>
 
         
     </section>

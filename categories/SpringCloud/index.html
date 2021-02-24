@@ -131,116 +131,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/12/02/Skywalking 分布式链路追踪 /">Skywalking 分布式链路追踪</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/SpringCloud/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2019-12-02T04:30:00.000Z" itemprop="datePublished">2019-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Skywalking-分布式链路追踪"><a href="#Skywalking-分布式链路追踪" class="headerlink" title="Skywalking 分布式链路追踪"></a>Skywalking 分布式链路追踪</h1><h2 id="skywalking下载"><a href="#skywalking下载" class="headerlink" title="skywalking下载"></a>skywalking下载</h2><p>在官网下载最新版skywalking：<br>• <a href="http://skywalking.apache.org/downloads/" target="_blank" rel="noopener">下载地址</a></p>
-<p><a href="http://skywalking.apache.org/downloads/" target="_blank" rel="noopener">http://skywalking.apache.org/downloads/</a></p>
-<h2 id="解压后启动"><a href="#解压后启动" class="headerlink" title="解压后启动"></a>解压后启动</h2><p>启动skywalking后台程序和ui<br>在此之前可以修改ui等启动的端口。</p>
-<blockquote>
-<p>例如ui的端口，在webapp目录下–&gt;的webapp.yml文件，这里修改的是808端口，默认是8080</p>
-</blockquote>
-<h3 id="启动skywalking的方法是："><a href="#启动skywalking的方法是：" class="headerlink" title="启动skywalking的方法是："></a>启动skywalking的方法是：</h3><p>a.在解压下的bin目录，windows双击startup.bat，linux运行startup.sh</p>
-<p>b.启动后检查端口 </p>
-<h2 id="探针的配置"><a href="#探针的配置" class="headerlink" title="探针的配置"></a>探针的配置</h2><p>使用探针<br>在要监控的项目中使用探针，在开发环境，结合idea使用时，配置我们项目的启动参数：<br><figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-javaagent:D:<span class="symbol">\c</span>loud<span class="symbol">\a</span>pache-skywalking-apm-bin<span class="symbol">\a</span>gent<span class="symbol">\s</span>kywalking-agent.jar</span><br></pre></td></tr></table></figure></p>
-<p>-javaagent后面时skywalking探针的绝对地址，也就是之前下载的skywalking的压缩包解压出来后目录下的agent目录下的skywalking-agent.jar包。</p>
-<p>IDEA中使用 VM options中加入相同配置.<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">-javaagent:D:/apache-skywalking-apm-bin/agent/skywalking-agent.jar</span><br><span class="line">-Dskywalking.collector.<span class="attribute">backend_service</span>=localhost:12800</span><br><span class="line"></span><br><span class="line">agent（实际地址）</span><br><span class="line">IP 记得改 </span><br><span class="line"></span><br><span class="line">eg: </span><br><span class="line"></span><br><span class="line">-javaagent:E:/微服务/skywalking/apache-skywalking-apm-bin-es7/agent/skywalking-agent.jar</span><br><span class="line">-Dskywalking.collector.<span class="attribute">backend_service</span>=172.16.129.139:12800</span><br></pre></td></tr></table></figure></p>
-<h2 id="配置优先级"><a href="#配置优先级" class="headerlink" title="配置优先级"></a>配置优先级</h2><p>skywalking agent配置覆盖<br>在正式环境使用探针时，每使用一次，都去配置一下agent的参数信息也是比较繁琐的，所以skywalking有配置覆盖的选项，即不同的形式的配置优先级是不一样的，具体如下：</p>
-<blockquote>
-<p>JVM配置 &gt; 系统环境变量 &gt; agent.config</p>
-</blockquote>
-<p>上面所用的方式是agent.config的方式，优先级是最低的，所以还可以覆盖他的配置：<br>jvm配置：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-javaagent:/path/to/skywalking-agent.jar=<span class="string">[option1]</span>=<span class="string">[value1]</span>,<span class="string">[option2]</span>=<span class="string">[value2]</span></span><br><span class="line">-javaagent:skywalkingagent.jar=agent.service_name=test,collector.backend_service=xxx:<span class="number">11800</span></span><br></pre></td></tr></table></figure></p>
-<p>环境变量配置：<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">-Dskywalking.[option1]</span>=[value1]</span><br><span class="line"><span class="attr">-Dskywalking.service_name</span>=xxxx</span><br></pre></td></tr></table></figure></p>
-<p>这样在启动的时候，就不用每次去复制一份agent文件了，只需要在启动时加上参数即可</p>
-<h2 id="skywalking修改数据源"><a href="#skywalking修改数据源" class="headerlink" title="skywalking修改数据源"></a>skywalking修改数据源</h2><p> skywalking 版本 8.0， 对应使用mysql8.0,所以复制相应驱动至 skywalking\oap-libs<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">mysql-connector-java-8</span><span class="selector-class">.0</span><span class="selector-class">.21</span><span class="selector-class">.jar</span></span><br></pre></td></tr></table></figure></p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2019/12/02/SpringCloud 进阶之 Ribbon 和 Feign 实现服务调用负载均衡/">SpringCloud进阶之Ribbon和Feign(负载均衡)</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/SpringCloud/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2019-12-02T04:30:00.000Z" itemprop="datePublished">2019-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Spring-Cloud-进阶之Ribbon和Feign-负载均衡"><a href="#Spring-Cloud-进阶之Ribbon和Feign-负载均衡" class="headerlink" title="Spring Cloud 进阶之Ribbon和Feign(负载均衡)"></a>Spring Cloud 进阶之Ribbon和Feign(负载均衡)</h1><h2 id="Ribbon-负载均衡"><a href="#Ribbon-负载均衡" class="headerlink" title="Ribbon 负载均衡"></a>Ribbon 负载均衡</h2><p>Spring Cloud Ribbon是基于Netflix Ribbon实现的一套客户端,负载均衡的工具;</p>
-<h3 id="Ribbon-核心组件IRule"><a href="#Ribbon-核心组件IRule" class="headerlink" title="Ribbon 核心组件IRule"></a>Ribbon 核心组件IRule</h3><p>根据特定算法,从服务列表中选取一个要访问的服务:</p>
-<ul>
-<li>RoundRobinRule:轮询</li>
-<li>RandomRule:随机</li>
-<li>AvailabilityFilteringRule: 会先过滤掉由于多次访问故障而处于断路器跳闸状态的服务,以及并发的连接数量<br>超过阈值的服务,然后对剩余的服务列表按照轮询策略进行访问;</li>
-<li>WeightedResponseTimeRule: 根据平均响应时间计算所有服务的权重,响应时间越快,服务权重越大,被选中的机率越高;<br>刚启动时,如果统计信息不足,则使用RoundRobinRule策略,等统计信息足够时,会切换到WeightedResponseTimeRule</li>
-<li>RetryRule: 先按照RoundRobinRule的策略获取服务,如果获取服务失败,则在指定时间内会进行重试,获取可用的服务;</li>
-<li>BestAvailableRule: 会先过滤掉由于多次访问故障而处于断路器跳闸状态的服务,然后选择一个并发量最小的服务;</li>
-<li>ZoneAvoidanceRule: 默认规则,复合判断server所在区域的性能和server的可用性选择服务器;</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ConfigBean 添加新注解 @LoadBalanced, 用于加入 Ribbon 配置</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConfigBean</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="meta">@LoadBalanced</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RestTemplate <span class="title">getRestTemplate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> RestTemplate();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConfigBean</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="meta">@LoadBalanced</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RestTemplate <span class="title">getRestTemplate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> RestTemplate();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> IRule <span class="title">myRule</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> RoundRobinRule(); <span class="comment">// 显式的指定使用轮询算法</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 修改主启动类</span></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableEurekaClient</span></span><br><span class="line"><span class="meta">@RibbonClient</span>(name=<span class="string">"MICROSERVICECLOUD-DEPT"</span>, configuration=MySelfRule.class)  <span class="comment">// 自定义Ribbon配置类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DeptConsumer80_App</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        SpringApplication.run(DeptConsumer80_App.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// com.noodles.myrule</span></span><br><span class="line"><span class="comment">// 自定义Robbin规则类</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MySelfRule</span></span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> IRule <span class="title">myRule</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> RandomRule(); <span class="comment">//自定义均衡策略</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="Feign-负载均衡"><a href="#Feign-负载均衡" class="headerlink" title="Feign 负载均衡"></a>Feign 负载均衡</h2><p>Feign 是一个声明式WebService客户端:<br>使用方法: 定义一个接口,然后在上面添加注解;</p>
-<ul>
-<li>首先通过 @EnableFeignClients 注解开启 FeignClient 的功能。只有这个注解存在，才会在程序启动时开启 @FeignClient 注解的包扫描。</li>
-<li>根据Feign的规则实现接口，并在接口上面加上 @FeignClient 注解。</li>
-<li>程序启动后，会进行包扫描，扫描所有的@FeignClient 的注解的类，并将这些信息注入 IOC容器中。</li>
-<li>当接口的方法被调用时，通过JDK的代理来生成具体的 RequestTemplate 模板对象。</li>
-<li>根据 RequestTemplate 再生成 Http 请求的 Request 对象。</li>
-<li>Request 对象交给 Client 去处理，其中 Client 的网络请求框架可以是 HTTPURLConnection、HttpClient 和 OkHttp。</li>
-<li>最后Client被封装到LoadBalanceClient类，这个类结合类 Ribbon 做到了负载均衡。</li>
-</ul>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 新建DeptClientService接口,并新增注解@FeignClient，来指定调用哪个服务</span></span><br><span class="line">   <span class="meta">@FeignClient(value=<span class="meta-string">"MICROSERVICECLOUD-DEPT"</span>)</span></span><br><span class="line">   <span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DeptClientService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">       <span class="meta">@RequestMapping(value=<span class="meta-string">"/dept/get/&#123;id&#125;"</span>, method= RequestMethod.GET)</span></span><br><span class="line">       <span class="keyword">public</span> Dept <span class="keyword">get</span>(<span class="meta">@PathVariable(<span class="meta-string">"id"</span>)</span> long id);</span><br><span class="line"></span><br><span class="line">       <span class="meta">@RequestMapping(value=<span class="meta-string">"/dept/list"</span>, method= RequestMethod.GET)</span></span><br><span class="line">       <span class="keyword">public</span> List&lt;Dept&gt; list();</span><br><span class="line"></span><br><span class="line">       <span class="meta">@RequestMapping(value=<span class="meta-string">"/dept/add"</span>, method= RequestMethod.POST)</span></span><br><span class="line">       <span class="keyword">public</span> boolean add(Dept dept);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// microservice-consumer-dept-feign 工程修改Controller</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DeptController_Consumer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//用于服务调用</span></span><br><span class="line">	<span class="meta">@Autowired</span></span><br><span class="line">	<span class="keyword">private</span> DeptClientService service;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@RequestMapping(value=<span class="meta-string">"/consumer/dept/get/&#123;id&#125;"</span>)</span></span><br><span class="line">	<span class="keyword">public</span> Dept <span class="keyword">get</span>(<span class="meta">@PathVariable(<span class="meta-string">"id"</span>)</span> <span class="built_in">Long</span> id) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.service.<span class="keyword">get</span>(id);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@RequestMapping(value=<span class="meta-string">"/consumer/dept/list"</span>)</span></span><br><span class="line">	<span class="keyword">public</span> List&lt;Dept&gt; list()&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.service.list();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@RequestMapping(value=<span class="meta-string">"/consumer/dept/add"</span>)</span></span><br><span class="line">	<span class="keyword">public</span> Object add(Dept dept) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.service.add(dept);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2019/12/02/Eureka 服务注册与发现/">Eureka服务注册与发现</a>
         </h1>
         
@@ -318,6 +208,59 @@
 <h4 id="Cancel：服务下线"><a href="#Cancel：服务下线" class="headerlink" title="Cancel：服务下线"></a>Cancel：服务下线</h4><p>Eureka客户端在程序关闭时向Eureka服务器发送取消请求。 发送请求后，该客户端实例信息将从服务器的实例注册表中删除。该下线请求不会自动完成，它需要调用以下内容：</p>
 <p>DiscoveryManager.getInstance().shutdownComponent()；</p>
 <h5 id="Eviction：服务剔除"><a href="#Eviction：服务剔除" class="headerlink" title="Eviction：服务剔除"></a>Eviction：服务剔除</h5><p>在默认的情况下，当Eureka客户端连续90秒没有向Eureka服务器发送服务续约，即心跳，Eureka服务器会将该服务实例从服务注册列表删除，即服务剔除。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2019/12/02/Skywalking 分布式链路追踪 /">Skywalking 分布式链路追踪</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/SpringCloud/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-12-02T04:30:00.000Z" itemprop="datePublished">2019-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Skywalking-分布式链路追踪"><a href="#Skywalking-分布式链路追踪" class="headerlink" title="Skywalking 分布式链路追踪"></a>Skywalking 分布式链路追踪</h1><h2 id="skywalking下载"><a href="#skywalking下载" class="headerlink" title="skywalking下载"></a>skywalking下载</h2><p>在官网下载最新版skywalking：<br>• <a href="http://skywalking.apache.org/downloads/" target="_blank" rel="noopener">下载地址</a></p>
+<p><a href="http://skywalking.apache.org/downloads/" target="_blank" rel="noopener">http://skywalking.apache.org/downloads/</a></p>
+<h2 id="解压后启动"><a href="#解压后启动" class="headerlink" title="解压后启动"></a>解压后启动</h2><p>启动skywalking后台程序和ui<br>在此之前可以修改ui等启动的端口。</p>
+<blockquote>
+<p>例如ui的端口，在webapp目录下–&gt;的webapp.yml文件，这里修改的是808端口，默认是8080</p>
+</blockquote>
+<h3 id="启动skywalking的方法是："><a href="#启动skywalking的方法是：" class="headerlink" title="启动skywalking的方法是："></a>启动skywalking的方法是：</h3><p>a.在解压下的bin目录，windows双击startup.bat，linux运行startup.sh</p>
+<p>b.启动后检查端口 </p>
+<h2 id="探针的配置"><a href="#探针的配置" class="headerlink" title="探针的配置"></a>探针的配置</h2><p>使用探针<br>在要监控的项目中使用探针，在开发环境，结合idea使用时，配置我们项目的启动参数：<br><figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-javaagent:D:<span class="symbol">\c</span>loud<span class="symbol">\a</span>pache-skywalking-apm-bin<span class="symbol">\a</span>gent<span class="symbol">\s</span>kywalking-agent.jar</span><br></pre></td></tr></table></figure></p>
+<p>-javaagent后面时skywalking探针的绝对地址，也就是之前下载的skywalking的压缩包解压出来后目录下的agent目录下的skywalking-agent.jar包。</p>
+<p>IDEA中使用 VM options中加入相同配置.<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">-javaagent:D:/apache-skywalking-apm-bin/agent/skywalking-agent.jar</span><br><span class="line">-Dskywalking.collector.<span class="attribute">backend_service</span>=localhost:12800</span><br><span class="line"></span><br><span class="line">agent（实际地址）</span><br><span class="line">IP 记得改 </span><br><span class="line"></span><br><span class="line">eg: </span><br><span class="line"></span><br><span class="line">-javaagent:E:/微服务/skywalking/apache-skywalking-apm-bin-es7/agent/skywalking-agent.jar</span><br><span class="line">-Dskywalking.collector.<span class="attribute">backend_service</span>=172.16.129.139:12800</span><br></pre></td></tr></table></figure></p>
+<h2 id="配置优先级"><a href="#配置优先级" class="headerlink" title="配置优先级"></a>配置优先级</h2><p>skywalking agent配置覆盖<br>在正式环境使用探针时，每使用一次，都去配置一下agent的参数信息也是比较繁琐的，所以skywalking有配置覆盖的选项，即不同的形式的配置优先级是不一样的，具体如下：</p>
+<blockquote>
+<p>JVM配置 &gt; 系统环境变量 &gt; agent.config</p>
+</blockquote>
+<p>上面所用的方式是agent.config的方式，优先级是最低的，所以还可以覆盖他的配置：<br>jvm配置：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-javaagent:/path/to/skywalking-agent.jar=<span class="string">[option1]</span>=<span class="string">[value1]</span>,<span class="string">[option2]</span>=<span class="string">[value2]</span></span><br><span class="line">-javaagent:skywalkingagent.jar=agent.service_name=test,collector.backend_service=xxx:<span class="number">11800</span></span><br></pre></td></tr></table></figure></p>
+<p>环境变量配置：<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">-Dskywalking.[option1]</span>=[value1]</span><br><span class="line"><span class="attr">-Dskywalking.service_name</span>=xxxx</span><br></pre></td></tr></table></figure></p>
+<p>这样在启动的时候，就不用每次去复制一份agent文件了，只需要在启动时加上参数即可</p>
+<h2 id="skywalking修改数据源"><a href="#skywalking修改数据源" class="headerlink" title="skywalking修改数据源"></a>skywalking修改数据源</h2><p> skywalking 版本 8.0， 对应使用mysql8.0,所以复制相应驱动至 skywalking\oap-libs<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">mysql-connector-java-8</span><span class="selector-class">.0</span><span class="selector-class">.21</span><span class="selector-class">.jar</span></span><br></pre></td></tr></table></figure></p>
 
         
     </section>
@@ -421,7 +364,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/12/02/总览/">SpringCloud总览</a>
+            <a href="/2019/12/02/SpringCloud 进阶之 Ribbon 和 Feign 实现服务调用负载均衡/">SpringCloud进阶之Ribbon和Feign(负载均衡)</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -429,7 +372,7 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+    <time datetime="2019-12-02T04:30:00.000Z" itemprop="datePublished">2019-12-02</time>
 </a>
 
             
@@ -444,388 +387,29 @@
     
     <section class="article-body markdown-body">
         
-        <h2 id="总览"><a href="#总览" class="headerlink" title="总览"></a>总览</h2><p>Spring Cloud 为开发人员提供了快速构建分布式系统中一些常见模式的工具（例如配置管理、服务发现、断路器、智能路由、微代理、控制总线、一次性令牌、全局锁、leader选举、分布式session、集群状态）。<br>分布式系统的协调导致了样板模式, 使用 Spring Cloud 开发人员可以快速地支持实现这些模式的服务和应用程序。它们可以在任何分布式环境中很好地工作，包括开发人员自己的笔记本电脑，裸机数据中心，<br>以及Cloud Foundry等托管平台。</p>
-<p>Spring Cloud专注于为典型用例提供良好的开箱即用体验，并为其他用户提供可扩展性机制。</p>
-<h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h2><table>
-<thead>
-<tr>
-<th>功能（english）</th>
-<th>功能</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Distributed/versioned configuration</td>
-<td>分布式/版本化配置</td>
-</tr>
-<tr>
-<td>Service registration and discovery</td>
-<td>服务注册和发现</td>
-</tr>
-<tr>
-<td>Routing</td>
-<td>智能路由</td>
-</tr>
-<tr>
-<td>Service-to-service calls</td>
-<td>service-to-service调用</td>
-</tr>
-<tr>
-<td>Load balancing</td>
-<td>负载均衡</td>
-</tr>
-<tr>
-<td>Circuit Breakers</td>
-<td>断路器</td>
-</tr>
-<tr>
-<td>Global locks</td>
-<td>全局锁</td>
-</tr>
-<tr>
-<td>Leadership election and cluster state</td>
-<td>leader选举和集群状态管理</td>
-</tr>
-<tr>
-<td>Distributed messaging</td>
-<td>分布式消息</td>
-</tr>
-</tbody>
-</table>
-<h2 id="主要项目"><a href="#主要项目" class="headerlink" title="主要项目"></a>主要项目</h2><table>
-<thead>
-<tr>
-<th>项目名称</th>
-<th>项目职能</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Spring Cloud Config</td>
-<td>Spring Cloud提供的分布式配置中心，为外部配置提供了客户端和服务端的支持。</td>
-</tr>
-<tr>
-<td>Spring Cloud Netflix</td>
-<td>与各种NetflixOSS组件集成（Eureka，Hystrix，Zuul，Archaius等）。</td>
-</tr>
-<tr>
-<td>Spring Cloud Bus</td>
-<td>用于将服务和服务实例与分布式消息传递连接在一起的事件总线。用于跨群集传播状态更改（例如，配置更改事件）。</td>
-</tr>
-<tr>
-<td>Spring Cloud Cloudfoundry</td>
-<td>提供应用程序与 Pivotal Cloud Foundry 集成。提供服务发现实现，还可以轻松实现受SSO和OAuth2保护的资源。</td>
-</tr>
-<tr>
-<td>Spring Cloud Open Service Broker</td>
-<td>为构建实现 Open service broker API 的服务代理提供了一个起点。    </td>
-</tr>
-<tr>
-<td>Spring Cloud Cluster</td>
-<td>提供Leadership选举，如：Zookeeper, Redis, Hazelcast, Consul等常见状态模式的抽象和实现。</td>
-</tr>
-<tr>
-<td>Spring Cloud Consul</td>
-<td>封装了Consul操作，consul 是一个服务发现与配置工具，与Docker容器可以无缝集成。</td>
-</tr>
-<tr>
-<td>Spring Cloud Security</td>
-<td>基于Spring security的安全工具包，为你的应用程序添加安全控制。在Zuul代理中为负载平衡的OAuth2 rest客户端和身份验证头中继提供支持。</td>
-</tr>
-<tr>
-<td>Spring Cloud Sleuth</td>
-<td>Spring Cloud 提供的分布式链路跟踪组件，兼容zipkin、HTracer和基于日志的跟踪（ELK）</td>
-</tr>
-<tr>
-<td>Spring Cloud Data Flow</td>
-<td>大数据操作工具，作为Spring XD的替代产品，它是一个混合计算模型，结合了流数据与批量数据的处理方式。</td>
-</tr>
-<tr>
-<td>Spring Cloud Stream</td>
-<td>数据流操作开发包，封装了与Redis,Rabbit、Kafka等发送接收消息。</td>
-</tr>
-<tr>
-<td>Spring Cloud CLI</td>
-<td>基于 Spring Boot CLI，可以让你以命令行方式快速建立云组件。</td>
-</tr>
-<tr>
-<td>Spring Cloud OpenFeign</td>
-<td>一个http client客户端，致力于减少http client客户端构建的复杂性。</td>
-</tr>
-<tr>
-<td>Spring Cloud Gateway</td>
-<td>Spring Cloud 提供的网关服务组件</td>
-</tr>
-<tr>
-<td>Spring Cloud Stream App Starters</td>
-<td>Spring Cloud Stream App Starters是基于Spring Boot的Spring 集成应用程序，可提供与外部系统的集成。</td>
-</tr>
-<tr>
-<td>Spring Cloud Task</td>
-<td>提供云端计划任务管理、任务调度。</td>
-</tr>
-<tr>
-<td>Spring Cloud Task App Starters</td>
-<td>SpringCloud任务应用程序启动器是SpringBoot应用程序，它可以是任何进程，包括不会永远运行的Spring批处理作业，并且在有限的数据处理周期后结束/停止。</td>
-</tr>
-<tr>
-<td>Spring Cloud Zookeeper</td>
-<td>操作Zookeeper的工具包，用于使用zookeeper方式的服务发现和配置管理。</td>
-</tr>
-<tr>
-<td>Spring Cloud AWS</td>
-<td>提供与托管的AWS集成</td>
-</tr>
-<tr>
-<td>Spring Cloud Connectors</td>
-<td>便于云端应用程序在各种PaaS平台连接到后端，如：数据库和消息代理服务。</td>
-</tr>
-<tr>
-<td>Spring Cloud Starters</td>
-<td>Spring Boot式的启动项目，为Spring Cloud提供开箱即用的依赖管理。</td>
-</tr>
-<tr>
-<td>Spring Cloud Contract</td>
-<td>Spring Cloud Contract是一个总体项目，其中包含帮助用户成功实施消费者驱动合同方法的解决方案。</td>
-</tr>
-<tr>
-<td>Spring Cloud Pipelines</td>
-<td>Spring Cloud Pipelines提供了一个固定意见的部署管道，其中包含确保您的应用程序可以零停机方式部署并轻松回滚出错的步骤。</td>
-</tr>
-<tr>
-<td>Spring Cloud Function</td>
-<td>Spring Cloud Function通过函数促进业务逻辑的实现。 它支持Serverless 提供商之间的统一编程模型，以及独立运行（本地或PaaS）的能力。</td>
-</tr>
-</tbody>
-</table>
-<h2 id="SpringCloud-与-SpringBoot-版本兼容关系"><a href="#SpringCloud-与-SpringBoot-版本兼容关系" class="headerlink" title="SpringCloud 与 SpringBoot 版本兼容关系"></a>SpringCloud 与 SpringBoot 版本兼容关系</h2><table>
-<thead>
-<tr>
-<th>Release Train</th>
-<th>Boot Version</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Greenwich</td>
-<td>2.1.x</td>
-</tr>
-<tr>
-<td>Finchley</td>
-<td>2.0.x</td>
-</tr>
-<tr>
-<td>Edgware</td>
-<td>1.5.x</td>
-</tr>
-<tr>
-<td>Dalston</td>
-<td>1.5.x</td>
-</tr>
-</tbody>
-</table>
-<h2 id="SpringCloud-与子工程版本关系"><a href="#SpringCloud-与子工程版本关系" class="headerlink" title="SpringCloud 与子工程版本关系"></a>SpringCloud 与子工程版本关系</h2><table>
-<thead>
-<tr>
-<th>Component</th>
-<th>Edgware.SR5</th>
-<th>Finchley.SR2</th>
-<th>Finchley.BUILD-SNAPSHOT</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>spring-cloud-aws</td>
-<td>1.2.3.RELEASE</td>
-<td>2.0.1.RELEASE</td>
-<td>2.0.1.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-bus</td>
-<td>1.3.3.RELEASE</td>
-<td>2.0.0.RELEASE</td>
-<td>2.0.1.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-cli</td>
-<td>1.4.1.RELEASE</td>
-<td>2.0.0.RELEASE</td>
-<td>2.0.1.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-commons</td>
-<td>1.3.5.RELEASE</td>
-<td>2.0.2.RELEASE</td>
-<td>2.0.2.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-contract</td>
-<td>1.2.6.RELEASE</td>
-<td>2.0.2.RELEASE</td>
-<td>2.0.2.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-config</td>
-<td>1.4.5.RELEASE</td>
-<td>2.0.2.RELEASE</td>
-<td>2.0.2.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-netflix</td>
-<td>1.4.6.RELEASE</td>
-<td>2.0.2.RELEASE</td>
-<td>2.0.2.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-security</td>
-<td>1.2.3.RELEASE</td>
-<td>2.0.1.RELEASE</td>
-<td>2.0.1.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-cloudfoundry</td>
-<td>1.1.2.RELEASE</td>
-<td>2.0.1.RELEASE</td>
-<td>2.0.1.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-consul</td>
-<td>1.3.5.RELEASE</td>
-<td>2.0.1.RELEASE</td>
-<td>2.0.2.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-sleuth</td>
-<td>1.3.5.RELEASE</td>
-<td>2.0.2.RELEASE</td>
-<td>2.0.2.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-stream</td>
-<td>Ditmars.SR4</td>
-<td>Elmhurst.SR1</td>
-<td>Elmhurst.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-zookeeper</td>
-<td>1.2.2.RELEASE</td>
-<td>2.0.0.RELEASE</td>
-<td>2.0.1.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-boot</td>
-<td>1.5.16.RELEASE</td>
-<td>2.0.6.RELEASE</td>
-<td>2.0.7.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-task</td>
-<td>1.2.3.RELEASE</td>
-<td>2.0.0.RELEASE</td>
-<td>2.0.1.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-vault</td>
-<td>1.1.2.RELEASE</td>
-<td>2.0.2.RELEASE</td>
-<td>2.0.2.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-gateway</td>
-<td>1.0.2.RELEASE</td>
-<td>2.0.2.RELEASE</td>
-<td>2.0.2.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-openfeign</td>
-<td></td>
-<td>2.0.2.RELEASE</td>
-<td>2.0.2.BUILD-SNAPSHOT</td>
-</tr>
-<tr>
-<td>spring-cloud-function</td>
-<td>1.0.1.RELEASE</td>
-<td>1.0.0.RELEASE</td>
-<td>1.0.1.BUILD-SNAPSHOT</td>
-</tr>
-</tbody>
-</table>
-<h2 id="兼容"><a href="#兼容" class="headerlink" title="兼容"></a>兼容</h2><ul>
-<li><p>Finchley 构建并使用Spring Boot 2.0.x，与 Spring Boot 1.5.x 不兼容。</p>
-</li>
-<li><p>Dalston 和 Edgware 基于 Spring Boot 1.5.x 构建，不兼容 SpringBoot 2.0.x</p>
-</li>
-<li><p>Camden 版本迭代正式结束，Dalston 将于2018年12月结束使用，Edgware 将遵循 Spring Boot 1.5.x 的生命周期结束。</p>
-</li>
-<li><p>Camden 基于SpringBoot 1.4.x 构建，但是也会支持 1.5.x 版本</p>
-</li>
-<li><p>Brixton 和 Angel 迭代结束时间是2017年7月，Brixton 基于SpringBoot 1.3.x ，同时也支持 1.4.x 版本</p>
-</li>
-<li><p>Angel 基于 SpringBoot 1.2.x ,在某些方式不兼容 SpringBoot 1.3.x 。</p>
-</li>
-<li><p>Brixton 构建在SpringBoot 1.3.x ，不兼容 SpringBoot 1.2.x 。一些基于Angel的库和大多数应用程序可以在Brixton上正常运行，但如果OAuth2具备spring-cloud-security 1.0的特性，则需要在任何地方进行更改。x被使用(它们大多在1.3.0中被移到Spring Boot中)。</p>
-</li>
+        <h1 id="Spring-Cloud-进阶之Ribbon和Feign-负载均衡"><a href="#Spring-Cloud-进阶之Ribbon和Feign-负载均衡" class="headerlink" title="Spring Cloud 进阶之Ribbon和Feign(负载均衡)"></a>Spring Cloud 进阶之Ribbon和Feign(负载均衡)</h1><h2 id="Ribbon-负载均衡"><a href="#Ribbon-负载均衡" class="headerlink" title="Ribbon 负载均衡"></a>Ribbon 负载均衡</h2><p>Spring Cloud Ribbon是基于Netflix Ribbon实现的一套客户端,负载均衡的工具;</p>
+<h3 id="Ribbon-核心组件IRule"><a href="#Ribbon-核心组件IRule" class="headerlink" title="Ribbon 核心组件IRule"></a>Ribbon 核心组件IRule</h3><p>根据特定算法,从服务列表中选取一个要访问的服务:</p>
+<ul>
+<li>RoundRobinRule:轮询</li>
+<li>RandomRule:随机</li>
+<li>AvailabilityFilteringRule: 会先过滤掉由于多次访问故障而处于断路器跳闸状态的服务,以及并发的连接数量<br>超过阈值的服务,然后对剩余的服务列表按照轮询策略进行访问;</li>
+<li>WeightedResponseTimeRule: 根据平均响应时间计算所有服务的权重,响应时间越快,服务权重越大,被选中的机率越高;<br>刚启动时,如果统计信息不足,则使用RoundRobinRule策略,等统计信息足够时,会切换到WeightedResponseTimeRule</li>
+<li>RetryRule: 先按照RoundRobinRule的策略获取服务,如果获取服务失败,则在指定时间内会进行重试,获取可用的服务;</li>
+<li>BestAvailableRule: 会先过滤掉由于多次访问故障而处于断路器跳闸状态的服务,然后选择一个并发量最小的服务;</li>
+<li>ZoneAvoidanceRule: 默认规则,复合判断server所在区域的性能和server的可用性选择服务器;</li>
 </ul>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/12/02/集群版本Nacos/">集群Nacos</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/SpringCloud/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="集群Nacos"><a href="#集群Nacos" class="headerlink" title="集群Nacos"></a>集群Nacos</h1><h2 id="工作模式："><a href="#工作模式：" class="headerlink" title="工作模式："></a>工作模式：</h2><p>因此开源的时候推荐用户把所有服务列表放到一个vip下面，然后挂到一个域名下面</p>
-<p><a href="http://ip1:port/openAPI" target="_blank" rel="noopener">http://ip1:port/openAPI</a> 直连ip模式，机器挂则需要修改ip才可以使用。</p>
-<p><a href="http://VIP:port/openAPI" target="_blank" rel="noopener">http://VIP:port/openAPI</a> 挂载VIP模式，直连vip即可，下面挂server真实ip，可读性不好。</p>
-<p><a href="http://nacos.com:port/openAPI" target="_blank" rel="noopener">http://nacos.com:port/openAPI</a> 域名 + VIP模式，可读性好，而且换ip方便，推荐模式</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/338441/1561258986171-4ddec33c-a632-4ec3-bfff-7ef4ffc33fb9.jpeg" alt="工作模式"></p>
-<h2 id="环境说明："><a href="#环境说明：" class="headerlink" title="环境说明："></a>环境说明：</h2><ol>
-<li>64 bit OS Linux/Unix/Mac，推荐使用Linux系统。</li>
-<li>64 bit JDK 1.8+；下载.配置。</li>
-<li>Maven 3.2.x+；下载.配置。</li>
-<li>3个或3个以上Nacos节点才能构成集群。</li>
-</ol>
-<h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><p>使用源码编译：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">unzip nacos-source.zip</span><br><span class="line">cd nacos/</span><br><span class="line">mvn -Prelease-nacos clean <span class="keyword">install</span> -U  </span><br><span class="line">cd nacos/distribution/target/nacos-<span class="keyword">server</span><span class="number">-1.3</span><span class="number">.0</span>/nacos/<span class="keyword">bin</span></span><br></pre></td></tr></table></figure></p>
-<p>直接使用压缩包：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">unzip nacos-server-<span class="number">1.3</span>.<span class="number">0</span>.zip</span><br><span class="line">or</span><br><span class="line">tar -xvf nacos-server-<span class="number">1.3</span>.<span class="number">0</span><span class="selector-class">.tar</span><span class="selector-class">.gz</span></span><br><span class="line"></span><br><span class="line">cd nacos/bin</span><br></pre></td></tr></table></figure></p>
-<h2 id="配置集群配置文件"><a href="#配置集群配置文件" class="headerlink" title="配置集群配置文件"></a>配置集群配置文件</h2><p>在nacos的解压目录nacos/的conf目录下，有配置文件cluster.conf，请每行配置成ip:port。（请配置3个或3个以上节点）<br><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">ip1:</span><span class="number">8848</span></span><br><span class="line"><span class="symbol">ip2:</span><span class="number">8848</span></span><br><span class="line"><span class="symbol">ip3:</span><span class="number">8848</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="确定数据源"><a href="#确定数据源" class="headerlink" title="确定数据源"></a>确定数据源</h2><h3 id="使用内置数据源"><a href="#使用内置数据源" class="headerlink" title="使用内置数据源"></a>使用内置数据源</h3><p>无需进行任何配置</p>
-<h3 id="使用外置数据源"><a href="#使用外置数据源" class="headerlink" title="使用外置数据源"></a>使用外置数据源</h3><p>生产使用建议至少主备模式，或者采用高可用数据库。</p>
-<h2 id="初始化-MySQL-数据库"><a href="#初始化-MySQL-数据库" class="headerlink" title="初始化 MySQL 数据库"></a>初始化 MySQL 数据库</h2><p>在nacos的解压目录nacos/的conf目录下，存在sql文件 nacos-mysql.sql</p>
-<h2 id="修改application-properties-配置"><a href="#修改application-properties-配置" class="headerlink" title="修改application.properties 配置"></a>修改application.properties 配置</h2><p>application.properties配置文件</p>
-<h2 id="启动服务器"><a href="#启动服务器" class="headerlink" title="启动服务器"></a>启动服务器</h2><p>Linux/Unix/Mac<br>Stand-alone mode<br><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sh </span>startup.<span class="keyword">sh </span>-m standalone</span><br></pre></td></tr></table></figure></p>
-<p>集群模式 + 使用内置数据源<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh startup<span class="selector-class">.sh</span> -<span class="selector-tag">p</span> embedded</span><br></pre></td></tr></table></figure></p>
-<p>集群模式 + 使用外置数据源<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sh</span> startup.<span class="keyword">sh</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="服务注册发现-和-配置管理"><a href="#服务注册发现-和-配置管理" class="headerlink" title="服务注册发现 和 配置管理"></a>服务注册发现 和 配置管理</h2><p>服务注册<br><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X PUT 'http://127.0.0.1:<span class="number">8848</span>/nacos/v1/ns/instance?serviceName=nacos.naming.serviceName&amp;ip=20.18.7.10&amp;port=<span class="number">8080</span>'</span><br></pre></td></tr></table></figure></p>
-<p>服务发现<br><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X GET 'http://127.0.0.1:<span class="number">8848</span>/nacos/v1/ns/instances?serviceName=nacos.naming.serviceName'</span><br></pre></td></tr></table></figure></p>
-<p>发布配置<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">curl</span> -X POST <span class="string">"http://127.0.0.1:8848/nacos/v1/cs/configs?dataId=nacos.cfg.dataId&amp;group=test&amp;content=helloWorld"</span></span><br></pre></td></tr></table></figure></p>
-<p>获取配置<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X <span class="builtin-name">GET</span> <span class="string">"http://127.0.0.1:8848/nacos/v1/cs/configs?dataId=nacos.cfg.dataId&amp;group=test"</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="关闭服务器"><a href="#关闭服务器" class="headerlink" title="关闭服务器"></a>关闭服务器</h2><p>Linux/Unix/Mac<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sh</span> shutdown.<span class="keyword">sh</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ConfigBean 添加新注解 @LoadBalanced, 用于加入 Ribbon 配置</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConfigBean</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="meta">@LoadBalanced</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RestTemplate <span class="title">getRestTemplate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> RestTemplate();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConfigBean</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="meta">@LoadBalanced</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RestTemplate <span class="title">getRestTemplate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> RestTemplate();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> IRule <span class="title">myRule</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> RoundRobinRule(); <span class="comment">// 显式的指定使用轮询算法</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 修改主启动类</span></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableEurekaClient</span></span><br><span class="line"><span class="meta">@RibbonClient</span>(name=<span class="string">"MICROSERVICECLOUD-DEPT"</span>, configuration=MySelfRule.class)  <span class="comment">// 自定义Ribbon配置类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DeptConsumer80_App</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        SpringApplication.run(DeptConsumer80_App.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// com.noodles.myrule</span></span><br><span class="line"><span class="comment">// 自定义Robbin规则类</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MySelfRule</span></span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> IRule <span class="title">myRule</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> RandomRule(); <span class="comment">//自定义均衡策略</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Feign-负载均衡"><a href="#Feign-负载均衡" class="headerlink" title="Feign 负载均衡"></a>Feign 负载均衡</h2><p>Feign 是一个声明式WebService客户端:<br>使用方法: 定义一个接口,然后在上面添加注解;</p>
+<ul>
+<li>首先通过 @EnableFeignClients 注解开启 FeignClient 的功能。只有这个注解存在，才会在程序启动时开启 @FeignClient 注解的包扫描。</li>
+<li>根据Feign的规则实现接口，并在接口上面加上 @FeignClient 注解。</li>
+<li>程序启动后，会进行包扫描，扫描所有的@FeignClient 的注解的类，并将这些信息注入 IOC容器中。</li>
+<li>当接口的方法被调用时，通过JDK的代理来生成具体的 RequestTemplate 模板对象。</li>
+<li>根据 RequestTemplate 再生成 Http 请求的 Request 对象。</li>
+<li>Request 对象交给 Client 去处理，其中 Client 的网络请求框架可以是 HTTPURLConnection、HttpClient 和 OkHttp。</li>
+<li>最后Client被封装到LoadBalanceClient类，这个类结合类 Ribbon 做到了负载均衡。</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 新建DeptClientService接口,并新增注解@FeignClient，来指定调用哪个服务</span></span><br><span class="line">   <span class="meta">@FeignClient(value=<span class="meta-string">"MICROSERVICECLOUD-DEPT"</span>)</span></span><br><span class="line">   <span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DeptClientService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">       <span class="meta">@RequestMapping(value=<span class="meta-string">"/dept/get/&#123;id&#125;"</span>, method= RequestMethod.GET)</span></span><br><span class="line">       <span class="keyword">public</span> Dept <span class="keyword">get</span>(<span class="meta">@PathVariable(<span class="meta-string">"id"</span>)</span> long id);</span><br><span class="line"></span><br><span class="line">       <span class="meta">@RequestMapping(value=<span class="meta-string">"/dept/list"</span>, method= RequestMethod.GET)</span></span><br><span class="line">       <span class="keyword">public</span> List&lt;Dept&gt; list();</span><br><span class="line"></span><br><span class="line">       <span class="meta">@RequestMapping(value=<span class="meta-string">"/dept/add"</span>, method= RequestMethod.POST)</span></span><br><span class="line">       <span class="keyword">public</span> boolean add(Dept dept);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// microservice-consumer-dept-feign 工程修改Controller</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DeptController_Consumer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//用于服务调用</span></span><br><span class="line">	<span class="meta">@Autowired</span></span><br><span class="line">	<span class="keyword">private</span> DeptClientService service;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@RequestMapping(value=<span class="meta-string">"/consumer/dept/get/&#123;id&#125;"</span>)</span></span><br><span class="line">	<span class="keyword">public</span> Dept <span class="keyword">get</span>(<span class="meta">@PathVariable(<span class="meta-string">"id"</span>)</span> <span class="built_in">Long</span> id) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.service.<span class="keyword">get</span>(id);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@RequestMapping(value=<span class="meta-string">"/consumer/dept/list"</span>)</span></span><br><span class="line">	<span class="keyword">public</span> List&lt;Dept&gt; list()&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.service.list();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@RequestMapping(value=<span class="meta-string">"/consumer/dept/add"</span>)</span></span><br><span class="line">	<span class="keyword">public</span> Object add(Dept dept) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.service.add(dept);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
         
     </section>
@@ -884,7 +468,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/12/02/Sentinel 主流框架的适配/">Sentinel 主流框架的适配</a>
+            <a href="/2018/12/02/Spring Cloud Alibaba 组件介绍/">Spring Cloud Alibaba 组件</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -907,25 +491,71 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="Sentinel-主流框架的适配"><a href="#Sentinel-主流框架的适配" class="headerlink" title="Sentinel 主流框架的适配"></a>Sentinel 主流框架的适配</h1><p><a href="https://github.com/alibaba/Sentinel/wiki/%E4%B8%BB%E6%B5%81%E6%A1%86%E6%9E%B6%E7%9A%84%E9%80%82%E9%85%8D" target="_blank" rel="noopener">适配</a></p>
-<p>为了减少开发的复杂程度，Sentinel对大部分的主流框架，例如 Web Servlet、Dubbo、Spring Cloud、gRPC、Spring WebFlux、Reactor 等都做了适配。您只需要引入对应的依赖即可方便地整合 Sentinel。<br>包括以下配置：</p>
-<h3 id="Web-适配"><a href="#Web-适配" class="headerlink" title="Web 适配"></a>Web 适配</h3><ul>
-<li>Spring Boot/Spring Cloud</li>
-<li>Web Servlet</li>
-<li>Spring WebFlux<h3 id="RPC-适配"><a href="#RPC-适配" class="headerlink" title="RPC 适配"></a>RPC 适配</h3></li>
-<li>Apache Dubbo</li>
-<li>gRPC</li>
-<li>Feign</li>
-<li>SOFARPC<h3 id="HTTP-client-适配"><a href="#HTTP-client-适配" class="headerlink" title="HTTP client 适配"></a>HTTP client 适配</h3></li>
-<li>Apache HttpClient</li>
-<li>OkHttp</li>
-<li>Reactive 适配</li>
-<li>Reactor<h3 id="API-Gateway-适配"><a href="#API-Gateway-适配" class="headerlink" title="API Gateway 适配"></a>API Gateway 适配</h3></li>
-<li>Spring Cloud Gateway</li>
-<li>Netflix Zuul 1.x</li>
-<li>Netflix Zuul 2.x</li>
-<li>Apache RocketMQ</li>
+        <h1 id="Spring-Cloud-Alibaba-组件"><a href="#Spring-Cloud-Alibaba-组件" class="headerlink" title="Spring Cloud Alibaba 组件"></a>Spring Cloud Alibaba 组件</h1><ol>
+<li><p>Sentinel：把流量作为切入点，从流量控制、熔断降级、系统负载保护等多个维度保护服务的稳定性。</p>
+</li>
+<li><p>Nacos：一个更易于构建云原生应用的动态服务发现、配置管理和服务管理平台。</p>
+</li>
+<li><p>RocketMQ：一款开源的分布式消息系统，基于高可用分布式集群技术，提供低延时的、高可靠的消息发布与订阅服务。</p>
+</li>
+<li><p>Dubbo：Apache Dubbo™ 是一款高性能 Java RPC 框架。</p>
+</li>
+<li><p>Seata：阿里巴巴开源产品，一个易于使用的高性能微服务分布式事务解决方案。</p>
+</li>
+<li><p>Alibaba Cloud ACM：一款在分布式架构环境中对应用配置进行集中管理和推送的应用配置中心产品。</p>
+</li>
+<li><p>Alibaba Cloud OSS: 阿里云对象存储服务（Object Storage Service，简称 OSS），是阿里云提供的海量、安全、低成本、高可靠的云存储服务。您可以在任何应用、任何时间、任何地点存储和访问任意类型的数据。</p>
+</li>
+<li><p>Alibaba Cloud SchedulerX: 阿里中间件团队开发的一款分布式任务调度产品，提供秒级、精准、高可靠、高可用的定时（基于 Cron 表达式）任务调度服务。</p>
+</li>
+<li><p>Alibaba Cloud SMS: 覆盖全球的短信服务，友好、高效、智能的互联化通讯能力，帮助企业迅速搭建客户触达通道。</p>
+</li>
+</ol>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/Spring Cloud Alibaba 的学习之熔断篇/">熔断</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/SpringCloud/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="熔断"><a href="#熔断" class="headerlink" title="熔断"></a>熔断</h1><h2 id="什么是服务雪崩"><a href="#什么是服务雪崩" class="headerlink" title="什么是服务雪崩"></a>什么是服务雪崩</h2><p>在微服务架构中，根据业务来拆分成一个个的服务，服务与服务之间可以通过 HTTP/RPC 相互调用，在 Spring Cloud 中可以用 ==RestTemplate== + ==LoadBalanceClient== 和 ==Feign== 来调用。为了保证其高可用，单个服务通常会集群部署。由于网络原因或者自身的原因，服务并不能保证 100% 可用，如果单个服务出现问题，调用这个服务就会出现线程阻塞，此时若有大量的请求涌入，Servlet 容器的线程资源会被消耗完毕，导致服务瘫痪。服务与服务之间的依赖性，故障会传播，会对整个微服务系统造成灾难性的严重后果，这就是服务故障的 “雪崩” 效应。为了解决这个问题，业界提出了 ++熔断器模型++。</p>
+<h2 id="Spring-Cloud微服务设计中如何才能实现这样的机制呢？这里涉及到几个问题："><a href="#Spring-Cloud微服务设计中如何才能实现这样的机制呢？这里涉及到几个问题：" class="headerlink" title="Spring Cloud微服务设计中如何才能实现这样的机制呢？这里涉及到几个问题："></a>Spring Cloud微服务设计中如何才能实现这样的机制呢？这里涉及到几个问题：</h2><ul>
+<li><p>微服务如何定义为故障，熔断的条件是什么？如何确定当前调用的微服务不可用，从而可以实现熔断操作；</p>
+</li>
+<li><p>被定义为故障的微服务恢复后如何让熔断方感知？当前微服务何时才可以继续正常的调用需要调用的其他微服务，实现故障恢复；</p>
+</li>
 </ul>
+<p>Spring Cloud的代码实现机制是什么样的？</p>
+<blockquote>
+<p>在Spring Cloud微服务设计中需要通过集成Hystrix框架来实现微服务间的熔断保护机制，Hystrix框架会通过监控微服务之间的调用情况，来决定是否启动熔断保护。</p>
+</blockquote>
 
         
     </section>
@@ -1000,7 +630,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/12/02/单机版本Nacos/">nacos单机模式支持mysql</a>
+            <a href="/2018/12/02/SpringCloud Alibaba 整体结构/">SpringCloud Alibaba</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -1023,13 +653,93 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="单机模式支持mysql"><a href="#单机模式支持mysql" class="headerlink" title="单机模式支持mysql"></a>单机模式支持mysql</h1><p>在0.7版本之前，在单机模式时nacos使用嵌入式数据库实现数据的存储，不方便观察数据存储的基本情况。0.7版本增加了支持mysql数据源能力，具体的操作步骤：</p>
+        <h1 id="SpringCloud-Alibaba"><a href="#SpringCloud-Alibaba" class="headerlink" title="SpringCloud Alibaba"></a>SpringCloud Alibaba</h1><p><img src="https://img-blog.csdnimg.cn/20200612191916995.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NteDEwNjAyMjAyMTk=,size_16,color_FFFFFF,t_70" alt="SpringCloud Alibaba"></p>
+<p>官方文档：<br><a href="https://github.com/alibaba/spring-cloud-alibaba/blob/master/README-zh.md" target="_blank" rel="noopener">README</a></p>
 <ol>
-<li>安装数据库，版本要求：5.6.5+</li>
-<li>初始化mysql数据库，数据库初始化文件：nacos-mysql.sql</li>
-<li>修改conf/application.properties文件，增加支持mysql数据源配置（目前只支持mysql），添加mysql数据源的url、用户名和密码。</li>
+<li>服务限流降级</li>
 </ol>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring.datasource.platform</span>=mysql</span><br><span class="line"></span><br><span class="line"><span class="attr">db.num</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">db.url.0</span>=jdbc:mysql://<span class="number">11.162</span>.<span class="number">196.16</span>:<span class="number">3306</span>/nacos_devtest?characterEncoding=utf8&amp;connectTimeout=<span class="number">1000</span>&amp;socketTimeout=<span class="number">3000</span>&amp;autoReconnect=<span class="literal">true</span></span><br><span class="line"><span class="attr">db.user</span>=nacos_devtest</span><br><span class="line"><span class="attr">db.password</span>=youdontknow</span><br></pre></td></tr></table></figure>
+<p>默认支持 WebServlet、WebFlux, OpenFeign、RestTemplate、Spring Cloud Gateway, Zuul, Dubbo 和 RocketMQ 限流降级功能的接入，可以在运行时通过控制台实时修改限流降级规则，还支持查看限流降级 Metrics 监控。</p>
+<ol start="2">
+<li>服务注册与发现</li>
+</ol>
+<p>适配 Spring Cloud 服务注册与发现标准，默认集成了 Ribbon 的支持。</p>
+<ol start="3">
+<li>分布式配置管理</li>
+</ol>
+<p>支持分布式系统中的外部化配置，配置更改时自动刷新。</p>
+<ol start="4">
+<li>消息驱动能力</li>
+</ol>
+<p>基于 Spring Cloud Stream 为微服务应用构建消息驱动能力。</p>
+<ol start="5">
+<li><p>分布式事务<br>使用 @GlobalTransactional 注解， 高效并且对业务零侵入地解决分布式事务问题。</p>
+</li>
+<li><p>阿里云对象存储</p>
+</li>
+</ol>
+<p>阿里云提供的海量、安全、低成本、高可靠的云存储服务。支持在任何应用、任何时间、任何地点存储和访问任意类型的数据。</p>
+<ol start="7">
+<li>分布式任务调度</li>
+</ol>
+<p>提供秒级、精准、高可靠、高可用的定时（基于 Cron 表达式）任务调度服务。同时提供分布式的任务执行模型，如网格任务。网格任务支持海量子任务均匀分配到所有 Worker（schedulerx-client）上执行。</p>
+<ol start="8">
+<li>阿里云短信服务</li>
+</ol>
+<p>覆盖全球的短信服务，友好、高效、智能的互联化通讯能力，帮助企业迅速搭建客户触达通道。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/Sentinel 主流框架的适配/">Sentinel 主流框架的适配</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/SpringCloud/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Sentinel-主流框架的适配"><a href="#Sentinel-主流框架的适配" class="headerlink" title="Sentinel 主流框架的适配"></a>Sentinel 主流框架的适配</h1><p><a href="https://github.com/alibaba/Sentinel/wiki/%E4%B8%BB%E6%B5%81%E6%A1%86%E6%9E%B6%E7%9A%84%E9%80%82%E9%85%8D" target="_blank" rel="noopener">适配</a></p>
+<p>为了减少开发的复杂程度，Sentinel对大部分的主流框架，例如 Web Servlet、Dubbo、Spring Cloud、gRPC、Spring WebFlux、Reactor 等都做了适配。您只需要引入对应的依赖即可方便地整合 Sentinel。<br>包括以下配置：</p>
+<h3 id="Web-适配"><a href="#Web-适配" class="headerlink" title="Web 适配"></a>Web 适配</h3><ul>
+<li>Spring Boot/Spring Cloud</li>
+<li>Web Servlet</li>
+<li>Spring WebFlux<h3 id="RPC-适配"><a href="#RPC-适配" class="headerlink" title="RPC 适配"></a>RPC 适配</h3></li>
+<li>Apache Dubbo</li>
+<li>gRPC</li>
+<li>Feign</li>
+<li>SOFARPC<h3 id="HTTP-client-适配"><a href="#HTTP-client-适配" class="headerlink" title="HTTP client 适配"></a>HTTP client 适配</h3></li>
+<li>Apache HttpClient</li>
+<li>OkHttp</li>
+<li>Reactive 适配</li>
+<li>Reactor<h3 id="API-Gateway-适配"><a href="#API-Gateway-适配" class="headerlink" title="API Gateway 适配"></a>API Gateway 适配</h3></li>
+<li>Spring Cloud Gateway</li>
+<li>Netflix Zuul 1.x</li>
+<li>Netflix Zuul 2.x</li>
+<li>Apache RocketMQ</li>
+</ul>
+
         
     </section>
 </article>

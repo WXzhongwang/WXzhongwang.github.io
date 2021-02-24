@@ -131,7 +131,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/08/07/Java基础面试题四/">Java基础面试题四</a>
+            <a href="/2021/02/24/Java基础面试题四/">Java基础面试题四</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -139,7 +139,7 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2019-08-07T14:37:25.985Z" itemprop="datePublished">2019-08-07</time>
+    <time datetime="2021-02-24T14:46:06.653Z" itemprop="datePublished">2021-02-24</time>
 </a>
 
             
@@ -206,7 +206,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/08/07/Java基础面试题五/">Java基础面试题五</a>
+            <a href="/2021/02/24/Java基础面试题五/">Java基础面试题五</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -214,7 +214,7 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2019-08-07T14:37:25.985Z" itemprop="datePublished">2019-08-07</time>
+    <time datetime="2021-02-24T14:46:06.652Z" itemprop="datePublished">2021-02-24</time>
 </a>
 
             
@@ -270,7 +270,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/08/07/Java基础面试题三/">Java基础面试题三</a>
+            <a href="/2021/02/24/Java基础面试题二/">Java基础面试题二</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -278,7 +278,48 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2019-08-07T14:37:25.984Z" itemprop="datePublished">2019-08-07</time>
+    <time datetime="2021-02-24T14:46:06.651Z" itemprop="datePublished">2021-02-24</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/面试题/">面试题</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>Java基础面试题二</p>
+<blockquote>
+<p>Q1: 什么是死锁(deadlock)？ </p>
+</blockquote>
+<p>两个进程都在等待对方执行完毕才能继续往下执行的时候就发生了死锁。结果就是两个进程都陷入了无限的等待中。<br>代码表示：<br><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLockDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> void main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">    DieLock dl1 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">true</span>);</span><br><span class="line">    DieLock dl2 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">false</span>);</span><br><span class="line">    dl1.start();</span><br><span class="line">    dl2.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>理想状态下dl1线程为true从if执行先打出”if objA”然后再接着打出”if objB”之后释放A、B的锁对象，之后dl2线程执行else语句打出”else objB”，”else objA”。<br>非理想状态下dl1先打出”if objA”，之后线程dl2执行打出”else objB”，然后1、2线程的锁对象A和B都处于被锁的状态，两个线程争夺锁对象发生死锁现象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLock</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> flag;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DieLock</span><span class="params">(<span class="keyword">boolean</span> flag)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.flag = flag;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (flag) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                System.out.println(<span class="string">"if objA"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"if objB"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                System.out.println(<span class="string">"else objB"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"else objA"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2021/02/24/Java基础面试题三/">Java基础面试题三</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2021-02-24T14:46:06.649Z" itemprop="datePublished">2021-02-24</time>
 </a>
 
             
@@ -374,7 +415,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/08/07/Java基础面试题二/">Java基础面试题二</a>
+            <a href="/2021/02/24/Java基础面试题/">Java基础面试题一</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -382,48 +423,7 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2019-08-07T14:37:25.984Z" itemprop="datePublished">2019-08-07</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/面试题/">面试题</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>Java基础面试题二</p>
-<blockquote>
-<p>Q1: 什么是死锁(deadlock)？ </p>
-</blockquote>
-<p>两个进程都在等待对方执行完毕才能继续往下执行的时候就发生了死锁。结果就是两个进程都陷入了无限的等待中。<br>代码表示：<br><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLockDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> void main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">    DieLock dl1 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">true</span>);</span><br><span class="line">    DieLock dl2 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">false</span>);</span><br><span class="line">    dl1.start();</span><br><span class="line">    dl2.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>理想状态下dl1线程为true从if执行先打出”if objA”然后再接着打出”if objB”之后释放A、B的锁对象，之后dl2线程执行else语句打出”else objB”，”else objA”。<br>非理想状态下dl1先打出”if objA”，之后线程dl2执行打出”else objB”，然后1、2线程的锁对象A和B都处于被锁的状态，两个线程争夺锁对象发生死锁现象。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLock</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> flag;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DieLock</span><span class="params">(<span class="keyword">boolean</span> flag)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.flag = flag;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (flag) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                System.out.println(<span class="string">"if objA"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"if objB"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                System.out.println(<span class="string">"else objB"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"else objA"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2019/08/07/Java基础面试题/">Java基础面试题一</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2019-08-07T14:37:25.983Z" itemprop="datePublished">2019-08-07</time>
+    <time datetime="2021-02-24T14:46:06.647Z" itemprop="datePublished">2021-02-24</time>
 </a>
 
             
@@ -522,44 +522,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/03/01/字符型常量和字符串常量的区别/">字符型常量和字符串常量的区别</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2019-03-01T02:10:00.000Z" itemprop="datePublished">2019-03-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="字符型常量和字符串常量的区别"><a href="#字符型常量和字符串常量的区别" class="headerlink" title="字符型常量和字符串常量的区别"></a>字符型常量和字符串常量的区别</h1><p>形式上: 字符常量是单引号引起的一个字符; 字符串常量是双引号引起的若干个字符</p>
-<p>含义上: 字符常量相当于一个整型值( ASCII 值),可以参加表达式运算; 字符串常量代表一个地址值(该字符串在内存中存放位置)</p>
-<p>占内存大小: 字符常量只占2个字节; 字符串常量占若干个字节(至少一个字符结束标志) (注意： char在Java中占两个字节)</p>
-<p>数据类型     大小        包装器类型<br>boolean      -           Boolean<br>char       16bits        Character<br>byte        8bits        Byte<br>short      16bits        Short<br>int        32bits        Integer<br>long       64bits        Long<br>float      32bits        Float<br>double     64bits        Double</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2019/03/01/Java 并发进阶常见面试题总结/">Java 并发进阶常见面试题总结</a>
         </h1>
         
@@ -600,6 +562,44 @@
 </ul>
 <p>但是由于 JVM 具有指令重排的特性，执行顺序有可能变成 1-&gt;3-&gt;2。指令重排在单线程环境下不会出先问题，但是在多线程环境下会导致一个线程获得还没有初始化的实例。例如，线程 T1 执行了 1 和 3，此时 T2 调用 getUniqueInstance() 后发现 uniqueInstance 不为空，因此返回 uniqueInstance，但此时 uniqueInstance 还未被初始化。</p>
 <p>使用 volatile 可以禁止 JVM 的指令重排，保证在多线程环境下也能正常运行。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2019/03/01/字符型常量和字符串常量的区别/">字符型常量和字符串常量的区别</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-03-01T02:10:00.000Z" itemprop="datePublished">2019-03-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java/">Java</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="字符型常量和字符串常量的区别"><a href="#字符型常量和字符串常量的区别" class="headerlink" title="字符型常量和字符串常量的区别"></a>字符型常量和字符串常量的区别</h1><p>形式上: 字符常量是单引号引起的一个字符; 字符串常量是双引号引起的若干个字符</p>
+<p>含义上: 字符常量相当于一个整型值( ASCII 值),可以参加表达式运算; 字符串常量代表一个地址值(该字符串在内存中存放位置)</p>
+<p>占内存大小: 字符常量只占2个字节; 字符串常量占若干个字节(至少一个字符结束标志) (注意： char在Java中占两个字节)</p>
+<p>数据类型     大小        包装器类型<br>boolean      -           Boolean<br>char       16bits        Character<br>byte        8bits        Byte<br>short      16bits        Short<br>int        32bits        Integer<br>long       64bits        Long<br>float      32bits        Float<br>double     64bits        Double</p>
 
         
     </section>
@@ -727,7 +727,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/12/02/fastjson autoType 问题/">fastjson enable_autotype</a>
+            <a href="/2018/12/02/个人面试遇到的一些问题/">个人面试遇到的一些问题</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -741,7 +741,7 @@
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
 </div>
 
 
@@ -750,32 +750,21 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="fastjson-enable-autotype"><a href="#fastjson-enable-autotype" class="headerlink" title="fastjson enable_autotype"></a>fastjson enable_autotype</h1><p><a href="https://github.com/alibaba/fastjson/wiki/enable_autotype" target="_blank" rel="noopener">https://github.com/alibaba/fastjson/wiki/enable_autotype</a></p>
-<h2 id="打开AutoType功能"><a href="#打开AutoType功能" class="headerlink" title="打开AutoType功能"></a>打开AutoType功能</h2><p>在1.2.25之后的版本，以及所有的.sec01后缀版本中，autotype功能是受限的，和之前的版本不同，如果在升级的过程中遇到问题，可以通过以下方法配置。</p>
-<h2 id="一、添加autotype白名单"><a href="#一、添加autotype白名单" class="headerlink" title="一、添加autotype白名单"></a>一、添加autotype白名单</h2><p>添加白名单有三种方式，三选一，如下:<br></p>
-<h3 id="1-在代码中配置"><a href="#1-在代码中配置" class="headerlink" title="1. 在代码中配置"></a>1. 在代码中配置</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ParserConfig.getGlobalInstance().addAccept(<span class="string">"com.taobao.pac.client.sdk.dataobject."</span>);</span><br></pre></td></tr></table></figure>
-<p>如果有多个包名前缀，分多次addAccept</p>
-<h3 id="2-加上JVM启动参数"><a href="#2-加上JVM启动参数" class="headerlink" title="2. 加上JVM启动参数"></a>2. 加上JVM启动参数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Dfastjson.parser.autoTypeAccept=com.taobao.pac.client.sdk.dataobject.,com.cainiao.</span><br></pre></td></tr></table></figure>
-<p>如果有多个包名前缀，用逗号隔开</p>
-<h3 id="3-通过fastjson-properties文件配置。"><a href="#3-通过fastjson-properties文件配置。" class="headerlink" title="3. 通过fastjson.properties文件配置。"></a>3. 通过fastjson.properties文件配置。</h3><p>在1.2.25/1.2.26版本支持通过类路径的fastjson.properties文件来配置，配置方式如下：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastjson<span class="selector-class">.parser</span><span class="selector-class">.autoTypeAccept</span>=com<span class="selector-class">.taobao</span><span class="selector-class">.pac</span><span class="selector-class">.client</span><span class="selector-class">.sdk</span><span class="selector-class">.dataobject</span>.,com<span class="selector-class">.cainiao</span>. <span class="comment">// 如果有多个包名前缀，用逗号隔开</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="二、打开autotype功能"><a href="#二、打开autotype功能" class="headerlink" title="二、打开autotype功能"></a>二、打开autotype功能</h2><p>如果通过配置白名单解决不了问题，可以选择继续打开autotype功能，fastjson在新版本中内置了多重防护，但是还是可能会存在一定风险。两种方法打开autotype，二选一，如下：</p>
-<h3 id="1、JVM启动参数"><a href="#1、JVM启动参数" class="headerlink" title="1、JVM启动参数"></a>1、JVM启动参数</h3><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">-Dfastjson.parser.autoTypeSupport</span>=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<h3 id="2、代码中设置"><a href="#2、代码中设置" class="headerlink" title="2、代码中设置"></a>2、代码中设置</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ParserConfig.getGlobalInstance().setAutoTypeSupport(<span class="keyword">true</span>);</span><br></pre></td></tr></table></figure>
-<p>如果有使用非全局ParserConfig则用另外调用setAutoTypeSupport(true)；</p>
-<h2 id="三、配置autoType黑名单"><a href="#三、配置autoType黑名单" class="headerlink" title="三、配置autoType黑名单"></a>三、配置autoType黑名单</h2><p>打开AutoType之后，是基于内置黑名单来实现安全的，但黑名单是穷举不完的，如果发现了新的风险类，可以通过以下配置来增加黑名单：</p>
-<h3 id="1-配置JVM启动参数"><a href="#1-配置JVM启动参数" class="headerlink" title="1. 配置JVM启动参数"></a>1. 配置JVM启动参数</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Dfastjson<span class="selector-class">.parser</span><span class="selector-class">.deny</span>=xx.xxx</span><br></pre></td></tr></table></figure>
-<ul>
-<li>这里的xx.xxx是包名前缀，如果有多个包名前缀，用逗号隔开</li>
-</ul>
-<h3 id="2-通过fastjson-properties来配置"><a href="#2-通过fastjson-properties来配置" class="headerlink" title="2. 通过fastjson.properties来配置"></a>2. 通过fastjson.properties来配置</h3><p>在1.2.25之后的版本支持通过类路径的fastjson.properties文件来配置，配置方式如下：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Dfastjson<span class="selector-class">.parser</span><span class="selector-class">.deny</span>=xx.xxx</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>这里的xx.xxx是包名前缀，如果有多个包名前缀，用逗号隔开</li>
-</ul>
-<h3 id="3-代码中配置"><a href="#3-代码中配置" class="headerlink" title="3. 代码中配置"></a>3. 代码中配置</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ParserConfig.getGlobalInstance().addDeny(<span class="string">"xx.xxx"</span>);</span><br></pre></td></tr></table></figure>
-<ul>
-<li>这里的xx.xxx是包名前缀，如果有多个包名前缀，用逗号隔开</li>
-</ul>
+        <h1 id="1-Dubbo-Zk-如何实现动态选择负载均衡策略"><a href="#1-Dubbo-Zk-如何实现动态选择负载均衡策略" class="headerlink" title="1. Dubbo + Zk 如何实现动态选择负载均衡策略"></a>1. Dubbo + Zk 如何实现动态选择负载均衡策略</h1><h1 id="2-Nginx-能实现哪些功能？-如何修改请求头？"><a href="#2-Nginx-能实现哪些功能？-如何修改请求头？" class="headerlink" title="2. Nginx 能实现哪些功能？ 如何修改请求头？"></a>2. Nginx 能实现哪些功能？ 如何修改请求头？</h1><pre><code>静态代理（资源托管）
+反向代理（请求转发）
 
+方式一：proxy_set_header
+proxy_set_header   iden    &quot;student&quot;;
+proxy_set_header   age     &quot;21&quot;;
+
+方式二：set 方式
+set $iden &quot;student&quot;;
+set $age &quot;21&quot;;
+</code></pre><h1 id="3-Java-什么时候会发生锁升级为重量级锁？"><a href="#3-Java-什么时候会发生锁升级为重量级锁？" class="headerlink" title="3. Java 什么时候会发生锁升级为重量级锁？"></a>3. Java 什么时候会发生锁升级为重量级锁？</h1><pre><code>（锁膨胀）
+</code></pre><h1 id="4-HashMap并发过程中出现CPU崩溃？什么原因？"><a href="#4-HashMap并发过程中出现CPU崩溃？什么原因？" class="headerlink" title="4. HashMap并发过程中出现CPU崩溃？什么原因？"></a>4. HashMap并发过程中出现CPU崩溃？什么原因？</h1><pre><code>https://blog.csdn.net/c929833623lvcha/article/details/8924414?utm_source=jiancool
+</code></pre><h1 id="5-ConcurrentHashMap-锁具体实现原理？"><a href="#5-ConcurrentHashMap-锁具体实现原理？" class="headerlink" title="5. ConcurrentHashMap 锁具体实现原理？"></a>5. ConcurrentHashMap 锁具体实现原理？</h1><h1 id="6-SpringCloud-熔断机制，客户端如何捕获异常？"><a href="#6-SpringCloud-熔断机制，客户端如何捕获异常？" class="headerlink" title="6. SpringCloud 熔断机制，客户端如何捕获异常？"></a>6. SpringCloud 熔断机制，客户端如何捕获异常？</h1><h1 id="7-Zookeeper的选举机制？一定是过半选举么？"><a href="#7-Zookeeper的选举机制？一定是过半选举么？" class="headerlink" title="7. Zookeeper的选举机制？一定是过半选举么？"></a>7. Zookeeper的选举机制？一定是过半选举么？</h1><h1 id="8-Redis-实现分布式锁？"><a href="#8-Redis-实现分布式锁？" class="headerlink" title="8. Redis 实现分布式锁？"></a>8. Redis 实现分布式锁？</h1><pre><code>SETNX 原理
+</code></pre><h1 id="9-MySQL-索引在什么场景下使用会发生失效？原因是什么？"><a href="#9-MySQL-索引在什么场景下使用会发生失效？原因是什么？" class="headerlink" title="9. MySQL 索引在什么场景下使用会发生失效？原因是什么？"></a>9. MySQL 索引在什么场景下使用会发生失效？原因是什么？</h1><h1 id="10-MySQL-MVCC"><a href="#10-MySQL-MVCC" class="headerlink" title="10. MySQL MVCC"></a>10. MySQL MVCC</h1><h1 id="11-MySQL-一张表-没有主键，但是有一列聚集索引，底层是怎么样？"><a href="#11-MySQL-一张表-没有主键，但是有一列聚集索引，底层是怎么样？" class="headerlink" title="11. MySQL 一张表 没有主键，但是有一列聚集索引，底层是怎么样？"></a>11. MySQL 一张表 没有主键，但是有一列聚集索引，底层是怎么样？</h1><pre><code>延伸: 如果是非InnoDB存储引擎，是怎么实现的。
+</code></pre>
         
     </section>
 </article>

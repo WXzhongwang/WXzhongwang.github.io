@@ -131,7 +131,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/12/08/消息队列/">消息队列</a>
+            <a href="/2018/12/02/Canal /">Canal准备</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -139,13 +139,13 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-12-08T03:18:02.000Z" itemprop="datePublished">2018-12-08</time>
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
 </a>
 
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/消息队列/">消息队列</a>
+    <a class="article-tag-link" href="/tags/Canal/">Canal</a>
 </div>
 
 
@@ -154,230 +154,194 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="一、消息队列的基本概念"><a href="#一、消息队列的基本概念" class="headerlink" title="一、消息队列的基本概念"></a>一、消息队列的基本概念</h1><h2 id="1-1-Broker"><a href="#1-1-Broker" class="headerlink" title="1.1 Broker"></a>1.1 Broker</h2><p>==Broker== 的概念来自与Apache ActiveMQ，通俗的讲就是消息队列服务器。</p>
-<h2 id="1-2-消息生产者和消费者"><a href="#1-2-消息生产者和消费者" class="headerlink" title="1.2 消息生产者和消费者"></a>1.2 消息生产者和消费者</h2><ul>
-<li>消息生产者 ==Producer==：发送消息到消息队列。</li>
-<li>消息消费者 ==Consumer==：从消息队列接收消息。</li>
+        <h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>对于自建 MySQL , 需要先开启 Binlog 写入功能，配置 binlog-format 为 ROW 模式，my.cnf 中配置如下<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[mysqld]</span></span><br><span class="line"><span class="attr">log-bin</span>=mysql-bin <span class="comment"># 开启 binlog</span></span><br><span class="line"><span class="attr">binlog-format</span>=ROW <span class="comment"># 选择 ROW 模式</span></span><br><span class="line"><span class="attr">server_id</span>=<span class="number">1</span></span><br></pre></td></tr></table></figure></p>
+<p>配置 MySQL replaction 需要定义，不要和 canal 的 slaveId 重复</p>
+<blockquote>
+<p>注意：针对阿里云 RDS for MySQL , 默认打开了 binlog , 并且账号默认具有 binlog dump 权限 , 不需要任何权限或者 binlog 设置,可以直接跳过这一步<br>授权 canal 链接 MySQL 账号具有作为 MySQL slave 的权限, 如果已有账户可直接 grant<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">USER</span> canal <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'canal'</span>;  </span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">SELECT</span>, <span class="keyword">REPLICATION</span> <span class="keyword">SLAVE</span>, <span class="keyword">REPLICATION</span> <span class="keyword">CLIENT</span> <span class="keyword">ON</span> *.* <span class="keyword">TO</span> <span class="string">'canal'</span>@<span class="string">'%'</span>;</span><br><span class="line"><span class="comment">-- GRANT ALL PRIVILEGES ON *.* TO 'canal'@'%' ;</span></span><br><span class="line"><span class="keyword">FLUSH</span> <span class="keyword">PRIVILEGES</span>;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/可靠事件通知/">（十）可靠事件通知</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/5/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/分布式事务/">分布式事务</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="可靠事件通知"><a href="#可靠事件通知" class="headerlink" title="可靠事件通知"></a>可靠事件通知</h1><p>可靠事件通知模式的设计理念比较容易理解，即是主服务完成后将结果通过事件（常常是消息队列）传递给从服务，从服务在接受到消息后进行消费，完成业务，从而达到主服务与从服务间的消息一致性。首先能想到的也是最简单的就是同步事件通知，业务处理与消息发送同步执行，实现逻辑见下方代码及时序图。</p>
+<h2 id="同步事件"><a href="#同步事件" class="headerlink" title="同步事件"></a>同步事件</h2><h3 id="伪代码"><a href="#伪代码" class="headerlink" title="伪代码:"></a>伪代码:</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">trans</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">try</span> &#123;  </span><br><span class="line">    <span class="comment">// 1. 操作数据库  </span></span><br><span class="line">        <span class="keyword">bool</span> result = dao.update(data);<span class="comment">// 操作数据库失败，会抛出异常  </span></span><br><span class="line">    <span class="comment">// 2. 如果数据库操作成功则发送消息  </span></span><br><span class="line">        <span class="keyword">if</span>(result)&#123;  </span><br><span class="line">            mq.send(data);<span class="comment">// 如果方法执行失败，会抛出异常  </span></span><br><span class="line">        &#125;  </span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;  </span><br><span class="line">        roolback();<span class="comment">// 如果发生异常，就回滚  </span></span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="理想化场景"><a href="#理想化场景" class="headerlink" title="理想化场景:"></a>理想化场景:</h3><p><img src="https://mmbiz.qpic.cn/mmbiz_png/Baq5lYpIw7UAmRmz9SHwLAkkzYRj8FzeVEmeiaahJE6OMa38XIug1eN2UYBW3XPDAHHXrJe8cictRf3mOOOfGdbw/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="image"></p>
+<p>上面的逻辑看上去天衣无缝，如果数据库操作失败则直接退出，不发送消息；如果发送消息失败，则数据库回滚；如果数据库操作成功且消息发送成功，则业务成功，消息发送给下游消费。然后仔细思考后，同步消息通知其实有==两点==不足的地方。</p>
+<h3 id="不足之处"><a href="#不足之处" class="headerlink" title="不足之处"></a>不足之处</h3><ul>
+<li>第一点：<br>在微服务的架构下，有可能出现网络IO问题或者服务器宕机的问题，如果这些问题出现在时序图的第7步，使得消息投递后无法正常通知主服务（网络问题），或无法继续提交事务（宕机），那么主服务将会认为消息投递失败，会滚主服务业务，然而实际上消息已经被从服务消费，那么就会造成主服务和从服务的数据不一致。具体场景可见下面两张时序图。</li>
 </ul>
-<h2 id="1-3-消息模型"><a href="#1-3-消息模型" class="headerlink" title="1.3 消息模型"></a>1.3 消息模型</h2><h3 id="点对点消息队列模型"><a href="#点对点消息队列模型" class="headerlink" title="点对点消息队列模型"></a>点对点消息队列模型</h3><p>消息生产者向一个特定的队列发送消息，消息消费者从该队列中接收消息。消息的生产者和消费者可以不同时处于运行状态。每一个成功处理的消息都由消息消费者签收确认（Acknowledge）。</p>
-<h3 id="发布订阅消息模型-Topic"><a href="#发布订阅消息模型-Topic" class="headerlink" title="发布订阅消息模型-Topic"></a>发布订阅消息模型-Topic</h3><p>发布订阅消息模型中，支持向一个特定的主题Topic发布消息，0个或多个订阅者接收来自这个消息主题的消息。在这种模型下，发布者和订阅者彼此不知道对方。实际操作过程中，必须先订阅，再发送消息，而后接收订阅的消息，这个顺序必须保证。 </p>
-<h2 id="1-4-消息顺序性保证"><a href="#1-4-消息顺序性保证" class="headerlink" title="1.4 消息顺序性保证"></a>1.4 消息顺序性保证</h2><p>基于Queue消息模型，利用FIFO先进先出的特性，可以保证消息的顺序性。</p>
-<h2 id="1-5-消息的ACK确认机制"><a href="#1-5-消息的ACK确认机制" class="headerlink" title="1.5 消息的ACK确认机制"></a>1.5 消息的ACK确认机制</h2><p>即消息的Ackownledge确认机制：<br>为了保证消息不丢失，消息队列提供了消息Acknowledge机制，即ACK机制，当Consumer确认消息已经消费处理，发送一个ACK给消息队列，此时消息队列便可以删除这个消息了。如果Consumer宕机/关闭，没有发送ACK，消息队列将认为这个消息没有被处理，会将这个消息重新发送给其他的Consumer重新消费处理。</p>
-<h2 id="1-6-消息的持久化"><a href="#1-6-消息的持久化" class="headerlink" title="1.6 消息的持久化"></a>1.6 消息的持久化</h2><p>消息的持久化，对于一些关键的核心业务来说是非常重要的，启用消息持久化后，消息队列宕机重启后，消息可以从持久化存储恢复，消息不丢失，可以继续消费处理。</p>
-<h2 id="1-7-消息的同步和异步收发"><a href="#1-7-消息的同步和异步收发" class="headerlink" title="1.7 消息的同步和异步收发"></a>1.7 消息的同步和异步收发</h2><h3 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h3><p>消息的收发支持同步收发的方式<br>同步收发场景下，消息生产者和消费者双向应答模式，例如：张三写封信送到邮局中转站，然后李四从中转站获得信，然后在写一份回执信，放到中转站，然后张三去取，当然张三写信的时候就得写明回信地址。<br>消息的接收如果以同步的方式(Pull)进行接收，如果队列中为空，此时接收将处于同步阻塞状态，会一直等待，直到消息的到达。</p>
-<h3 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h3><p>消息的收发同样支持异步方式：异步发送消息，不需要等待消息队列的接收确认。<br>异步接收消息，以Push的方式触发消息消费者接收消息。</p>
-<h2 id="1-8-消息的事务支持"><a href="#1-8-消息的事务支持" class="headerlink" title="1.8 消息的事务支持"></a>1.8 消息的事务支持</h2><p>消息的收发处理支持事务，例如：在任务中心场景中，一次处理可能涉及多个消息的接收、处理，这处于同一个事务范围内，如果一个消息处理失败，事务回滚，消息重新回到队列中。</p>
-<h1 id="二、JMS消费服务"><a href="#二、JMS消费服务" class="headerlink" title="二、JMS消费服务"></a>二、JMS消费服务</h1><p>Java消息服务（Java Message Service，JMS）应用程序接口是一个Java平台中关于面向消息中间件（MOM）的API，用于在两个应用程序之间，或分布式系统中发送消息，进行异步通信。 点对点与发布订阅最初是由JMS定义的。这两种模式主要区别或解决的问题就是发送到队列的消息能否重复消费(多订阅) 。</p>
-<p>JMS规范目前支持两种消息模型：</p>
-<ol>
-<li>点对点（point to point， queue）</li>
-<li>发布/订阅（publish/subscribe，topic）</li>
+<h4 id="网络异常"><a href="#网络异常" class="headerlink" title="网络异常:"></a>网络异常:</h4><p><img src="https://mmbiz.qpic.cn/mmbiz_png/Baq5lYpIw7UAmRmz9SHwLAkkzYRj8FzePKpkYem9wEIwyp9YU4YV1Usib1iatBfXodicTzXw8qskcry4jJAgEVJ5w/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="image"></p>
+<h4 id="服务器宕机"><a href="#服务器宕机" class="headerlink" title="服务器宕机:"></a>服务器宕机:</h4><p><img src="https://mmbiz.qpic.cn/mmbiz_png/Baq5lYpIw7UAmRmz9SHwLAkkzYRj8FzeO8Y0Rz0mIILzCB4XWf4Yia4U1nAeIQcVib9xseaKicIicmnbFR4biaIyHJg/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="image"></p>
+<ul>
+<li>第二点 ：事件服务（在这里就是消息服务）与业务过于耦合，如果消息服务不可用，会导致业务不可用。应该将事件服务与业务解耦，独立出来异步执行，或者在业务执行后先尝试发送一次消息，如果消息发送失败，则降级为异步发送。</li>
+<li></li>
+</ul>
+<h2 id="异步事件"><a href="#异步事件" class="headerlink" title="异步事件"></a>异步事件</h2><h3 id="本地事件服务"><a href="#本地事件服务" class="headerlink" title="本地事件服务"></a>本地事件服务</h3><p>为了解决前面描述的同步事件的问题，异步事件通知模式被发展了出来，既业务服务和事件服务解耦，事件异步进行，由单独的事件服务保证事件的可靠投递。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/Baq5lYpIw7UAmRmz9SHwLAkkzYRj8FzeymQcemYABBK50naIib5837TU5P0iauWiag7dHZ1YicL6dIph4HF6ia6Qibiag/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="image"></p>
+<p>异步事件通知－本地事件服务</p>
+<p>当业务执行时，在同一个本地事务中将事件写入本地事件表，同时投递该事件，如果事件投递成功，则将该事件从事件表中删除。如果投递失败，则使用事件服务定时地异步统一处理投递失败的事件，进行重新投递，直到事件被正确投递，并将事件从事件表中删除。这种方式最大可能地保证了事件投递的实效性，并且当第一次投递失败后，也能使用异步事件服务保证事件至少被投递一次。</p>
+<p>然而，这种使用本地事件服务保证可靠事件通知的方式也有它的不足之处，那便是业务仍旧与事件服务有一定耦合（第一次同步投递时），更为严重的是，本地事务需要负责额外的事件表的操作，为数据库带来了压力，在高并发的场景，由于每一个业务操作就要产生相应的事件表操作，几乎将数据库的可用吞吐量砍了一半，这无疑是无法接受的。正是因为这样的原因，可靠事件通知模式进一步地发展－外部事件服务出现在了人们的眼中。</p>
+<h3 id="外部事件服务"><a href="#外部事件服务" class="headerlink" title="外部事件服务"></a>外部事件服务</h3><p>外部事件服务在本地事件服务的基础上更进了一步，将事件服务独立出主业务服务，主业务服务不在对事件服务有任何强依赖。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/Baq5lYpIw7UAmRmz9SHwLAkkzYRj8FzeaBIY5Ff9r6jKEutSBesV0OadfdAqkPN3CvYgUpo4pe0NKxGgFelfRw/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="image"></p>
+<p>异步事件通知－外部事件服务</p>
+<p>业务服务在提交前，向事件服务发送事件，事件服务只记录事件，并不发送。业务服务在提交或回滚后通知事件服务，事件服务发送事件或者删除事件。不用担心业务系统在提交或者会滚后宕机而无法发送确认事件给事件服务，因为事件服务会定时获取所有仍未发送的事件并且向业务系统查询，根据业务系统的返回来决定发送或者删除该事件。</p>
+<p>外部事件虽然能够将业务系统和事件系统解耦，但是也带来了额外的工作量：外部事件服务比起本地事件服务来说多了两次网络通信开销（提交前、提交／回滚后），同时也需要业务系统提供单独的查询接口给事件系统用来判断未发送事件的状态。</p>
+<h5 id="流程梳理"><a href="#流程梳理" class="headerlink" title="流程梳理"></a>流程梳理</h5><ol>
+<li>首先事务发起方先往 MQ 发送一条预读消息，这条消息与普通消息的区别在于他只对 MQ 可见不会向下传播。</li>
+<li>MQ接受到消息后，先进行持久化，则存储中会新增一条状态为待发送的消息，接着给事务发起方返回处理完成的 ACK；事务发起方收到处理完成的 ACK 之后开始执行本地事务。</li>
+<li>发起方会根据本地事务的执行状态来决定这个预读消息是应该继续往前还是回滚。另外 MQ 也应该支持自己反查来解决异常情况，如果发起方本地事务已经执行完毕发送消息到MQ,但是消息因为网络原因丢失，那么怎么解决。所以这个反查机制很重要。</li>
+<li>本地事务执行成功以后，MQ 也接收到成功通知，接着将消息状态更新为可发送，然后将消息推送给下游的消费者，这个时候消费者就可以去处理自己的本地事务 。</li>
 </ol>
-<h2 id="2-1-点对点：Queue，不可重复消费"><a href="#2-1-点对点：Queue，不可重复消费" class="headerlink" title="2.1 点对点：Queue，不可重复消费"></a>2.1 点对点：Queue，不可重复消费</h2><p>消息生产者生产消息发送到queue中，然后消息消费者从queue中取出并且消费消息。<br>消息被消费以后，queue中不再有存储，所以消息消费者不可能消费到已经被消费的消息。<br>Queue支持存在多个消费者，但是对一个消息而言，只会有一个消费者可以消费。 </p>
-<p>P2P模式包含三个角色：</p>
+<p>注意点：由于MQ通常都会保证消息能够投递成功，因此，如果业务没有及时返回ACK结果，那么就有可能造成MQ的重复消息投递问题。因此，对于消息最终一致性的方案，消息的消费者必须要对消息的消费支持幂等，不能造成同一条消息的重复消费的情况。</p>
+<h2 id="可靠事件通知注意事项"><a href="#可靠事件通知注意事项" class="headerlink" title="可靠事件通知注意事项"></a>可靠事件通知注意事项</h2><p>可靠事件模式需要注意的有两点，1. 事件的正确发送；2. 事件的重复消费。</p>
+<p>通过异步消息服务可以确保事件的正确发送，然而事件是有可能重复发送的，那么就需要消费端保证同一条事件不会重复被消费，简而言之就是保证事件消费的 ==幂等性==<br>。</p>
+<p>如果事件本身是具备幂等性的状态型事件，如订单状态的通知（已下单、已支付、已发货等），则需要判断事件的顺序。一般通过时间戳来判断，既消费过了新的消息后，当接受到老的消息直接丢弃不予消费。如果无法提供全局时间戳，则应考虑使用全局统一的序列号。</p>
+<p>对于不具备幂等性的事件，一般是动作行为事件，如扣款100，存款200，则应该将事件id及事件结果持久化，在消费事件前查询事件id，若已经消费则直接返回执行结果；若是新消息，则执行，并存储执行结果。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/单机版本Nacos/">nacos单机模式支持mysql</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/5/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="单机模式支持mysql"><a href="#单机模式支持mysql" class="headerlink" title="单机模式支持mysql"></a>单机模式支持mysql</h1><p>在0.7版本之前，在单机模式时nacos使用嵌入式数据库实现数据的存储，不方便观察数据存储的基本情况。0.7版本增加了支持mysql数据源能力，具体的操作步骤：</p>
+<ol>
+<li>安装数据库，版本要求：5.6.5+</li>
+<li>初始化mysql数据库，数据库初始化文件：nacos-mysql.sql</li>
+<li>修改conf/application.properties文件，增加支持mysql数据源配置（目前只支持mysql），添加mysql数据源的url、用户名和密码。</li>
+</ol>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring.datasource.platform</span>=mysql</span><br><span class="line"></span><br><span class="line"><span class="attr">db.num</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">db.url.0</span>=jdbc:mysql://<span class="number">11.162</span>.<span class="number">196.16</span>:<span class="number">3306</span>/nacos_devtest?characterEncoding=utf8&amp;connectTimeout=<span class="number">1000</span>&amp;socketTimeout=<span class="number">3000</span>&amp;autoReconnect=<span class="literal">true</span></span><br><span class="line"><span class="attr">db.user</span>=nacos_devtest</span><br><span class="line"><span class="attr">db.password</span>=youdontknow</span><br></pre></td></tr></table></figure>
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/缓存雪崩、缓存穿透、缓存预热、缓存更新、缓存降级/">缓存雪崩、缓存穿透、缓存预热、缓存更新、缓存降级</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/5/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="缓存雪崩、缓存穿透、缓存预热、缓存更新、缓存降级"><a href="#缓存雪崩、缓存穿透、缓存预热、缓存更新、缓存降级" class="headerlink" title="缓存雪崩、缓存穿透、缓存预热、缓存更新、缓存降级"></a>缓存雪崩、缓存穿透、缓存预热、缓存更新、缓存降级</h1><p><a href="https://www.cnblogs.com/leeSmall/p/8594542.html" target="_blank" rel="noopener">参考</a> </p>
+<h2 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h2><p>缓存雪崩我们可以简单的理解为：由于原有缓存失效，新缓存未到期间(例如：我们设置缓存时采用了相同的过期时间，在同一时刻出现大面积的缓存过期)，所有原本应该访问缓存的请求都去查询数据库了，而对数据库CPU和内存造成巨大压力，严重的会造成数据库宕机。从而形成一系列连锁反应，造成整个系统崩溃。</p>
+<p>缓存正常从Redis中获取，示意图如下：</p>
+<p><img src="http://p1.pstatp.com/large/pgc-image/1521269040783ad8b0b3415" alt="image"></p>
+<p>缓存失效瞬间示意图如下：</p>
+<p><img src="http://p3.pstatp.com/large/pgc-image/15212690408812aad2545bb" alt="image"></p>
+<p>解决方案:</p>
+<p>（1）碰到这种情况，一般并发量不是特别多的时候，使用最多的解决方案是加锁排队，伪代码如下：<br><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public Object getProductListNew()&#123;</span><br><span class="line">    int <span class="keyword">cacheTime </span>= <span class="number">30</span><span class="comment">;</span></span><br><span class="line">    String <span class="keyword">cacheKey </span>= <span class="string">"product_list"</span><span class="comment">;</span></span><br><span class="line">    String localKey = <span class="keyword">cacheKey;</span></span><br><span class="line"><span class="keyword"> </span>   </span><br><span class="line">    String <span class="keyword">cacheValue </span>= <span class="keyword">CacheHelper.get(cacheKey);</span></span><br><span class="line"><span class="keyword"> </span>   if(<span class="keyword">cacheValue </span>!= null)&#123;</span><br><span class="line">        return <span class="keyword">cacheValue;</span></span><br><span class="line"><span class="keyword"> </span>   &#125; else &#123;</span><br><span class="line">        sychronized(localKey)&#123;</span><br><span class="line">            if(<span class="keyword">cacheValue </span>!= null)&#123;</span><br><span class="line">                 return <span class="keyword">cacheValue;</span></span><br><span class="line"><span class="keyword"> </span>           &#125; else  &#123;</span><br><span class="line">                <span class="keyword">cacheValue </span>= getProductListFromDB()<span class="comment">;</span></span><br><span class="line">                <span class="keyword">CacheHelper.add(cacheKey, </span><span class="keyword">cacheValue, </span><span class="keyword">cacheTime);</span></span><br><span class="line"><span class="keyword"> </span>           &#125;</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">        return <span class="keyword">cacheValue;</span></span><br><span class="line"><span class="keyword"> </span>   &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>加锁排队只是为了减轻数据库的压力，并没有提高系统吞吐量。假设在高并发下，缓存重建期间key是锁着的，这是过来1000个请求999个都在阻塞的。同样会导致用户等待超时，这是个治标不治本的方法！</p>
+<p>注意：加锁排队的解决方式分布式环境的并发问题，有可能还要解决分布式锁的问题；线程还会被阻塞，用户体验很差！因此，在真正的高并发场景下很少使用！</p>
+<p>（2）给每一个缓存数据增加相应的缓存标记，记录缓存的是否失效，如果缓存标记失效，则更新数据缓存，实例伪代码如下：</p>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">Object</span> getProductListNew()&#123;</span><br><span class="line">    <span class="built_in">int</span> cacheTime = <span class="number">30</span>;</span><br><span class="line">    <span class="keyword">String</span> cacheKey = <span class="string">"product_list"</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//缓存标记 </span></span><br><span class="line">    <span class="keyword">String</span> cacheSign = cacheKey + <span class="string">"_sign"</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">String</span> sign = CacheHelper.<span class="built_in">get</span>(cacheSign);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">String</span> cacheValue = CacheHelper.<span class="built_in">get</span>(cacheKey);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(sign != <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> cacheValue;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">//过期 </span></span><br><span class="line">        CacheHelper.<span class="built_in">add</span>(cacheSign, <span class="number">1</span>, cacheTime);</span><br><span class="line">        ThreadPool.QueueUserWorkItem((arg -&gt; &#123;</span><br><span class="line">            cacheValue = getProductListFromDB();</span><br><span class="line">            CacheHelper.<span class="built_in">add</span>(cacheKey, cacheValue, cacheTime * <span class="number">2</span>);</span><br><span class="line">        &#125;));</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> cacheValue;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>解释说明：</p>
+<p>1、缓存标记：记录缓存数据是否过期，如果过期会触发通知另外的线程在后台去更新实际key的缓存；</p>
+<p>2、缓存数据：它的过期时间比缓存标记的时间延长1倍，例：标记缓存时间30分钟，数据缓存设置为60分钟。 这样，当缓存标记key过期后，实际缓存还能把旧数据返回给调用端，直到另外的线程在后台更新完成后，才会返回新缓存。</p>
+<p>关于缓存崩溃的解决方法，这里提出了三种方案：使用锁或队列、设置过期标志更新缓存、为key设置不同的缓存失效时间，还有一各被称为“二级缓存”的解决方法，有兴趣的读者可以自行研究。</p>
+<h2 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h2><p>缓存穿透是指用户查询数据，在数据库没有，自然在缓存中也不会有。这样就导致用户查询的时候，在缓存中找不到，每次都要去数据库再查询一遍，然后返回空（相当于进行了两次无用的查询）。这样请求就绕过缓存直接查数据库，这也是经常提的缓存命中率问题。</p>
+<p> 缓存穿透解决方案：</p>
+<p>（1）采用布隆过滤器，将所有可能存在的数据哈希到一个足够大的bitmap中，一个一定不存在的数据会被这个bitmap拦截掉，从而避免了对底层存储系统的查询压力。</p>
+<p>（2）如果一个查询返回的数据为空（不管是数据不存在，还是系统故障），我们仍然把这个空结果进行缓存，但它的过期时间会很短，最长不超过五分钟。通过这个直接设置的默认值存放到缓存，这样第二次到缓存中获取就有值了，而不会继续访问数据库，这种办法最简单粗暴！ 把空结果也给缓存起来，这样下次同样的请求就可以直接返回空了，即可以避免当查询的值为空时引起的缓存穿透。同时也可以单独设置个缓存区域存储空值，对要查询的key进行预先校验，然后再放行给后面的正常缓存处理逻辑。</p>
+<h2 id="缓存预热"><a href="#缓存预热" class="headerlink" title="缓存预热"></a>缓存预热</h2><p> 缓存预热就是系统上线后，提前将相关的缓存数据直接加载到缓存系统。避免在用户请求的时候，先查询数据库，然后再将数据缓存的问题！用户直接查询事先被预热的缓存数据！</p>
+<p> 缓存预热解决方案：</p>
 <ul>
-<li>消息队列（Queue）</li>
-<li>发送者(Sender)</li>
-<li>接收者(Receiver)</li>
+<li><p>（1）直接写个缓存刷新页面，上线时手工操作下；</p>
+</li>
+<li><p>（2）数据量不大，可以在项目启动的时候自动进行加载；</p>
+</li>
+<li><p>（3）定时刷新缓存；</p>
+</li>
 </ul>
-<p>每个消息都被发送到一个特定的队列，接收者从队列中获取消息。队列保留着消息，<br>直到他们被消费或超时。</p>
-<h2 id="2-2-发布-订阅：Topic，可以重复消费"><a href="#2-2-发布-订阅：Topic，可以重复消费" class="headerlink" title="2.2 发布/订阅：Topic，可以重复消费"></a>2.2 发布/订阅：Topic，可以重复消费</h2><p>消息生产者（发布）将消息发布到topic中，同时有多个消息消费者（订阅）消费该消息。<br>和点对点方式不同，发布到topic的消息会被所有订阅者消费。 </p>
-<p>支持订阅组的发布订阅模式：<br>发布订阅模式下，当发布者消息量很大时，显然单个订阅者的处理能力是不足的。实际上现实场景中是多个订阅者节点组成一个订阅组负载均衡消费topic消息即分组订阅，这样订阅者很容易实现消费能力线性扩展。可以看成是一个topic下有多个Queue，每个Queue是点对点的方式，Queue之间是发布订阅方式。 </p>
-<h2 id="2-3-区别"><a href="#2-3-区别" class="headerlink" title="2.3 区别"></a>2.3 区别</h2><h3 id="点对点模式"><a href="#点对点模式" class="headerlink" title="点对点模式"></a>点对点模式</h3><p>生产者发送一条消息到queue，一个queue可以有很多消费者，但是一个消息只能被一个消费者接受，当没有消费者可用时，这个消息会被保存直到有一个可用的消费者，所以Queue实现了一个可靠的负载均衡。</p>
-<h3 id="发布订阅模式"><a href="#发布订阅模式" class="headerlink" title="发布订阅模式"></a>发布订阅模式</h3><p>发布者发送到topic的消息，只有订阅了topic的订阅者才会收到消息。topic实现了发布和订阅，当你发布一个消息，所有订阅这个topic的服务都能得到这个消息，所以从1到N个订阅者都能得到这个消息的拷贝。</p>
-<h1 id="三、流行模型对比"><a href="#三、流行模型对比" class="headerlink" title="三、流行模型对比"></a>三、流行模型对比</h1><p>传统企业型消息队列ActiveMQ遵循了JMS规范，实现了点对点和发布订阅模型，但其他流行的消息队列RabbitMQ、Kafka并没有遵循JMS规范。</p>
-<h2 id="3-1-RabbitMQ"><a href="#3-1-RabbitMQ" class="headerlink" title="3.1 RabbitMQ"></a>3.1 RabbitMQ</h2><p>RabbitMQ实现了AQMP协议，AQMP协议定义了消息路由规则和方式。生产端通过路由规则发送消息到不同queue，消费端根据queue名称消费消息。RabbitMQ既支持内存队列也支持持久化队列，消费端为推模型，消费状态和订阅关系由服务端负责维护，消息消费完后立即删除，不保留历史消息。</p>
-<h3 id="点对点"><a href="#点对点" class="headerlink" title="点对点"></a>点对点</h3><p>生产端发送一条消息通过路由投递到Queue，只有一个消费者能消费到。 </p>
-<h3 id="多订阅"><a href="#多订阅" class="headerlink" title="多订阅"></a>多订阅</h3><p>当RabbitMQ需要支持多订阅时，发布者发送的消息通过路由同时写到多个Queue，不同订阅组消费不同的Queue。所以支持多订阅时，消息会多个拷贝。 </p>
-<h2 id="3-2-Kafka"><a href="#3-2-Kafka" class="headerlink" title="3.2 Kafka"></a>3.2 Kafka</h2><p>Kafka只支持消息持久化，消费端为拉模型，消费状态和订阅关系由客户端端负责维护，消息消费完后不会立即删除，会保留历史消息。因此支持多订阅时，消息只会存储一份就可以了。但是可能产生重复消费的情况。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/12/02/事务/">（一）什么是事务</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/5/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/分布式事务/">分布式事务</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h2 id="什么是事务？"><a href="#什么是事务？" class="headerlink" title="什么是事务？"></a>什么是事务？</h2><p>事务由一组操作构成，我们希望这组操作能够全部正确执行，如果这一组操作中的任意一个步骤发生错误，那么就需要回滚之前已经完成的操作。也就是同一个事务中的所有操作，要么全都正确执行，要么全都不要执行。</p>
-<h2 id="事务的四大特性-ACID"><a href="#事务的四大特性-ACID" class="headerlink" title="事务的四大特性 ACID"></a>事务的四大特性 ACID</h2><p>说到事务，就不得不提一下事务著名的四大特性。</p>
-<h3 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h3><p>原子性要求，事务是一个不可分割的执行单元，事务中的所有操作要么全都执行，要么全都不执行。</p>
-<h3 id="一致性"><a href="#一致性" class="headerlink" title="一致性"></a>一致性</h3><p>一致性要求，事务在开始前和结束后，数据库的完整性约束没有被破坏。</p>
-<h3 id="隔离性"><a href="#隔离性" class="headerlink" title="隔离性"></a>隔离性</h3><p>事务的执行是相互独立的，它们不会相互干扰，一个事务不会看到另一个正在运行过程中的事务的数据。</p>
-<h3 id="持久性"><a href="#持久性" class="headerlink" title="持久性"></a>持久性</h3><p>持久性要求，一个事务完成之后，事务的执行结果必须是持久化保存的。即使数据库发生崩溃，在数据库恢复后事务提交的结果仍然不会丢失。</p>
-<p>注意：事务只能保证数据库的高可靠性，即数据库本身发生问题后，事务提交后的数据仍然能恢复；而如果不是数据库本身的故障，如硬盘损坏了，那么事务提交的数据可能就丢失了。这属于『高可用性』的范畴。因此，事务只能保证数据库的『高可靠性』，而『高可用性』需要整个系统共同配合实现。</p>
-<h2 id="事务的隔离级别"><a href="#事务的隔离级别" class="headerlink" title="事务的隔离级别"></a>事务的隔离级别</h2><p>这里扩展一下，对事务的隔离性做一个详细的解释。</p>
-<p>在事务的四大特性ACID中，要求的隔离性是一种严格意义上的隔离，也就是多个事务是串行执行的，彼此之间不会受到任何干扰。这确实能够完全保证数据的安全性，但在实际业务系统中，这种方式性能不高。因此，数据库定义了四种隔离级别，隔离级别和数据库的性能是呈反比的，隔离级别越低，数据库性能越高，而隔离级别越高，数据库性能越差。</p>
-<p>事务并发执行会出现的问题<br>我们先来看一下在不同的隔离级别下，数据库可能会出现的问题：</p>
-<h3 id="更新丢失"><a href="#更新丢失" class="headerlink" title="更新丢失"></a>更新丢失</h3><p>当有两个并发执行的事务，更新同一行数据，那么有可能一个事务会把另一个事务的更新覆盖掉。<br>当数据库没有加任何锁操作的情况下会发生。</p>
-<h3 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h3><p>一个事务读到另一个尚未提交的事务中的数据。<br>该数据可能会被回滚从而失效。<br>如果第一个事务拿着失效的数据去处理那就发生错误了。</p>
-<h3 id="不可重复读"><a href="#不可重复读" class="headerlink" title="不可重复读"></a>不可重复读</h3><p>不可重复度的含义：一个事务对同一行数据读了两次，却得到了不同的结果。</p>
-<p>在事务1两次读取同一记录的过程中，事务2对该记录进行了修改，从而事务1第二次读到了不一样的记录。</p>
-<h3 id="幻读"><a href="#幻读" class="headerlink" title="幻读"></a>幻读</h3><p>事务1在两次查询的过程中，事务2对该表进行了插入、删除操作，从而事务1第二次查询的结果发生了变化。</p>
-<blockquote>
-<p>不可重复读 与 脏读 的区别？</p>
-<ul>
-<li>脏读读到的是尚未提交的数据，而不可重复读读到的是已经提交的数据，只不过在两次读的过程中数据被另一个事务改过了。</li>
-</ul>
-</blockquote>
-<h2 id="数据库的四种隔离级别"><a href="#数据库的四种隔离级别" class="headerlink" title="数据库的四种隔离级别"></a>数据库的四种隔离级别</h2><p>数据库一共有如下四种隔离级别：</p>
-<h3 id="Read-uncommitted-读未提交"><a href="#Read-uncommitted-读未提交" class="headerlink" title="Read uncommitted 读未提交"></a>Read uncommitted 读未提交</h3><p>在该级别下，一个事务对一行数据修改的过程中，不允许另一个事务对该行数据进行修改，但允许另一个事务对该行数据读。<br>因此本级别下，不会出现更新丢失，但会出现脏读、不可重复读。</p>
-<h3 id="Read-committed-读提交"><a href="#Read-committed-读提交" class="headerlink" title="Read committed 读提交"></a>Read committed 读提交</h3><p>在该级别下，未提交的写事务不允许其他事务访问该行，因此不会出现脏读；但是读取数据的事务允许其他事务的访问该行数据，因此会出现不可重复读的情况。</p>
-<h3 id="Repeatable-read-重复读"><a href="#Repeatable-read-重复读" class="headerlink" title="Repeatable read 重复读"></a>Repeatable read 重复读</h3><p>在该级别下，读事务禁止写事务，但允许读事务，因此不会出现同一事务两次读到不同的数据的情况（不可重复读），且写事务禁止其他一切事务。</p>
-<h3 id="Serializable-序列化"><a href="#Serializable-序列化" class="headerlink" title="Serializable 序列化"></a>Serializable 序列化</h3><p>该级别要求所有事务都必须串行执行，因此能避免一切因并发引起的问题，但效率很低。</p>
-<p>隔离级别越高，越能保证数据的完整性和一致性，但是对并发性能的影响也越大。对于多数应用程序，可以优先考虑把数据库系统的隔离级别设为Read Committed。它能够避免脏读取，而且具有较好的并发性能。尽管它会导致不可重复读、幻读和第二类丢失更新这些并发问题，在可能出现这类问题的个别场合，可以由应用程序采用悲观锁或乐观锁来控制。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/12/02/个人面试遇到的一些问题/">线上排查基本操作</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/5/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="1-Dubbo-Zk-如何实现动态选择负载均衡策略"><a href="#1-Dubbo-Zk-如何实现动态选择负载均衡策略" class="headerlink" title="1. Dubbo + Zk 如何实现动态选择负载均衡策略"></a>1. Dubbo + Zk 如何实现动态选择负载均衡策略</h1><h1 id="2-Nginx-能实现哪些功能？-如何修改请求头？"><a href="#2-Nginx-能实现哪些功能？-如何修改请求头？" class="headerlink" title="2. Nginx 能实现哪些功能？ 如何修改请求头？"></a>2. Nginx 能实现哪些功能？ 如何修改请求头？</h1><pre><code>静态代理（资源托管）
-反向代理（请求转发）
-
-方式一：proxy_set_header
-proxy_set_header   iden    &quot;student&quot;;
-proxy_set_header   age     &quot;21&quot;;
-
-方式二：set 方式
-set $iden &quot;student&quot;;
-set $age &quot;21&quot;;
-</code></pre><h1 id="3-Java-什么时候会发生锁升级为重量级锁？"><a href="#3-Java-什么时候会发生锁升级为重量级锁？" class="headerlink" title="3. Java 什么时候会发生锁升级为重量级锁？"></a>3. Java 什么时候会发生锁升级为重量级锁？</h1><pre><code>（锁膨胀）
-</code></pre><h1 id="4-HashMap并发过程中出现CPU崩溃？什么原因？"><a href="#4-HashMap并发过程中出现CPU崩溃？什么原因？" class="headerlink" title="4. HashMap并发过程中出现CPU崩溃？什么原因？"></a>4. HashMap并发过程中出现CPU崩溃？什么原因？</h1><pre><code>https://blog.csdn.net/c929833623lvcha/article/details/8924414?utm_source=jiancool
-</code></pre><h1 id="5-ConcurrentHashMap-锁具体实现原理？"><a href="#5-ConcurrentHashMap-锁具体实现原理？" class="headerlink" title="5. ConcurrentHashMap 锁具体实现原理？"></a>5. ConcurrentHashMap 锁具体实现原理？</h1><h1 id="6-SpringCloud-熔断机制，客户端如何捕获异常？"><a href="#6-SpringCloud-熔断机制，客户端如何捕获异常？" class="headerlink" title="6. SpringCloud 熔断机制，客户端如何捕获异常？"></a>6. SpringCloud 熔断机制，客户端如何捕获异常？</h1><h1 id="7-Zookeeper的选举机制？一定是过半选举么？"><a href="#7-Zookeeper的选举机制？一定是过半选举么？" class="headerlink" title="7. Zookeeper的选举机制？一定是过半选举么？"></a>7. Zookeeper的选举机制？一定是过半选举么？</h1><h1 id="8-Redis-实现分布式锁？"><a href="#8-Redis-实现分布式锁？" class="headerlink" title="8. Redis 实现分布式锁？"></a>8. Redis 实现分布式锁？</h1><pre><code>SETNX 原理
-</code></pre><h1 id="9-MySQL-索引在什么场景下使用会发生失效？原因是什么？"><a href="#9-MySQL-索引在什么场景下使用会发生失效？原因是什么？" class="headerlink" title="9. MySQL 索引在什么场景下使用会发生失效？原因是什么？"></a>9. MySQL 索引在什么场景下使用会发生失效？原因是什么？</h1><h1 id="10-MySQL-MVCC"><a href="#10-MySQL-MVCC" class="headerlink" title="10. MySQL MVCC"></a>10. MySQL MVCC</h1><h1 id="11-MySQL-一张表-没有主键，但是有一列聚集索引，底层是怎么样？"><a href="#11-MySQL-一张表-没有主键，但是有一列聚集索引，底层是怎么样？" class="headerlink" title="11. MySQL 一张表 没有主键，但是有一列聚集索引，底层是怎么样？"></a>11. MySQL 一张表 没有主键，但是有一列聚集索引，底层是怎么样？</h1><pre><code>延伸: 如果是非InnoDB存储引擎，是怎么实现的。
-</code></pre>
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/12/02/两阶段提交2PC/">（七）两阶段提交2PC</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/5/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/分布式事务/">分布式事务</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="两阶段提交2PC"><a href="#两阶段提交2PC" class="headerlink" title="两阶段提交2PC"></a>两阶段提交2PC</h1><p>当应用逐渐扩展，出现一个应用使用多个数据源的情况，这个时候本地事务已经无法满足数据一致性的要求。由于多个数据源的同时访问，事务需要跨多个数据源管理，分布式事务应运而生。其中最流行的就是两阶段提交（2PC），分布式事务由事务管理器（TM）统一管理。</p>
-<p>两阶段提交分为准备阶段和提交阶段。</p>
-<h2 id="两阶段提交-commit"><a href="#两阶段提交-commit" class="headerlink" title="两阶段提交-commit"></a>两阶段提交-commit</h2><p><img src="https://mmbiz.qpic.cn/mmbiz_png/Baq5lYpIw7UAmRmz9SHwLAkkzYRj8FzeUN50QbiarIoDfZSgLKjbgwuQ68PUcWBicrYrELotBJpZKKsxfialIyyvw/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="image"></p>
-<h2 id="两阶段提交-rollback"><a href="#两阶段提交-rollback" class="headerlink" title="两阶段提交-rollback"></a>两阶段提交-rollback</h2><p><img src="https://mmbiz.qpic.cn/mmbiz_png/Baq5lYpIw7UAmRmz9SHwLAkkzYRj8FzeTeCibYLNibQW4CmBvPPejjyR39W2vF2UdTF5o50Qb0rJbW2YwvCWJPJw/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="image"></p>
-<blockquote>
-<p>然而两阶段提交也不能完全保证数据一致性问题，并且有==同步阻塞==的问题，所以其优化版本三阶段提交（3PC）被发明了出来。</p>
-</blockquote>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/12/02/三阶段提交3PC/">（八）三阶段提交3PC</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/5/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/分布式事务/">分布式事务</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="三阶段提交3PC"><a href="#三阶段提交3PC" class="headerlink" title="三阶段提交3PC"></a>三阶段提交3PC</h1><blockquote>
-<p>3PC也只能保证绝大多数情况下的数据一致性</p>
-</blockquote>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/Baq5lYpIw7UAmRmz9SHwLAkkzYRj8Fze4Qp8szvXcnwialHTwHoLKHvoYQCfWcF2gEWDKM4gibFxfIve5qNx15mQ/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="image"></p>
+<h2 id="缓存更新"><a href="#缓存更新" class="headerlink" title="缓存更新"></a>缓存更新</h2><p>除了缓存服务器自带的缓存失效策略之外（Redis默认的有6中策略可供选择），我们还可以根据具体的业务需求进行自定义的缓存淘汰，常见的策略有两种：</p>
+<p>（1）定时去清理过期的缓存；</p>
+<p>（2）当有用户请求过来时，再判断这个请求所用到的缓存是否过期，过期的话就去底层系统得到新数据并更新缓存。</p>
+<p>两者各有优劣，第一种的缺点是维护大量缓存的key是比较麻烦的，第二种的缺点就是每次用户请求过来都要判断缓存失效，逻辑相对比较复杂！具体用哪种方案，大家可以根据自己的应用场景来权衡。</p>
+<h2 id="缓存降级"><a href="#缓存降级" class="headerlink" title="缓存降级"></a>缓存降级</h2><p>当访问量剧增、服务出现问题（如响应时间慢或不响应）或非核心服务影响到核心流程的性能时，仍然需要保证服务还是可用的，即使是有损服务。系统可以根据一些关键数据进行自动降级，也可以配置开关实现人工降级。</p>
+<p>降级的最终目的是保证核心服务可用，即使是有损的。而且有些服务是无法降级的（如加入购物车、结算）。</p>
+<p>在进行降级之前要对系统进行梳理，看看系统是不是可以丢卒保帅；从而梳理出哪些必须誓死保护，哪些可降级；比如可以参考日志级别设置预案：</p>
+<p>（1）一般：比如有些服务偶尔因为网络抖动或者服务正在上线而超时，可以自动降级；</p>
+<p>（2）警告：有些服务在一段时间内成功率有波动（如在95~100%之间），可以自动降级或人工降级，并发送告警；</p>
+<p>（3）错误：比如可用率低于90%，或者数据库连接池被打爆了，或者访问量突然猛增到系统能承受的最大阀值，此时可以根据情况自动降级或者人工降级；</p>
+<p>（4）严重错误：比如因为特殊原因数据错误了，此时需要紧急人工降级。</p>
 
         
     </section>
@@ -473,7 +437,7 @@ set $age &quot;21&quot;;
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/12/02/XA协议 /">（六）XA协议</a>
+            <a href="/2018/12/02/nacos 部署方式/">nacos 部署方式</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -487,7 +451,7 @@ set $age &quot;21&quot;;
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/分布式事务/">分布式事务</a>
+    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
 </div>
 
 
@@ -496,27 +460,91 @@ set $age &quot;21&quot;;
     
     <section class="article-body markdown-body">
         
-        <h1 id="XA协议"><a href="#XA协议" class="headerlink" title="XA协议"></a>XA协议</h1><p>XA是由X/Open组织提出的分布式事务的规范。 XA规范主要定义了(全局)事务管理器(TM)和(局 部)资源管理器(RM)之间的接口。主流的关系型数据库产品都是实现了XA接口的。XA 的全称是 <code>eXtended Architecture</code>，它是一个分布式事务协议，通过二阶段提交协议保证强一致性。</p>
-<p>XA 规范中定义了分布式事务处理模型，这个模型中包含四个核心角色：</p>
+        <h1 id="nacos-部署方式"><a href="#nacos-部署方式" class="headerlink" title="nacos 部署方式"></a>nacos 部署方式</h1><p><a href="https://nacos.io/zh-cn/docs/what-is-nacos.html" target="_blank" rel="noopener">nacos you should know</a></p>
+<p>Nacos支持三种部署模式</p>
 <ul>
-<li>RM (Resource Managers)：</li>
+<li>单机模式 - 用于测试和单机试用。</li>
+<li>集群模式 - 用于生产环境，确保高可用。</li>
+<li>多集群模式 - 用于多数据中心场景。</li>
 </ul>
-<p>资源管理器，提供数据资源的操作、管理接口，保证数据的一致性和完整性。最有代表性的就是数据库管理系统，当然有的文件系统、MQ 系统也可以看作 RM。</p>
-<ul>
-<li>TM (Transaction Managers)：</li>
-</ul>
-<p>事务管理器，是一个协调者的角色，协调跨库事务关联的所有RM的行为。</p>
-<ul>
-<li>AP (Application Program)：</li>
-</ul>
-<p>应用程序，按照业务规则调用RM接口来完成对业务模型数据的变更，当数据的变更涉及多个RM且要保证事务时，AP就会通过TM来定义事务的边界，TM负责协调参与事务的各个RM一同完成一个全局事务。</p>
-<ul>
-<li>CRMs (Communication Resource Managers)：</li>
-</ul>
-<p>主要用来进行跨服务的事务的传播。</p>
+<p>单机模式下运行Nacos</p>
 <blockquote>
-<p>XA 不能自动提交</p>
+<p>Standalone means it is non-cluster Mode. * </p>
 </blockquote>
+<ol>
+<li><p>Linux/Unix/Mac</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sh </span>startup.<span class="keyword">sh </span>-m standalone</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Windows</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmd</span><span class="bash"> startup.cmd -m standalone</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>单机模式支持mysql<br>在0.7版本之前，在单机模式时nacos使用嵌入式数据库实现数据的存储，不方便观察数据存储的基本情况。0.7版本增加了支持mysql数据源能力，具体的操作步骤：</p>
+<ol>
+<li>安装数据库，版本要求：5.6.5+</li>
+<li>初始化mysql数据库，数据库初始化文件：nacos-mysql.sql</li>
+<li>修改conf/application.properties文件，增加支持mysql数据源配置（目前只支持mysql），添加mysql数据源的url、用户名和密码。</li>
+</ol>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring.datasource.platform</span>=mysql</span><br><span class="line"></span><br><span class="line"><span class="attr">db.num</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">db.url.0</span>=jdbc:mysql://<span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">3306</span>/nacos_config?characterEncoding=utf8&amp;connectTimeout=<span class="number">1000</span>&amp;socketTimeout=<span class="number">3000</span>&amp;autoReconnect=<span class="literal">true</span></span><br><span class="line"><span class="attr">db.user</span>=nacos_config</span><br><span class="line"><span class="attr">db.password</span>=youdontknow</span><br></pre></td></tr></table></figure>
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/集群版本Nacos/">集群Nacos</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/5/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="集群Nacos"><a href="#集群Nacos" class="headerlink" title="集群Nacos"></a>集群Nacos</h1><h2 id="工作模式："><a href="#工作模式：" class="headerlink" title="工作模式："></a>工作模式：</h2><p>因此开源的时候推荐用户把所有服务列表放到一个vip下面，然后挂到一个域名下面</p>
+<p><a href="http://ip1:port/openAPI" target="_blank" rel="noopener">http://ip1:port/openAPI</a> 直连ip模式，机器挂则需要修改ip才可以使用。</p>
+<p><a href="http://VIP:port/openAPI" target="_blank" rel="noopener">http://VIP:port/openAPI</a> 挂载VIP模式，直连vip即可，下面挂server真实ip，可读性不好。</p>
+<p><a href="http://nacos.com:port/openAPI" target="_blank" rel="noopener">http://nacos.com:port/openAPI</a> 域名 + VIP模式，可读性好，而且换ip方便，推荐模式</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/338441/1561258986171-4ddec33c-a632-4ec3-bfff-7ef4ffc33fb9.jpeg" alt="工作模式"></p>
+<h2 id="环境说明："><a href="#环境说明：" class="headerlink" title="环境说明："></a>环境说明：</h2><ol>
+<li>64 bit OS Linux/Unix/Mac，推荐使用Linux系统。</li>
+<li>64 bit JDK 1.8+；下载.配置。</li>
+<li>Maven 3.2.x+；下载.配置。</li>
+<li>3个或3个以上Nacos节点才能构成集群。</li>
+</ol>
+<h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><p>使用源码编译：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">unzip nacos-source.zip</span><br><span class="line">cd nacos/</span><br><span class="line">mvn -Prelease-nacos clean <span class="keyword">install</span> -U  </span><br><span class="line">cd nacos/distribution/target/nacos-<span class="keyword">server</span><span class="number">-1.3</span><span class="number">.0</span>/nacos/<span class="keyword">bin</span></span><br></pre></td></tr></table></figure></p>
+<p>直接使用压缩包：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">unzip nacos-server-<span class="number">1.3</span>.<span class="number">0</span>.zip</span><br><span class="line">or</span><br><span class="line">tar -xvf nacos-server-<span class="number">1.3</span>.<span class="number">0</span><span class="selector-class">.tar</span><span class="selector-class">.gz</span></span><br><span class="line"></span><br><span class="line">cd nacos/bin</span><br></pre></td></tr></table></figure></p>
+<h2 id="配置集群配置文件"><a href="#配置集群配置文件" class="headerlink" title="配置集群配置文件"></a>配置集群配置文件</h2><p>在nacos的解压目录nacos/的conf目录下，有配置文件cluster.conf，请每行配置成ip:port。（请配置3个或3个以上节点）<br><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">ip1:</span><span class="number">8848</span></span><br><span class="line"><span class="symbol">ip2:</span><span class="number">8848</span></span><br><span class="line"><span class="symbol">ip3:</span><span class="number">8848</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="确定数据源"><a href="#确定数据源" class="headerlink" title="确定数据源"></a>确定数据源</h2><h3 id="使用内置数据源"><a href="#使用内置数据源" class="headerlink" title="使用内置数据源"></a>使用内置数据源</h3><p>无需进行任何配置</p>
+<h3 id="使用外置数据源"><a href="#使用外置数据源" class="headerlink" title="使用外置数据源"></a>使用外置数据源</h3><p>生产使用建议至少主备模式，或者采用高可用数据库。</p>
+<h2 id="初始化-MySQL-数据库"><a href="#初始化-MySQL-数据库" class="headerlink" title="初始化 MySQL 数据库"></a>初始化 MySQL 数据库</h2><p>在nacos的解压目录nacos/的conf目录下，存在sql文件 nacos-mysql.sql</p>
+<h2 id="修改application-properties-配置"><a href="#修改application-properties-配置" class="headerlink" title="修改application.properties 配置"></a>修改application.properties 配置</h2><p>application.properties配置文件</p>
+<h2 id="启动服务器"><a href="#启动服务器" class="headerlink" title="启动服务器"></a>启动服务器</h2><p>Linux/Unix/Mac<br>Stand-alone mode<br><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sh </span>startup.<span class="keyword">sh </span>-m standalone</span><br></pre></td></tr></table></figure></p>
+<p>集群模式 + 使用内置数据源<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh startup<span class="selector-class">.sh</span> -<span class="selector-tag">p</span> embedded</span><br></pre></td></tr></table></figure></p>
+<p>集群模式 + 使用外置数据源<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sh</span> startup.<span class="keyword">sh</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="服务注册发现-和-配置管理"><a href="#服务注册发现-和-配置管理" class="headerlink" title="服务注册发现 和 配置管理"></a>服务注册发现 和 配置管理</h2><p>服务注册<br><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X PUT 'http://127.0.0.1:<span class="number">8848</span>/nacos/v1/ns/instance?serviceName=nacos.naming.serviceName&amp;ip=20.18.7.10&amp;port=<span class="number">8080</span>'</span><br></pre></td></tr></table></figure></p>
+<p>服务发现<br><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X GET 'http://127.0.0.1:<span class="number">8848</span>/nacos/v1/ns/instances?serviceName=nacos.naming.serviceName'</span><br></pre></td></tr></table></figure></p>
+<p>发布配置<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">curl</span> -X POST <span class="string">"http://127.0.0.1:8848/nacos/v1/cs/configs?dataId=nacos.cfg.dataId&amp;group=test&amp;content=helloWorld"</span></span><br></pre></td></tr></table></figure></p>
+<p>获取配置<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X <span class="builtin-name">GET</span> <span class="string">"http://127.0.0.1:8848/nacos/v1/cs/configs?dataId=nacos.cfg.dataId&amp;group=test"</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="关闭服务器"><a href="#关闭服务器" class="headerlink" title="关闭服务器"></a>关闭服务器</h2><p>Linux/Unix/Mac<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sh</span> shutdown.<span class="keyword">sh</span></span><br></pre></td></tr></table></figure></p>
 
         
     </section>
@@ -528,7 +556,7 @@ set $age &quot;21&quot;;
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/12/02/缓存雪崩、缓存穿透、缓存预热、缓存更新、缓存降级/">缓存雪崩、缓存穿透、缓存预热、缓存更新、缓存降级</a>
+            <a href="/2018/12/02/git ssh http 协议切换 /">git ssh http 协议切换</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -542,7 +570,7 @@ set $age &quot;21&quot;;
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
+    <a class="article-tag-link" href="/tags/Git/">Git</a>
 </div>
 
 
@@ -551,48 +579,7 @@ set $age &quot;21&quot;;
     
     <section class="article-body markdown-body">
         
-        <h1 id="缓存雪崩、缓存穿透、缓存预热、缓存更新、缓存降级"><a href="#缓存雪崩、缓存穿透、缓存预热、缓存更新、缓存降级" class="headerlink" title="缓存雪崩、缓存穿透、缓存预热、缓存更新、缓存降级"></a>缓存雪崩、缓存穿透、缓存预热、缓存更新、缓存降级</h1><p><a href="https://www.cnblogs.com/leeSmall/p/8594542.html" target="_blank" rel="noopener">参考</a> </p>
-<h2 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h2><p>缓存雪崩我们可以简单的理解为：由于原有缓存失效，新缓存未到期间(例如：我们设置缓存时采用了相同的过期时间，在同一时刻出现大面积的缓存过期)，所有原本应该访问缓存的请求都去查询数据库了，而对数据库CPU和内存造成巨大压力，严重的会造成数据库宕机。从而形成一系列连锁反应，造成整个系统崩溃。</p>
-<p>缓存正常从Redis中获取，示意图如下：</p>
-<p><img src="http://p1.pstatp.com/large/pgc-image/1521269040783ad8b0b3415" alt="image"></p>
-<p>缓存失效瞬间示意图如下：</p>
-<p><img src="http://p3.pstatp.com/large/pgc-image/15212690408812aad2545bb" alt="image"></p>
-<p>解决方案:</p>
-<p>（1）碰到这种情况，一般并发量不是特别多的时候，使用最多的解决方案是加锁排队，伪代码如下：<br><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public Object getProductListNew()&#123;</span><br><span class="line">    int <span class="keyword">cacheTime </span>= <span class="number">30</span><span class="comment">;</span></span><br><span class="line">    String <span class="keyword">cacheKey </span>= <span class="string">"product_list"</span><span class="comment">;</span></span><br><span class="line">    String localKey = <span class="keyword">cacheKey;</span></span><br><span class="line"><span class="keyword"> </span>   </span><br><span class="line">    String <span class="keyword">cacheValue </span>= <span class="keyword">CacheHelper.get(cacheKey);</span></span><br><span class="line"><span class="keyword"> </span>   if(<span class="keyword">cacheValue </span>!= null)&#123;</span><br><span class="line">        return <span class="keyword">cacheValue;</span></span><br><span class="line"><span class="keyword"> </span>   &#125; else &#123;</span><br><span class="line">        sychronized(localKey)&#123;</span><br><span class="line">            if(<span class="keyword">cacheValue </span>!= null)&#123;</span><br><span class="line">                 return <span class="keyword">cacheValue;</span></span><br><span class="line"><span class="keyword"> </span>           &#125; else  &#123;</span><br><span class="line">                <span class="keyword">cacheValue </span>= getProductListFromDB()<span class="comment">;</span></span><br><span class="line">                <span class="keyword">CacheHelper.add(cacheKey, </span><span class="keyword">cacheValue, </span><span class="keyword">cacheTime);</span></span><br><span class="line"><span class="keyword"> </span>           &#125;</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">        return <span class="keyword">cacheValue;</span></span><br><span class="line"><span class="keyword"> </span>   &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>加锁排队只是为了减轻数据库的压力，并没有提高系统吞吐量。假设在高并发下，缓存重建期间key是锁着的，这是过来1000个请求999个都在阻塞的。同样会导致用户等待超时，这是个治标不治本的方法！</p>
-<p>注意：加锁排队的解决方式分布式环境的并发问题，有可能还要解决分布式锁的问题；线程还会被阻塞，用户体验很差！因此，在真正的高并发场景下很少使用！</p>
-<p>（2）给每一个缓存数据增加相应的缓存标记，记录缓存的是否失效，如果缓存标记失效，则更新数据缓存，实例伪代码如下：</p>
-<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">Object</span> getProductListNew()&#123;</span><br><span class="line">    <span class="built_in">int</span> cacheTime = <span class="number">30</span>;</span><br><span class="line">    <span class="keyword">String</span> cacheKey = <span class="string">"product_list"</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//缓存标记 </span></span><br><span class="line">    <span class="keyword">String</span> cacheSign = cacheKey + <span class="string">"_sign"</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">String</span> sign = CacheHelper.<span class="built_in">get</span>(cacheSign);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">String</span> cacheValue = CacheHelper.<span class="built_in">get</span>(cacheKey);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(sign != <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> cacheValue;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">//过期 </span></span><br><span class="line">        CacheHelper.<span class="built_in">add</span>(cacheSign, <span class="number">1</span>, cacheTime);</span><br><span class="line">        ThreadPool.QueueUserWorkItem((arg -&gt; &#123;</span><br><span class="line">            cacheValue = getProductListFromDB();</span><br><span class="line">            CacheHelper.<span class="built_in">add</span>(cacheKey, cacheValue, cacheTime * <span class="number">2</span>);</span><br><span class="line">        &#125;));</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> cacheValue;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>解释说明：</p>
-<p>1、缓存标记：记录缓存数据是否过期，如果过期会触发通知另外的线程在后台去更新实际key的缓存；</p>
-<p>2、缓存数据：它的过期时间比缓存标记的时间延长1倍，例：标记缓存时间30分钟，数据缓存设置为60分钟。 这样，当缓存标记key过期后，实际缓存还能把旧数据返回给调用端，直到另外的线程在后台更新完成后，才会返回新缓存。</p>
-<p>关于缓存崩溃的解决方法，这里提出了三种方案：使用锁或队列、设置过期标志更新缓存、为key设置不同的缓存失效时间，还有一各被称为“二级缓存”的解决方法，有兴趣的读者可以自行研究。</p>
-<h2 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h2><p>缓存穿透是指用户查询数据，在数据库没有，自然在缓存中也不会有。这样就导致用户查询的时候，在缓存中找不到，每次都要去数据库再查询一遍，然后返回空（相当于进行了两次无用的查询）。这样请求就绕过缓存直接查数据库，这也是经常提的缓存命中率问题。</p>
-<p> 缓存穿透解决方案：</p>
-<p>（1）采用布隆过滤器，将所有可能存在的数据哈希到一个足够大的bitmap中，一个一定不存在的数据会被这个bitmap拦截掉，从而避免了对底层存储系统的查询压力。</p>
-<p>（2）如果一个查询返回的数据为空（不管是数据不存在，还是系统故障），我们仍然把这个空结果进行缓存，但它的过期时间会很短，最长不超过五分钟。通过这个直接设置的默认值存放到缓存，这样第二次到缓存中获取就有值了，而不会继续访问数据库，这种办法最简单粗暴！ 把空结果也给缓存起来，这样下次同样的请求就可以直接返回空了，即可以避免当查询的值为空时引起的缓存穿透。同时也可以单独设置个缓存区域存储空值，对要查询的key进行预先校验，然后再放行给后面的正常缓存处理逻辑。</p>
-<h2 id="缓存预热"><a href="#缓存预热" class="headerlink" title="缓存预热"></a>缓存预热</h2><p> 缓存预热就是系统上线后，提前将相关的缓存数据直接加载到缓存系统。避免在用户请求的时候，先查询数据库，然后再将数据缓存的问题！用户直接查询事先被预热的缓存数据！</p>
-<p> 缓存预热解决方案：</p>
-<ul>
-<li><p>（1）直接写个缓存刷新页面，上线时手工操作下；</p>
-</li>
-<li><p>（2）数据量不大，可以在项目启动的时候自动进行加载；</p>
-</li>
-<li><p>（3）定时刷新缓存；</p>
-</li>
-</ul>
-<h2 id="缓存更新"><a href="#缓存更新" class="headerlink" title="缓存更新"></a>缓存更新</h2><p>除了缓存服务器自带的缓存失效策略之外（Redis默认的有6中策略可供选择），我们还可以根据具体的业务需求进行自定义的缓存淘汰，常见的策略有两种：</p>
-<p>（1）定时去清理过期的缓存；</p>
-<p>（2）当有用户请求过来时，再判断这个请求所用到的缓存是否过期，过期的话就去底层系统得到新数据并更新缓存。</p>
-<p>两者各有优劣，第一种的缺点是维护大量缓存的key是比较麻烦的，第二种的缺点就是每次用户请求过来都要判断缓存失效，逻辑相对比较复杂！具体用哪种方案，大家可以根据自己的应用场景来权衡。</p>
-<h2 id="缓存降级"><a href="#缓存降级" class="headerlink" title="缓存降级"></a>缓存降级</h2><p>当访问量剧增、服务出现问题（如响应时间慢或不响应）或非核心服务影响到核心流程的性能时，仍然需要保证服务还是可用的，即使是有损服务。系统可以根据一些关键数据进行自动降级，也可以配置开关实现人工降级。</p>
-<p>降级的最终目的是保证核心服务可用，即使是有损的。而且有些服务是无法降级的（如加入购物车、结算）。</p>
-<p>在进行降级之前要对系统进行梳理，看看系统是不是可以丢卒保帅；从而梳理出哪些必须誓死保护，哪些可降级；比如可以参考日志级别设置预案：</p>
-<p>（1）一般：比如有些服务偶尔因为网络抖动或者服务正在上线而超时，可以自动降级；</p>
-<p>（2）警告：有些服务在一段时间内成功率有波动（如在95~100%之间），可以自动降级或人工降级，并发送告警；</p>
-<p>（3）错误：比如可用率低于90%，或者数据库连接池被打爆了，或者访问量突然猛增到系统能承受的最大阀值，此时可以根据情况自动降级或者人工降级；</p>
-<p>（4）严重错误：比如因为特殊原因数据错误了，此时需要紧急人工降级。</p>
-
+        <h1 id="git-ssh-http-协议切换"><a href="#git-ssh-http-协议切换" class="headerlink" title="git ssh http 协议切换"></a>git ssh http 协议切换</h1><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># 先看一下远端地址是否自己想要的</span></span><br><span class="line">git remote -v </span><br><span class="line"><span class="meta"># 不是就移除</span></span><br><span class="line">git remote remove origin</span><br><span class="line"><span class="meta"># 添加新的</span></span><br><span class="line">git remote add origin http:<span class="comment">//172.16.5.77/HTDATA/CHD-Energy-Project.git</span></span><br><span class="line"><span class="meta"># 再看看</span></span><br><span class="line">git remote -v </span><br><span class="line"><span class="meta"># 合个代码试试</span></span><br><span class="line">git fetch origin</span><br><span class="line">git rebase origin/master</span><br><span class="line"><span class="meta"># 推个代码试试</span></span><br><span class="line">git push origin mingbai-dev</span><br></pre></td></tr></table></figure>
         
     </section>
 </article>

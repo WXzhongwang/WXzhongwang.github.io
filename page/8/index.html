@@ -131,185 +131,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/12/02/Redis数据类型之ZSet/">(七)Redis数据类型之ZSet(sorted_set)</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/8/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="七-Redis数据类型之ZSet-sorted-set"><a href="#七-Redis数据类型之ZSet-sorted-set" class="headerlink" title="(七)Redis数据类型之ZSet(sorted_set)"></a>(七)Redis数据类型之ZSet(sorted_set)</h1><h4 id="zadd"><a href="#zadd" class="headerlink" title="zadd"></a>zadd</h4><blockquote>
-<p>zadd key [NX|XX] [CH] [INCR] score member [score member …]</p>
-</blockquote>
-<p>往有序集合中新增成员，需要指定该成员的分数，分数可以是整形或浮点型，当分数相同时候，索引下标按照字典排序。</p>
-<figure class="highlight ceylon"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">zadd zset <span class="number">1</span> <span class="keyword">value</span><span class="number">1</span> <span class="number">2</span> <span class="keyword">value</span><span class="number">2</span> <span class="number">3</span> <span class="keyword">value</span><span class="number">3</span> <span class="number">4</span> <span class="keyword">value</span><span class="number">4</span></span><br><span class="line"></span><br><span class="line"><span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span> 表示的是各个元素的分数</span><br><span class="line"></span><br><span class="line">Docker:<span class="number">0</span>&gt;zrange zset <span class="number">0</span> -<span class="number">1</span> </span><br><span class="line"> <span class="number">1</span>)  <span class="string">"value1"</span></span><br><span class="line"> <span class="number">2</span>)  <span class="string">"value2"</span></span><br><span class="line"> <span class="number">3</span>)  <span class="string">"value3"</span></span><br><span class="line"> <span class="number">4</span>)  <span class="string">"value4"</span></span><br><span class="line"></span><br><span class="line">Docker:<span class="number">0</span>&gt;zrange zset <span class="number">0</span> -<span class="number">1</span> withscores</span><br><span class="line"> <span class="number">1</span>)  <span class="string">"value1"</span></span><br><span class="line"> <span class="number">2</span>)  <span class="string">"1"</span></span><br><span class="line"> <span class="number">3</span>)  <span class="string">"value2"</span></span><br><span class="line"> <span class="number">4</span>)  <span class="string">"2"</span></span><br><span class="line"> <span class="number">5</span>)  <span class="string">"value3"</span></span><br><span class="line"> <span class="number">6</span>)  <span class="string">"3"</span></span><br><span class="line"> <span class="number">7</span>)  <span class="string">"value4"</span></span><br><span class="line"> <span class="number">8</span>)  <span class="string">"4"</span></span><br></pre></td></tr></table></figure>
-<h4 id="zrange"><a href="#zrange" class="headerlink" title="zrange"></a>zrange</h4><blockquote>
-<p>zrange key start stop [WITHSCORES]</p>
-</blockquote>
-<p>根据下标查看集合内所有成员(及分数)，[start,stop]<br>[0 -1] 表示全部元素</p>
-<h4 id="zcard"><a href="#zcard" class="headerlink" title="zcard"></a>zcard</h4><blockquote>
-<p>zcard key</p>
-</blockquote>
-<p>获取有序集合的成员数。<br><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">Docker:</span><span class="number">0</span>&gt;zrange zset <span class="number">0</span> <span class="number">-1</span> </span><br><span class="line"> <span class="number">1</span>)  <span class="string">"value1"</span></span><br><span class="line"> <span class="number">2</span>)  <span class="string">"value2"</span></span><br><span class="line"> <span class="number">3</span>)  <span class="string">"value3"</span></span><br><span class="line"> <span class="number">4</span>)  <span class="string">"value4"</span></span><br><span class="line"><span class="symbol">Docker:</span><span class="number">0</span>&gt;zrange zset <span class="number">0</span> <span class="number">-1</span> withscores</span><br><span class="line"> <span class="number">1</span>)  <span class="string">"value1"</span></span><br><span class="line"> <span class="number">2</span>)  <span class="string">"1"</span></span><br><span class="line"> <span class="number">3</span>)  <span class="string">"value2"</span></span><br><span class="line"> <span class="number">4</span>)  <span class="string">"2"</span></span><br><span class="line"> <span class="number">5</span>)  <span class="string">"value3"</span></span><br><span class="line"> <span class="number">6</span>)  <span class="string">"3"</span></span><br><span class="line"> <span class="number">7</span>)  <span class="string">"value4"</span></span><br><span class="line"> <span class="number">8</span>)  <span class="string">"4"</span></span><br><span class="line"><span class="symbol">Docker:</span><span class="number">0</span>&gt;zcard zset</span><br><span class="line"><span class="string">"4"</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="zcount"><a href="#zcount" class="headerlink" title="zcount"></a>zcount</h4><blockquote>
-<p>ZCOUNT key min max</p>
-</blockquote>
-<p>从有序集合内获取指定分数区间内的成员数。<br><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">Docker:</span><span class="number">0</span>&gt;zrange zset <span class="number">0</span> <span class="number">-1</span> withscores</span><br><span class="line"> <span class="number">1</span>)  <span class="string">"value1"</span></span><br><span class="line"> <span class="number">2</span>)  <span class="string">"1"</span></span><br><span class="line"> <span class="number">3</span>)  <span class="string">"value2"</span></span><br><span class="line"> <span class="number">4</span>)  <span class="string">"2"</span></span><br><span class="line"> <span class="number">5</span>)  <span class="string">"value3"</span></span><br><span class="line"> <span class="number">6</span>)  <span class="string">"3"</span></span><br><span class="line"> <span class="number">7</span>)  <span class="string">"value4"</span></span><br><span class="line"> <span class="number">8</span>)  <span class="string">"4"</span></span><br><span class="line"><span class="symbol">Docker:</span><span class="number">0</span>&gt;zcount zset <span class="number">2</span> <span class="number">3</span></span><br><span class="line"><span class="string">"2"</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="zrank"><a href="#zrank" class="headerlink" title="zrank"></a>zrank</h4><blockquote>
-<p>ZRANK key member</p>
-</blockquote>
-<p>返回有序集合中指定成员的索引(下标)：</p>
-<h4 id="zrevrange"><a href="#zrevrange" class="headerlink" title="zrevrange"></a>zrevrange</h4><blockquote>
-<p>zrevrange key start stop [WITHSCORES]</p>
-</blockquote>
-<p>与zrange功能类似，不同的是zrevrange会将集合先反序[reverse]之后再执行zrange返回。</p>
-<h4 id="zincrby"><a href="#zincrby" class="headerlink" title="zincrby"></a>zincrby</h4><p>修改有序集合内成员的分数，将有序集合内成员的分数增加increment分值，increment可以为浮点型整型也可以为负数或正数。</p>
-<blockquote>
-<p>zincrby key increment member</p>
-</blockquote>
-<h4 id="zrem"><a href="#zrem" class="headerlink" title="zrem"></a>zrem</h4><blockquote>
-<p>zrem key member [member …]</p>
-</blockquote>
-<p>从集合中移除指定的成员。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/12/02/Redis数据类型之String/">(一) Redis 数据类型之字符串String</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/8/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="一-Redis-数据类型之字符串String"><a href="#一-Redis-数据类型之字符串String" class="headerlink" title="(一) Redis 数据类型之字符串String"></a>(一) Redis 数据类型之字符串String</h1><h4 id="判断key是否存在，返回true-false-1-0"><a href="#判断key是否存在，返回true-false-1-0" class="headerlink" title="判断key是否存在，返回true / false, 1/0"></a>判断key是否存在，返回true / false, 1/0</h4><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">exists</span> key</span><br></pre></td></tr></table></figure>
-<h4 id="查看剩余存活时间"><a href="#查看剩余存活时间" class="headerlink" title="查看剩余存活时间"></a>查看剩余存活时间</h4><p>※ 获取不存在的key，返回-1<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">ttl key</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="查看过期key情况"><a href="#查看过期key情况" class="headerlink" title="查看过期key情况"></a>查看过期key情况</h4><p>※ redis作为一个内存型的数据库，我们需要对过期key保持关注，从info keyspace中可以看出有多少key没有设置过期时间<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="builtin-name">info</span> keyspace</span><br><span class="line"></span><br><span class="line">eg: db0:<span class="attribute">keys</span>=10000,expires=3,avg_ttl=583699</span><br></pre></td></tr></table></figure></p>
-<h4 id="set"><a href="#set" class="headerlink" title="set"></a>set</h4><blockquote>
-<p>set key value [ex seconds] [px milliseconds] [nx|xx]</p>
-</blockquote>
-<ul>
-<li>ex : 过期 (s)</li>
-<li>px: 过期 (ms)</li>
-<li>nx: 不存在则创建</li>
-<li>xx: 存在则覆盖创建</li>
-</ul>
-<figure class="highlight q"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">① <span class="built_in">set</span> <span class="built_in">key</span> <span class="built_in">value</span></span><br><span class="line"></span><br><span class="line">② <span class="built_in">set</span> <span class="built_in">key</span> <span class="built_in">value</span> ex <span class="number">10</span></span><br><span class="line">  或者写法为: setex <span class="built_in">key</span> <span class="number">10</span> <span class="built_in">value</span></span><br><span class="line"></span><br><span class="line">③ <span class="built_in">set</span> <span class="built_in">key</span> <span class="built_in">value</span> px <span class="number">1000</span></span><br><span class="line">  或者写法为: psetex <span class="built_in">key</span> <span class="number">1000</span> <span class="built_in">value</span></span><br><span class="line"></span><br><span class="line">④ <span class="built_in">set</span> <span class="built_in">key</span> <span class="built_in">value</span> nx</span><br><span class="line">  或者写法为: setnx <span class="built_in">key</span> <span class="built_in">value</span> </span><br><span class="line">  </span><br><span class="line">⑤ <span class="built_in">set</span> <span class="built_in">key</span> <span class="built_in">value</span> xx</span><br></pre></td></tr></table></figure>
-<h4 id="mset"><a href="#mset" class="headerlink" title="mset"></a>mset</h4><p>mset, msetnx 批量创建</p>
-<blockquote>
-<p>mset key1 value1 [key2 value2…] #批量创建kv，已存在的会被更新</p>
-</blockquote>
-<blockquote>
-<p>msetnx key1 value1 [key2 value2…] #批量创建kv，所有key不存在才会创建</p>
-</blockquote>
-<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">127.0</span><span class="meta">.0</span><span class="meta">.1</span>:<span class="number">6379</span>&gt; mset <span class="built_in">k1</span> a <span class="built_in">k2</span> b <span class="built_in">k3</span> c</span><br><span class="line">OK</span><br><span class="line"><span class="number">127.0</span><span class="meta">.0</span><span class="meta">.1</span>:<span class="number">6379</span>&gt; mget <span class="built_in">k1</span> <span class="built_in">k2</span> <span class="built_in">k3</span></span><br><span class="line"><span class="number">1</span>) <span class="string">"a"</span></span><br><span class="line"><span class="number">2</span>) <span class="string">"b"</span></span><br><span class="line"><span class="number">3</span>) <span class="string">"c"</span></span><br></pre></td></tr></table></figure>
-<h4 id="del"><a href="#del" class="headerlink" title="del"></a>del</h4><blockquote>
-<p>del key1 [key2 key3…]</p>
-</blockquote>
-<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">127.0</span><span class="meta">.0</span><span class="meta">.1</span>:<span class="number">6379</span>&gt; del <span class="built_in">k1</span> <span class="built_in">k2</span> <span class="built_in">k3</span></span><br><span class="line">(integer) <span class="number">3</span></span><br><span class="line"><span class="number">127.0</span><span class="meta">.0</span><span class="meta">.1</span>:<span class="number">6379</span>&gt; del name_xx</span><br><span class="line">(integer) <span class="number">1</span></span><br><span class="line"><span class="number">127.0</span><span class="meta">.0</span><span class="meta">.1</span>:<span class="number">6379</span>&gt; mget <span class="built_in">k1</span> <span class="built_in">k2</span> <span class="built_in">k3</span> name_xx name_nx</span><br><span class="line"><span class="number">1</span>) (nil)</span><br><span class="line"><span class="number">2</span>) (nil)</span><br><span class="line"><span class="number">3</span>) (nil)</span><br><span class="line"><span class="number">4</span>) (nil)</span><br><span class="line"><span class="number">5</span>) <span class="string">"dick"</span></span><br></pre></td></tr></table></figure>
-<h4 id="getset"><a href="#getset" class="headerlink" title="getset"></a>getset</h4><blockquote>
-<p>getset key new_value</p>
-</blockquote>
-<p>等同于get+set，执行此命令返回get的结果，然后将该key更新为新的value，下次再get的时候查到的就是新的value。</p>
-<h4 id="setrange"><a href="#setrange" class="headerlink" title="setrange"></a>setrange</h4><blockquote>
-<p>setrange key offeset value</p>
-</blockquote>
-<p>对指定下标的字符串进行更新，下标从0开始算起。</p>
-<h4 id="keys"><a href="#keys" class="headerlink" title="keys"></a>keys</h4><blockquote>
-<p>keys * </p>
-</blockquote>
-<p>查看所有key</p>
-<h4 id="get"><a href="#get" class="headerlink" title="get"></a>get</h4><blockquote>
-<p>get key</p>
-</blockquote>
-<p>使用get获得指定key的value</p>
-<h4 id="mget"><a href="#mget" class="headerlink" title="mget"></a>mget</h4><blockquote>
-<p>mget key1 [key2 key3…]</p>
-</blockquote>
-<p>使用mget批量获得指定keys的values</p>
-<h4 id="getrange"><a href="#getrange" class="headerlink" title="getrange"></a>getrange</h4><blockquote>
-<p>getrange key start end</p>
-</blockquote>
-<p>从字符串的指定开始结束下标截取字符串返回，下标从0开始算起。</p>
-<h4 id="incr"><a href="#incr" class="headerlink" title="incr"></a>incr</h4><blockquote>
-<p>incr key</p>
-</blockquote>
-<p>对指定的key的value值 + 1, 若不存在，初始值为0，incr后为1。字符串无法转换会报错。</p>
-<h4 id="decr"><a href="#decr" class="headerlink" title="decr"></a>decr</h4><blockquote>
-<p>decr key</p>
-</blockquote>
-<p>对指定的key的value值 - 1, 若不存在，初始值为0，incr后为-1。字符串无法转换会报错。</p>
-<h4 id="incrby"><a href="#incrby" class="headerlink" title="incrby"></a>incrby</h4><blockquote>
-<p>incrby key </p>
-</blockquote>
-<p>增加指定步长，如果key不存在，初始值为0，incrby后为步长。不能转换会报错。</p>
-<h4 id="decrby"><a href="#decrby" class="headerlink" title="decrby"></a>decrby</h4><blockquote>
-<p>decrby key 3</p>
-</blockquote>
-<p>增加指定步长，如果key不存在，初始值为0，incrby后为步长的负数。不能转换会报错。</p>
-<h4 id="append"><a href="#append" class="headerlink" title="append"></a>append</h4><blockquote>
-<p>append key valu</p>
-</blockquote>
-<p>追加字符串</p>
-<h4 id="strlen"><a href="#strlen" class="headerlink" title="strlen"></a>strlen</h4><blockquote>
-<p>strlen key</p>
-</blockquote>
-<p>返回字符串的长度</p>
-<h4 id="incrbyfloat"><a href="#incrbyfloat" class="headerlink" title="incrbyfloat"></a>incrbyfloat</h4><blockquote>
-<p>incrbyfloat key 2.5</p>
-</blockquote>
-<p>支持浮点传参</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/12/02/nacos 部署方式/">nacos 部署方式</a>
+            <a href="/2018/12/02/Spring Cloud Alibaba 组件介绍/">Spring Cloud Alibaba 组件</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -332,32 +154,27 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="nacos-部署方式"><a href="#nacos-部署方式" class="headerlink" title="nacos 部署方式"></a>nacos 部署方式</h1><p><a href="https://nacos.io/zh-cn/docs/what-is-nacos.html" target="_blank" rel="noopener">nacos you should know</a></p>
-<p>Nacos支持三种部署模式</p>
-<ul>
-<li>单机模式 - 用于测试和单机试用。</li>
-<li>集群模式 - 用于生产环境，确保高可用。</li>
-<li>多集群模式 - 用于多数据中心场景。</li>
-</ul>
-<p>单机模式下运行Nacos</p>
-<blockquote>
-<p>Standalone means it is non-cluster Mode. * </p>
-</blockquote>
-<ol>
-<li><p>Linux/Unix/Mac</p>
-<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sh </span>startup.<span class="keyword">sh </span>-m standalone</span><br></pre></td></tr></table></figure>
+        <h1 id="Spring-Cloud-Alibaba-组件"><a href="#Spring-Cloud-Alibaba-组件" class="headerlink" title="Spring Cloud Alibaba 组件"></a>Spring Cloud Alibaba 组件</h1><ol>
+<li><p>Sentinel：把流量作为切入点，从流量控制、熔断降级、系统负载保护等多个维度保护服务的稳定性。</p>
 </li>
-<li><p>Windows</p>
-<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmd</span><span class="bash"> startup.cmd -m standalone</span></span><br></pre></td></tr></table></figure>
+<li><p>Nacos：一个更易于构建云原生应用的动态服务发现、配置管理和服务管理平台。</p>
+</li>
+<li><p>RocketMQ：一款开源的分布式消息系统，基于高可用分布式集群技术，提供低延时的、高可靠的消息发布与订阅服务。</p>
+</li>
+<li><p>Dubbo：Apache Dubbo™ 是一款高性能 Java RPC 框架。</p>
+</li>
+<li><p>Seata：阿里巴巴开源产品，一个易于使用的高性能微服务分布式事务解决方案。</p>
+</li>
+<li><p>Alibaba Cloud ACM：一款在分布式架构环境中对应用配置进行集中管理和推送的应用配置中心产品。</p>
+</li>
+<li><p>Alibaba Cloud OSS: 阿里云对象存储服务（Object Storage Service，简称 OSS），是阿里云提供的海量、安全、低成本、高可靠的云存储服务。您可以在任何应用、任何时间、任何地点存储和访问任意类型的数据。</p>
+</li>
+<li><p>Alibaba Cloud SchedulerX: 阿里中间件团队开发的一款分布式任务调度产品，提供秒级、精准、高可靠、高可用的定时（基于 Cron 表达式）任务调度服务。</p>
+</li>
+<li><p>Alibaba Cloud SMS: 覆盖全球的短信服务，友好、高效、智能的互联化通讯能力，帮助企业迅速搭建客户触达通道。</p>
 </li>
 </ol>
-<p>单机模式支持mysql<br>在0.7版本之前，在单机模式时nacos使用嵌入式数据库实现数据的存储，不方便观察数据存储的基本情况。0.7版本增加了支持mysql数据源能力，具体的操作步骤：</p>
-<ol>
-<li>安装数据库，版本要求：5.6.5+</li>
-<li>初始化mysql数据库，数据库初始化文件：nacos-mysql.sql</li>
-<li>修改conf/application.properties文件，增加支持mysql数据源配置（目前只支持mysql），添加mysql数据源的url、用户名和密码。</li>
-</ol>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring.datasource.platform</span>=mysql</span><br><span class="line"></span><br><span class="line"><span class="attr">db.num</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">db.url.0</span>=jdbc:mysql://<span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">3306</span>/nacos_config?characterEncoding=utf8&amp;connectTimeout=<span class="number">1000</span>&amp;socketTimeout=<span class="number">3000</span>&amp;autoReconnect=<span class="literal">true</span></span><br><span class="line"><span class="attr">db.user</span>=nacos_config</span><br><span class="line"><span class="attr">db.password</span>=youdontknow</span><br></pre></td></tr></table></figure>
+
         
     </section>
 </article>
@@ -368,7 +185,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/12/02/git ssh http 协议切换 /">git ssh http 协议切换</a>
+            <a href="/2018/12/02/线上排查基本操作/">线上排查基本操作</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -382,7 +199,7 @@
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Git/">Git</a>
+    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
 </div>
 
 
@@ -391,7 +208,32 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="git-ssh-http-协议切换"><a href="#git-ssh-http-协议切换" class="headerlink" title="git ssh http 协议切换"></a>git ssh http 协议切换</h1><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># 先看一下远端地址是否自己想要的</span></span><br><span class="line">git remote -v </span><br><span class="line"><span class="meta"># 不是就移除</span></span><br><span class="line">git remote remove origin</span><br><span class="line"><span class="meta"># 添加新的</span></span><br><span class="line">git remote add origin http:<span class="comment">//172.16.5.77/HTDATA/CHD-Energy-Project.git</span></span><br><span class="line"><span class="meta"># 再看看</span></span><br><span class="line">git remote -v </span><br><span class="line"><span class="meta"># 合个代码试试</span></span><br><span class="line">git fetch origin</span><br><span class="line">git rebase origin/master</span><br><span class="line"><span class="meta"># 推个代码试试</span></span><br><span class="line">git push origin mingbai-dev</span><br></pre></td></tr></table></figure>
+        <h1 id="线上排查基本操作"><a href="#线上排查基本操作" class="headerlink" title="线上排查基本操作"></a>线上排查基本操作</h1><h2 id="1-CPU-飚高"><a href="#1-CPU-飚高" class="headerlink" title="1. CPU 飚高"></a>1. CPU 飚高</h2><p>线上 CPU 飚高问题大家应该都遇到过，那么如何定位问题呢？</p>
+<p>思路：首先找到 CPU 飚高的那个 Java 进程，因为你的服务器会有多个 JVM 进程。然后找到那个进程中的 “问题线程”，最后根据线程堆栈信息找到问题代码。最后对代码进行排查。</p>
+<p>如何操作呢？</p>
+<p>通过 top 命令找到 CPU 消耗最高的进程，并记住进程 ID。<br>再次通过 top -Hp [进程 ID] 找到 CPU 消耗最高的线程 ID，并记住线程 ID.<br><figure class="highlight prolog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">top -<span class="symbol">Hp</span> [进程 <span class="symbol">ID</span>]  -- 找到 <span class="symbol">CPU</span> 消耗最高的线程 <span class="symbol">ID</span>，并记住线程 <span class="symbol">ID</span>.</span><br></pre></td></tr></table></figure></p>
+<p>通过 JDK 提供的 jstack 工具 dump 线程堆栈信息到指定文件中。具体命令：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jstack -l [进程 ID] &gt;jstack.log。</span><br><span class="line"></span><br><span class="line">由于刚刚的线程 ID 是十进制的，而堆栈信息中的线程 ID 是<span class="number">16</span>进制的，因此我们需要将<span class="number">10</span>进制的转换成<span class="number">16</span>进制的，并用这个线程 ID 在堆栈中查找。使用 printf <span class="string">"%x<span class="subst">\n</span>"</span> [十进制数字] ，可以将<span class="number">10</span>进制转换成<span class="number">16</span>进制。</span><br></pre></td></tr></table></figure></p>
+<p>通过刚刚转换的16进制数字从堆栈信息里找到对应的线程堆栈。就可以从该堆栈中看出端倪。<br>从经验来看，一般是某个业务死循环没有出口，这种情况可以根据业务进行修复。<br>还有 C2 编译器执行编译时也会抢占 CPU，什么是 C2编译器呢？<br>当 Java 某一段代码执行次数超过10000次（默认）后，<br>就会将该段代码从解释执行改为编译执行，也就是编译成机器码以提高速度。<br>而这个 C2编译器就是做这个的。如何解决呢？项目上线后，可以先通过压测工具进行预热，<br>这样，等用户真正访问的时候，C2编译器就不会干扰应用程序了。<br>如果是 GC 线程导致的，那么极有可能是 Full GC ，那么就要进行 GC 的优化。</p>
+<h2 id="2-内存问题排查"><a href="#2-内存问题排查" class="headerlink" title="2. 内存问题排查"></a>2. 内存问题排查</h2><p>说完了 CPU 的问题排查，再说说内存的排查，通常，内存的问题就是 GC 的问题，因为 Java 的内存由 GC 管理。<br>有2种情况，一种是内存溢出了，一种是内存没有溢出，但 GC 不健康。</p>
+<h2 id="内存溢出OOM"><a href="#内存溢出OOM" class="headerlink" title="内存溢出OOM"></a>内存溢出OOM</h2><p>内存溢出的情况可以通过加上 -XX:+HeapDumpOnOutOfMemoryError 参数，该参数作用是：在程序内存溢出时输出 dump 文件。</p>
+<p>有了 dump 文件，就可以通过 dump 分析工具进行分析了，比如常用的MAT，Jprofile，jvisualvm 等工具都可以分析，这些工具都能够看出到底是哪里溢出，哪里创建了大量的对象等等信息。</p>
+<h2 id="GC-的健康问题-第二种情况就比较复杂了"><a href="#GC-的健康问题-第二种情况就比较复杂了" class="headerlink" title="GC 的健康问题(第二种情况就比较复杂了)"></a>GC 的健康问题(第二种情况就比较复杂了)</h2><p>通常一个健康的 GC 是什么状态呢？</p>
+<p>YGC 5秒一次左右，每次不超过50毫秒，FGC 最好没有，CMS GC 一天一次左右。</p>
+<p>而 GC 的优化有2个维度:</p>
+<blockquote>
+<p>一是频率，二是时长。</p>
+</blockquote>
+<h3 id="YGC-年轻代GC"><a href="#YGC-年轻代GC" class="headerlink" title="YGC 年轻代GC"></a>YGC 年轻代GC</h3><p>首先看频率，如果 YGC 超过5秒一次，甚至更长，说明系统内存过大，应该缩小容量<br>如果频率很高，说明 Eden 区过小，可以将 Eden 区增大，但整个新生代的容量应该在堆的 30% - 40%之间，<br>eden，from 和 to 的比例应该在 8：1：1左右，这个比例可根据对象晋升的大小进行调整。</p>
+<p>如果YGC时间过长呢？<br>YGC 有2个过程，一个是扫描，一个是复制，通常扫描速度很快，复制速度相比而言要慢一些，如果每次都有大量对象要复制，<br>就会将 STW 时间延长，还有一个情况就是 StringTable ，这个数据结构中存储着 String.intern 方法返回的常连池的引用，<br>YGC 每次都会扫描这个数据结构（HashTable），如果这个数据结构很大，且没有经过 FGC，那么也会拉长 STW 时长，<br>还有一种情况就是操作系统的虚拟内存，当 GC 时正巧操作系统正在交换内存，也会拉长 STW 时长。</p>
+<h3 id="FGC"><a href="#FGC" class="headerlink" title="FGC"></a>FGC</h3><p>实际上，FGC 我们只能优化频率，无法优化时长，因为这个时长无法控制。如何优化频率呢？</p>
+<p>首先，FGC 的原因有几个:<br>1.Old 区内存不够<br>2.元数据区内存不够<br>3.System.gc()<br>4.执行jmap 或者 jcmd，<br>5.是CMS Promotion failed 或者 concurrent mode failure，<br>6.JVM 基于悲观策略认为这次 YGC 后 Old 区无法容纳晋升的对象，因此取消 YGC，提前 FGC。</p>
+<p>通常优化的点是 Old 区内存不够导致 FGC。<br>如果 FGC 后还有大量对象，说明 Old 区过小，应该扩大 Old 区。<br>如果 FGC 后效果很好，说明 Old 区存在了大量短命的对象，优化的点应该是让这些对象在新生代就被 YGC 掉，<br>通常的做法是增大新生代，如果有大而短命的对象，通过参数设置对象的大小，不要让这些对象进入 Old 区，还需要检查晋升年龄是否过小。<br>如果 YGC 后，有大量对象因为无法进入 Survivor 区从而提前晋升，这时应该增大 Survivor 区，但不宜太大。</p>
+<p>上面说的都是优化的思路，我们也需要一些工具知道 GC 的状况。</p>
+<p>JDK 提供了很多的工具，比如 jmap ，jcmd 等，oracle 官方推荐使用 jcmd 代替 jmap，因为 jcmd 确实能代替 jmap 很多功能。<br>jmap 可以打印对象的分布信息，可以 dump 文件，注意，jmap 和 jcmd dump 文件的时候会触发 FGC ，使用的时候注意场景。</p>
+<p>还有一个比较常用的工具是 jstat，该工具可以查看GC 的详细信息，比如eden ，from，to，old 等区域的内存使用情况。<br>还有一个工具是 jinfo，该工具可以查看当前 jvm 使用了哪些参数，并且也可以在不停机的情况下修改参数。</p>
+<p>包括我们上面说的一些分析 dump 文件的可视化工具，MAT，Jprofile，jvisualvm 等，这些工具可以分析 jmap dump 下来的文件，看看哪个对象使用的内存较多，通常是能够查出问题的。</p>
+<p>还有很重要的一点就是，线上环境一定要带上 GC 日志！！！</p>
+
         
     </section>
 </article>
@@ -402,7 +244,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/12/02/fastjson autoType 问题/">fastjson enable_autotype</a>
+            <a href="/2018/12/02/GC参数/">线上排查基本操作</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -425,292 +267,170 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="fastjson-enable-autotype"><a href="#fastjson-enable-autotype" class="headerlink" title="fastjson enable_autotype"></a>fastjson enable_autotype</h1><p><a href="https://github.com/alibaba/fastjson/wiki/enable_autotype" target="_blank" rel="noopener">https://github.com/alibaba/fastjson/wiki/enable_autotype</a></p>
-<h2 id="打开AutoType功能"><a href="#打开AutoType功能" class="headerlink" title="打开AutoType功能"></a>打开AutoType功能</h2><p>在1.2.25之后的版本，以及所有的.sec01后缀版本中，autotype功能是受限的，和之前的版本不同，如果在升级的过程中遇到问题，可以通过以下方法配置。</p>
-<h2 id="一、添加autotype白名单"><a href="#一、添加autotype白名单" class="headerlink" title="一、添加autotype白名单"></a>一、添加autotype白名单</h2><p>添加白名单有三种方式，三选一，如下:<br></p>
-<h3 id="1-在代码中配置"><a href="#1-在代码中配置" class="headerlink" title="1. 在代码中配置"></a>1. 在代码中配置</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ParserConfig.getGlobalInstance().addAccept(<span class="string">"com.taobao.pac.client.sdk.dataobject."</span>);</span><br></pre></td></tr></table></figure>
-<p>如果有多个包名前缀，分多次addAccept</p>
-<h3 id="2-加上JVM启动参数"><a href="#2-加上JVM启动参数" class="headerlink" title="2. 加上JVM启动参数"></a>2. 加上JVM启动参数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Dfastjson.parser.autoTypeAccept=com.taobao.pac.client.sdk.dataobject.,com.cainiao.</span><br></pre></td></tr></table></figure>
-<p>如果有多个包名前缀，用逗号隔开</p>
-<h3 id="3-通过fastjson-properties文件配置。"><a href="#3-通过fastjson-properties文件配置。" class="headerlink" title="3. 通过fastjson.properties文件配置。"></a>3. 通过fastjson.properties文件配置。</h3><p>在1.2.25/1.2.26版本支持通过类路径的fastjson.properties文件来配置，配置方式如下：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastjson<span class="selector-class">.parser</span><span class="selector-class">.autoTypeAccept</span>=com<span class="selector-class">.taobao</span><span class="selector-class">.pac</span><span class="selector-class">.client</span><span class="selector-class">.sdk</span><span class="selector-class">.dataobject</span>.,com<span class="selector-class">.cainiao</span>. <span class="comment">// 如果有多个包名前缀，用逗号隔开</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="二、打开autotype功能"><a href="#二、打开autotype功能" class="headerlink" title="二、打开autotype功能"></a>二、打开autotype功能</h2><p>如果通过配置白名单解决不了问题，可以选择继续打开autotype功能，fastjson在新版本中内置了多重防护，但是还是可能会存在一定风险。两种方法打开autotype，二选一，如下：</p>
-<h3 id="1、JVM启动参数"><a href="#1、JVM启动参数" class="headerlink" title="1、JVM启动参数"></a>1、JVM启动参数</h3><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">-Dfastjson.parser.autoTypeSupport</span>=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<h3 id="2、代码中设置"><a href="#2、代码中设置" class="headerlink" title="2、代码中设置"></a>2、代码中设置</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ParserConfig.getGlobalInstance().setAutoTypeSupport(<span class="keyword">true</span>);</span><br></pre></td></tr></table></figure>
-<p>如果有使用非全局ParserConfig则用另外调用setAutoTypeSupport(true)；</p>
-<h2 id="三、配置autoType黑名单"><a href="#三、配置autoType黑名单" class="headerlink" title="三、配置autoType黑名单"></a>三、配置autoType黑名单</h2><p>打开AutoType之后，是基于内置黑名单来实现安全的，但黑名单是穷举不完的，如果发现了新的风险类，可以通过以下配置来增加黑名单：</p>
-<h3 id="1-配置JVM启动参数"><a href="#1-配置JVM启动参数" class="headerlink" title="1. 配置JVM启动参数"></a>1. 配置JVM启动参数</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Dfastjson<span class="selector-class">.parser</span><span class="selector-class">.deny</span>=xx.xxx</span><br></pre></td></tr></table></figure>
-<ul>
-<li>这里的xx.xxx是包名前缀，如果有多个包名前缀，用逗号隔开</li>
-</ul>
-<h3 id="2-通过fastjson-properties来配置"><a href="#2-通过fastjson-properties来配置" class="headerlink" title="2. 通过fastjson.properties来配置"></a>2. 通过fastjson.properties来配置</h3><p>在1.2.25之后的版本支持通过类路径的fastjson.properties文件来配置，配置方式如下：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Dfastjson<span class="selector-class">.parser</span><span class="selector-class">.deny</span>=xx.xxx</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>这里的xx.xxx是包名前缀，如果有多个包名前缀，用逗号隔开</li>
-</ul>
-<h3 id="3-代码中配置"><a href="#3-代码中配置" class="headerlink" title="3. 代码中配置"></a>3. 代码中配置</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ParserConfig.getGlobalInstance().addDeny(<span class="string">"xx.xxx"</span>);</span><br></pre></td></tr></table></figure>
-<ul>
-<li>这里的xx.xxx是包名前缀，如果有多个包名前缀，用逗号隔开</li>
-</ul>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/12/02/Nginx的负载均衡策略(粗略)/">附上Nginx的负载均衡策略</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/8/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Nginx/">Nginx</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="附上Nginx的负载均衡策略："><a href="#附上Nginx的负载均衡策略：" class="headerlink" title="附上Nginx的负载均衡策略："></a>附上Nginx的负载均衡策略：</h1><h2 id="轮询（默认）"><a href="#轮询（默认）" class="headerlink" title="轮询（默认）:"></a>轮询（默认）:</h2><p>每个请求按时间顺序逐一分配到不同的后端服务器，如果后端服务器down掉，能自动剔除。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="指定权重"><a href="#指定权重" class="headerlink" title="指定权重"></a>指定权重</h2><p>指定轮询几率，weight和访问比率成正比，用于后端服务器性能不均的情况。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14 <span class="attribute">weight</span>=10; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15 <span class="attribute">weight</span>=10; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="IP绑定-ip-hash"><a href="#IP绑定-ip-hash" class="headerlink" title="IP绑定 ip_hash"></a>IP绑定 ip_hash</h2><p>每个请求按访问ip的hash结果分配，这样每个访客固定访问一个后端服务器，可以解决session的问题。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"> ip_hash; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14:88; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15:80; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="fair（第三方）"><a href="#fair（第三方）" class="headerlink" title="fair（第三方）"></a>fair（第三方）</h2><p>按后端服务器的响应时间来分配请求，响应时间短的优先分配。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14:88; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15:80;</span><br><span class="line"> fair; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="url-hash（第三方）"><a href="#url-hash（第三方）" class="headerlink" title="url_hash（第三方）"></a>url_hash（第三方）</h2><p>按访问url的hash结果来分配请求，使每个url定向到同一个后端服务器，后端服务器为缓存时比较有效。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123;</span><br><span class="line"><span class="built_in"> server </span>squid1:3128; </span><br><span class="line"><span class="built_in"> server </span>squid2:3128;</span><br><span class="line"> </span><br><span class="line"> hash <span class="variable">$request_uri</span>; </span><br><span class="line"> hash_method crc32; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/12/02/Redis数据类型之Set/">(六)Redis数据类型之Set</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/8/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="六-Redis数据类型之Set"><a href="#六-Redis数据类型之Set" class="headerlink" title="(六)Redis数据类型之Set"></a>(六)Redis数据类型之Set</h1><h4 id="sadd"><a href="#sadd" class="headerlink" title="sadd"></a>sadd</h4><blockquote>
-<p>sadd key member [member1 …]</p>
-</blockquote>
-<p>给集合内新增成员，若集合不存在则创建集合并新增成员。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">sadd <span class="builtin-name">set</span> one</span><br><span class="line">sadd <span class="builtin-name">set</span> two</span><br><span class="line">sadd <span class="builtin-name">set</span> three</span><br><span class="line">sadd <span class="builtin-name">set</span> four</span><br><span class="line">sadd <span class="builtin-name">set</span> five</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Docker:0&gt;smembers set</span><br><span class="line"> 1)  <span class="string">"four"</span></span><br><span class="line"> 2)  <span class="string">"two"</span></span><br><span class="line"> 3)  <span class="string">"one"</span></span><br><span class="line"> 4)  <span class="string">"three"</span></span><br><span class="line"> 5)  <span class="string">"five"</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="srem"><a href="#srem" class="headerlink" title="srem"></a>srem</h4><blockquote>
-<p>srem key member [member1 …]</p>
-</blockquote>
-<p>移除元素</p>
-<h4 id="smove"><a href="#smove" class="headerlink" title="smove"></a>smove</h4><blockquote>
-<p>smove source destination member</p>
-</blockquote>
-<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Docker<span class="function">:0</span>&gt;sadd <span class="keyword">set</span>1 dick joe nick joe</span><br><span class="line"><span class="string">"3"</span></span><br><span class="line"></span><br><span class="line">Docker<span class="function">:0</span>&gt;sadd <span class="keyword">set</span>2 helen steve frank</span><br><span class="line"><span class="string">"3"</span></span><br><span class="line"></span><br><span class="line">Docker<span class="function">:0</span>&gt;smove <span class="keyword">set</span>1 <span class="keyword">set</span>2 joe</span><br><span class="line"><span class="string">"1"</span></span><br><span class="line"></span><br><span class="line">Docker<span class="function">:0</span>&gt;smembers <span class="keyword">set</span>2</span><br><span class="line"> 1)  <span class="string">"steve"</span></span><br><span class="line"> 2)  <span class="string">"joe"</span></span><br><span class="line"> 3)  <span class="string">"frank"</span></span><br><span class="line"> 4)  <span class="string">"helen"</span></span><br><span class="line"> </span><br><span class="line"> Docker<span class="function">:0</span>&gt;smembers <span class="keyword">set</span>1</span><br><span class="line"> 1)  <span class="string">"nick"</span></span><br><span class="line"> 2)  <span class="string">"dick"</span></span><br></pre></td></tr></table></figure>
-<h4 id="smembers"><a href="#smembers" class="headerlink" title="smembers"></a>smembers</h4><blockquote>
-<p>smembers key</p>
-</blockquote>
-<p> 查看成员<br>  <figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">Docker:</span><span class="number">0</span>&gt;smembers set2</span><br><span class="line"><span class="number">1</span>)  <span class="string">"steve"</span></span><br><span class="line"><span class="number">2</span>)  <span class="string">"joe"</span></span><br><span class="line"><span class="number">3</span>)  <span class="string">"frank"</span></span><br><span class="line"><span class="number">4</span>)  <span class="string">"helen"</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="scard"><a href="#scard" class="headerlink" title="scard"></a>scard</h4><blockquote>
-<p>scard key </p>
-</blockquote>
-<p> 返回集合中成员的个数</p>
- <figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol"> Docker:</span><span class="number">0</span>&gt;scard set2</span><br><span class="line"><span class="string">"4"</span></span><br><span class="line"></span><br><span class="line"><span class="symbol">Docker:</span><span class="number">0</span>&gt;scard set1</span><br><span class="line"><span class="string">"2"</span></span><br></pre></td></tr></table></figure>
-<h4 id="srandmember"><a href="#srandmember" class="headerlink" title="srandmember"></a>srandmember</h4><blockquote>
-<p>srandmember key [count]</p>
-</blockquote>
-<p> 从集合中随机返回指定个数的成员<br> <figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">Docker:</span><span class="number">0</span>&gt;srandmember set2 <span class="number">2</span></span><br><span class="line"> <span class="number">1</span>)  <span class="string">"helen"</span></span><br><span class="line"> <span class="number">2</span>)  <span class="string">"frank"</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="sismember"><a href="#sismember" class="headerlink" title="sismember"></a>sismember</h4><blockquote>
-<p>sismember key member</p>
-</blockquote>
-<p> 判断是否存在于指定key的集合中</p>
- <figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol"> Docker:</span><span class="number">0</span>&gt;smembers set1</span><br><span class="line"> <span class="number">1</span>)  <span class="string">"nick"</span></span><br><span class="line"> <span class="number">2</span>)  <span class="string">"dick"</span></span><br><span class="line"><span class="symbol"> Docker:</span><span class="number">0</span>&gt;sismember set1 dick</span><br><span class="line"><span class="string">"1"</span></span><br></pre></td></tr></table></figure>
-<h4 id="spop"><a href="#spop" class="headerlink" title="spop"></a>spop</h4><blockquote>
-<p>spop key</p>
-</blockquote>
-<p>从集合中随机弹出一个成员，返回该成员并从集合中删除该成员</p>
-<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">Docker:</span><span class="number">0</span>&gt;smembers set2</span><br><span class="line"> <span class="number">1</span>)  <span class="string">"steve"</span></span><br><span class="line"> <span class="number">2</span>)  <span class="string">"joe"</span></span><br><span class="line"> <span class="number">3</span>)  <span class="string">"frank"</span></span><br><span class="line"> <span class="number">4</span>)  <span class="string">"helen"</span></span><br><span class="line"><span class="symbol">Docker:</span><span class="number">0</span>&gt;spop set2</span><br><span class="line"><span class="string">"joe"</span></span><br><span class="line"><span class="symbol">Docker:</span><span class="number">0</span>&gt;smembers set2</span><br><span class="line"> <span class="number">1</span>)  <span class="string">"steve"</span></span><br><span class="line"> <span class="number">2</span>)  <span class="string">"frank"</span></span><br><span class="line"> <span class="number">3</span>)  <span class="string">"helen"</span></span><br></pre></td></tr></table></figure>
-<h4 id="sinter"><a href="#sinter" class="headerlink" title="sinter"></a>sinter</h4><blockquote>
-<p>sinter key [key2 key3 …]</p>
-</blockquote>
-<p>取多个集合的交集，返回这些集合中共同拥有的成员<br><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Docker<span class="function">:0</span>&gt;smembers <span class="keyword">set</span>A</span><br><span class="line"> 1)  <span class="string">"C"</span></span><br><span class="line"> 2)  <span class="string">"A"</span></span><br><span class="line"> 3)  <span class="string">"F"</span></span><br><span class="line"> 4)  <span class="string">"B"</span></span><br><span class="line"> 5)  <span class="string">"D"</span></span><br><span class="line"> 6)  <span class="string">"E"</span></span><br><span class="line">Docker<span class="function">:0</span>&gt;smembers <span class="keyword">set</span>B</span><br><span class="line"> 1)  <span class="string">"E"</span></span><br><span class="line"> 2)  <span class="string">"D"</span></span><br><span class="line"> 3)  <span class="string">"B"</span></span><br><span class="line"> 4)  <span class="string">"C"</span></span><br><span class="line"> 5)  <span class="string">"F"</span></span><br><span class="line">Docker<span class="function">:0</span>&gt;smembers <span class="keyword">set</span>C</span><br><span class="line"> 1)  <span class="string">"D"</span></span><br><span class="line"> 2)  <span class="string">"C"</span></span><br><span class="line"> </span><br><span class="line">Docker<span class="function">:0</span>&gt;sinter <span class="keyword">set</span>A <span class="keyword">set</span>B <span class="keyword">set</span>C</span><br><span class="line"> 1)  <span class="string">"D"</span></span><br><span class="line"> 2)  <span class="string">"C"</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="sinterstore"><a href="#sinterstore" class="headerlink" title="sinterstore"></a>sinterstore</h4><blockquote>
-<p>sinterstore destination key [key1 key2 …]</p>
-</blockquote>
-<p>取多个集合的交集∩， 结果存于新的set<br><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Docker<span class="function">:0</span>&gt;sinterstore rest_A_B_C <span class="keyword">set</span>A <span class="keyword">set</span>B <span class="keyword">set</span>C</span><br><span class="line"><span class="string">"2"</span></span><br><span class="line"></span><br><span class="line">Docker<span class="function">:0</span>&gt;smembers rest_A_B_C</span><br><span class="line"> 1)  <span class="string">"D"</span></span><br><span class="line"> 2)  <span class="string">"C"</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="sunion"><a href="#sunion" class="headerlink" title="sunion"></a>sunion</h4><blockquote>
-<p>sunion key [key1 key2 …]</p>
-</blockquote>
-<p>求并集∪，相同的成员会被去重</p>
-<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Docker<span class="function">:0</span>&gt;sunion <span class="keyword">set</span>A <span class="keyword">set</span>B <span class="keyword">set</span>C</span><br><span class="line"> 1)  <span class="string">"F"</span></span><br><span class="line"> 2)  <span class="string">"B"</span></span><br><span class="line"> 3)  <span class="string">"D"</span></span><br><span class="line"> 4)  <span class="string">"A"</span></span><br><span class="line"> 5)  <span class="string">"C"</span></span><br><span class="line"> 6)  <span class="string">"E"</span></span><br></pre></td></tr></table></figure>
-<h4 id="sunionstore"><a href="#sunionstore" class="headerlink" title="sunionstore"></a>sunionstore</h4><blockquote>
-<p>sunionstore destination key [key …]</p>
-</blockquote>
-<p>将多个集合的并集的结果保存为一个新的集合destination ，返回新集合的成员个数。</p>
-<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Docker<span class="function">:0</span>&gt;sunionstore union_A_B_C <span class="keyword">set</span>A <span class="keyword">set</span>B <span class="keyword">set</span>C</span><br><span class="line"><span class="string">"6"</span></span><br><span class="line"></span><br><span class="line">Docker<span class="function">:0</span>&gt;smembers union_A_B_C</span><br><span class="line"> 1)  <span class="string">"F"</span></span><br><span class="line"> 2)  <span class="string">"B"</span></span><br><span class="line"> 3)  <span class="string">"D"</span></span><br><span class="line"> 4)  <span class="string">"A"</span></span><br><span class="line"> 5)  <span class="string">"C"</span></span><br><span class="line"> 6)  <span class="string">"E"</span></span><br></pre></td></tr></table></figure>
-<h4 id="sdiff"><a href="#sdiff" class="headerlink" title="sdiff"></a>sdiff</h4><blockquote>
-<p>sdiff key [key1 key2 …]</p>
-</blockquote>
-<p>取多个集合的差集，以最左边的为主集合，返回左集合中有而其他集合没有的成员</p>
-<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Docker<span class="function">:0</span>&gt;smembers <span class="keyword">set</span>A</span><br><span class="line"> 1)  <span class="string">"C"</span></span><br><span class="line"> 2)  <span class="string">"A"</span></span><br><span class="line"> 3)  <span class="string">"F"</span></span><br><span class="line"> 4)  <span class="string">"B"</span></span><br><span class="line"> 5)  <span class="string">"D"</span></span><br><span class="line"> 6)  <span class="string">"E"</span></span><br><span class="line">Docker<span class="function">:0</span>&gt;smembers <span class="keyword">set</span>B</span><br><span class="line"> 1)  <span class="string">"E"</span></span><br><span class="line"> 2)  <span class="string">"D"</span></span><br><span class="line"> 3)  <span class="string">"B"</span></span><br><span class="line"> 4)  <span class="string">"C"</span></span><br><span class="line"> 5)  <span class="string">"F"</span></span><br><span class="line">Docker<span class="function">:0</span>&gt;smembers <span class="keyword">set</span>C</span><br><span class="line"> 1)  <span class="string">"D"</span></span><br><span class="line"> 2)  <span class="string">"C"</span></span><br><span class="line">※ 集合A 比集合B和集合C多了A这个元素</span><br><span class="line">Docker<span class="function">:0</span>&gt;sdiff <span class="keyword">set</span>A <span class="keyword">set</span>B <span class="keyword">set</span>C</span><br><span class="line"> 1)  <span class="string">"A"</span></span><br></pre></td></tr></table></figure>
-<h4 id="sdiffstore"><a href="#sdiffstore" class="headerlink" title="sdiffstore"></a>sdiffstore</h4><blockquote>
-<p>sdiffstore destination key [key1 key2 …]</p>
-</blockquote>
-<p>将多个集合的差集的结果保存为一个新的集合destination，返回新集合的成员个数<br><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Docker<span class="function">:0</span>&gt;sdiffstore diff_A_B_C <span class="keyword">set</span>A <span class="keyword">set</span>B <span class="keyword">set</span>C</span><br><span class="line"><span class="string">"1"</span></span><br><span class="line"></span><br><span class="line">Docker<span class="function">:0</span>&gt;smembers diff_A_B_C</span><br><span class="line">1)  <span class="string">"A"</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="set-集合结合具体业务场景："><a href="#set-集合结合具体业务场景：" class="headerlink" title="set 集合结合具体业务场景："></a>set 集合结合具体业务场景：</h4><p>应用场景</p>
-<ul>
-<li>抽奖：随机返回指定个数成员</li>
-<li>共同好友：取交集</li>
-<li>好友推荐：根据标签取交集，交集的成员个数大于某个阈值触发推荐动作</li>
-</ul>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/12/02/Redis数据类型之List下/">(三) Redis数据类型之List下</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/8/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h4 id="rpoplpush"><a href="#rpoplpush" class="headerlink" title="rpoplpush"></a>rpoplpush</h4><p>消费列表A的最右边的元素返回，然后追加到列表B的最左边：</p>
-<blockquote>
-<p>rpoplpush source destination</p>
-</blockquote>
-<p>rpoplpush List_A List_B</p>
-<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Docker:<span class="number">0</span>&gt;<span class="keyword">lrange</span> <span class="keyword">source</span> <span class="number">0</span> <span class="number">-1</span></span><br><span class="line"> <span class="number">1</span>)  <span class="string">"1"</span></span><br><span class="line"> <span class="number">2</span>)  <span class="string">"2"</span></span><br><span class="line"> <span class="number">3</span>)  <span class="string">"3"</span></span><br><span class="line">Docker:<span class="number">0</span>&gt;<span class="keyword">lrange</span> destination <span class="number">0</span> <span class="number">-1</span></span><br><span class="line"> <span class="number">1</span>)  <span class="string">"4"</span></span><br><span class="line"> <span class="number">2</span>)  <span class="string">"5"</span></span><br><span class="line"> <span class="number">3</span>)  <span class="string">"6"</span></span><br><span class="line">Docker:<span class="number">0</span>&gt;rpoplpush <span class="keyword">source</span> destination</span><br><span class="line"><span class="string">"3"</span></span><br><span class="line"></span><br><span class="line">Docker:<span class="number">0</span>&gt;<span class="keyword">lrange</span> <span class="keyword">source</span> <span class="number">0</span> <span class="number">-1</span></span><br><span class="line"> <span class="number">1</span>)  <span class="string">"1"</span></span><br><span class="line"> <span class="number">2</span>)  <span class="string">"2"</span></span><br><span class="line">Docker:<span class="number">0</span>&gt;<span class="keyword">lrange</span> destination <span class="number">0</span> <span class="number">-1</span></span><br><span class="line"> <span class="number">1</span>)  <span class="string">"3"</span></span><br><span class="line"> <span class="number">2</span>)  <span class="string">"4"</span></span><br><span class="line"> <span class="number">3</span>)  <span class="string">"5"</span></span><br><span class="line"> <span class="number">4</span>)  <span class="string">"6"</span></span><br></pre></td></tr></table></figure>
-<h4 id="blpop"><a href="#blpop" class="headerlink" title="blpop"></a>blpop</h4><blockquote>
-<p>blpop key timeout</p>
-</blockquote>
-<p>列表左侧查询元素，返回列表的key和左侧第一个元素。若所有查询的列表中都没有元素，则会阻塞等待至设置的timeout秒之后返回空，若在这期间，这些列表新增了元素，则会立刻消费并返回该元素。</p>
-<h4 id="brpop"><a href="#brpop" class="headerlink" title="brpop"></a>brpop</h4><blockquote>
-<p>brpop key timeout</p>
-</blockquote>
-<p>类似，从右侧消费。</p>
-<h4 id="brpoplpush"><a href="#brpoplpush" class="headerlink" title="brpoplpush"></a>brpoplpush</h4><blockquote>
-<p>brpoplpush source destination timeout<br>结合brpop和lpush，阻塞消费并将消费到的元素添加至target列表的最左侧：</p>
-</blockquote>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/12/02/可靠事件通知/">（十）可靠事件通知</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/8/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/分布式事务/">分布式事务</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="可靠事件通知"><a href="#可靠事件通知" class="headerlink" title="可靠事件通知"></a>可靠事件通知</h1><p>可靠事件通知模式的设计理念比较容易理解，即是主服务完成后将结果通过事件（常常是消息队列）传递给从服务，从服务在接受到消息后进行消费，完成业务，从而达到主服务与从服务间的消息一致性。首先能想到的也是最简单的就是同步事件通知，业务处理与消息发送同步执行，实现逻辑见下方代码及时序图。</p>
-<h2 id="同步事件"><a href="#同步事件" class="headerlink" title="同步事件"></a>同步事件</h2><h3 id="伪代码"><a href="#伪代码" class="headerlink" title="伪代码:"></a>伪代码:</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">trans</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">try</span> &#123;  </span><br><span class="line">    <span class="comment">// 1. 操作数据库  </span></span><br><span class="line">        <span class="keyword">bool</span> result = dao.update(data);<span class="comment">// 操作数据库失败，会抛出异常  </span></span><br><span class="line">    <span class="comment">// 2. 如果数据库操作成功则发送消息  </span></span><br><span class="line">        <span class="keyword">if</span>(result)&#123;  </span><br><span class="line">            mq.send(data);<span class="comment">// 如果方法执行失败，会抛出异常  </span></span><br><span class="line">        &#125;  </span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;  </span><br><span class="line">        roolback();<span class="comment">// 如果发生异常，就回滚  </span></span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="理想化场景"><a href="#理想化场景" class="headerlink" title="理想化场景:"></a>理想化场景:</h3><p><img src="https://mmbiz.qpic.cn/mmbiz_png/Baq5lYpIw7UAmRmz9SHwLAkkzYRj8FzeVEmeiaahJE6OMa38XIug1eN2UYBW3XPDAHHXrJe8cictRf3mOOOfGdbw/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="image"></p>
-<p>上面的逻辑看上去天衣无缝，如果数据库操作失败则直接退出，不发送消息；如果发送消息失败，则数据库回滚；如果数据库操作成功且消息发送成功，则业务成功，消息发送给下游消费。然后仔细思考后，同步消息通知其实有==两点==不足的地方。</p>
-<h3 id="不足之处"><a href="#不足之处" class="headerlink" title="不足之处"></a>不足之处</h3><ul>
-<li>第一点：<br>在微服务的架构下，有可能出现网络IO问题或者服务器宕机的问题，如果这些问题出现在时序图的第7步，使得消息投递后无法正常通知主服务（网络问题），或无法继续提交事务（宕机），那么主服务将会认为消息投递失败，会滚主服务业务，然而实际上消息已经被从服务消费，那么就会造成主服务和从服务的数据不一致。具体场景可见下面两张时序图。</li>
-</ul>
-<h4 id="网络异常"><a href="#网络异常" class="headerlink" title="网络异常:"></a>网络异常:</h4><p><img src="https://mmbiz.qpic.cn/mmbiz_png/Baq5lYpIw7UAmRmz9SHwLAkkzYRj8FzePKpkYem9wEIwyp9YU4YV1Usib1iatBfXodicTzXw8qskcry4jJAgEVJ5w/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="image"></p>
-<h4 id="服务器宕机"><a href="#服务器宕机" class="headerlink" title="服务器宕机:"></a>服务器宕机:</h4><p><img src="https://mmbiz.qpic.cn/mmbiz_png/Baq5lYpIw7UAmRmz9SHwLAkkzYRj8FzeO8Y0Rz0mIILzCB4XWf4Yia4U1nAeIQcVib9xseaKicIicmnbFR4biaIyHJg/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="image"></p>
-<ul>
-<li>第二点 ：事件服务（在这里就是消息服务）与业务过于耦合，如果消息服务不可用，会导致业务不可用。应该将事件服务与业务解耦，独立出来异步执行，或者在业务执行后先尝试发送一次消息，如果消息发送失败，则降级为异步发送。</li>
-<li></li>
-</ul>
-<h2 id="异步事件"><a href="#异步事件" class="headerlink" title="异步事件"></a>异步事件</h2><h3 id="本地事件服务"><a href="#本地事件服务" class="headerlink" title="本地事件服务"></a>本地事件服务</h3><p>为了解决前面描述的同步事件的问题，异步事件通知模式被发展了出来，既业务服务和事件服务解耦，事件异步进行，由单独的事件服务保证事件的可靠投递。</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/Baq5lYpIw7UAmRmz9SHwLAkkzYRj8FzeymQcemYABBK50naIib5837TU5P0iauWiag7dHZ1YicL6dIph4HF6ia6Qibiag/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="image"></p>
-<p>异步事件通知－本地事件服务</p>
-<p>当业务执行时，在同一个本地事务中将事件写入本地事件表，同时投递该事件，如果事件投递成功，则将该事件从事件表中删除。如果投递失败，则使用事件服务定时地异步统一处理投递失败的事件，进行重新投递，直到事件被正确投递，并将事件从事件表中删除。这种方式最大可能地保证了事件投递的实效性，并且当第一次投递失败后，也能使用异步事件服务保证事件至少被投递一次。</p>
-<p>然而，这种使用本地事件服务保证可靠事件通知的方式也有它的不足之处，那便是业务仍旧与事件服务有一定耦合（第一次同步投递时），更为严重的是，本地事务需要负责额外的事件表的操作，为数据库带来了压力，在高并发的场景，由于每一个业务操作就要产生相应的事件表操作，几乎将数据库的可用吞吐量砍了一半，这无疑是无法接受的。正是因为这样的原因，可靠事件通知模式进一步地发展－外部事件服务出现在了人们的眼中。</p>
-<h3 id="外部事件服务"><a href="#外部事件服务" class="headerlink" title="外部事件服务"></a>外部事件服务</h3><p>外部事件服务在本地事件服务的基础上更进了一步，将事件服务独立出主业务服务，主业务服务不在对事件服务有任何强依赖。</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/Baq5lYpIw7UAmRmz9SHwLAkkzYRj8FzeaBIY5Ff9r6jKEutSBesV0OadfdAqkPN3CvYgUpo4pe0NKxGgFelfRw/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="image"></p>
-<p>异步事件通知－外部事件服务</p>
-<p>业务服务在提交前，向事件服务发送事件，事件服务只记录事件，并不发送。业务服务在提交或回滚后通知事件服务，事件服务发送事件或者删除事件。不用担心业务系统在提交或者会滚后宕机而无法发送确认事件给事件服务，因为事件服务会定时获取所有仍未发送的事件并且向业务系统查询，根据业务系统的返回来决定发送或者删除该事件。</p>
-<p>外部事件虽然能够将业务系统和事件系统解耦，但是也带来了额外的工作量：外部事件服务比起本地事件服务来说多了两次网络通信开销（提交前、提交／回滚后），同时也需要业务系统提供单独的查询接口给事件系统用来判断未发送事件的状态。</p>
-<h5 id="流程梳理"><a href="#流程梳理" class="headerlink" title="流程梳理"></a>流程梳理</h5><ol>
-<li>首先事务发起方先往 MQ 发送一条预读消息，这条消息与普通消息的区别在于他只对 MQ 可见不会向下传播。</li>
-<li>MQ接受到消息后，先进行持久化，则存储中会新增一条状态为待发送的消息，接着给事务发起方返回处理完成的 ACK；事务发起方收到处理完成的 ACK 之后开始执行本地事务。</li>
-<li>发起方会根据本地事务的执行状态来决定这个预读消息是应该继续往前还是回滚。另外 MQ 也应该支持自己反查来解决异常情况，如果发起方本地事务已经执行完毕发送消息到MQ,但是消息因为网络原因丢失，那么怎么解决。所以这个反查机制很重要。</li>
-<li>本地事务执行成功以后，MQ 也接收到成功通知，接着将消息状态更新为可发送，然后将消息推送给下游的消费者，这个时候消费者就可以去处理自己的本地事务 。</li>
+        <h1 id="GC-参数"><a href="#GC-参数" class="headerlink" title="GC 参数"></a>GC 参数</h1><ol>
+<li>-Xms2048m                      初始堆大小</li>
+<li>-Xmx2048m                        最大堆大小</li>
+<li>-Xss:1024k                  设置每个线程堆栈大小，设置每个线程的堆栈大小。<br>JDK5.0以后每个线程堆栈大小为1M，以前每个线程堆栈大小为256K。<br>更具应用的线程所需内存大小进行调整。在相同物理内存下，减小这个值能生成更多的线程。但是操作系统对一个进程内的线程数还是有限制的，不能无限生成，经验值在3000~5000左右。</li>
+<li>-XX:NewSize=n                  设置年轻代大小</li>
+<li>-XX:NewRatio=2                 设置年轻代和年老代的比值。</li>
+<li>-XX:SurvivorRatio=8         年轻代中Eden区与两个Survivor区的比值Eden:S1:S2 = 8:1:1  Eden:Survivor = 8 : 2</li>
+<li>-XX:MaxPermSize=64m         设置持久代大小,持久代一般固定大小为64m</li>
+<li>-XX:MaxMetaspaceSize=512m   元空间大小</li>
+<li>-XX:MetaspaceSize=512m        最大元空间大小</li>
 </ol>
-<p>注意点：由于MQ通常都会保证消息能够投递成功，因此，如果业务没有及时返回ACK结果，那么就有可能造成MQ的重复消息投递问题。因此，对于消息最终一致性的方案，消息的消费者必须要对消息的消费支持幂等，不能造成同一条消息的重复消费的情况。</p>
-<h2 id="可靠事件通知注意事项"><a href="#可靠事件通知注意事项" class="headerlink" title="可靠事件通知注意事项"></a>可靠事件通知注意事项</h2><p>可靠事件模式需要注意的有两点，1. 事件的正确发送；2. 事件的重复消费。</p>
-<p>通过异步消息服务可以确保事件的正确发送，然而事件是有可能重复发送的，那么就需要消费端保证同一条事件不会重复被消费，简而言之就是保证事件消费的 ==幂等性==<br>。</p>
-<p>如果事件本身是具备幂等性的状态型事件，如订单状态的通知（已下单、已支付、已发货等），则需要判断事件的顺序。一般通过时间戳来判断，既消费过了新的消息后，当接受到老的消息直接丢弃不予消费。如果无法提供全局时间戳，则应考虑使用全局统一的序列号。</p>
-<p>对于不具备幂等性的事件，一般是动作行为事件，如扣款100，存款200，则应该将事件id及事件结果持久化，在消费事件前查询事件id，若已经消费则直接返回执行结果；若是新消息，则执行，并存储执行结果。</p>
+<p>GC:</p>
+<ol>
+<li>-XX:+PrintGC                      打印GC</li>
+<li>-XX:+PrintGCDetails               打印GC，格式不一样，详细</li>
+<li>-XX:+PrintGCTimeStamps            PrintGCTimeStamps可与上面两个混合使用</li>
+<li>-XX:+PrintHeapAtGC                打印GC前后的详细堆栈信息</li>
+<li>-Xloggc:D:/temp/gclog/idea.gc.log 与上面几个配合使用，把相关日志信息记录到文件以便分析</li>
+</ol>
+<p>垃圾收集器：</p>
+<ol>
+<li>-XX:+UseSerialGC:设置串行收集器</li>
+<li>-XX:+UseParallelGC:设置并行收集器</li>
+<li>-XX:+UseParalledlOldGC:设置并行年老代收集器</li>
+<li>-XX:+UseConcMarkSweepGC:设置并发收集器</li>
+<li>-XX:InitialBootClassLoaderMetaspaceSize=64M</li>
+<li>-XX:MaxTenuringThreshold=6        设置垃圾最大年龄，如果设置为0的话，则年轻代对象不经过Survivor区，直接进入年老代。对于年老代比较多的应用，可以提高效率。如果将此值设置为一个较大值，则年轻代对象会在Survivor区进行多次复制，这样可以增加对象再年轻代的存活时间，增加在年轻代即被回收的概论。</li>
+<li>-XX:+UseConcMarkSweepGC</li>
+<li><p>-XX:CMSFullGCsBeforeCompaction=5  使用并发收集器时，开启对年老代的压缩。由于并发收集器不对内存空间进行压缩、整理，所以运行一段时间以后会产生“碎片”，使得运行效率降低。此值设置运行多少次GC以后对内存空间进行压缩、整理。</p>
+</li>
+<li><p>-XX:+CMSParallelRemarkEnabled</p>
+</li>
+<li><p>-XX:+CMSClassUnloadingEnabled</p>
+</li>
+<li><p>-XX:+DisableExplicitGC</p>
+</li>
+<li>-XX:+ExplicitGCInvokesConcurrentAndUnloadsClasses</li>
+<li>-XX:ReservedCodeCacheSize=240m</li>
+<li>-XX:SoftRefLRUPolicyMSPerMB=50<br>-ea<br>-Dsun.io.useCanonCaches=false<br>-Djava.net.preferIPv4Stack=true<br>-XX:+HeapDumpOnOutOfMemoryError<br>-XX:-OmitStackTraceInFastThrow</li>
+</ol>
 
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/Sentinel工作原理/">Sentinel工作原理</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/8/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Sentinel"><a href="#Sentinel" class="headerlink" title="Sentinel"></a>Sentinel</h1><p>英 [ˈsentɪnl]</p>
+<p><a href="https://github.com/alibaba/Sentinel/wiki/%E4%BB%8B%E7%BB%8D" target="_blank" rel="noopener">官方文档</a></p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>资源是 Sentinel 的关键概念。它可以是 Java 应用程序中的任何内容，例如，由应用程序提供的服务，或由应用程序调用的其它应用提供的服务，甚至可以是一段代码。<br>在接下来的文档中，我们都会用资源来描述代码块。</p>
+<p>只要通过 Sentinel API 定义的代码，就是资源，能够被 Sentinel 保护起来。<br>大部分情况下，可以使用方法签名，URL，甚至服务名称作为资源名来标示资源。</p>
+<h2 id="规则"><a href="#规则" class="headerlink" title="规则"></a>规则</h2><p>围绕资源的实时状态设定的规则，可以包括流量控制规则、熔断降级规则以及系统保护规则。所有规则可以动态实时调整。</p>
+<h2 id="Sentinel-功能和设计理念"><a href="#Sentinel-功能和设计理念" class="headerlink" title="Sentinel 功能和设计理念"></a>Sentinel 功能和设计理念</h2><h3 id="流量控制"><a href="#流量控制" class="headerlink" title="流量控制"></a>流量控制</h3><h4 id="什么是流量控制"><a href="#什么是流量控制" class="headerlink" title="什么是流量控制"></a>什么是流量控制</h4><p>流量控制在网络传输中是一个常用的概念，它用于调整网络包的发送数据。<br>然而，从系统稳定性角度考虑，在处理请求的速度上，也有非常多的讲究。<br>任意时间到来的请求往往是随机不可控的，而系统的处理能力是有限的。我们需要根据系统的处理能力对流量进行控制。<br>Sentinel 作为一个调配器，可以根据需要把随机的请求调整成合适的形状，如下图所示：</p>
+<h3 id="流量控制设计理念"><a href="#流量控制设计理念" class="headerlink" title="流量控制设计理念"></a>流量控制设计理念</h3><p>资源的调用关系，例如资源的调用链路，资源和资源之间的关系；<br>运行指标，例如 QPS、线程池、系统负载等；<br>控制的效果，例如直接限流、冷启动、排队等。</p>
+<p>Sentinel 的设计理念是让您自由选择控制的角度，并进行灵活组合，从而达到想要的效果。</p>
+<h2 id="熔断降级"><a href="#熔断降级" class="headerlink" title="熔断降级"></a>熔断降级</h2><h3 id="什么是熔断降级"><a href="#什么是熔断降级" class="headerlink" title="什么是熔断降级"></a>什么是熔断降级</h3><p>除了流量控制以外，及时对调用链路中的不稳定因素进行熔断也是 Sentinel 的使命之一。<br>由于调用关系的复杂性，如果调用链路中的某个资源出现了不稳定，可能会导致请求发生堆积，进而导致级联错误。</p>
+<p>Sentinel 和 Hystrix 的原则是一致的: 当检测到调用链路中某个资源出现不稳定的表现，<br>例如请求响应时间长或异常比例升高的时候，则对这个资源的调用进行限制，<br>让请求快速失败，避免影响到其它的资源而导致级联故障。</p>
+<h3 id="熔断降级设计理念"><a href="#熔断降级设计理念" class="headerlink" title="熔断降级设计理念"></a>熔断降级设计理念</h3><p>在限制的手段上，Sentinel 和 Hystrix 采取了完全不一样的方法。</p>
+<h4 id="Hystrix"><a href="#Hystrix" class="headerlink" title="Hystrix"></a>Hystrix</h4><p>Hystrix 通过 ==线程池隔离== 的方式，来对依赖（在 Sentinel 的概念中对应 资源）进行了隔离。<br>这样做的好处是资源和资源之间做到了最彻底的隔离。缺点是除了增加了线程切换的成本（过多的线程池导致线程数目过多），<br>还需要预先给各个资源做线程池大小的分配，并且对于一些使用了 ThreadLocal 的场景来说会有问题（如 Spring 事务）。</p>
+<h4 id="Sentinel-1"><a href="#Sentinel-1" class="headerlink" title="Sentinel"></a>Sentinel</h4><blockquote>
+<p>通过==并发线程数==进行限制</p>
+</blockquote>
+<p>和资源池隔离的方法不同，Sentinel 通过限制资源并发线程的数量，来减少不稳定资源对其它资源的影响。<br>这样不但没有线程切换的损耗，也不需要您预先分配线程池的大小。当某个资源出现不稳定的情况下，例如响应时间变长，<br>对资源的直接影响就是会造成线程数的逐步堆积。当线程数在特定资源上堆积到一定的数量之后，对该资源的新请求就会被拒绝。<br>堆积的线程完成任务后才开始继续接收请求。</p>
+<blockquote>
+<p>针对==慢调用和异常==对资源进行降级</p>
+</blockquote>
+<p>除了对并发线程数进行控制以外，Sentinel 还可以根据响应时间和异常等不稳定因素来快速对不稳定的调用进行熔断。<br>当依赖的资源出现响应时间过长后，所有对该资源的访问都会被直接拒绝，直到过了指定的时间窗口之后才重新渐进式地恢复。</p>
+<h3 id="系统自适应保护"><a href="#系统自适应保护" class="headerlink" title="系统自适应保护"></a>系统自适应保护</h3><p>Sentinel 同时提供系统维度的自适应保护能力。防止雪崩，是系统防护中重要的一环。<br>当系统负载较高的时候，如果还持续让请求进入，可能会导致系统崩溃，无法响应。<br>在集群环境下，网络负载均衡会把本应这台机器承载的流量转发到其它的机器上去。<br>如果这个时候其它的机器也处在一个边缘状态的时候，这个增加的流量就会导致这台机器也崩溃，最后导致整个集群不可用。</p>
+<p>针对这个情况，Sentinel 提供了对应的保护机制，让系统的入口流量和系统的负载达到一个平衡，保证系统在能力范围之内处理最多的请求。</p>
+<h2 id="Sentinel-工作机制"><a href="#Sentinel-工作机制" class="headerlink" title="Sentinel 工作机制"></a>Sentinel 工作机制</h2><p>Sentinel 的主要工作机制如下：</p>
+<p>对主流框架提供适配或者显示的 API，来定义需要保护的资源，并提供设施对资源进行实时统计和调用链路分析。</p>
+<p>根据预设的规则，结合对资源的实时统计信息，对流量进行控制。同时，Sentinel 提供开放的接口，方便您定义及改变规则。</p>
+<p>Sentinel 提供实时的监控系统，方便您快速了解目前系统的状态。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/Sentinel 注解式支持/">Sentinel 注解式支持</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/8/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Sentinel-注解式支持"><a href="#Sentinel-注解式支持" class="headerlink" title="Sentinel 注解式支持"></a>Sentinel 注解式支持</h1><p>@SentinelResource 用于定义资源，并提供可选的异常处理和 fallback 配置项。 @SentinelResource 注解包含以下属性：</p>
+<ul>
+<li>value：资源名称，必需项（不能为空）</li>
+<li>entryType：entry 类型，可选项（默认为 EntryType.OUT）</li>
+<li>blockHandler / blockHandlerClass</li>
+</ul>
+<p>blockHandler 对应处理 BlockException 的函数名称，可选项。blockHandler 函数访问范围需要是 public，返回类型需要与原方法相匹配，参数类型需要和原方法相匹配并且最后加一个额外的参数，类型为 BlockException。blockHandler 函数默认需要和原方法在同一个类中。若希望使用其他类的函数，则可以指定 blockHandlerClass 为对应的类的 Class 对象，注意对应的函数必需为 static 函数，否则无法解析。</p>
+<ul>
+<li>fallback / fallbackClass</li>
+</ul>
+<p>fallback 函数名称，可选项，用于在抛出异常的时候提供 fallback 处理逻辑。fallback 函数可以针对所有类型的异常（除了exceptionsToIgnore里面排除掉的异常类型）进行处理。<br>fallback 函数签名和位置要求：</p>
+<ol>
+<li>返回值类型必须与原函数返回值类型一致；</li>
+<li>方法参数列表需要和原函数一致，或者可以额外多一个Throwable类型的参数用于接收对应的异常。</li>
+<li>fallback 函数默认需要和原方法在同一个类中。若希望使用其他类的函数，则可以指定 fallbackClass 为对应的类的 Class 对象，注意对应的函数必需为 static 函数，否则无法解析。</li>
+</ol>
+<ul>
+<li>defaultFallback（since 1.6.0）：</li>
+</ul>
+<p>默认的 fallback 函数名称，可选项，通常用于通用的 fallback 逻辑（即可以用于很多服务或方法）。默认 fallback 函数可以针对所有类型的异常（除了 exceptionsToIgnore 里面排除掉的异常类型）进行处理。若同时配置了 fallback 和 defaultFallback，则只有 fallback 会生效。</p>
+<p>defaultFallback 函数签名要求：</p>
+<ol>
+<li>返回值类型必须与原函数返回值类型一致；</li>
+<li>方法参数列表需要为空，或者可以额外多一个Throwable类型的参数用于接收对应的异常。</li>
+<li>defaultFallback 函数默认需要和原方法在同一个类中。若希望使用其他类的函数，则可以指定 fallbackClass 为对应的类的 Class 对象，注意对应的函数必需为 static 函数，否则无法解析。</li>
+</ol>
+<ul>
+<li>exceptionsToIgnore：用于指定哪些异常被排除掉，不会计入异常统计中，也不会进入 fallback 逻辑中，而是会原样抛出。</li>
+</ul>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 对应的 `handleException` 函数需要位于 `ExceptionUtil` 类中，并且必须为 static 函数.</span></span><br><span class="line">    <span class="meta">@SentinelResource</span>(value = <span class="string">"test"</span>, blockHandler = <span class="string">"handleException"</span>, blockHandlerClass = &#123;ExceptionUtil.class&#125;)</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Test"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 原函数</span></span><br><span class="line">    <span class="meta">@SentinelResource</span>(value = <span class="string">"hello"</span>, blockHandler = <span class="string">"exceptionHandler"</span>, fallback = <span class="string">"helloFallback"</span>)</span><br><span class="line">    <span class="keyword">public</span> <span class="function">String <span class="title">hello</span><span class="params">(<span class="keyword">long</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">return</span> String.<span class="title">format</span><span class="params">(<span class="string">"Hello at %d"</span>, s)</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Fallback 函数，函数签名与原函数一致或加一个 Throwable 类型的参数.</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function">String <span class="title">helloFallback</span><span class="params">(<span class="keyword">long</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">return</span> String.<span class="title">format</span><span class="params">(<span class="string">"Halooooo %d"</span>, s)</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Block 异常处理函数，参数最后多一个 BlockException，其余与原函数一致.</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function">String <span class="title">exceptionHandler</span><span class="params">(<span class="keyword">long</span> s, BlockException ex)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Do some log here.</span></span><br><span class="line">        ex.printStackTrace();</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Oops, error occurred at "</span> + s;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
         
     </section>
 </article>
@@ -801,6 +521,192 @@
 <p>rpop key</p>
 </blockquote>
 <p>从右侧消费数据，消费完删除</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/Sentinel 主流框架的适配/">Sentinel 主流框架的适配</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/8/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Sentinel-主流框架的适配"><a href="#Sentinel-主流框架的适配" class="headerlink" title="Sentinel 主流框架的适配"></a>Sentinel 主流框架的适配</h1><p><a href="https://github.com/alibaba/Sentinel/wiki/%E4%B8%BB%E6%B5%81%E6%A1%86%E6%9E%B6%E7%9A%84%E9%80%82%E9%85%8D" target="_blank" rel="noopener">适配</a></p>
+<p>为了减少开发的复杂程度，Sentinel对大部分的主流框架，例如 Web Servlet、Dubbo、Spring Cloud、gRPC、Spring WebFlux、Reactor 等都做了适配。您只需要引入对应的依赖即可方便地整合 Sentinel。<br>包括以下配置：</p>
+<h3 id="Web-适配"><a href="#Web-适配" class="headerlink" title="Web 适配"></a>Web 适配</h3><ul>
+<li>Spring Boot/Spring Cloud</li>
+<li>Web Servlet</li>
+<li>Spring WebFlux<h3 id="RPC-适配"><a href="#RPC-适配" class="headerlink" title="RPC 适配"></a>RPC 适配</h3></li>
+<li>Apache Dubbo</li>
+<li>gRPC</li>
+<li>Feign</li>
+<li>SOFARPC<h3 id="HTTP-client-适配"><a href="#HTTP-client-适配" class="headerlink" title="HTTP client 适配"></a>HTTP client 适配</h3></li>
+<li>Apache HttpClient</li>
+<li>OkHttp</li>
+<li>Reactive 适配</li>
+<li>Reactor<h3 id="API-Gateway-适配"><a href="#API-Gateway-适配" class="headerlink" title="API Gateway 适配"></a>API Gateway 适配</h3></li>
+<li>Spring Cloud Gateway</li>
+<li>Netflix Zuul 1.x</li>
+<li>Netflix Zuul 2.x</li>
+<li>Apache RocketMQ</li>
+</ul>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/Linux 防火墙开放端口 /">防火墙开放端口</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/8/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Linux-防火墙开放端口"><a href="#Linux-防火墙开放端口" class="headerlink" title="Linux 防火墙开放端口"></a>Linux 防火墙开放端口</h1><p>如果想开放端口（如：8889）</p>
+<p>（1）通过vi /etc/sysconfig/iptables 进入编辑增添一条-A INPUT -p tcp -m tcp –dport 8889 -j ACCEPT 即可</p>
+<p>（2）执行 /etc/init.d/iptables restart 命令将iptables服务重启</p>
+<p>#（3）保存 /etc/rc.d/init.d/iptables save</p>
+<p>注：如若不想修改iptables表，可以直接输入下面命令：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -I INPUT -<span class="selector-tag">p</span> tcp --dport <span class="number">8889</span> -j ACCEPT</span><br></pre></td></tr></table></figure></p>
+<p> 附：参考自：<a href="http://www.cnblogs.com/alimac/p/5848372.html" target="_blank" rel="noopener">http://www.cnblogs.com/alimac/p/5848372.html</a></p>
+<p>若/etc/sysconfig/iptables不存在，</p>
+<p>原因：在新安装的linux系统中，防火墙默认是被禁掉的，一般也没有配置过任何防火墙的策略，所有不存在/etc/sysconfig/iptables文件。</p>
+<p>解决：</p>
+<p> 在控制台使用iptables命令随便写一条防火墙规则，如：<br><figure class="highlight tp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -<span class="keyword">P</span> OUTPUT <span class="keyword">ACC</span>EPT</span><br></pre></td></tr></table></figure></p>
+<p>使用<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">service iptables save</span></span><br></pre></td></tr></table></figure></p>
+<p>进行保存，默认就保存到了/etc/sysconfig目录下的iptables文件中</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/Linux 高版本nginx Centos7/">Linux 高版本nginx Centos7</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/8/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Linux/">Linux</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Linux-高版本nginx-Centos7"><a href="#Linux-高版本nginx-Centos7" class="headerlink" title="Linux 高版本nginx Centos7"></a>Linux 高版本nginx Centos7</h1><p>Install the prerequisites:<br><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum <span class="keyword">install</span> yum-utils</span><br></pre></td></tr></table></figure></p>
+<p>To set up the yum repository, create the file named<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/yum<span class="selector-class">.repos</span><span class="selector-class">.d</span>/nginx.repo</span><br></pre></td></tr></table></figure></p>
+<p>with the following contents:<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[nginx-stable]</span></span><br><span class="line"><span class="attr">name</span>=nginx stable repo</span><br><span class="line"><span class="attr">baseurl</span>=http://nginx.org/packages/centos/<span class="variable">$releasever</span>/<span class="variable">$basearch</span>/</span><br><span class="line"><span class="attr">gpgcheck</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">enabled</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">gpgkey</span>=https://nginx.org/keys/nginx_signing.key</span><br><span class="line"><span class="attr">module_hotfixes</span>=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="section">[nginx-mainline]</span></span><br><span class="line"><span class="attr">name</span>=nginx mainline repo</span><br><span class="line"><span class="attr">baseurl</span>=http://nginx.org/packages/mainline/centos/<span class="variable">$releasever</span>/<span class="variable">$basearch</span>/</span><br><span class="line"><span class="attr">gpgcheck</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">enabled</span>=<span class="number">0</span></span><br><span class="line"><span class="attr">gpgkey</span>=https://nginx.org/keys/nginx_signing.key</span><br><span class="line"><span class="attr">module_hotfixes</span>=<span class="literal">true</span></span><br></pre></td></tr></table></figure></p>
+<p>By default, the repository for stable nginx packages is used. If you would like to use mainline nginx packages, run the following command:<br><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum-<span class="built_in">config</span>-manager <span class="comment">--enable nginx-mainline</span></span><br></pre></td></tr></table></figure></p>
+<p>To install nginx, run the following command:<br><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum <span class="keyword">install</span> nginx</span><br></pre></td></tr></table></figure></p>
+<p>When prompted to accept the GPG key, verify that the fingerprint matches 573B FD6B 3D8F BC64 1079 A6AB ABF5 BD82 7BD9 BF62, and if so, accept it.</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/Sentinel quick start/">Sentinel快速入门</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/8/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Sentinel快速入门"><a href="#Sentinel快速入门" class="headerlink" title="Sentinel快速入门"></a>Sentinel快速入门</h1><p>如下的代码任然是侵入式的使用方式，也提供了<a href="https://github.com/alibaba/Sentinel/wiki/%E6%B3%A8%E8%A7%A3%E6%94%AF%E6%8C%81" target="_blank" rel="noopener">注解支持模块</a>。</p>
+<p>应用使用 pom 工程，则在 pom.xml 文件中加入以下代码即可：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.csp<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>sentinel-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>First Demo 代码：</p>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> sentinel;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.alibaba.csp.sentinel.Entry;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.csp.sentinel.SphU;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.csp.sentinel.slots.block.BlockException;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.csp.sentinel.slots.block.RuleConstant;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.csp.sentinel.slots.block.flow.FlowRule;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.csp.sentinel.slots.block.flow.FlowRuleManager;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> class SentinelDemo &#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">		initFlowRules();</span><br><span class="line">		<span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">			Entry entry = <span class="keyword">null</span>;</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				entry = SphU.entry(<span class="string">"HelloWorld"</span>);</span><br><span class="line">				<span class="comment">/* 您的业务逻辑 - 开始 */</span></span><br><span class="line">				System.out.<span class="built_in">println</span>(<span class="string">"hello world"</span>);</span><br><span class="line">				<span class="comment">/* 您的业务逻辑 - 结束 */</span></span><br><span class="line">			&#125; <span class="keyword">catch</span> (BlockException e1) &#123;</span><br><span class="line">				<span class="comment">/* 流控逻辑处理 - 开始 */</span></span><br><span class="line">				System.out.<span class="built_in">println</span>(<span class="string">"block!"</span>);</span><br><span class="line">				<span class="comment">/* 流控逻辑处理 - 结束 */</span></span><br><span class="line">			&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">				<span class="keyword">if</span> (entry != <span class="keyword">null</span>) &#123;</span><br><span class="line">					entry.<span class="built_in">exit</span>();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 接下来，通过规则来指定允许该资源通过的请求次数</span></span><br><span class="line"><span class="comment">// 例如下面的代码定义了资源 HelloWorld 每秒最多只能通过 20 个请求。</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> initFlowRules() &#123;</span><br><span class="line">		List&lt;FlowRule&gt; rules = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">		FlowRule rule = <span class="keyword">new</span> FlowRule();</span><br><span class="line">		rule.setResource(<span class="string">"HelloWorld"</span>);</span><br><span class="line">		rule.setGrade(RuleConstant.FLOW_GRADE_QPS);</span><br><span class="line">		<span class="comment">// Set limit QPS to 20.</span></span><br><span class="line">		rule.setCount(<span class="number">20</span>);</span><br><span class="line">		rules.<span class="built_in">add</span>(rule);</span><br><span class="line">		FlowRuleManager.loadRules(rules);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Demo 运行之后，我们可以在日志里看到下面的输出:<br><figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">window机器位于 C:\Users\shengwangzhong\logs\xxxx</span><br><span class="line">~/logs/csp/$&#123;appName&#125;-metrics.log.xxx</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">|<span class="type">--timestamp</span>-|<span class="type">------date</span> <span class="built_in">time</span>----|<span class="type">-resource</span>-|<span class="type">p</span> |<span class="type">block</span>|<span class="type">s</span> |<span class="type">e</span>|<span class="type">rt</span></span><br><span class="line"><span class="number">1529998904000</span>|<span class="type">2018</span><span class="number">-06</span><span class="number">-26</span> <span class="number">15</span>:<span class="number">41</span>:<span class="number">44</span>|<span class="type">HelloWorld</span>|<span class="type">20</span>|<span class="type">0</span>    |<span class="type">20</span>|<span class="type">0</span>|<span class="type">0</span></span><br><span class="line"><span class="number">1529998905000</span>|<span class="type">2018</span><span class="number">-06</span><span class="number">-26</span> <span class="number">15</span>:<span class="number">41</span>:<span class="number">45</span>|<span class="type">HelloWorld</span>|<span class="type">20</span>|<span class="type">5579</span> |<span class="type">20</span>|<span class="type">0</span>|<span class="type">728</span></span><br><span class="line"><span class="number">1529998906000</span>|<span class="type">2018</span><span class="number">-06</span><span class="number">-26</span> <span class="number">15</span>:<span class="number">41</span>:<span class="number">46</span>|<span class="type">HelloWorld</span>|<span class="type">20</span>|<span class="type">15698</span>|<span class="type">20</span>|<span class="type">0</span>|<span class="type">0</span></span><br><span class="line"><span class="number">1529998907000</span>|<span class="type">2018</span><span class="number">-06</span><span class="number">-26</span> <span class="number">15</span>:<span class="number">41</span>:<span class="number">47</span>|<span class="type">HelloWorld</span>|<span class="type">20</span>|<span class="type">19262</span>|<span class="type">20</span>|<span class="type">0</span>|<span class="type">0</span></span><br><span class="line"><span class="number">1529998908000</span>|<span class="type">2018</span><span class="number">-06</span><span class="number">-26</span> <span class="number">15</span>:<span class="number">41</span>:<span class="number">48</span>|<span class="type">HelloWorld</span>|<span class="type">20</span>|<span class="type">19502</span>|<span class="type">20</span>|<span class="type">0</span>|<span class="type">0</span></span><br><span class="line"><span class="number">1529998909000</span>|<span class="type">2018</span><span class="number">-06</span><span class="number">-26</span> <span class="number">15</span>:<span class="number">41</span>:<span class="number">49</span>|<span class="type">HelloWorld</span>|<span class="type">20</span>|<span class="type">18386</span>|<span class="type">20</span>|<span class="type">0</span>|<span class="type">0</span></span><br></pre></td></tr></table></figure></p>
+<p>其中 p 代表通过的请求, block 代表被阻止的请求, s 代表成功执行完成的请求个数, e 代表用户自定义的异常, rt 代表平均响应时长。</p>
+<p>结合控制台使用：</p>
+<p>首先需要保证控制台处于启动状态：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -Dserver.<span class="attribute">port</span>=8080 -Dcsp.sentinel.dashboard.<span class="attribute">server</span>=localhost:8080 -Dproject.<span class="attribute">name</span>=sentinel-dashboard -jar sentinel-dashboard.jar</span><br></pre></td></tr></table></figure></p>
+<p>其中 -Dserver.port=8080 用于指定 Sentinel 控制台端口为 8080</p>
+<p>此外针对上面的应用需要添加依赖：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.csp<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>sentinel-transport-simple-http<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>同时需要添加程序启动参数：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-Dcsp<span class="selector-class">.sentinel</span><span class="selector-class">.dashboard</span><span class="selector-class">.server</span>=consoleIp:port</span><br><span class="line">                ↓↓↓↓↓↓↓</span><br><span class="line">-Dcsp<span class="selector-class">.sentinel</span><span class="selector-class">.dashboard</span><span class="selector-class">.server</span>=localhost:<span class="number">8080</span></span><br></pre></td></tr></table></figure></p>
+<p>若启动多个应用，则需要通过 -Dcsp.sentinel.api.port=xxxx 指定客户端监控 API 的端口（默认是 8719）。</p>
+<p>这时候，在启动程序以后，可以再dashboard页面能对具体的应用进行实时监控。</p>
 
         
     </section>
