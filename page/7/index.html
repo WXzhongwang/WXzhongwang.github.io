@@ -131,7 +131,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/05/06/Nginx的accept_mutex配置/">Nginx工作原理</a>
+            <a href="/2018/12/02/Spring Cloud Alibaba 的学习之熔断篇/">熔断</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -139,13 +139,13 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-05-06T14:22:22.000Z" itemprop="datePublished">2018-05-06</time>
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
 </a>
 
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Nginx/">Nginx</a>
+    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
 </div>
 
 
@@ -154,403 +154,17 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="Nginx的accept-mutex配置"><a href="#Nginx的accept-mutex配置" class="headerlink" title="Nginx的accept_mutex配置"></a>Nginx的accept_mutex配置</h1><p>通常多数人不会注意Nginx的accept_mutex配置，不过实际上它对系统的吞吐量有一定的影响。</p>
-<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">events</span> &#123; </span><br><span class="line"><span class="attribute">accept_mutex</span> <span class="literal">off</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>当一个新连接到达时:<br>如果激活了accept_mutex，那么多个Worker将以串行方式来处理，其中有一个Worker会被唤醒，其他的Worker继续保持休眠状态；<br>如果没有激活accept_mutex，那么所有的Worker都会被唤醒，不过只有一个Worker能获取新连接，其它的Worker会重新进入休眠状态，这就是「惊群问题」。</p>
-<p>Nginx缺省激活了accept_mutex，也就是说不会有惊群问题，但真的有那么严重么？</p>
-<p>简单点说：Apache动辄就会启动成百上千的进程，如果发生惊群问题的话，影响相对较大；但是对Nginx而言，一般来说，worker_processes会设置成CPU个数，所以最多也就几十个，即便发生惊群问题的话，影响相对也较小。</p>
-<p>另：高版本的Linux中，accept不存在惊群问题，不过epoll_wait等操作还有。</p>
-<p>很形象： 假设你养了一百只小鸡，现在你有一粒粮食，那么有两种喂食方法：</p>
-<p>你把这粒粮食直接扔到小鸡中间，一百只小鸡一起上来抢，最终只有一只小鸡能得手，其它九十九只小鸡只能铩羽而归。这就相当于关闭了accept_mutex。<br>你主动抓一只小鸡过来，把这粒粮食塞到它嘴里，其它九十九只小鸡对此浑然不知，该睡觉睡觉。这就相当于激活了accept_mutex。<br>可以看到此场景下，激活accept_mutex相对更好一些，让我们修改一下问题的场景，我不再只有一粒粮食，而是一盆粮食，怎么办？</p>
-<p>此时如果仍然采用主动抓小鸡过来塞粮食的做法就太低效了，一盆粮食不知何年何月才能喂完，大家可以设想一下几十只小鸡排队等着喂食时那种翘首以盼的情景。此时更好的方法是把这盆粮食直接撒到小鸡中间，让它们自己去抢，虽然这可能会造成一定程度的混乱，但是整体的效率无疑大大增强了。</p>
-<p>accept_mutex会轮流来选择worker进程。Nginx默认开启了accept_mutex。<br>Nginx缺省激活了accept_mutex，是一种保守的选择。如果关闭了它，可能会引起一定程度的惊群问题，表现为上下文切换增多（sar -w）或者负载上升，但是如果你的网站访问量比较大，为了系统的吞吐量，我还是建议大家关闭它。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/05/06/Nginx的负载均衡策略(粗略)/">Nginx的负载均衡策略</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-05-06T14:22:22.000Z" itemprop="datePublished">2018-05-06</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Nginx/">Nginx</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Nginx的负载均衡策略"><a href="#Nginx的负载均衡策略" class="headerlink" title="Nginx的负载均衡策略"></a>Nginx的负载均衡策略</h1><h2 id="轮询（默认）"><a href="#轮询（默认）" class="headerlink" title="轮询（默认）:"></a>轮询（默认）:</h2><p>每个请求按时间顺序逐一分配到不同的后端服务器，如果后端服务器down掉，能自动剔除。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="指定权重"><a href="#指定权重" class="headerlink" title="指定权重"></a>指定权重</h2><p>指定轮询几率，weight和访问比率成正比，用于后端服务器性能不均的情况。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14 <span class="attribute">weight</span>=10; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15 <span class="attribute">weight</span>=10; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="IP绑定-ip-hash"><a href="#IP绑定-ip-hash" class="headerlink" title="IP绑定 ip_hash"></a>IP绑定 ip_hash</h2><p>每个请求按访问ip的hash结果分配，这样每个访客固定访问一个后端服务器，可以解决session的问题。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"> ip_hash; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14:88; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15:80; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="fair（第三方）"><a href="#fair（第三方）" class="headerlink" title="fair（第三方）"></a>fair（第三方）</h2><p>按后端服务器的响应时间来分配请求，响应时间短的优先分配。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.14:88; </span><br><span class="line"><span class="built_in"> server </span>192.168.0.15:80;</span><br><span class="line"> fair; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="url-hash（第三方）"><a href="#url-hash（第三方）" class="headerlink" title="url_hash（第三方）"></a>url_hash（第三方）</h2><p>按访问url的hash结果来分配请求，使每个url定向到同一个后端服务器，后端服务器为缓存时比较有效。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123;</span><br><span class="line"><span class="built_in"> server </span>squid1:3128; </span><br><span class="line"><span class="built_in"> server </span>squid2:3128;</span><br><span class="line"> </span><br><span class="line"> hash <span class="variable">$request_uri</span>; </span><br><span class="line"> hash_method crc32; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/05/01/为什么Java中只有值传递/">为什么 Java 中只有值传递？</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-05-01T15:10:00.000Z" itemprop="datePublished">2018-05-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="为什么-Java-中只有值传递？"><a href="#为什么-Java-中只有值传递？" class="headerlink" title="为什么 Java 中只有值传递？"></a>为什么 Java 中只有值传递？</h1><p>首先回顾一下在程序设计语言中有关将参数传递给方法（或函数）的一些专业术语。<br>按值调用(call by value)表示方法接收的是调用者提供的值。<br>按引用调用（call by reference)表示方法接收的是调用者提供的变量地址。<br>一个方法可以修改传递引用所对应的变量值，而不能修改传递值调用所对应的变量值。<br>它用来描述各种程序设计语言（不只是Java)中方法参数传递方式。</p>
-<p>Java程序设计语言对对象采用的不是引用调用，实际上，对象引用是按值传递的。</p>
-<p>下面再总结一下Java中方法参数的使用情况：</p>
-<p>一个方法不能修改一个基本数据类型的参数（即数值型或布尔型）。<br>一个方法可以改变一个对象参数的状态。<br>一个方法不能让对象参数引用一个新的对象。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/05/01/nginx工作原理/">Nginx工作原理</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-05-01T08:22:22.000Z" itemprop="datePublished">2018-05-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Nginx/">Nginx</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Nginx工作原理"><a href="#Nginx工作原理" class="headerlink" title="Nginx工作原理"></a>Nginx工作原理</h1><p>当我们在操作Nginx的时候，Nginx内部做了些什么事情，那么，worker 进程又是如何处理请求的呢？我们前面有提到，worker进程之间是平等的，每个进程，处理请求的机会也是一样的。当我们提供80端口的 http 服务时，一个连接请求过来，每个进程都有可能处理这个连接，怎么做到的呢？首先，每个worker进程都是从master进程fork过来，在master进程里面，先建立好需要listen的socket（listenfd）之后，然后再fork出多个worker进程。所有worker进程的listenfd会在新连接到来时变得可读，为保证只有一个进程处理该连接，所有worker进程在注册listenfd读事件前抢accept_mutex，抢到互斥锁的那个进程注册listenfd读事件，在读事件里调用accept接受该连接。当一个worker进程在accept这个连接之后，就开始读取请求，解析请求，处理请求，产生数据后，再返回给客户端，最后才断开连接，这样一个完整的请求就是这样的了。我们可以看到，一个请求，完全由worker进程来处理，而且只在一个worker进程中处理。</p>
-<p>一个请求在一个worker进程中处理。同时一个worker只有一个主线程。（worker进程通过监听共享套接字接受新请求）</p>
-<h2 id="进程模型"><a href="#进程模型" class="headerlink" title="进程模型"></a>进程模型</h2><p>进程模型有什么好处呢？</p>
-<p>首先，对于每个worker进程来说，独立的进程，不需要加锁，所以省掉了锁带来的开销，同时在编程以及问题查找时，也会方便很多。<br>其次，采用独立的进程，可以让互相之间不会影响，一个进程退出后，其它进程还在工作，服务不会中断，master进程则很快启动新的worker进程。</p>
-<h2 id="高并发"><a href="#高并发" class="headerlink" title="高并发"></a>高并发</h2><p>那是如何解决高并发的呢？每个 worker 里面只有一个主线程，那能够处理的并发数很有限啊，多少个 worker 就能处理多少个并发，何来高并发呢？</p>
-<p>Nginx 采用了异步非阻塞的方式来处理请求</p>
-<p>Nginx供了一种机制，同时监控多个事件(具体到系统调用就是像select、poll、epoll、kqueue这样的系统调用，调用他们是阻塞的，但可以设置超时时间，在超时时间之内，如果有事件准备好了，就返回。这种机制正好解决了我们上面的两个问题，拿epoll为例，当事件没准备好时，放到epoll里面，事件准备好了，我们就去读写，当读写返回EAGAIN时，我们将它再次加入到epoll里面。这样，只要有事件准备好了，我们就去处理它，只有当所有事件都没准备好时，才在epoll里面等着。我们就可以并发处理大量的并发了。</p>
-<p>线程只有一个，所以同时能处理的请求当然只有一个了，只是在请求间进行不断地切换而已，切换也是因为异步事件未准备好，而主动让出的。这里的切换是没有任何代价，你可以理解为循环处理多个准备好的事件，事实上就是这样的。与多线程相比，这种事件处理方式是有很大的优势的，不需要创建线程，每个请求占用的内存也很少，没有上下文切换，事件处理非常的轻量级。并发数再多也不会导致无谓的资源浪费（上下文切换）。更多的并发数，只是会占用更多的内存而已。 </p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/04/20/tomcat源码解析/">tomcat源码解析</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-04-20T04:00:00.000Z" itemprop="datePublished">2018-04-20</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Tomcat/">Tomcat</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="tomcat源码解析"><a href="#tomcat源码解析" class="headerlink" title="tomcat源码解析"></a>tomcat源码解析</h1><p>1.tomcat的总体概述和tomcat的启动流程源码分析</p>
-<p>2.tomcat当中的web请求源码分析？一个http请求是如何请求到tomcat的？tomcat如何处理的？</p>
-<p>3.tomcat的协议分析，从源码分析tomcat当中各种协议详细配置的意义。</p>
-<p>4.tomcat和apache、nginx等主流静态资源服务器的搭配使用</p>
-<p>5.tomcat的性能调优？生产环境下如何让tomcat容器的性能达到最高</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/04/11/Thread实现多线程三/">Thread实现多线程三</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-04-11T02:10:00.000Z" itemprop="datePublished">2018-04-11</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Thread实现多线程三"><a href="#Thread实现多线程三" class="headerlink" title="Thread实现多线程三"></a>Thread实现多线程三</h1><p>接上文，关系到线程运行状态的几个方法：</p>
-<p>6）interrupt方法</p>
-<p>interrupt，顾名思义，即中断的意思。单独调用interrupt方法可以使得处于阻塞状态的线程抛出一个异常，也就说，它可以用来中断一个正处于阻塞状态的线程；另外，通过interrupt方法和isInterrupted()方法来停止正在运行的线程。</p>
-<p>下面看一个例子：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.<span class="type">IOException</span>;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">ThreadInterupt</span> </span>&#123;</span><br><span class="line">	public static void main(<span class="type">String</span>[] args) <span class="keyword">throws</span> <span class="type">IOException</span>  &#123;</span><br><span class="line">		<span class="type">ThreadInterupt</span> test = <span class="keyword">new</span> <span class="type">ThreadInterupt</span>();</span><br><span class="line">        <span class="type">MyThread</span> thread = test.<span class="keyword">new</span> <span class="type">MyThread</span>();</span><br><span class="line">        <span class="comment">//线程开始</span></span><br><span class="line">        <span class="type">System</span>.out.println(<span class="string">"进入线程"</span> + <span class="type">Thread</span>.currentThread().getName());</span><br><span class="line">        thread.start();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">Thread</span>.currentThread().sleep(<span class="number">2000</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (<span class="type">InterruptedException</span> e) &#123;</span><br><span class="line">             </span><br><span class="line">        &#125;</span><br><span class="line">        thread.interrupt();</span><br><span class="line">    &#125; </span><br><span class="line">     </span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        public void run() &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="type">System</span>.out.println(<span class="string">"线程"</span> + <span class="type">Thread</span>.currentThread().getName() + <span class="string">"进入睡眠状态"</span>);</span><br><span class="line">                <span class="type">Thread</span>.currentThread().sleep(<span class="number">10000</span>);</span><br><span class="line">                <span class="type">System</span>.out.println(<span class="string">"线程"</span> + <span class="type">Thread</span>.currentThread().getName() + <span class="string">"睡眠完毕"</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (<span class="type">InterruptedException</span> e) &#123;</span><br><span class="line">                <span class="type">System</span>.out.println(<span class="string">"线程"</span> + <span class="type">Thread</span>.currentThread().getName() + <span class="string">"得到中断异常"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="type">System</span>.out.println(<span class="string">"线程"</span> + <span class="type">Thread</span>.currentThread().getName() + <span class="string">"run方法执行完毕"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>执行结果 ：<br><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">进入线程main</span><br><span class="line">线程<span class="keyword">Thread</span>-<span class="number">0</span>进入睡眠状态</span><br><span class="line">线程<span class="keyword">Thread</span>-<span class="number">0</span>得到中断异常</span><br><span class="line">线程<span class="keyword">Thread</span>-<span class="number">0</span>run方法执行完毕</span><br></pre></td></tr></table></figure></p>
-<p>从这里可以看出，在主线程中,通过interrupt方法可以中断处于阻塞状态的线程。</p>
-<p>那么能不能中断处于非阻塞状态的线程呢？看下面这个例子：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.<span class="type">IOException</span>;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">InteruptRunningThread</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	  public static void main(<span class="type">String</span>[] args) <span class="keyword">throws</span> <span class="type">IOException</span>  &#123;</span><br><span class="line">		  	<span class="type">InteruptRunningThread</span> test = <span class="keyword">new</span> <span class="type">InteruptRunningThread</span>();</span><br><span class="line">		    <span class="comment">//线程开始</span></span><br><span class="line">	        <span class="type">System</span>.out.println(<span class="string">"进入线程"</span> + <span class="type">Thread</span>.currentThread().getName());</span><br><span class="line">	        </span><br><span class="line">	        <span class="type">MyThread</span> thread = test.<span class="keyword">new</span> <span class="type">MyThread</span>();</span><br><span class="line">	        thread.start();</span><br><span class="line">	        <span class="keyword">try</span> &#123;</span><br><span class="line">	            <span class="type">Thread</span>.currentThread().sleep(<span class="number">2000</span>);</span><br><span class="line">	        &#125; <span class="keyword">catch</span> (<span class="type">InterruptedException</span> e) &#123;</span><br><span class="line">	             </span><br><span class="line">	        &#125;</span><br><span class="line">	        thread.interrupt();</span><br><span class="line">	    &#125; </span><br><span class="line">	     </span><br><span class="line">	    <span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">	        <span class="meta">@Override</span></span><br><span class="line">	        public void run() &#123;</span><br><span class="line">	            int i = <span class="number">0</span>;</span><br><span class="line">	            <span class="keyword">while</span>(i &lt; <span class="type">Integer</span>.<span class="type">MAX_VALUE</span>)&#123;</span><br><span class="line">	                <span class="type">System</span>.out.println(<span class="string">"while循环, i = "</span> + i + <span class="string">"\r\n"</span>);</span><br><span class="line">	                i++;</span><br><span class="line">	            &#125;</span><br><span class="line">	        &#125;</span><br><span class="line">	    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>执行结果：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">while循环, <span class="selector-tag">i</span> = <span class="number">394572</span></span><br><span class="line"></span><br><span class="line">while循环, <span class="selector-tag">i</span> = <span class="number">394573</span></span><br><span class="line"></span><br><span class="line">while循环, <span class="selector-tag">i</span> = <span class="number">394574</span></span><br><span class="line">...<span class="comment">//还在继续</span></span><br></pre></td></tr></table></figure></p>
-<p>运行该程序会发现，while循环会一直运行直到变量i的值超出Integer.MAX_VALUE。所以说直接调用interrupt方法不能中断正在运行中的线程。</p>
-<p>但是如果配合isInterrupted()能够中断正在运行的线程，因为调用interrupt方法相当于<br>将中断标志位置为true，那么可以通过调用isInterrupted()判断中断标志是否被置位来中断线程的执行。比如下面这段代码：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.<span class="type">IOException</span>;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">InteruptRunningThread</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	  public static void main(<span class="type">String</span>[] args) <span class="keyword">throws</span> <span class="type">IOException</span>  &#123;</span><br><span class="line">		  	<span class="type">InteruptRunningThread</span> test = <span class="keyword">new</span> <span class="type">InteruptRunningThread</span>();</span><br><span class="line">		    <span class="comment">//线程开始</span></span><br><span class="line">	        <span class="type">System</span>.out.println(<span class="string">"进入线程"</span> + <span class="type">Thread</span>.currentThread().getName());</span><br><span class="line">	        </span><br><span class="line">	        <span class="type">MyThread</span> thread = test.<span class="keyword">new</span> <span class="type">MyThread</span>();</span><br><span class="line">	        thread.start();</span><br><span class="line">	        <span class="keyword">try</span> &#123;</span><br><span class="line">	            <span class="type">Thread</span>.currentThread().sleep(<span class="number">2000</span>);</span><br><span class="line">	        &#125; <span class="keyword">catch</span> (<span class="type">InterruptedException</span> e) &#123;</span><br><span class="line">	             </span><br><span class="line">	        &#125;</span><br><span class="line">	        thread.interrupt();</span><br><span class="line">	        <span class="type">System</span>.out.println(<span class="string">"结束线程"</span> + <span class="type">Thread</span>.currentThread().getName());</span><br><span class="line">	    &#125; </span><br><span class="line">	     </span><br><span class="line">	    <span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">	        <span class="meta">@Override</span></span><br><span class="line">	        public void run() &#123;</span><br><span class="line">	            int i = <span class="number">0</span>;</span><br><span class="line">	            <span class="comment">/*while(i &lt; Integer.MAX_VALUE)&#123;</span></span><br><span class="line"><span class="comment">	                System.out.println("while循环, i = " + i + "\r\n");</span></span><br><span class="line"><span class="comment">	                i++;</span></span><br><span class="line"><span class="comment">	            &#125;*/</span></span><br><span class="line">	            <span class="keyword">while</span>(!isInterrupted() &amp;&amp; i&lt;<span class="type">Integer</span>.<span class="type">MAX_VALUE</span>)&#123;</span><br><span class="line">	                <span class="type">System</span>.out.println(i+<span class="string">" while循环"</span>);</span><br><span class="line">	                i++;</span><br><span class="line">	            &#125;</span><br><span class="line">	        &#125;</span><br><span class="line">	    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>执行结果：<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">138537</span> <span class="keyword">while</span>循环</span><br><span class="line"><span class="number">138538</span> <span class="keyword">while</span>循环</span><br><span class="line"><span class="number">138539</span> <span class="keyword">while</span>循环</span><br><span class="line">结束线程main</span><br></pre></td></tr></table></figure></p>
-<p>但是一般情况下不建议通过这种方式来中断线程，一般会在MyThread类中增加一个属性 isStop来标志是否结束while循环，然后再在while循环中判断isStop的值。<br>那么就可以在外面通过调用setStop方法来终止while循环。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> isStop = <span class="keyword">false</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(!isStop &amp;&amp; i &lt; Integer.MAX_VALUE)&#123;</span><br><span class="line">        	System.out.println(<span class="string">"while循环, i = "</span> + i + <span class="string">"\r\n"</span>);</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">     </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setStop</span><span class="params">(<span class="keyword">boolean</span> stop)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.isStop = stop;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>7）stop方法</p>
-<p>stop方法已经是一个废弃的方法，它是一个不安全的方法。因为调用stop方法会直接终止run方法的调用，并且会抛出一个ThreadDeath错误，如果线程持有某个对象锁的话，会完全释放锁，导致对象状态不一致。所以stop方法基本是不会被用到的。</p>
-<p>8）destroy方法</p>
-<p>destroy方法也是废弃的方法。基本不会被使用到。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/04/08/Mockjs/">Mock.js</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-04-08T05:22:02.000Z" itemprop="datePublished">2018-04-08</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Web/">Web</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>目前的大部分公司的项目都是采用的前后端分离, 后端接口的开发和前端人员是同时进行的. 那么这个时候就会存在一个问题, 在页面需要使用大量数据进行渲染生成前, 后端开发人员的接口也许并没有写完, 作为前端的我们也就没有办法获取数据. 所以 前端工程师就需要自己按照接口文档模拟后端人员提供的数据, 以此进行页面的开发.<br>这个时候, Mock.js的作用就体现出来了, 在数据量较大的情况下, 我们不用一个一个的编写数据, 只需要根据接口文档将数据的格式填入,Mock.js就能够自动的按需生成大量的模拟数据. 且Mock.js提供了大量的数据类型, 包括文本, 数字, 布尔值, 日期, 邮箱, 链接, 图片, 颜色等.</p>
-<h1 id="Mock-js"><a href="#Mock-js" class="headerlink" title="Mock.js"></a>Mock.js</h1><h2 id="Mockjs是什么"><a href="#Mockjs是什么" class="headerlink" title="Mockjs是什么?"></a>Mockjs是什么?</h2><p>目前的大部分公司的项目都是采用的前后端分离, 后端接口的开发和前端人员是同时进行的. 那么这个时候就会存在一个问题, 在页面需要使用大量数据进行渲染生成前, 后端开发人员的接口也许并没有写完, 作为前端的我们也就没有办法获取数据. 所以 前端工程师就需要自己按照接口文档模拟后端人员提供的数据, 以此进行页面的开发.<br>这个时候, Mock.js的作用就体现出来了, 在数据量较大的情况下, 我们不用一个一个的编写数据, 只需要根据接口文档将数据的格式填入,Mock.js就能够自动的按需生成大量的模拟数据. 且Mock.js提供了大量的数据类型, 包括文本, 数字, 布尔值, 日期, 邮箱, 链接, 图片, 颜色等.</p>
-<h2 id="安装Mockjs"><a href="#安装Mockjs" class="headerlink" title="安装Mockjs"></a>安装Mockjs</h2><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm <span class="keyword">install</span> mockjs -S </span><br><span class="line"><span class="keyword">or</span> </span><br><span class="line">npm <span class="keyword">install</span> mockjs -D</span><br></pre></td></tr></table></figure>
-<h2 id="引用Mockjs"><a href="#引用Mockjs" class="headerlink" title="引用Mockjs"></a>引用Mockjs</h2><p>Mock.js暴露了一个全局的Mock对象, 我们只需要将Mock对象引入到文件中, 调用Mock对象的方法即可</p>
-<ul>
-<li>CommonJS的引入方式</li>
-</ul>
-<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//CommonJS引入</span></span><br><span class="line"><span class="keyword">let</span> Mock = require(<span class="symbol">'mockjs</span>)</span><br><span class="line"> </span><br><span class="line"><span class="comment">//调用Mock.mock()方法模拟数据</span></span><br><span class="line"><span class="keyword">let</span> data = Mock.mock(&#123;</span><br><span class="line"><span class="symbol">'list</span>|<span class="number">1</span>-<span class="number">10</span>': [&#123;</span><br><span class="line">  <span class="symbol">'id</span>|+<span class="number">1</span>': <span class="number">1</span></span><br><span class="line">&#125;]</span><br><span class="line">&#125;);</span><br><span class="line">console.log(data);</span><br></pre></td></tr></table></figure>
-<ul>
-<li>ES6的引入方式</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//ES6的引入方式</span></span><br><span class="line"><span class="keyword">import</span> Mock <span class="keyword">from</span> <span class="string">'mockjs'</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">let</span> data = Mock.mock(&#123;</span><br><span class="line"><span class="string">'list|1-10'</span>: [&#123;</span><br><span class="line">  <span class="string">'id|+1'</span>: <span class="number">1</span></span><br><span class="line">&#125;]</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(data);</span><br></pre></td></tr></table></figure>
-<h2 id="简单用法"><a href="#简单用法" class="headerlink" title="简单用法"></a>简单用法</h2><p>Mock对象提供了4个方法, 分别是</p>
-<ul>
-<li>Mock.mock()</li>
-<li>Mock.setup()</li>
-<li>Mock.valid</li>
-<li>Mock.toJSONSchema()</li>
-</ul>
-<p>以及一个工具库 Mock.Random. 其中我们经常使用到的就是Mock.mock()和Mock.Random.</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/04/08/Java对象的大小/">Java对象的大小</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-04-08T04:18:45.000Z" itemprop="datePublished">2018-04-08</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Java对象的大小"><a href="#Java对象的大小" class="headerlink" title="Java对象的大小"></a>Java对象的大小</h1><p>基本数据的类型的大小是固定的，这里就不多说了。对于非基本类型的Java对象，其大小就值得商榷。</p>
-<p>在Java中，一个空Object对象的大小是8byte，这个大小只是保存堆中一个没有任何属性的对象的大小。看下面语句：</p>
-<p>基本类型包括：byte, short, int, long, char, float, double, Boolean</p>
-<p>引用类型包括：类类型，接口类型和数组。</p>
-<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span> ob = <span class="keyword">new</span> <span class="built_in">Object</span>();</span><br></pre></td></tr></table></figure>
-<p>这样在程序中完成了一个Java对象的生命，但是它所占的空间为：4byte+8byte。4byte是因为在程序中，创建一个对象，Java栈中保存引用的所需要的空间。而那8byte则是Java堆中对象的信息。因为所有的Java非基本类型的对象都需要默认继承Object对象，因此不论什么样的Java对象，其大小都必须是大于8byte。</p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Class</span> NewObject &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> <span class="keyword">count</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">boolean</span> flag;</span><br><span class="line"></span><br><span class="line">    Object ob;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">其大小为：空对象大小(<span class="number">8</span><span class="keyword">byte</span>)+<span class="keyword">int</span>大小(<span class="number">4</span><span class="keyword">byte</span>)+<span class="keyword">Boolean</span>大小(<span class="number">1</span><span class="keyword">byte</span>)+空Object引用的大小(<span class="number">4</span><span class="keyword">byte</span>)=<span class="number">17</span><span class="keyword">byte</span>。但是因为Java在对对象内存分配时都是以<span class="number">8</span>的整数倍来分，因此大于<span class="number">17</span><span class="keyword">byte</span>的最接近<span class="number">8</span>的整数倍的是<span class="number">24</span>，因此此对象的大小为<span class="number">24</span><span class="keyword">byte</span>。</span><br></pre></td></tr></table></figure>
-<p>这里需要注意一下基本类型的包装类型的大小。因为这种包装类型已经成为对象了，因此需要把他们作为对象来看待。包装类型的大小至少是12byte（声明一个空Object至少需要的空间），而且12byte没有包含任何有效信息，同时，因为Java对象大小是8的整数倍，因此一个基本类型包装类的大小至少是16byte。这个内存占用是很恐怖的，它是使用基本类型的N倍（N&gt;2），有些类型的内存占用更是夸张（随便想下就知道了）。因此，可能的话应尽量少使用包装类。在JDK5.0以后，因为加入了自动类型装换，因此，Java虚拟机会在存储方面进行相应的优化。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/04/08/Java线程池工作原理/">Java线程池工作原理</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-04-08T04:18:45.000Z" itemprop="datePublished">2018-04-08</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/多线程/">多线程</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Java线程池工作原理"><a href="#Java线程池工作原理" class="headerlink" title="Java线程池工作原理"></a>Java线程池工作原理</h1><p>Java中的线程池是运用场景最多的并发框架，几乎所有需要异步或并发执行任务的程序都可以使用线程池，所以我们就要认识并弄懂线程池，以便于更好为业务场景服务。<br>(异步与并发)</p>
-<h2 id="一、线程池的好处"><a href="#一、线程池的好处" class="headerlink" title="一、线程池的好处"></a>一、线程池的好处</h2><p>在开发过程中，合理地使用线程池大致有3个好处：</p>
-<ul>
-<li>第一：降低资源消耗。通过重复利用已创建的线程降低线程创建和销毁造成的消耗。</li>
-<li>第二：提高响应速度。当任务到达时，任务可以不需要等到线程创建就能立即执行。</li>
-<li>第三：提高线程的可管理性。线程是稀缺资源，如果无限制地创建，不仅会消耗系统资源，还会降低系统的稳定性，使用线程池可以进行统一分配、调优和监控。</li>
-</ul>
-<p>但是，要做到合理利用线程池，必须对其实现原理了如指掌。</p>
-<h2 id="二、线程池工作流程"><a href="#二、线程池工作流程" class="headerlink" title="二、线程池工作流程"></a>二、线程池工作流程</h2><p>1）当提交一个新任务到线程池时，线程池判断corePoolSize线程池是否都在执行任务，如果有空闲线程，则创建一个新的工作线程来执行任务，直到当前线程数等于corePoolSize；</p>
-<p>2）如果当前线程数为corePoolSize，继续提交的任务被保存到阻塞队列中，等待被执行；</p>
-<p>3）如果阻塞队列满了，那就创建新的线程执行当前任务，直到线程池中的线程数达到maxPoolSize，这时再有任务来，由饱和策略来处理提交的任务。</p>
-<h2 id="三、线程池参数"><a href="#三、线程池参数" class="headerlink" title="三、线程池参数"></a>三、线程池参数</h2><p>下面是ThreadPoolExecutor类的构造方法传参数<br><figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> ThreadPoolExecutor(</span><br><span class="line"><span class="keyword">int</span> corePoolSize, <span class="meta">#核心线程数</span></span><br><span class="line"><span class="keyword">int</span> maximumPoolSize, <span class="meta">#最大线程数</span></span><br><span class="line"><span class="keyword">long</span> keepAliveTime, <span class="meta">#达到最大线程数数时候，线程池的工作线程空闲后，保持存活的时间</span></span><br><span class="line">TimeUnit unit, <span class="meta">#keepAliveTime单位</span></span><br><span class="line">BlockingQueue&lt;Runnable&gt; workQueue <span class="meta">#阻塞队列</span></span><br><span class="line">RejectedExecutionHandler handler <span class="meta">#饱和策略</span></span><br><span class="line"></span><br><span class="line">) &#123;</span><br><span class="line">    <span class="keyword">this</span>(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,</span><br><span class="line">    Executors.defaultThreadFactory(), handler);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> ThreadPoolExecutor(<span class="number">6</span> ,<span class="number">12</span>, <span class="number">5</span>L, TimeUnit.SECONDS,<span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;(<span class="number">10</span>),<span class="keyword">new</span> ThreadPoolExecutor.CallerRunsPolicy());</span><br></pre></td></tr></table></figure></p>
-<p>比如corePoolSize为6，maximumPoolSize为12，keepAliveTime为5秒，队列长度为10；提交任务数达到核心线程数6时候，新来的任务就会被放入LinkedBlockingQueue阻塞队列。<br>当队列任务数达到10个时候，就会创建新线程执行任务，直到达到maximumPoolSize数量12。如果还有新来的任务，由策略来处理提交的任务；如果没有，线程池空闲时候，超过5秒，创建的maximumPoolSize，就会被销毁。</p>
-<h2 id="四、阻塞队列"><a href="#四、阻塞队列" class="headerlink" title="四、阻塞队列"></a>四、阻塞队列</h2><p>阻塞队列BlockingQueue接口，从jdk1.5开始，有四个实现类，jdk8亦是如此</p>
-<ul>
-<li><p>ArrayBlockingQueue：是一个基于数组结构的有界阻塞队列，此队列按FIFO（先进先出）原则对元素进行排序。</p>
+        <h1 id="熔断"><a href="#熔断" class="headerlink" title="熔断"></a>熔断</h1><h2 id="什么是服务雪崩"><a href="#什么是服务雪崩" class="headerlink" title="什么是服务雪崩"></a>什么是服务雪崩</h2><p>在微服务架构中，根据业务来拆分成一个个的服务，服务与服务之间可以通过 HTTP/RPC 相互调用，在 Spring Cloud 中可以用 ==RestTemplate== + ==LoadBalanceClient== 和 ==Feign== 来调用。为了保证其高可用，单个服务通常会集群部署。由于网络原因或者自身的原因，服务并不能保证 100% 可用，如果单个服务出现问题，调用这个服务就会出现线程阻塞，此时若有大量的请求涌入，Servlet 容器的线程资源会被消耗完毕，导致服务瘫痪。服务与服务之间的依赖性，故障会传播，会对整个微服务系统造成灾难性的严重后果，这就是服务故障的 “雪崩” 效应。为了解决这个问题，业界提出了 ++熔断器模型++。</p>
+<h2 id="Spring-Cloud微服务设计中如何才能实现这样的机制呢？这里涉及到几个问题："><a href="#Spring-Cloud微服务设计中如何才能实现这样的机制呢？这里涉及到几个问题：" class="headerlink" title="Spring Cloud微服务设计中如何才能实现这样的机制呢？这里涉及到几个问题："></a>Spring Cloud微服务设计中如何才能实现这样的机制呢？这里涉及到几个问题：</h2><ul>
+<li><p>微服务如何定义为故障，熔断的条件是什么？如何确定当前调用的微服务不可用，从而可以实现熔断操作；</p>
 </li>
-<li><p>LinkedBlockingQueue：一个基于链表结构的阻塞队列，此队列按FIFO排序元素，吞吐量通常要高于ArrayBlockingQueue，静态工厂方法Executors.newFixedThreadPool()使用了这个队列。</p>
-</li>
-<li><p>SynchronousQueue：一个不存储元素的阻塞队列。每个插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态，吞吐量通常要高于LinkedBlockingQueue，静态工厂方法Executors.newCachedThreadPool使用了这个列。</p>
-</li>
-<li><p>PriorityBlockingQueue：一个具有优先级的无限阻塞队列。</p>
+<li><p>被定义为故障的微服务恢复后如何让熔断方感知？当前微服务何时才可以继续正常的调用需要调用的其他微服务，实现故障恢复；</p>
 </li>
 </ul>
-<h2 id="五、饱和策略"><a href="#五、饱和策略" class="headerlink" title="五、饱和策略"></a>五、饱和策略</h2><p>当队列和线程池都满了，说明线程池处于饱和状态，那么必须采取一种策略处理提交的新任务。这个策略默认情况下是AbortPolicy，表示无法处理新任务时抛出异常。在JDK 1.5中Java线程池框架提供了以下4种策略。</p>
-<ul>
-<li>AbortPolicy：直接抛出异常。</li>
-<li>CallerRunsPolicy：只用调用者所在线程来运行任务。</li>
-<li>DiscardOldestPolicy：丢弃队列里最近的一个任务，并执行当前任务。</li>
-<li>DiscardPolicy：不处理，丢弃掉。</li>
-</ul>
-<p>当然，也可以根据应用场景需要来实现RejectedExecutionHandler接口自定义策略。如记录日志或持久化存储不能处理的任务。</p>
-<h2 id="六、向线程池提交任务"><a href="#六、向线程池提交任务" class="headerlink" title="六、向线程池提交任务"></a>六、向线程池提交任务</h2><p>可以使用两个方法向线程池提交任务，分别为execute()和submit()方法</p>
-<ul>
-<li>1、execute()方法用于提交不需要返回值的任务，所以无法判断任务是否被线程池执行成功</li>
-<li>2、submit()方法用于提交需要返回值的任务。</li>
-</ul>
-<p>线程池会返回一个future类型的对象，通过这个future对象可以判断任务是否执行成功，并且可以通过future的get()方法来获取返回值，get()方法会阻塞当前线程直到任务完成，而使用get(long timeout，TimeUnit unit)，在指定的时间内会等待任务执行，超时则抛出超时异常，等待时候会阻塞当前线程</p>
-<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line">package com.mine.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ExecutionException;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.Future;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.LinkedBlockingQueue;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ThreadPoolExecutor;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeoutException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> class ThreadPoolTest &#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 新建线程池</span></span><br><span class="line">		ThreadPoolExecutor threadPoolExecutor = <span class="keyword">new</span> ThreadPoolExecutor(<span class="number">6</span>, <span class="comment">// 核心线程数</span></span><br><span class="line">				<span class="number">12</span>, <span class="comment">// 最大线程数</span></span><br><span class="line">				<span class="number">5</span>L, <span class="comment">// KeepAlive Time long</span></span><br><span class="line">				TimeUnit.SECONDS, <span class="comment">// TimeOut</span></span><br><span class="line">				<span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;(<span class="number">10</span>), <span class="comment">// 阻塞队列</span></span><br><span class="line">				<span class="keyword">new</span> ThreadPoolExecutor.CallerRunsPolicy()<span class="comment">// 饱和策略</span></span><br><span class="line">		);</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 向线程池提交任务</span></span><br><span class="line">		<span class="comment">// 1、execute()方法用于提交不需要返回值的任务，所以无法判断任务是否被线程池执行成功</span></span><br><span class="line"></span><br><span class="line">		threadPoolExecutor.execute(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">			@Override</span><br><span class="line">			<span class="keyword">public</span> <span class="keyword">void</span> <span class="built_in">run</span>() &#123;</span><br><span class="line">				<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">				System.out.<span class="built_in">println</span>(</span><br><span class="line">						<span class="string">"执行当前线程体,线程名：  "</span> + Thread.currentThread().getName() + <span class="string">"当前:"</span> + System.currentTimeMillis());</span><br><span class="line">				<span class="built_in">try</span> &#123;</span><br><span class="line">					Thread.sleep(<span class="number">2000</span>);</span><br><span class="line">				&#125; <span class="built_in">catch</span> (InterruptedException e) &#123;</span><br><span class="line">					<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">					e.printStackTrace();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line"></span><br><span class="line">		Future&lt;?&gt; future = threadPoolExecutor.submit(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">			@Override</span><br><span class="line">			<span class="keyword">public</span> <span class="keyword">void</span> <span class="built_in">run</span>() &#123;</span><br><span class="line">				<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">				System.out.<span class="built_in">println</span>(<span class="string">"执行当前线程体,线程名：  "</span> + Thread.currentThread().getName());</span><br><span class="line">				<span class="built_in">try</span> &#123;</span><br><span class="line">					Thread.sleep(<span class="number">2000</span>);</span><br><span class="line">				&#125; <span class="built_in">catch</span> (InterruptedException e) &#123;</span><br><span class="line">					<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">					e.printStackTrace();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line"></span><br><span class="line">		<span class="comment">/**</span></span><br><span class="line"><span class="comment">		 * 线程池会返回一个future类型的对象，通过这个future对象可以判断任务是否执行成功，并且可以通过future的get()方法来获取返回值，</span></span><br><span class="line"><span class="comment">		 * get()方法会阻塞当前线程直到任务完成， 而使用get(long timeout，TimeUnit</span></span><br><span class="line"><span class="comment">		 * unit)，在指定的时间内会等待任务执行，超时则抛出超时异常，等待时候会阻塞当前线程</span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line">		<span class="built_in">try</span> &#123;</span><br><span class="line">			<span class="comment">// 阻塞当前线程，直到任务完成</span></span><br><span class="line">			Object obj = future.<span class="built_in">get</span>();</span><br><span class="line">			<span class="comment">// 当前线程等待执行结果的返回值，延迟2s</span></span><br><span class="line">			Object obj2 = future.<span class="built_in">get</span>(<span class="number">10</span>, TimeUnit.MINUTES);</span><br><span class="line"></span><br><span class="line">		&#125; <span class="built_in">catch</span> (InterruptedException e) &#123;</span><br><span class="line">			<span class="comment">// 处理中断异常</span></span><br><span class="line">			<span class="comment">// <span class="doctag">TODO:</span> handle exception</span></span><br><span class="line">		&#125; <span class="built_in">catch</span> (ExecutionException e) &#123;</span><br><span class="line">			<span class="comment">// 处理执行异常</span></span><br><span class="line">			<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125; <span class="built_in">catch</span> (TimeoutException e) &#123;</span><br><span class="line">			<span class="comment">// 处理超时异常</span></span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125; finally &#123;<span class="comment">// 关闭线程池</span></span><br><span class="line">			threadPoolExecutor.<span class="built_in">shutdown</span>();</span><br><span class="line">		&#125;</span><br><span class="line">		threadPoolExecutor.<span class="built_in">shutdown</span>();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="七、关闭线程池"><a href="#七、关闭线程池" class="headerlink" title="七、关闭线程池"></a>七、关闭线程池</h2><p>ThreadPoolExecutor提供了两个方法，用于线程池的关闭，分别是shutdown()和shutdownNow()，它们的原理是遍历线程池中的工作线程，然后逐个调用线程的interrupt方法来中断线程</p>
-<p>shutdown()：不会立即终止线程池，而是要等所有任务缓存队列中的任务都执行完后才终止，但再也不会接受新的任务。</p>
-<p>shutdownNow()：立即终止线程池，并尝试打断正在执行的任务，并且清空任务缓存队列，返回尚未执行的任务。</p>
-<p>只要调用了这两个关闭方法中的任意一个，isShutdown方法就会返回true。当所有的任务<br>都已关闭后，才表示线程池关闭成功，这时调用isTerminaed方法会返回true。</p>
-<p>因此，判断线程池所有线程是否执行完成，可以这样写：<br><figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(true)&#123;<span class="comment">//死循环</span></span><br><span class="line">	<span class="keyword">if</span>(threadPool.<span class="built_in">isTerminated</span>()) &#123;</span><br><span class="line">			<span class="comment">//执行自己的操作</span></span><br><span class="line">			<span class="keyword">break</span>;<span class="comment">//true停止</span></span><br><span class="line">	&#125;</span><br><span class="line">	Thread.sleep(<span class="number">500</span>);<span class="comment">//休眠500继续循环</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>shutdown，只是将线程池的状态设置成SHUTDOWN状态，然后中断所有没有正在执行任务的线程，等待执行任务的线程完成。</p>
-<p>shutdownNow首先将线程池的状态设置成STOP，然后尝试停止所有的正在执行或暂停任务的线程，并返回等待执行任务的列表。</p>
-<h2 id="八、线程池状态"><a href="#八、线程池状态" class="headerlink" title="八、线程池状态"></a>八、线程池状态</h2><p>线程池有五种运行状态：<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">1</span>、<span class="selector-tag">RUNNING</span></span><br><span class="line"></span><br><span class="line">(<span class="number">1</span>) 状态说明：线程池处在<span class="selector-tag">RUNNING</span>状态时，能够接收新任务，以及对已添加的任务进行处理。</span><br><span class="line">(<span class="number">2</span>) 状态切换：线程池的初始化状态是<span class="selector-tag">RUNNING</span>。线程池被一旦被创建，</span><br><span class="line">就处于<span class="selector-tag">RUNNING</span>状态，且线程池中的任务数为<span class="selector-tag">0</span></span><br><span class="line"></span><br><span class="line"><span class="selector-tag">2</span>、 <span class="selector-tag">SHUTDOWN</span></span><br><span class="line"></span><br><span class="line">(<span class="number">1</span>) 状态说明：线程池处在<span class="selector-tag">SHUTDOWN</span>状态时，不接收新任务，但能处理已添加的任务。</span><br><span class="line">(<span class="number">2</span>) 状态切换：调用线程池的<span class="selector-tag">shutdown</span>()接口时，线程池由<span class="selector-tag">RUNNING</span> <span class="selector-tag">-</span>&gt; <span class="selector-tag">SHUTDOWN</span>。</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">3</span>、<span class="selector-tag">STOP</span></span><br><span class="line"></span><br><span class="line">(<span class="number">1</span>) 状态说明：线程池处在<span class="selector-tag">STOP</span>状态时，不接收新任务，不处理已添加的任务，并且会中断正在处理的任务。</span><br><span class="line">(<span class="number">2</span>) 状态切换：调用线程池的<span class="selector-tag">shutdownNow</span>()接口时，线程池由(RUNNING or SHUTDOWN ) <span class="selector-tag">-</span>&gt; <span class="selector-tag">STOP</span>。</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">4</span>、<span class="selector-tag">TIDYING</span></span><br><span class="line"></span><br><span class="line">(<span class="number">1</span>) 状态说明：当所有的任务已终止，<span class="selector-tag">ctl</span>记录的”任务数量”为<span class="selector-tag">0</span>，线程池会变为</span><br><span class="line"><span class="selector-tag">TIDYING</span>状态。当线程池变为<span class="selector-tag">TIDYING</span>状态时，会执行钩子函数<span class="selector-tag">terminated</span>()。</span><br><span class="line"><span class="selector-tag">terminated</span>()在<span class="selector-tag">ThreadPoolExecutor</span>类中是空的，若用户想在线程池变为<span class="selector-tag">TIDYING</span>时，</span><br><span class="line">进行相应的处理；可以通过重载<span class="selector-tag">terminated</span>()函数来实现。</span><br><span class="line">(<span class="number">2</span>) 状态切换：当线程池在<span class="selector-tag">SHUTDOWN</span>状态下，阻塞队列为空并且线程池中执行的任务</span><br><span class="line">也为空时，就会由 <span class="selector-tag">SHUTDOWN-</span>&gt;<span class="selector-tag">TIDYING</span>。当线程池在<span class="selector-tag">STOP</span>状态下，线程池中执行的任务</span><br><span class="line">为空时，就会由<span class="selector-tag">STOP</span> <span class="selector-tag">-</span>&gt; <span class="selector-tag">TIDYING</span>。</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">5</span>、 <span class="selector-tag">TERMINATED</span></span><br><span class="line"></span><br><span class="line">(<span class="number">1</span>) 状态说明：线程池彻底终止，就变成<span class="selector-tag">TERMINATED</span>状态。</span><br><span class="line">(<span class="number">2</span>) 状态切换：线程池处在<span class="selector-tag">TIDYING</span>状态时，执行完<span class="selector-tag">terminated</span>()之后，</span><br><span class="line">就会由 <span class="selector-tag">TIDYING</span> <span class="selector-tag">-</span>&gt; <span class="selector-tag">TERMINATED</span>。</span><br></pre></td></tr></table></figure></p>
+<p>Spring Cloud的代码实现机制是什么样的？</p>
+<blockquote>
+<p>在Spring Cloud微服务设计中需要通过集成Hystrix框架来实现微服务间的熔断保护机制，Hystrix框架会通过监控微服务之间的调用情况，来决定是否启动熔断保护。</p>
+</blockquote>
 
         
     </section>
@@ -562,7 +176,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/04/07/Dubbo/">Dubbo</a>
+            <a href="/2018/12/02/Sentinel工作原理/">Sentinel工作原理</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -570,7 +184,492 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-04-07T02:10:00.000Z" itemprop="datePublished">2018-04-07</time>
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Sentinel"><a href="#Sentinel" class="headerlink" title="Sentinel"></a>Sentinel</h1><p>英 [ˈsentɪnl]</p>
+<p><a href="https://github.com/alibaba/Sentinel/wiki/%E4%BB%8B%E7%BB%8D" target="_blank" rel="noopener">官方文档</a></p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>资源是 Sentinel 的关键概念。它可以是 Java 应用程序中的任何内容，例如，由应用程序提供的服务，或由应用程序调用的其它应用提供的服务，甚至可以是一段代码。<br>在接下来的文档中，我们都会用资源来描述代码块。</p>
+<p>只要通过 Sentinel API 定义的代码，就是资源，能够被 Sentinel 保护起来。<br>大部分情况下，可以使用方法签名，URL，甚至服务名称作为资源名来标示资源。</p>
+<h2 id="规则"><a href="#规则" class="headerlink" title="规则"></a>规则</h2><p>围绕资源的实时状态设定的规则，可以包括流量控制规则、熔断降级规则以及系统保护规则。所有规则可以动态实时调整。</p>
+<h2 id="Sentinel-功能和设计理念"><a href="#Sentinel-功能和设计理念" class="headerlink" title="Sentinel 功能和设计理念"></a>Sentinel 功能和设计理念</h2><h3 id="流量控制"><a href="#流量控制" class="headerlink" title="流量控制"></a>流量控制</h3><h4 id="什么是流量控制"><a href="#什么是流量控制" class="headerlink" title="什么是流量控制"></a>什么是流量控制</h4><p>流量控制在网络传输中是一个常用的概念，它用于调整网络包的发送数据。<br>然而，从系统稳定性角度考虑，在处理请求的速度上，也有非常多的讲究。<br>任意时间到来的请求往往是随机不可控的，而系统的处理能力是有限的。我们需要根据系统的处理能力对流量进行控制。<br>Sentinel 作为一个调配器，可以根据需要把随机的请求调整成合适的形状，如下图所示：</p>
+<h3 id="流量控制设计理念"><a href="#流量控制设计理念" class="headerlink" title="流量控制设计理念"></a>流量控制设计理念</h3><p>资源的调用关系，例如资源的调用链路，资源和资源之间的关系；<br>运行指标，例如 QPS、线程池、系统负载等；<br>控制的效果，例如直接限流、冷启动、排队等。</p>
+<p>Sentinel 的设计理念是让您自由选择控制的角度，并进行灵活组合，从而达到想要的效果。</p>
+<h2 id="熔断降级"><a href="#熔断降级" class="headerlink" title="熔断降级"></a>熔断降级</h2><h3 id="什么是熔断降级"><a href="#什么是熔断降级" class="headerlink" title="什么是熔断降级"></a>什么是熔断降级</h3><p>除了流量控制以外，及时对调用链路中的不稳定因素进行熔断也是 Sentinel 的使命之一。<br>由于调用关系的复杂性，如果调用链路中的某个资源出现了不稳定，可能会导致请求发生堆积，进而导致级联错误。</p>
+<p>Sentinel 和 Hystrix 的原则是一致的: 当检测到调用链路中某个资源出现不稳定的表现，<br>例如请求响应时间长或异常比例升高的时候，则对这个资源的调用进行限制，<br>让请求快速失败，避免影响到其它的资源而导致级联故障。</p>
+<h3 id="熔断降级设计理念"><a href="#熔断降级设计理念" class="headerlink" title="熔断降级设计理念"></a>熔断降级设计理念</h3><p>在限制的手段上，Sentinel 和 Hystrix 采取了完全不一样的方法。</p>
+<h4 id="Hystrix"><a href="#Hystrix" class="headerlink" title="Hystrix"></a>Hystrix</h4><p>Hystrix 通过 ==线程池隔离== 的方式，来对依赖（在 Sentinel 的概念中对应 资源）进行了隔离。<br>这样做的好处是资源和资源之间做到了最彻底的隔离。缺点是除了增加了线程切换的成本（过多的线程池导致线程数目过多），<br>还需要预先给各个资源做线程池大小的分配，并且对于一些使用了 ThreadLocal 的场景来说会有问题（如 Spring 事务）。</p>
+<h4 id="Sentinel-1"><a href="#Sentinel-1" class="headerlink" title="Sentinel"></a>Sentinel</h4><blockquote>
+<p>通过==并发线程数==进行限制</p>
+</blockquote>
+<p>和资源池隔离的方法不同，Sentinel 通过限制资源并发线程的数量，来减少不稳定资源对其它资源的影响。<br>这样不但没有线程切换的损耗，也不需要您预先分配线程池的大小。当某个资源出现不稳定的情况下，例如响应时间变长，<br>对资源的直接影响就是会造成线程数的逐步堆积。当线程数在特定资源上堆积到一定的数量之后，对该资源的新请求就会被拒绝。<br>堆积的线程完成任务后才开始继续接收请求。</p>
+<blockquote>
+<p>针对==慢调用和异常==对资源进行降级</p>
+</blockquote>
+<p>除了对并发线程数进行控制以外，Sentinel 还可以根据响应时间和异常等不稳定因素来快速对不稳定的调用进行熔断。<br>当依赖的资源出现响应时间过长后，所有对该资源的访问都会被直接拒绝，直到过了指定的时间窗口之后才重新渐进式地恢复。</p>
+<h3 id="系统自适应保护"><a href="#系统自适应保护" class="headerlink" title="系统自适应保护"></a>系统自适应保护</h3><p>Sentinel 同时提供系统维度的自适应保护能力。防止雪崩，是系统防护中重要的一环。<br>当系统负载较高的时候，如果还持续让请求进入，可能会导致系统崩溃，无法响应。<br>在集群环境下，网络负载均衡会把本应这台机器承载的流量转发到其它的机器上去。<br>如果这个时候其它的机器也处在一个边缘状态的时候，这个增加的流量就会导致这台机器也崩溃，最后导致整个集群不可用。</p>
+<p>针对这个情况，Sentinel 提供了对应的保护机制，让系统的入口流量和系统的负载达到一个平衡，保证系统在能力范围之内处理最多的请求。</p>
+<h2 id="Sentinel-工作机制"><a href="#Sentinel-工作机制" class="headerlink" title="Sentinel 工作机制"></a>Sentinel 工作机制</h2><p>Sentinel 的主要工作机制如下：</p>
+<p>对主流框架提供适配或者显示的 API，来定义需要保护的资源，并提供设施对资源进行实时统计和调用链路分析。</p>
+<p>根据预设的规则，结合对资源的实时统计信息，对流量进行控制。同时，Sentinel 提供开放的接口，方便您定义及改变规则。</p>
+<p>Sentinel 提供实时的监控系统，方便您快速了解目前系统的状态。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/Sentinel 注解式支持/">Sentinel 注解式支持</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Sentinel-注解式支持"><a href="#Sentinel-注解式支持" class="headerlink" title="Sentinel 注解式支持"></a>Sentinel 注解式支持</h1><p>@SentinelResource 用于定义资源，并提供可选的异常处理和 fallback 配置项。 @SentinelResource 注解包含以下属性：</p>
+<ul>
+<li>value：资源名称，必需项（不能为空）</li>
+<li>entryType：entry 类型，可选项（默认为 EntryType.OUT）</li>
+<li>blockHandler / blockHandlerClass</li>
+</ul>
+<p>blockHandler 对应处理 BlockException 的函数名称，可选项。blockHandler 函数访问范围需要是 public，返回类型需要与原方法相匹配，参数类型需要和原方法相匹配并且最后加一个额外的参数，类型为 BlockException。blockHandler 函数默认需要和原方法在同一个类中。若希望使用其他类的函数，则可以指定 blockHandlerClass 为对应的类的 Class 对象，注意对应的函数必需为 static 函数，否则无法解析。</p>
+<ul>
+<li>fallback / fallbackClass</li>
+</ul>
+<p>fallback 函数名称，可选项，用于在抛出异常的时候提供 fallback 处理逻辑。fallback 函数可以针对所有类型的异常（除了exceptionsToIgnore里面排除掉的异常类型）进行处理。<br>fallback 函数签名和位置要求：</p>
+<ol>
+<li>返回值类型必须与原函数返回值类型一致；</li>
+<li>方法参数列表需要和原函数一致，或者可以额外多一个Throwable类型的参数用于接收对应的异常。</li>
+<li>fallback 函数默认需要和原方法在同一个类中。若希望使用其他类的函数，则可以指定 fallbackClass 为对应的类的 Class 对象，注意对应的函数必需为 static 函数，否则无法解析。</li>
+</ol>
+<ul>
+<li>defaultFallback（since 1.6.0）：</li>
+</ul>
+<p>默认的 fallback 函数名称，可选项，通常用于通用的 fallback 逻辑（即可以用于很多服务或方法）。默认 fallback 函数可以针对所有类型的异常（除了 exceptionsToIgnore 里面排除掉的异常类型）进行处理。若同时配置了 fallback 和 defaultFallback，则只有 fallback 会生效。</p>
+<p>defaultFallback 函数签名要求：</p>
+<ol>
+<li>返回值类型必须与原函数返回值类型一致；</li>
+<li>方法参数列表需要为空，或者可以额外多一个Throwable类型的参数用于接收对应的异常。</li>
+<li>defaultFallback 函数默认需要和原方法在同一个类中。若希望使用其他类的函数，则可以指定 fallbackClass 为对应的类的 Class 对象，注意对应的函数必需为 static 函数，否则无法解析。</li>
+</ol>
+<ul>
+<li>exceptionsToIgnore：用于指定哪些异常被排除掉，不会计入异常统计中，也不会进入 fallback 逻辑中，而是会原样抛出。</li>
+</ul>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 对应的 `handleException` 函数需要位于 `ExceptionUtil` 类中，并且必须为 static 函数.</span></span><br><span class="line">    <span class="meta">@SentinelResource</span>(value = <span class="string">"test"</span>, blockHandler = <span class="string">"handleException"</span>, blockHandlerClass = &#123;ExceptionUtil.class&#125;)</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Test"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 原函数</span></span><br><span class="line">    <span class="meta">@SentinelResource</span>(value = <span class="string">"hello"</span>, blockHandler = <span class="string">"exceptionHandler"</span>, fallback = <span class="string">"helloFallback"</span>)</span><br><span class="line">    <span class="keyword">public</span> <span class="function">String <span class="title">hello</span><span class="params">(<span class="keyword">long</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">return</span> String.<span class="title">format</span><span class="params">(<span class="string">"Hello at %d"</span>, s)</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Fallback 函数，函数签名与原函数一致或加一个 Throwable 类型的参数.</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function">String <span class="title">helloFallback</span><span class="params">(<span class="keyword">long</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">return</span> String.<span class="title">format</span><span class="params">(<span class="string">"Halooooo %d"</span>, s)</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Block 异常处理函数，参数最后多一个 BlockException，其余与原函数一致.</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function">String <span class="title">exceptionHandler</span><span class="params">(<span class="keyword">long</span> s, BlockException ex)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Do some log here.</span></span><br><span class="line">        ex.printStackTrace();</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Oops, error occurred at "</span> + s;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/Sentinel 主流框架的适配/">Sentinel 主流框架的适配</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Sentinel-主流框架的适配"><a href="#Sentinel-主流框架的适配" class="headerlink" title="Sentinel 主流框架的适配"></a>Sentinel 主流框架的适配</h1><p><a href="https://github.com/alibaba/Sentinel/wiki/%E4%B8%BB%E6%B5%81%E6%A1%86%E6%9E%B6%E7%9A%84%E9%80%82%E9%85%8D" target="_blank" rel="noopener">适配</a></p>
+<p>为了减少开发的复杂程度，Sentinel对大部分的主流框架，例如 Web Servlet、Dubbo、Spring Cloud、gRPC、Spring WebFlux、Reactor 等都做了适配。您只需要引入对应的依赖即可方便地整合 Sentinel。<br>包括以下配置：</p>
+<h3 id="Web-适配"><a href="#Web-适配" class="headerlink" title="Web 适配"></a>Web 适配</h3><ul>
+<li>Spring Boot/Spring Cloud</li>
+<li>Web Servlet</li>
+<li>Spring WebFlux<h3 id="RPC-适配"><a href="#RPC-适配" class="headerlink" title="RPC 适配"></a>RPC 适配</h3></li>
+<li>Apache Dubbo</li>
+<li>gRPC</li>
+<li>Feign</li>
+<li>SOFARPC<h3 id="HTTP-client-适配"><a href="#HTTP-client-适配" class="headerlink" title="HTTP client 适配"></a>HTTP client 适配</h3></li>
+<li>Apache HttpClient</li>
+<li>OkHttp</li>
+<li>Reactive 适配</li>
+<li>Reactor<h3 id="API-Gateway-适配"><a href="#API-Gateway-适配" class="headerlink" title="API Gateway 适配"></a>API Gateway 适配</h3></li>
+<li>Spring Cloud Gateway</li>
+<li>Netflix Zuul 1.x</li>
+<li>Netflix Zuul 2.x</li>
+<li>Apache RocketMQ</li>
+</ul>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/Sentinel quick start/">Sentinel快速入门</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Sentinel快速入门"><a href="#Sentinel快速入门" class="headerlink" title="Sentinel快速入门"></a>Sentinel快速入门</h1><p>如下的代码任然是侵入式的使用方式，也提供了<a href="https://github.com/alibaba/Sentinel/wiki/%E6%B3%A8%E8%A7%A3%E6%94%AF%E6%8C%81" target="_blank" rel="noopener">注解支持模块</a>。</p>
+<p>应用使用 pom 工程，则在 pom.xml 文件中加入以下代码即可：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.csp<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>sentinel-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>First Demo 代码：</p>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> sentinel;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.alibaba.csp.sentinel.Entry;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.csp.sentinel.SphU;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.csp.sentinel.slots.block.BlockException;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.csp.sentinel.slots.block.RuleConstant;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.csp.sentinel.slots.block.flow.FlowRule;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.csp.sentinel.slots.block.flow.FlowRuleManager;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> class SentinelDemo &#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">		initFlowRules();</span><br><span class="line">		<span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">			Entry entry = <span class="keyword">null</span>;</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				entry = SphU.entry(<span class="string">"HelloWorld"</span>);</span><br><span class="line">				<span class="comment">/* 您的业务逻辑 - 开始 */</span></span><br><span class="line">				System.out.<span class="built_in">println</span>(<span class="string">"hello world"</span>);</span><br><span class="line">				<span class="comment">/* 您的业务逻辑 - 结束 */</span></span><br><span class="line">			&#125; <span class="keyword">catch</span> (BlockException e1) &#123;</span><br><span class="line">				<span class="comment">/* 流控逻辑处理 - 开始 */</span></span><br><span class="line">				System.out.<span class="built_in">println</span>(<span class="string">"block!"</span>);</span><br><span class="line">				<span class="comment">/* 流控逻辑处理 - 结束 */</span></span><br><span class="line">			&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">				<span class="keyword">if</span> (entry != <span class="keyword">null</span>) &#123;</span><br><span class="line">					entry.<span class="built_in">exit</span>();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 接下来，通过规则来指定允许该资源通过的请求次数</span></span><br><span class="line"><span class="comment">// 例如下面的代码定义了资源 HelloWorld 每秒最多只能通过 20 个请求。</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> initFlowRules() &#123;</span><br><span class="line">		List&lt;FlowRule&gt; rules = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">		FlowRule rule = <span class="keyword">new</span> FlowRule();</span><br><span class="line">		rule.setResource(<span class="string">"HelloWorld"</span>);</span><br><span class="line">		rule.setGrade(RuleConstant.FLOW_GRADE_QPS);</span><br><span class="line">		<span class="comment">// Set limit QPS to 20.</span></span><br><span class="line">		rule.setCount(<span class="number">20</span>);</span><br><span class="line">		rules.<span class="built_in">add</span>(rule);</span><br><span class="line">		FlowRuleManager.loadRules(rules);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Demo 运行之后，我们可以在日志里看到下面的输出:<br><figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">window机器位于 C:\Users\shengwangzhong\logs\xxxx</span><br><span class="line">~/logs/csp/$&#123;appName&#125;-metrics.log.xxx</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">|<span class="type">--timestamp</span>-|<span class="type">------date</span> <span class="built_in">time</span>----|<span class="type">-resource</span>-|<span class="type">p</span> |<span class="type">block</span>|<span class="type">s</span> |<span class="type">e</span>|<span class="type">rt</span></span><br><span class="line"><span class="number">1529998904000</span>|<span class="type">2018</span><span class="number">-06</span><span class="number">-26</span> <span class="number">15</span>:<span class="number">41</span>:<span class="number">44</span>|<span class="type">HelloWorld</span>|<span class="type">20</span>|<span class="type">0</span>    |<span class="type">20</span>|<span class="type">0</span>|<span class="type">0</span></span><br><span class="line"><span class="number">1529998905000</span>|<span class="type">2018</span><span class="number">-06</span><span class="number">-26</span> <span class="number">15</span>:<span class="number">41</span>:<span class="number">45</span>|<span class="type">HelloWorld</span>|<span class="type">20</span>|<span class="type">5579</span> |<span class="type">20</span>|<span class="type">0</span>|<span class="type">728</span></span><br><span class="line"><span class="number">1529998906000</span>|<span class="type">2018</span><span class="number">-06</span><span class="number">-26</span> <span class="number">15</span>:<span class="number">41</span>:<span class="number">46</span>|<span class="type">HelloWorld</span>|<span class="type">20</span>|<span class="type">15698</span>|<span class="type">20</span>|<span class="type">0</span>|<span class="type">0</span></span><br><span class="line"><span class="number">1529998907000</span>|<span class="type">2018</span><span class="number">-06</span><span class="number">-26</span> <span class="number">15</span>:<span class="number">41</span>:<span class="number">47</span>|<span class="type">HelloWorld</span>|<span class="type">20</span>|<span class="type">19262</span>|<span class="type">20</span>|<span class="type">0</span>|<span class="type">0</span></span><br><span class="line"><span class="number">1529998908000</span>|<span class="type">2018</span><span class="number">-06</span><span class="number">-26</span> <span class="number">15</span>:<span class="number">41</span>:<span class="number">48</span>|<span class="type">HelloWorld</span>|<span class="type">20</span>|<span class="type">19502</span>|<span class="type">20</span>|<span class="type">0</span>|<span class="type">0</span></span><br><span class="line"><span class="number">1529998909000</span>|<span class="type">2018</span><span class="number">-06</span><span class="number">-26</span> <span class="number">15</span>:<span class="number">41</span>:<span class="number">49</span>|<span class="type">HelloWorld</span>|<span class="type">20</span>|<span class="type">18386</span>|<span class="type">20</span>|<span class="type">0</span>|<span class="type">0</span></span><br></pre></td></tr></table></figure></p>
+<p>其中 p 代表通过的请求, block 代表被阻止的请求, s 代表成功执行完成的请求个数, e 代表用户自定义的异常, rt 代表平均响应时长。</p>
+<p>结合控制台使用：</p>
+<p>首先需要保证控制台处于启动状态：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -Dserver.<span class="attribute">port</span>=8080 -Dcsp.sentinel.dashboard.<span class="attribute">server</span>=localhost:8080 -Dproject.<span class="attribute">name</span>=sentinel-dashboard -jar sentinel-dashboard.jar</span><br></pre></td></tr></table></figure></p>
+<p>其中 -Dserver.port=8080 用于指定 Sentinel 控制台端口为 8080</p>
+<p>此外针对上面的应用需要添加依赖：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.csp<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>sentinel-transport-simple-http<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>同时需要添加程序启动参数：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-Dcsp<span class="selector-class">.sentinel</span><span class="selector-class">.dashboard</span><span class="selector-class">.server</span>=consoleIp:port</span><br><span class="line">                ↓↓↓↓↓↓↓</span><br><span class="line">-Dcsp<span class="selector-class">.sentinel</span><span class="selector-class">.dashboard</span><span class="selector-class">.server</span>=localhost:<span class="number">8080</span></span><br></pre></td></tr></table></figure></p>
+<p>若启动多个应用，则需要通过 -Dcsp.sentinel.api.port=xxxx 指定客户端监控 API 的端口（默认是 8719）。</p>
+<p>这时候，在启动程序以后，可以再dashboard页面能对具体的应用进行实时监控。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/Redis的过期策略和内存淘汰机制/">Redis的过期策略和内存淘汰机制</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h2 id="Redis的过期策略和内存淘汰机制"><a href="#Redis的过期策略和内存淘汰机制" class="headerlink" title="Redis的过期策略和内存淘汰机制"></a>Redis的过期策略和内存淘汰机制</h2><p>一、背景<br>线上你写代码的时候，想当然的认为写进 redis 的数据就一定会存在，后面导致系统各种 bug，谁来负责？<br>常见的有两个问题：<br>往 redis 写入的数据怎么没了？<br>可能有同学会遇到，在生产环境的 redis 经常会丢掉一些数据，写进去了，过一会儿可能就没了。我的天，同学，你问这个问题就说明 redis 你就没用对啊。redis 是缓存，你给当存储了是吧？<br>啥叫缓存？用内存当缓存。内存是无限的吗，内存是很宝贵而且是有限的，磁盘是廉价而且是大量的。可能一台机器就几十个 G 的内存，但是可以有几个 T 的硬盘空间。redis 主要是基于内存来进行高性能、高并发的读写操作的。<br>那既然内存是有限的，比如 redis 就只能用 10G，你要是往里面写了 20G 的数据，会咋办？当然会干掉 10G 的数据，然后就保留 10G 的数据了。那干掉哪些数据？保留哪些数据？当然是干掉不常用的数据，保留常用的数据了。<br>数据明明过期了，怎么还占用着内存？<br>这是由 redis 的过期策略来决定。</p>
+<blockquote>
+<p>3种过期策略</p>
+</blockquote>
+<h2 id="定时删除"><a href="#定时删除" class="headerlink" title="定时删除"></a>定时删除</h2><h3 id="含义："><a href="#含义：" class="headerlink" title="含义："></a>含义：</h3><p>在设置key的过期时间的同时，为该key创建一个定时器，让定时器在key的过期时间来临时，对key进行删除</p>
+<h3 id="优点："><a href="#优点：" class="headerlink" title="优点："></a>优点：</h3><p>保证内存被尽快释放</p>
+<h3 id="缺点："><a href="#缺点：" class="headerlink" title="缺点："></a>缺点：</h3><ol>
+<li>若过期key很多，删除这些key会占用很多的CPU时间，在CPU时间紧张的情况下，CPU不能把所有的时间用来做要紧的事儿，还需要去花时间删除这些key</li>
+<li>定时器的创建耗时，若为每一个设置过期时间的key创建一个定时器（将会有大量的定时器产生），性能影响严重</li>
+<li>没人用</li>
+</ol>
+<h2 id="惰性删除"><a href="#惰性删除" class="headerlink" title="惰性删除"></a>惰性删除</h2><h3 id="含义：-1"><a href="#含义：-1" class="headerlink" title="含义："></a>含义：</h3><p>key过期的时候不删除，每次从数据库获取key的时候去检查是否过期，若过期，则删除，返回null。</p>
+<h3 id="优点：-1"><a href="#优点：-1" class="headerlink" title="优点："></a>优点：</h3><p>删除操作只发生在从数据库取出key的时候发生，而且只删除当前key，所以对CPU时间的占用是比较少的，而且此时的删除是已经到了非做不可的地步（如果此时还不删除的话，我们就会获取到了已经过期的key了）</p>
+<h3 id="缺点：-1"><a href="#缺点：-1" class="headerlink" title="缺点："></a>缺点：</h3><p>若大量的key在超出超时时间后，很久一段时间内，都没有被获取过，那么可能发生内存泄露（无用的垃圾占用了大量的内存）</p>
+<h2 id="定期删除"><a href="#定期删除" class="headerlink" title="定期删除"></a>定期删除</h2><h3 id="含义：-2"><a href="#含义：-2" class="headerlink" title="含义："></a>含义：</h3><p>每隔一段时间执行一次删除(在redis.conf配置文件设置hz，1s刷新的频率)过期key操作</p>
+<h3 id="优点：-2"><a href="#优点：-2" class="headerlink" title="优点："></a>优点：</h3><p>通过限制删除操作的时长和频率，来减少删除操作对CPU时间的占用–处理”定时删除”的缺点<br>定期删除过期key–处理”惰性删除”的缺点</p>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点:"></a>缺点:</h3><p>在内存友好方面，不如”定时删除”<br>在CPU时间友好方面，不如”惰性删除”</p>
+<h3 id="难点"><a href="#难点" class="headerlink" title="难点:"></a>难点:</h3><p>合理设置删除操作的执行时长（每次删除执行多长时间）和执行频率（每隔多长时间做一次删除）（这个要根据服务器运行情况来定了）</p>
+<h2 id="redis的过期策略和内存淘汰机制"><a href="#redis的过期策略和内存淘汰机制" class="headerlink" title="redis的过期策略和内存淘汰机制"></a>redis的过期策略和内存淘汰机制</h2><p>1、定期删除+惰性删除</p>
+<p>定期删除：指的是redis默认是每隔100ms就随机抽取一些设置了过期时间的key，检查其是否过期，如果过期就删除</p>
+<p>惰性删除：在你获取某个key的时候，redis会检查一下 ，这个key如果设置了过期时间那么是否过期了，如果过期了此时就会删除，不会给你返回任何东西</p>
+<p>2、如果大量过期key堆积在内存里，导致redis内存块耗尽了，怎么办？</p>
+<blockquote>
+<p>内存淘汰机制：</p>
+</blockquote>
+<p>redis.conf中配置：<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># maxmemory-policy noeviction</span></span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><p>noeviction：当内存使用达到阈值的时候，所有引起申请内存的命令会报错。</p>
+</li>
+<li><p>allkeys-lru：在主键空间中，优先移除最近未使用的key。</p>
+</li>
+<li><p>volatile-lru：在设置了过期时间的键空间中，优先移除最近未使用的key。</p>
+</li>
+<li><p>allkeys-random：在主键空间中，随机移除某个key。</p>
+</li>
+<li><p>volatile-random：在设置了过期时间的键空间中，随机移除某个key。</p>
+</li>
+<li><p>volatile-ttl：在设置了过期时间的键空间中，具有更早过期时间的key优先移除。</p>
+</li>
+</ul>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/Redis数据持久化/">(十五)Redis数据持久化</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="十五-Redis数据持久化"><a href="#十五-Redis数据持久化" class="headerlink" title="(十五)Redis数据持久化"></a>(十五)Redis数据持久化</h1><p>Redis支持数据持久化，可以将内存中的数据持久化到磁盘中，重启的时候再次加载使用。Redis4之前的数据持久化有AOF和RDB两种，从Redis4之后新增了AOF+RDB混合持久化的方式。</p>
+<p>上面提到Redis持久化存储有两种持久化方案，RDB(Redis DataBase)和 AOF(Append-Only File)。</p>
+<ul>
+<li>RDB 内存快照（二进制）</li>
+</ul>
+<p>是将内存中的数据进行快照存储到磁盘。</p>
+<ul>
+<li>AOF 回放日志（文本）</li>
+</ul>
+<p>AOF则为可回放的命令日志记录redis内的所有操作。</p>
+<ul>
+<li>混合式 </li>
+</ul>
+<p>AOF 和 RDB各有特点也相互独立。Redis4之后支持RDB-AOF混合持久化的方式，结合了两者的优点，可以通过 aof-use-rdb-preamble 配置项可以打开混合开关。</p>
+<h2 id="RDB"><a href="#RDB" class="headerlink" title="RDB"></a>RDB</h2><p>RDB持久化是指在指定的时间间隔内将内存中的数据集快照写入磁盘，实际操作过程是fork一个子进程，先将数据集写入临时文件，写入成功后，再替换之前的文件，用二进制压缩存储。</p>
+<p><img src="http://img1.tuicool.com/NjYjYvF.png!web?_=6182478" alt="RDB"></p>
+<p>RDB(Redis DataBase)是将Redis内存中的数据进行Snaptshot快照存储在磁盘内，是Redis的==默认持久化方案==。使用RDB持久化默认有三种策略，该持久化策略在redis.conf中可配置，会以一段时间内有指定次数据修改的规则触发快照动作，快照文件名为dump.rdb，该文件默认使用LZF压缩算法 。每当Redis服务重启的时候会从该文件中加载数据进内存。</p>
+<p>RDB持久化除了可以根据配置中的策略触发，也可以手动触发，使用==save==和==bgsave==命令即可。这两个命令的区别的save会阻塞服务器进程，在进行save的过程中，服务器不能处理任何请求，而bgsave会通过一个子进程在后台处理rdb持久化。事实上save和bgsave调用的都是rdbSave函数，因此Redis不允许save和bgsave同时运行，这也是为了避免出现竞争导致rdb文件数据不准确。</p>
+<p>bgsave操作使用CopyOnWrite机制进行写时复制，是由一个子进程将内存中的最新数据遍历写入临时文件，此时父进程仍旧处理客户端的操作，当子进程操作完毕后再将该临时文件重命名为dump.rdb替换掉原来的dump.rdb文件，因此无论bgsave是否成功，dump.rdb都不会受到影响。</p>
+<p>另外在主从全量同步、debug reload以及shutdown的情况下也会触发RDB数据持久化。</p>
+<h3 id="配置RDB"><a href="#配置RDB" class="headerlink" title="配置RDB"></a>配置RDB</h3><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">vim $REDIS_HOME/bin/redis.conf</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#RDB持久化策略 默认三种方式，</span><br><span class="line">[<span class="number">900</span>秒内有<span class="number">1</span>次修改],</span><br><span class="line">[<span class="number">300</span>秒内有<span class="number">10</span>次修改],</span><br><span class="line">[<span class="number">60</span>秒内有<span class="number">10000</span>次修改]即触发RDB持久化，</span><br><span class="line">我们可以手动修改该参数或新增策略</span><br><span class="line"></span><br><span class="line">save <span class="number">900</span> <span class="number">1</span></span><br><span class="line">save <span class="number">300</span> <span class="number">10</span></span><br><span class="line">save <span class="number">60</span> <span class="number">10000</span></span><br><span class="line"> </span><br><span class="line">#RDB文件名</span><br><span class="line">dbfilename <span class="string">"dump.rdb"</span></span><br><span class="line"></span><br><span class="line">#RDB文件存储路径</span><br><span class="line">dir <span class="string">"/opt/app/redis6/data"</span></span><br></pre></td></tr></table></figure>
+<h2 id="AOF"><a href="#AOF" class="headerlink" title="AOF"></a>AOF</h2><p>AOF持久化以日志的形式记录服务器所处理的每一个写、删除操作，查询操作不会记录，以文本的方式记录，可以打开文件看到详细的操作记录。</p>
+<p><img src="http://img2.tuicool.com/YrqaY3f.png!web?_=6182478" alt="AOF"></p>
+<p>AOF(Append-Only File)记录Redis中每次的写命令，类似mysql中的binlog，服务重启时会重新执行AOF中的命令将数据恢复到内存中，RDB(按策略持久化)持久化方式记录的粒度不如AOF(记录每条写命令)，因此很多生产环境都是开启AOF持久化。</p>
+<p>AOF中记录了操作和数据，在日志文件中追加完成后才会将内存中的数据进行变更。</p>
+<p>AOF持久化流程：</p>
+<ol>
+<li>客户端的请求写命令会被append追加到AOF缓冲区内；</li>
+<li>AOF缓冲区根据AOF持久化策略[always,everysec,no]将操作sync同步到磁盘的AOF文件中；</li>
+<li>AOF文件大小超过重写策略或手动重写时，会对AOF文件rewrite重写，压缩AOF文件容量；</li>
+<li>Redis服务重启时，会重新load加载AOF文件中的写操作达到数据恢复的目的；</li>
+</ol>
+<h3 id="配置AOF"><a href="#配置AOF" class="headerlink" title="配置AOF"></a>配置AOF</h3><p>开启了AOF之后，RDB就默认不使用了。使用下面的配置开启AOF以及策略。(如果使用AOF，推荐选择always方式持久化，否则在高并发场景下，每秒钟会有几万甚至百万条请求，如果使用everysec的方式的话，万一服务器挂了那几万条数据就丢失了)。</p>
+<figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">vim $REDIS_HOME/bin/redis.conf</span><br><span class="line"></span><br><span class="line"><span class="meta">#开启AOF持久化</span></span><br><span class="line">appendonly yes</span><br><span class="line"> </span><br><span class="line"><span class="meta">#AOF文件名</span></span><br><span class="line">appendfilename <span class="string">"appendonly.aof"</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#AOF文件存储路径 与RDB是同一个参数</span></span><br><span class="line">dir <span class="string">"/opt/app/redis6/data"</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#AOF策略，一般都是选择第一种</span></span><br><span class="line">[always:每个命令都记录],</span><br><span class="line">[everysec:每秒记录一次],</span><br><span class="line">[no:看机器的心情高兴了就记录]</span><br><span class="line">appendfsync always</span><br><span class="line"><span class="meta">#appendfsync everysec</span></span><br><span class="line"><span class="meta"># appendfsync no</span></span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="meta">#aof文件大小比起上次重写时的大小,增长100%(配置可以大于100%)时,触发重写。</span></span><br><span class="line">[假如上次重写后大小为<span class="number">10</span>MB，当AOF文件达到<span class="number">20</span>MB时也会再次触发重写，以此类推]</span><br><span class="line">auto-aof-rewrite-percentage <span class="number">100</span> </span><br><span class="line"> </span><br><span class="line"><span class="meta">#aof文件大小超过64MB时,触发重写</span></span><br><span class="line">auto-aof-rewrite-min-size <span class="number">64</span>mb</span><br></pre></td></tr></table></figure>
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><h3 id="RDB-1"><a href="#RDB-1" class="headerlink" title="RDB"></a>RDB</h3><h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><p>1). 一旦采用该方式，那么你的整个Redis数据库将只包含一个文件，这对于文件备份而言是非常完美的。比如，你可能打算每个小时归档一次最近24小时的数据，同时还要每天归档一次最近30天的数据。通过这样的备份策略，一旦系统出现灾难性故障，我们可以非常容易的进行恢复。</p>
+<p>2). 对于灾难恢复而言，RDB是非常不错的选择。因为我们可以非常轻松的将一个单独的文件压缩后再转移到其它存储介质上。</p>
+<p>3). 性能最大化。对于Redis的服务进程而言，在开始持久化时，它唯一需要做的只是fork出子进程，之后再由子进程完成这些持久化的工作，这样就可以极大的避免服务进程执行IO操作了。</p>
+<p>4). 相比于AOF机制，如果数据集很大，RDB的启动效率会更高。</p>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><p>1). 如果你想保证数据的高可用性，即最大限度的避免数据丢失，那么RDB将不是一个很好的选择。因为系统一旦在定时持久化之前出现宕机现象，此前没有来得及写入磁盘的数据都将丢失。</p>
+<p>2). 由于RDB是通过fork子进程来协助完成数据持久化工作的，因此，如果当数据集较大时，可能会导致整个服务器停止服务几百毫秒，甚至是1秒钟。</p>
+<h3 id="AOF-1"><a href="#AOF-1" class="headerlink" title="AOF"></a>AOF</h3><h4 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h4><p>1). 该机制可以带来更高的数据安全性，即数据持久性。Redis中提供了3中同步策略，即每秒同步、每修改同步和不同步。事实上，每秒同步也是异步完成的，其效率也是非常高的，所差的是一旦系统出现宕机现象，那么这一秒钟之内修改的数据将会丢失。而每修改同步，我们可以将其视为同步持久化，即每次发生的数据变化都会被立即记录到磁盘中。可以预见，这种方式在效率上是最低的。至于无同步，无需多言，我想大家都能正确的理解它。</p>
+<p>2). 由于该机制对日志文件的写入操作采用的是append模式，因此在写入过程中即使出现宕机现象，也不会破坏日志文件中已经存在的内容。然而如果我们本次操作只是写入了一半数据就出现了系统崩溃问题，不用担心，在Redis下一次启动之前，我们可以通过redis-check-aof工具来帮助我们解决数据一致性的问题。</p>
+<p>3). 如果日志过大，Redis可以自动启用rewrite机制。即Redis以append模式不断的将修改数据写入到老的磁盘文件中，同时Redis还会创建一个新的文件用于记录此期间有哪些修改命令被执行。因此在进行rewrite切换时可以更好的保证数据安全性。</p>
+<p>4). AOF包含一个格式清晰、易于理解的日志文件用于记录所有的修改操作。事实上，我们也可以通过该文件完成数据的重建。</p>
+<h4 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h4><p>1). 对于相同数量的数据集而言，AOF文件通常要大于RDB文件。RDB 在恢复大数据集时的速度比 AOF 的恢复速度要快。</p>
+<p>2). 根据同步策略的不同，AOF在运行效率上往往会慢于RDB。总之，每秒同步策略的效率是比较高的，同步禁用策略的效率和RDB一样高效。</p>
+<p>二者选择的标准，就是看系统是愿意牺牲一些性能，换取更高的缓存一致性（aof），还是愿意写操作频繁的时候，不启用备份来换取更高的性能，待手动运行save的时候，再做备份（rdb）。rdb这个就更有些 eventually consistent的意思了。不过生产环境其实更多都是二者结合使用的。</p>
+<h2 id="常用配置"><a href="#常用配置" class="headerlink" title="常用配置"></a>常用配置</h2><h4 id="RDB持久化配置"><a href="#RDB持久化配置" class="headerlink" title="RDB持久化配置"></a>RDB持久化配置</h4><p>Redis会将数据集的快照dump到dump.rdb文件中。此外，我们也可以通过配置文件来修改Redis服务器dump快照的频率，在打开6379.conf文件之后，我们搜索save，可以看到下面的配置信息：</p>
+<p>save 900 1              #在900秒(15分钟)之后，如果至少有1个key发生变化，则dump内存快照。</p>
+<p>save 300 10            #在300秒(5分钟)之后，如果至少有10个key发生变化，则dump内存快照。</p>
+<p>save 60 10000        #在60秒(1分钟)之后，如果至少有10000个key发生变化，则dump内存快照。</p>
+<h4 id="AOF持久化配置"><a href="#AOF持久化配置" class="headerlink" title="AOF持久化配置"></a>AOF持久化配置</h4><p>在Redis的配置文件中存在三种同步方式，它们分别是：</p>
+<p>appendfsync always     #每次有数据修改发生时都会写入AOF文件。</p>
+<p>appendfsync everysec  #每秒钟同步一次，该策略为AOF的缺省策略。</p>
+<p>appendfsync no          #从不同步。高效但是数据不会被持久化。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/Redis服务器相关命令/">(九)Redis服务器相关命令</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="九-Redis服务器相关命令"><a href="#九-Redis服务器相关命令" class="headerlink" title="(九)Redis服务器相关命令"></a>(九)Redis服务器相关命令</h1><h4 id="验证密码是否正确"><a href="#验证密码是否正确" class="headerlink" title="验证密码是否正确"></a>验证密码是否正确</h4><p> 使用auth命令验证密码是否正确，如果当前未登陆进行验证通过后会转为登陆状态，如果当前已登陆，会返回验证结果成功或失败：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">auth password</span></span><br></pre></td></tr></table></figure>
+<h4 id="查看服务器信息"><a href="#查看服务器信息" class="headerlink" title="查看服务器信息"></a>查看服务器信息</h4><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">INFO [section]</span><br><span class="line"></span><br><span class="line">info cpu</span><br><span class="line"></span><br><span class="line"><span class="meta"># CPU</span></span><br><span class="line"><span class="symbol">used_cpu_sys:</span><span class="number">5495.206247</span></span><br><span class="line"><span class="symbol">used_cpu_user:</span><span class="number">5338.722012</span></span><br><span class="line"><span class="symbol">used_cpu_sys_children:</span><span class="number">0.627837</span></span><br><span class="line"><span class="symbol">used_cpu_user_children:</span><span class="number">0.214709</span></span><br></pre></td></tr></table></figure>
+<h4 id="统计当前库下key的数量"><a href="#统计当前库下key的数量" class="headerlink" title="统计当前库下key的数量"></a>统计当前库下key的数量</h4><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">dbsize</span></span><br></pre></td></tr></table></figure>
+<h4 id="查看配置信息"><a href="#查看配置信息" class="headerlink" title="查看配置信息"></a>查看配置信息</h4><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">config <span class="builtin-name">get</span> patten</span><br><span class="line"></span><br><span class="line">config <span class="builtin-name">get</span> port</span><br><span class="line"></span><br><span class="line">config <span class="builtin-name">get</span> max*</span><br><span class="line"></span><br><span class="line">config <span class="builtin-name">get</span> *</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Docker:0&gt;config <span class="builtin-name">get</span> port</span><br><span class="line"> 1)  <span class="string">"port"</span></span><br><span class="line"> 2)  <span class="string">"6379"</span></span><br><span class="line"></span><br><span class="line">Docker:0&gt;config <span class="builtin-name">get</span> max*</span><br><span class="line"> 1)  <span class="string">"maxmemory"</span></span><br><span class="line"> 2)  <span class="string">"0"</span></span><br><span class="line"> 3)  <span class="string">"maxmemory-samples"</span></span><br><span class="line"> 4)  <span class="string">"5"</span></span><br><span class="line"> 5)  <span class="string">"maxclients"</span></span><br><span class="line"> 6)  <span class="string">"10000"</span></span><br><span class="line"> 7)  <span class="string">"maxmemory-policy"</span></span><br><span class="line"> 8)  <span class="string">"noeviction"</span></span><br></pre></td></tr></table></figure>
+<h4 id="修改当前配置信息-动态修改"><a href="#修改当前配置信息-动态修改" class="headerlink" title="修改当前配置信息(动态修改)"></a>修改当前配置信息(动态修改)</h4><p>Config Set 命令可以动态地调整 Redis 服务器的配置(configuration)而无须重启，但此时配置文件中仍是修改前的配置，可搭配config rewrite命令一起使用：<br><figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">config <span class="keyword">set</span> <span class="keyword">parameter</span> <span class="comment">value</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="重写配置文件"><a href="#重写配置文件" class="headerlink" title="重写配置文件"></a>重写配置文件</h4><p>Config rewrite 命令对启动 Redis 服务器时所指定的 redis.conf 配置文件进行改写。与config<br>set不同，set之后会将配置信息修改而无需重启服务，但此时redis.conf配置文件里记录的参数仍是set之前的值，如果将redis服务重启后会读取conf文件中的配置，这时候读到的还是set之前的配置，因此我们可以在set配置之后使用rewrite命令将当前的配置回写至配置文件内，这样就能不停机修改配置信息了，因此config set和config rewrite是配合使用的：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">config rewrite</span><br><span class="line"></span><br><span class="line">config <span class="builtin-name">set</span> slowlog-max-len 256</span><br><span class="line"></span><br><span class="line">config <span class="builtin-name">get</span> slowlog-max-len</span><br><span class="line"></span><br><span class="line">config rewrite </span><br><span class="line"></span><br><span class="line">config rewrite 命令对启动 Redis 服务器时所指定的 redis.conf 配置文件进行改写写回配置文件 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">cat /opt/redis6/</span><br></pre></td></tr></table></figure></p>
+<h4 id="config-resetstat"><a href="#config-resetstat" class="headerlink" title="config resetstat"></a>config resetstat</h4><p>使用Config Resetstat 命令重置 INFO 命令中的某些统计数据，包括：</p>
+<ul>
+<li>Keyspace hits (键空间命中次数)</li>
+<li>Keyspace misses (键空间不命中次数)</li>
+<li>Number of commands processed (执行命令的次数)</li>
+<li>Number of connections received (连接服务器的次数)</li>
+<li>Number of expired keys (过期key的数量)</li>
+<li>Number of rejected connections (被拒绝的连接数量)</li>
+<li>Latest fork(2) time(最后执行 fork(2) 的时间)</li>
+<li>The aof_delayed_fsync counter(aof_delayed_fsync 计数器的值)</li>
+</ul>
+<h4 id="切换数据库"><a href="#切换数据库" class="headerlink" title="切换数据库"></a>切换数据库</h4><p>redis共有16个db，从db0~db15，使用select index命令在数据库之间进行切换：<br><figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="built_in">index</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="time"><a href="#time" class="headerlink" title="time"></a>time</h4><p>Time 命令用于返回当前服务器时间，返回一个包含两个字符串的列表： 第一个字符串是当前时间(以 UNIX 时间戳格式表示)，而第二个字符串是当前这一秒钟已经逝去的微秒数。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">time</span><br><span class="line"></span><br><span class="line">Docker:<span class="number">0</span>&gt;time</span><br><span class="line"> <span class="number">1</span>)  <span class="string">"1597122706"</span></span><br><span class="line"> <span class="number">2</span>)  <span class="string">"914251"</span></span><br></pre></td></tr></table></figure>
+<h4 id="DEBUG"><a href="#DEBUG" class="headerlink" title="DEBUG"></a>DEBUG</h4><p>debug object key获取 key 的调试信息，当key不存在时返回错误信息。</p>
+<p>debug segfault 命令执行一个非法的内存访问从而让 Redis 崩溃，仅在开发时用于 BUG 调试，执行后需要重启服务。<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="builtin-name">debug</span> object key</span><br><span class="line"></span><br><span class="line"><span class="builtin-name">debug</span> segfault bengku崩溃，需要重启服务</span><br></pre></td></tr></table></figure></p>
+<h4 id="清空库"><a href="#清空库" class="headerlink" title="清空库"></a>清空库</h4><p>flushdb清空当前数据库下的所有数据。<br>flushall清空所有库下的所有数据。<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">flushdb</span></span><br><span class="line"><span class="attribute">flushall</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="监控"><a href="#监控" class="headerlink" title="监控"></a>监控</h4><p>monitor命令用于监听redis服务器接收到的所有命令：<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">monitor</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="关闭"><a href="#关闭" class="headerlink" title="关闭"></a>关闭</h4><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHUTDOWN [NOSAVE<span class="string">|SAVE]</span></span><br></pre></td></tr></table></figure>
+<h4 id="command"><a href="#command" class="headerlink" title="command"></a>command</h4><p>查看当前Redis中所有可用命令，使用Command 命令用于返回所有的Redis命令的详细信息，以数组形式展示：<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">command</span></span><br></pre></td></tr></table></figure></p>
+<p>使用command count命令查看当前Redis中命令的数量：<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">command</span> <span class="title">count</span></span><br></pre></td></tr></table></figure></p>
+<p>使用command info命令查看当前Redis中指定的命令的详细信息：<br><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">COMMAND</span> INFO <span class="keyword">command</span>-name [<span class="keyword">command</span>-name ...]</span><br></pre></td></tr></table></figure></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/Redis日活BitMap高阶使用/">Redis BitMap高阶使用</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Redis-BitMap高阶使用"><a href="#Redis-BitMap高阶使用" class="headerlink" title="Redis BitMap高阶使用"></a>Redis BitMap高阶使用</h1><h2 id="redis-setbit-应用场景"><a href="#redis-setbit-应用场景" class="headerlink" title="redis setbit 应用场景"></a>redis setbit 应用场景</h2><p><a href="https://blog.csdn.net/wade1010/article/details/109545263" target="_blank" rel="noopener">https://blog.csdn.net/wade1010/article/details/109545263</a></p>
+<h2 id="BitMap-学习"><a href="#BitMap-学习" class="headerlink" title="BitMap 学习"></a>BitMap 学习</h2><p><a href="https://www.jianshu.com/p/4c8e119f35db" target="_blank" rel="noopener">https://www.jianshu.com/p/4c8e119f35db</a></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/Dubbo内置负载均衡策略/">Dubbo内置负载均衡策略</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/7/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
 </a>
 
             
@@ -585,15 +684,23 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="Dubbo"><a href="#Dubbo" class="headerlink" title="Dubbo"></a>Dubbo</h1><p>高性能Java RPC框架.Apache Dubbo |ˈdʌbəʊ| 是一款高性能、轻量级的开源Java RPC框架，它提供了三大核心能力：面向接口的远程方法调用，智能容错和负载均衡，以及服务自动注册和发现。</p>
-<p>远程过程调用（英语：Remote Procedure Call，缩写为 RPC）是一个计算机通信协议。该协议允许运行于一台计算机的程序调用另一台计算机的子程序，而程序员无需额外地为这个交互作用编程。RPC协议假定某些传输协议的存在，如TCP或UDP，为通信程序之间携带信息数据。在OSI网络通信模型中，RPC跨越了传输层和应用层。RPC使得开发包括网络分布式多程序在内的应用程序更加容易。</p>
-<p>HTTP/TCP 都属于RPC</p>
-<h2 id="特性一览"><a href="#特性一览" class="headerlink" title="特性一览"></a>特性一览</h2><h3 id="面向接口代理的高性能RPC调用"><a href="#面向接口代理的高性能RPC调用" class="headerlink" title="面向接口代理的高性能RPC调用"></a>面向接口代理的高性能RPC调用</h3><p>提供高性能的基于代理的远程调用能力，服务以接口为粒度，为开发者屏蔽远程调用底层细节。</p>
-<h3 id="智能负载均衡"><a href="#智能负载均衡" class="headerlink" title="智能负载均衡"></a>智能负载均衡</h3><p>内置多种负载均衡策略，智能感知下游节点健康状况，显著减少调用延迟，提高系统吞吐量。</p>
-<h3 id="服务自动注册与发现"><a href="#服务自动注册与发现" class="headerlink" title="服务自动注册与发现"></a>服务自动注册与发现</h3><p>支持多种注册中心服务，服务实例上下线实时感知。</p>
-<h3 id="高度可扩展能力"><a href="#高度可扩展能力" class="headerlink" title="高度可扩展能力"></a>高度可扩展能力</h3><p>遵循微内核+插件的设计原则，所有核心能力如Protocol、Transport、Serialization被设计为扩展点，平等对待内置实现和第三方实现。</p>
-<h3 id="运行期流量调度"><a href="#运行期流量调度" class="headerlink" title="运行期流量调度"></a>运行期流量调度</h3><p>内置条件、脚本等路由策略，通过配置不同的路由规则，轻松实现灰度发布，同机房优先等功能。</p>
-<h3 id="可视化的服务治理与运维"><a href="#可视化的服务治理与运维" class="headerlink" title="可视化的服务治理与运维"></a>可视化的服务治理与运维</h3><p>提供丰富服务治理、运维工具：随时查询服务元数据、服务健康状态及调用统计，实时下发路由策略、调整配置参数。</p>
+        <h1 id="Dubbo内置负载均衡策略"><a href="#Dubbo内置负载均衡策略" class="headerlink" title="Dubbo内置负载均衡策略"></a>Dubbo内置负载均衡策略</h1><p>Dubbo内置了4种负载均衡策略:</p>
+<ul>
+<li>RandomLoadBalance:</li>
+</ul>
+<p>随机负载均衡。随机的选择一个。是Dubbo的默认负载均衡策略。</p>
+<ul>
+<li>RoundRobinLoadBalance:</li>
+</ul>
+<p>轮询负载均衡。轮询选择一个。</p>
+<ul>
+<li>LeastActiveLoadBalance:</li>
+</ul>
+<p>最少活跃调用数，相同活跃数的随机。活跃数指调用前后计数差。使慢的 Provider 收到更少请求，因为越慢的 Provider 的调用前后计数差会越大。</p>
+<ul>
+<li>ConsistentHashLoadBalance: </li>
+</ul>
+<p>一致性哈希负载均衡。相同参数的请求总是落在同一台机器上。</p>
 
         
     </section>
@@ -603,7 +710,7 @@
 
 
 <nav class="page-nav">
-    <a class="extend prev" rel="prev" href="/page/6/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/8/">下一页 &raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/6/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/">23</a><a class="extend next" rel="next" href="/page/8/">下一页 &raquo;</a>
 </nav>
 
 

@@ -128,6 +128,105 @@
         <div id="content" class="content">
     <article class="article" itemscope itemprop="blogPost">
     
+    <section class="article-body markdown-body">
+        
+        <hr>
+<p>title: (四)Redis 数据类型之List实现数据结构<br>date: 2018-12-02 12:30:00<br>categories:</p>
+<pre><code>- Redis
+</code></pre><p>tags:</p>
+<pre><code>- Redis
+</code></pre><hr>
+<h1 id="四-Redis-数据类型之List实现数据结构"><a href="#四-Redis-数据类型之List实现数据结构" class="headerlink" title="(四)Redis 数据类型之List实现数据结构"></a>(四)Redis 数据类型之List实现数据结构</h1><h2 id="栈：先进后出"><a href="#栈：先进后出" class="headerlink" title="栈：先进后出"></a>栈：先进后出</h2><p>lpush + lpop</p>
+<p>左侧入栈，左侧出站</p>
+<h2 id="队列：先进先出"><a href="#队列：先进先出" class="headerlink" title="队列：先进先出"></a>队列：先进先出</h2><p>lpush + rpop<br>左侧入栈，右侧出栈，队列思想</p>
+<h2 id="有限集合"><a href="#有限集合" class="headerlink" title="有限集合"></a>有限集合</h2><p>lpush + ltrim</p>
+<h2 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h2><p>lpush + brpop</p>
+<p>左侧不断入栈，通过brpop不断消费List中数据</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h1><h2 id="什么是单例模式"><a href="#什么是单例模式" class="headerlink" title="什么是单例模式"></a>什么是单例模式</h2><p>因程序需要，有时我们只需要某个类同时保留一个对象，不希望有更多对象，此时，我们则应考虑单例模式的设计。</p>
+<h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><ol>
+<li><p>单例模式只能有一个实例。</p>
+</li>
+<li><p>单例类必须创建自己的唯一实例。</p>
+</li>
+<li><p>单例类必须向其他对象提供这一实例。</p>
+</li>
+</ol>
+<h2 id="单例模式VS静态类"><a href="#单例模式VS静态类" class="headerlink" title="单例模式VS静态类"></a>单例模式VS静态类</h2><p>在知道了什么是单例模式后，我想你一定会想到静态类，“既然只使用一个对象，为何不干脆使用静态类？”，这里我会将单例模式和静态类进行一个比较。</p>
+<ol>
+<li><p>单例可以继承和被继承，方法可以被override，而静态方法不可以。</p>
+</li>
+<li><p>静态方法中产生的对象会在执行后被释放，进而被GC清理，不会一直存在于内存中。</p>
+</li>
+<li><p>静态类会在第一次运行时初始化，单例模式可以有其他的选择，即可以延迟加载。</p>
+</li>
+<li><p>基于2， 3条，由于单例对象往往存在于DAO层（例如sessionFactory），如果反复的初始化和释放，则会占用很多资源，而使用单例模式将其常驻于内存可以更加节约资源。</p>
+</li>
+<li><p>静态方法有更高的访问效率。</p>
+</li>
+<li><p>单例模式很容易被测试。</p>
+</li>
+</ol>
+<p>几个关于静态类的误解：</p>
+<ul>
+<li>误解一：静态方法常驻内存而实例方法不是。</li>
+</ul>
+<blockquote>
+<p>实际上，特殊编写的实例方法可以常驻内存，而静态方法需要不断初始化和释放。</p>
+</blockquote>
+<ul>
+<li>误解二：静态方法在堆(heap)上，实例方法在栈(stack)上。</li>
+</ul>
+<blockquote>
+<p>实际上，都是加载到特殊的不可写的代码内存区域中。</p>
+</blockquote>
+<p>静态类和单例模式情景的选择：</p>
+<p>情景一：不需要维持任何状态，仅仅用于全局访问，此时更适合使用静态类。</p>
+<p>情景二：需要维持一些特定的状态，此时更适合使用单例模式。</p>
+<h2 id="单例模式的实现"><a href="#单例模式的实现" class="headerlink" title="单例模式的实现"></a>单例模式的实现</h2><h3 id="1-懒汉模式（线程不安全）"><a href="#1-懒汉模式（线程不安全）" class="headerlink" title="1. 懒汉模式（线程不安全）"></a>1. 懒汉模式（线程不安全）</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class SingletonDemo &#123;</span><br><span class="line">    private static SingletonDemo instance;</span><br><span class="line">    private SingletonDemo()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    public static SingletonDemo getInstance()&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="attribute">instance</span>==null)&#123;</span><br><span class="line">            <span class="attribute">instance</span>=new SingletonDemo();</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如上，通过提供一个静态的对象instance，利用private权限的构造方法和getInstance()方法来给予访问者一个单例。</p>
+<p>缺点是，没有考虑到线程安全，可能存在多个访问者同时访问，并同时构造了多个对象的问题。</p>
+<p>之所以叫做懒汉模式，主要是因为此种方法可以非常明显的lazy loading。</p>
+<p>针对懒汉模式线程不安全的问题，我们自然想到了，在getInstance()方法前加锁，于是就有了第二种实现。</p>
+<h3 id="2-懒汉模式二-（线程安全）"><a href="#2-懒汉模式二-（线程安全）" class="headerlink" title="2. 懒汉模式二 （线程安全）"></a>2. 懒汉模式二 （线程安全）</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class SingletonDemo &#123;</span><br><span class="line">    private static SingletonDemo instance;</span><br><span class="line">    private SingletonDemo()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    public static synchronized SingletonDemo getInstance()&#123;</span><br><span class="line">        <span class="keyword">if</span>(instance == <span class="literal">null</span>)&#123;</span><br><span class="line">           <span class="built_in"> instance </span>= new SingletonDemo();</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然而并发其实是一种特殊情况，大多时候这个锁占用的额外资源都浪费了，这种打补丁方式写出来的结构效率很低。</p>
+<h3 id="3-饿汉模式"><a href="#3-饿汉模式" class="headerlink" title="3. 饿汉模式"></a>3. 饿汉模式</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class SingletonDemo &#123;</span><br><span class="line">    private static SingletonDemo<span class="built_in"> instance </span>= new SingletonDemo();</span><br><span class="line">    private SingletonDemo()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    public static SingletonDemo getInstance()&#123;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>直接在运行这个类的时候进行一次loading，之后直接访问。显然，这种方法没有起到lazy loading的效果，考虑到前面提到的和静态类的对比，这种方法只比静态类多了一个内存常驻而已。</p>
+<h3 id="4-静态类内部加载"><a href="#4-静态类内部加载" class="headerlink" title="4. 静态类内部加载"></a>4. 静态类内部加载</h3><figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public class SingletonDemo &#123;</span><br><span class="line">   <span class="keyword"> private</span><span class="keyword"> static</span> class SingletonHolder&#123;</span><br><span class="line">       <span class="keyword"> private</span><span class="keyword"> static</span> SingletonDemo<span class="built_in"> instance </span>=<span class="built_in"> new </span>SingletonDemo();</span><br><span class="line">    &#125;</span><br><span class="line">   <span class="keyword"> private</span> SingletonDemo()&#123;</span><br><span class="line">        System.out.println(<span class="string">"Singleton has loaded"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">   <span class="keyword"> public</span><span class="keyword"> static</span> SingletonDemo getInstance()&#123;</span><br><span class="line">       <span class="built_in"> return </span>SingletonHolder.instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用内部类的好处是，静态内部类不会在单例加载时就加载，而是在调用getInstance()方法时才进行加载，达到了类似懒汉模式的效果，而这种方法又是线程安全的。</p>
+<h3 id="5-枚举方法"><a href="#5-枚举方法" class="headerlink" title="5. 枚举方法"></a>5. 枚举方法</h3><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">SingletonDemo</span>&#123;</span></span><br><span class="line">    INSTANCE;</span><br><span class="line">    public void otherMethods()&#123;</span><br><span class="line">        System.<span class="keyword">out</span>.println(<span class="string">"Something"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">Hello</span> &#123;</span></span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">        SingletonDemo.INSTANCE.otherMethods();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>提倡的方式，在我看来简直是来自神的写法。解决了以下三个问题：</p>
+<ul>
+<li>(1)自由序列化。</li>
+<li>(2)保证只有一个实例。</li>
+<li>(3)线程安全。</li>
+</ul>
+<p>这种充满美感的代码真的已经终结了其他一切实现方法了。</p>
+<h3 id="6-双重校验锁法"><a href="#6-双重校验锁法" class="headerlink" title="6. 双重校验锁法"></a>6. 双重校验锁法</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class SingletonDemo &#123;</span><br><span class="line">    private static SingletonDemo instance;</span><br><span class="line">    private SingletonDemo()&#123;</span><br><span class="line">        System.out.println(<span class="string">"Singleton has loaded"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    public static SingletonDemo getInstance()&#123;</span><br><span class="line">        <span class="keyword">if</span>(instance == <span class="literal">null</span>)&#123;</span><br><span class="line">            synchronized (SingletonDemo.class)&#123;</span><br><span class="line">                <span class="keyword">if</span>(instance == <span class="literal">null</span>)&#123;</span><br><span class="line">                   <span class="built_in"> instance </span>= new SingletonDemo();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下来我解释一下在并发时，双重校验锁法会有怎样的情景：</p>
+<p>STEP 1. 线程A访问getInstance()方法，因为单例还没有实例化，所以进入了锁定块。</p>
+<p>STEP 2. 线程B访问getInstance()方法，因为单例还没有实例化，得以访问接下来代码块，而接下来代码块已经被线程1锁定。</p>
+<p>STEP 3. 线程A进入下一判断，因为单例还没有实例化，所以进行单例实例化，成功实例化后退出代码块，解除锁定。</p>
+<p>STEP 4. 线程B进入接下来代码块，锁定线程，进入下一判断，因为已经实例化，退出代码块，解除锁定。</p>
+<p>STEP 5. 线程A初始化并获取到了单例实例并返回，线程B获取了在线程A中初始化的单例。</p>
+<p>理论上双重校验锁法是线程安全的，并且，这种方法实现了lazyloading。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
     <header class="article-header">
         
         <h1 itemprop="name">
@@ -443,31 +542,10 @@
 
     <article class="article" itemscope itemprop="blogPost">
     
-    <section class="article-body markdown-body">
-        
-        <h1 id="ConcurrentHashMap-和-Hashtable-的区别"><a href="#ConcurrentHashMap-和-Hashtable-的区别" class="headerlink" title="ConcurrentHashMap 和 Hashtable 的区别"></a>ConcurrentHashMap 和 Hashtable 的区别</h1><h2 id="底层数据结构"><a href="#底层数据结构" class="headerlink" title="底层数据结构"></a>底层数据结构</h2><h3 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h3><p>[JDK1.7]<br>ConcurrentHashMap 底层采用 分段的数组+链表 实现，<br>[JDK1.8]<br>ConcurrentHashMap 采用的数据结构跟HashMap1.8的结构一样，数组+链表/红黑二叉树。</p>
-<h3 id="Hashtable"><a href="#Hashtable" class="headerlink" title="Hashtable"></a>Hashtable</h3><p>Hashtable 和 JDK1.8 之前的 HashMap 的底层数据结构类似都是采用 数组+链表 的形式，<br>数组是 HashMap 的主体，链表则是主要为了解决哈希冲突而存在的；</p>
-<h2 id="实现线程安全的方式（重要）"><a href="#实现线程安全的方式（重要）" class="headerlink" title="实现线程安全的方式（重要）"></a>实现线程安全的方式（重要）</h2><h3 id="ConcurrentHashMap-1"><a href="#ConcurrentHashMap-1" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h3><p>[JDK1.7]<br>ConcurrentHashMap（分段锁） 对整个桶数组进行了分割分段(Segment)，每一把锁只锁容器其中一部分数据，多线程访问容器里不同数据段的数据，<br>就不会存在锁竞争，提高并发访问率。<br>[JDK1.8]<br>摒弃了Segment的概念，而是直接用 Node 数组 + 链表 + 红黑树 的数据结构来实现，并发控制使用 synchronized 和 CAS 来操作。<br>（JDK1.6以后 对 synchronized锁做了很多优化） 整个看起来就像是优化过且线程安全的 HashMap，<br>虽然在JDK1.8中还能看到 Segment 的数据结构，但是已经简化了属性，只是为了兼容旧版本；</p>
-<h3 id="Hashtable-同一把锁"><a href="#Hashtable-同一把锁" class="headerlink" title="Hashtable(同一把锁)"></a>Hashtable(同一把锁)</h3><p>使用 synchronized 来保证线程安全，效率非常低下。当一个线程访问同步方法时，其他线程也访问同步方法，<br>可能会进入阻塞或轮询状态，如使用 put 添加元素，另一个线程不能使用 put 添加元素，也不能使用 get，<br>竞争会越来越激烈效率越低。HashTable性能差主要是由于所有操作需要竞争同一把锁，而如果容器中有多把锁，<br>每一把锁锁一段数据，这样在多线程访问时不同段的数据时，就不会存在锁竞争了，这样便可以有效地提高并发效率。<br>这就是ConcurrentHashMap所采用的”分段锁”思想。</p>
-<p><strong>HashTable:</strong></p>
-<p><img src="https://my-blog-to-use.oss-cn-beijing.aliyuncs.com/2019-6/HashTable全表锁.png" alt="HashTable全表锁"></p>
-<p><strong>JDK1.7的ConcurrentHashMap：</strong></p>
-<p><img src="https://my-blog-to-use.oss-cn-beijing.aliyuncs.com/2019-6/ConcurrentHashMap分段锁.jpg" alt="JDK1.7的ConcurrentHashMap"></p>
-<p><strong>JDK1.8的ConcurrentHashMap（TreeBin: 红黑二叉树节点 Node: 链表节点）：</strong></p>
-<p><img src="https://my-blog-to-use.oss-cn-beijing.aliyuncs.com/2019-6/JDK1.8-ConcurrentHashMap-Structure.jpg" alt="JDK1.8的ConcurrentHashMap"></p>
-<p>　　</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/08/07/NOSQL/">NOSQL</a>
+            <a href="/2019/12/02/RabbitMQ/">RabbitMQ</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -475,13 +553,13 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2019-08-07T14:59:05.594Z" itemprop="datePublished">2019-08-07</time>
+    <time datetime="2019-12-02T04:30:00.000Z" itemprop="datePublished">2019-12-02</time>
 </a>
 
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Redis/">Redis</a>
+    <a class="article-tag-link" href="/tags/RabbitMQ/">RabbitMQ</a>
 </div>
 
 
@@ -490,241 +568,199 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="NOSQL"><a href="#NOSQL" class="headerlink" title="NOSQL"></a>NOSQL</h1><p>全称：NoSQL = Not Only SQL</p>
-<p>泛指非关系型数据库</p>
-<p>四大分类：</p>
-<p>1）键值(Key-Value)存储数据库</p>
-<p>Key/value模型对于IT系统来说的优势在于简单、易部署。<br>但是如果DBA只对部分值进行查询或更新的时候，Key/value就显得效率低下了。<br>举例如：Redis.</p>
-<p>2）列存储数据库</p>
-<p>这部分数据库通常是用来应对分布式存储的海量数据。<br>键仍然存在，但是它们的特点是指向了多个列。这些列是由列家族来安排的。<br>如：Cassandra, HBase, Riak.</p>
-<p>3）文档型</p>
-<p>文档型数据库的灵感是来自于Lotus Notes办公软件的，而且它同第一种键值存储相类似。<br>该类型的数据模型是版本化的文档，半结构化的文档以特定的格式存储，比如JSON。<br>文档型数据库可以看作是键值数据库的升级版，允许之间嵌套键值。<br>而且文档型数据库比键值数据库的查询效率更高。如：CouchDB, MongoDb.<br>国内也有文档型数据库SequoiaDB，已经开源。</p>
-<p>4）图形(Graph)数据库</p>
-<p>图形结构的数据库同其他行列以及刚性结构的SQL数据库不同，它是使用灵活的图形模型，并且能够扩展到多个服务器上。</p>
-<p>NoSQL数据库没有标准的查询语言(SQL)，因此进行数据库查询需要制定数据模型。<br>许多NoSQL数据库都有REST式的数据接口或者查询API。</p>
-<p>我们总结NoSQL数据库在以下的这几种情况下比较适用：</p>
-<ol>
-<li>数据模型比较简单；</li>
-<li>需要灵活性更强的IT系统；</li>
-<li>对数据库性能要求较高；</li>
-<li>不需要高度的数据一致性；</li>
-<li>对于给定key，比较容易映射复杂值的环境。</li>
-</ol>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2019/08/07/互联网金融行业数仓分层/">互联网金融行业数仓分层</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2019-08-07T14:37:26.011Z" itemprop="datePublished">2019-08-07</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/数据仓库/">数据仓库</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="互联网金融行业数仓分层"><a href="#互联网金融行业数仓分层" class="headerlink" title="互联网金融行业数仓分层"></a>互联网金融行业数仓分层</h1><h2 id="专业术语"><a href="#专业术语" class="headerlink" title="专业术语"></a>专业术语</h2><ul>
-<li><p>ODL层 （Operational Data Layer）：操作数据层</p>
-<blockquote>
-<p>外部数据什么样，该层数据就是什么样（关系型数据库、JSON格式等)<br>部分关系型数据可以直接转IDL层</p>
-</blockquote>
-</li>
-<li><p>BDL层 （Base Data Layer）：基础数据层</p>
-<blockquote>
-<p>ODL层经过简单格式化解析后存储到BDL层，常见于JSON日志格式的解析。</p>
-</blockquote>
-</li>
-<li><p>IDL层 （Interface Data Layer）：接口层，也称主题表，宽表</p>
-<blockquote>
-<p>由BDL层经过去重、去噪、字典翻译、空值转化，日期格式化、关联JOIN、维度分析等清洗后的数据。如：用户、产品、绑卡、订单、用户行为等明细数据。</p>
-</blockquote>
-</li>
-<li><p>ADL层（Application Data Layer）：应用层 ，也称数据集市</p>
-<blockquote>
-<p>通常与需求对接，由IDL层基于某些维度的深度加工统计汇总等操作转化而来，涉及到多个主题以及tmp数据之间的关联JOIN后的结果。</p>
-</blockquote>
-</li>
-<li><p>DIC层（Dictionary Data Layer）：字典层</p>
-<blockquote>
-<p>存储一些诸如省、市、县区域表、渠道列表、商品类目等等表数据，可以从数据源直接sqoop生成dic_xxx表，也可以通过odl层转化层dic_表。</p>
-</blockquote>
-</li>
-<li><p>TMP层（Temporary Data Layer）：临时层</p>
-<blockquote>
-<p>存储一些中间计算结果</p>
-</blockquote>
-</li>
-</ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/3763924-bfd47ed0607208d2.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp" alt="image"></p>
-<p>简要说明:</p>
-<blockquote>
-<ol>
-<li>层次间的转换没必要循规蹈矩，按部就班，适当做到灵活，避免重复清洗浪费资源</li>
-<li>ODL层干净的关系型数据可以直接转换为IDL层数据，减少计算量</li>
-<li>ODL层侧重与外部对接，BDL层/TMP层/IDL层侧重清洗，IDL层和ADL层侧重对外提供应用服务</li>
-<li>层数太少不够灵活，太多则在数据推翻重洗耗时，时间成本（一个坑）<br>数据源提供的数据越详细越好，避免后期大量重复的清洗工作。</li>
-</ol>
-</blockquote>
-<h2 id="“星型模型”和“雪花模型”"><a href="#“星型模型”和“雪花模型”" class="headerlink" title="“星型模型”和“雪花模型”"></a>“星型模型”和“雪花模型”</h2><p>简单解释：  </p>
+        <h1 id="RabbitMQ"><a href="#RabbitMQ" class="headerlink" title="RabbitMQ"></a>RabbitMQ</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>RabbitMQ 是采用 Erlang 语言实现 AMQP(Advanced Message Queuing Protocol，高级消息队列协议）的消息中间件，它最初起源于金融系统，用于在分布式系统中存储转发消息。</p>
 <ul>
-<li>（1）星型模型：事实表+维度表（区域、类目、性别…)等多表通过预先JOIN冗余到一张宽表里去，常见IDL层。</li>
-<li>（2）雪花模型：在计算的时候，才将事实表跟维度表做join。</li>
+<li>可靠性： RabbitMQ使用一些机制来保证消息的可靠性，如持久化、传输确认及发布确认等。</li>
+<li>灵活的路由： 在消息进入队列之前，通过交换器来路由消息。对于典型的路由功能，RabbitMQ 己经提供了一些内置的交换器来实现。针对更复杂的路由功能，可以将多个交换器绑定在一起，也可以通过插件机制来实现自己的交换器。</li>
+<li>扩展性： 多个RabbitMQ节点可以组成一个集群，也可以根据实际业务情况动态地扩展集群中节点。</li>
+<li>高可用性： 队列可以在集群中的机器上设置镜像，使得在部分节点出现问题的情况下队列仍然可用。</li>
+<li>支持多种协议： RabbitMQ 除了原生支持 AMQP 协议，还支持 STOMP、MQTT 等多种消息中间件协议。</li>
+<li>多语言客户端： RabbitMQ几乎支持所有常用语言，比如 Java、Python、Ruby、PHP、C#、JavaScript等。</li>
+<li>易用的管理界面： RabbitMQ提供了一个易用的用户界面，使得用户可以监控和管理消息、集群中的节点等。在安装 RabbitMQ 的时候会介绍到，安装好 RabbitMQ 就自带管理界面。</li>
+<li>插件机制： RabbitMQ 提供了许多插件，以实现从多方面进行扩展，当然也可以编写自己的插件。感觉这个有点类似 Dubbo 的 SPI机制。</li>
 </ul>
-<blockquote>
-<p>现在一般都是采用（1）的模式，为什么呢？   预先计算，挺高性能，避免后续重复计算。CPU和内存的资源永远比磁盘空间宝贵的多。<br>至于（2)的方式，有点就是灵活，不需要太多的重复清洗，但是性能不如（1）.</p>
+<h2 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h2><blockquote>
+<p>消息投递 </p>
 </blockquote>
-<h2 id="建设思路"><a href="#建设思路" class="headerlink" title="建设思路"></a>建设思路</h2><blockquote>
-<p>从需求出发，逆推应用层ADL结构，进而推导出它涉及的主题表IDL表结构，再推导可能涉及的基础表BDL表结构，最后分析所需的数据源取自何处。<br>需求包含“明确”需求和“潜在”需求。</p>
-</blockquote>
-<h2 id="开发步骤"><a href="#开发步骤" class="headerlink" title="开发步骤"></a>开发步骤</h2><ol>
-<li>创建ODL、BDL、IDL、ADL层表结构(HQL)</li>
-<li>确定数据抽取方案（增量或全量）</li>
-<li>编写sqoop脚本将data同步到ODL层</li>
-<li>编写ODL-&gt;BDL-&gt;IDL-&gt;ADL层ETL清洗脚本(HQL),注意：清洗的顺序，时间<br>确保上一层的数据稳定，减少对下一层的影响</li>
-<li>编写Hue workflow Ooize脚本</li>
-<li>打通Kylin、FineBI、Hive关系，实现数据可视化、可导出目标,将稳定后所有脚本WIKI上保存一份</li>
-</ol>
-<p>其他相关的请参照原博客</p>
-<p>作者：水星有鱼<br>链接：<a href="https://www.jianshu.com/p/f941967aeee8" target="_blank" rel="noopener">https://www.jianshu.com/p/f941967aeee8</a></p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2019/08/07/SparkStreaming和Storm的区别/">SparkStreaming和Storm</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2019-08-07T14:37:26.004Z" itemprop="datePublished">2019-08-07</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Hadoop/">Hadoop</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="SparkStreaming和Storm"><a href="#SparkStreaming和Storm" class="headerlink" title="SparkStreaming和Storm"></a>SparkStreaming和Storm</h1><p>Storm和Spark Streaming都是分布式流处理的开源框架，但是它们之间还是有一些区别的，这里将进行比较并指出它们的重要的区别。</p>
-<h2 id="处理模型以及延迟"><a href="#处理模型以及延迟" class="headerlink" title="处理模型以及延迟"></a>处理模型以及延迟</h2><p>虽然这两个框架都提供可扩展性(Scalability)和可容错性(Fault Tolerance),但是它们的处理模型从根本上说是不一样的。Storm处理的是每次传入的一个事件，而Spark Streaming是处理某个时间段窗口内的事件流。因此，Storm处理一个事件可以达到亚秒级的延迟，而Spark Streaming则有秒级的延迟。</p>
-<h2 id="容错和数据保证"><a href="#容错和数据保证" class="headerlink" title="容错和数据保证"></a>容错和数据保证</h2><p>在容错数据保证方面的权衡方面，Spark Streaming提供了更好的支持容错状态计算。在Storm中，当每条单独的记录通过系统时必须被跟踪，所以Storm能够至少保证每条记录将被处理一次，但是在从错误中恢复过来时候允许出现重复记录，这意味着可变状态可能不正确地被更新两次。而Spark Streaming只需要在批处理级别对记录进行跟踪处理，因此可以有效地保证每条记录将完全被处理一次，即便一个节点发生故障。虽然Storm的 Trident library库也提供了完全一次处理的功能。但是它依赖于事务更新状态，而这个过程是很慢的，并且通常必须由用户实现。</p>
-<p>简而言之,如果你需要亚秒级的延迟，Storm是一个不错的选择，而且没有数据丢失。如果你需要有状态的计算，而且要完全保证每个事件只被处理一次，Spark Streaming则更好。Spark Streaming编程逻辑也可能更容易，因为它类似于批处理程序，特别是在你使用批次(尽管是很小的)时。</p>
-<h2 id="实现和编程API"><a href="#实现和编程API" class="headerlink" title="实现和编程API"></a>实现和编程API</h2><p>Storm主要是由Clojure语言实现，SparkStreaming是由Scala实现。如果你想看看这两个框架是如何实现的或者你想自定义一些东西你就得记住这一点。Storm是由BackType和Twitter开发，而Spark Streaming是在UC Berkeley开发的。</p>
-<p>Storm提供了Java API，同时也支持其他语言的API。SparkStreaming支持Scala和Java语言(其实也支持Python)。另外SparkStreaming的一个很棒的特性就是它是在Spark框架上运行的。这样你就可以想使用其他批处理代码一样来写SparkStreaming程序，或者是在Spark中交互查询。这就减少了单独编写流批量处理程序和历史数据处理程序。</p>
-<h2 id="生产支持"><a href="#生产支持" class="headerlink" title="生产支持"></a>生产支持</h2><p>Storm已经出现好多年了，而且自从2011年开始就在Twitter内部生产环境中使用，还有其他一些公司。而Spark Streaming是一个新的项目，并且在2013年仅仅被Sharethrough使用(据作者了解)。</p>
-<p>Storm是 Hortonworks Hadoop数据平台中流处理的解决方案，而Spark Streaming出现在 MapR的分布式平台和Cloudera的企业数据平台中。除此之外，Databricks是为Spark提供技术支持的公司，包括了Spark Streaming。</p>
-<h2 id="集群管理集成"><a href="#集群管理集成" class="headerlink" title="集群管理集成"></a>集群管理集成</h2><p>尽管两个系统都运行在它们自己的集群上，Storm也能运行在Mesos，而SparkStreaming能运行在YARN 和 Mesos上。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2019/08/07/Java基础面试题四/">Java基础面试题四</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2019-08-07T14:37:25.985Z" itemprop="datePublished">2019-08-07</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/面试题/">面试题</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>Java基础面试题四</p>
-<blockquote>
-<p>Q1: Java中垃圾回收有什么目的？什么时候进行垃圾回收？ </p>
-</blockquote>
-<p>垃圾回收的目的是识别并且丢弃应用不再使用的对象来释放和重用资源。</p>
-<blockquote>
-<p>Q2：如果对象的引用被置为null，垃圾收集器是否会立即释放对象占用的内存？ </p>
-</blockquote>
-<p>不会，在下一个垃圾回收周期中，这个对象将是可被回收的。</p>
-<blockquote>
-<p>Q3: String是最基本的数据类型吗? </p>
-</blockquote>
-<p>基本数据类型包括:</p>
+<p>RabbitMQ 整体上是一个生产者与消费者模型，主要负责接收、存储和转发消息。可以把消息传递的过程想象成：当你将一个包裹送到邮局，邮局会暂存并最终将邮件通过邮递员送到收件人的手上，RabbitMQ就好比由邮局、邮箱和邮递员组成的一个系统。从计算机术语层面来说，RabbitMQ 模型更像是一种交换机模型。</p>
+<p><img src="http://my-blog-to-use.oss-cn-beijing.aliyuncs.com/18-12-16/96388546.jpg" alt="image"></p>
+<h2 id="发布订阅-（生产消费）"><a href="#发布订阅-（生产消费）" class="headerlink" title="发布订阅 （生产消费）"></a>发布订阅 （生产消费）</h2><ul>
+<li>Producer(生产者) :生产消息的一方（邮件投递者）</li>
+<li>Consumer(消费者) :消费消息的一方（邮件收件人）</li>
+</ul>
+<p>消息一般由 2 部分组成：消息头（或者说是标签 Label）和 消息体。消息体也可以称为payLoad,消息体是不透明的，而消息头则由一系列的可选属性组成，这些属性包括routing-key（路由键）、priority（相对于其他消息的优先权）、delivery-mode（指出该消息可能需要持久性存储）等。生产者把消息交由 RabbitMQ 后，RabbitMQ 会根据消息头把消息发送给感兴趣的 Consumer(消费者)。</p>
+<h2 id="交换器-Exchange"><a href="#交换器-Exchange" class="headerlink" title="交换器 Exchange"></a>交换器 Exchange</h2><p>RabbitMQ 的 Exchange(交换器)有4种类型（++常用++），不同的类型对应着不同的路由策略：</p>
 <ul>
-<li>byte</li>
-<li>int</li>
-<li>char</li>
-<li>long</li>
-<li>float</li>
-<li>double</li>
-<li>boolean</li>
-<li>short </li>
+<li>direct(默认)</li>
+<li>fanout</li>
+<li>topic</li>
+<li>headers</li>
 </ul>
-<p>java.lang.String类是final类型的，因此不可以继承这个类、不能修改这个类。为了提高效率节省空间，我们应该用StringBuffer类。</p>
+<p>不同类型的Exchange转发消息的策略有所区别。<br>在 RabbitMQ 中，消息并不是直接被投递到 Queue(消息队列) 中的，中间还必须经过 Exchange(交换器) 这一层，Exchange(交换器) 会把我们的消息分配到对应的 Queue(消息队列) 中<br><img src="http://my-blog-to-use.oss-cn-beijing.aliyuncs.com/18-12-16/24007899.jpg" alt="image"></p>
+<h2 id="路由"><a href="#路由" class="headerlink" title="路由"></a>路由</h2><p>生产者将消息发给交换器的时候，一般会指定一个==RoutingKey(路由键)==，用来指定这个消息的路由规则，而这个 <em>++RoutingKey++</em> 需要与交换器类型和绑定键(BindingKey)联合使用才能最终生效。</p>
+<p>RabbitMQ 中通过 Binding(绑定) 将 Exchange(交换器) 与 Queue(消息队列) 关联起来，在绑定的时候一般会指定一个 BindingKey(绑定建) ,这样 RabbitMQ 就知道如何正确将消息路由到队列了,如下图所示。一个绑定就是基于路由键将交换器和消息队列连接起来的路由规则，所以可以将交换器理解成一个由绑定构成的路由表。Exchange 和 Queue 的绑定可以是多对多的关系。</p>
+<p>Binding(绑定) 示意图：</p>
+<p><img src="http://my-blog-to-use.oss-cn-beijing.aliyuncs.com/18-12-16/70553134.jpg" alt="image"></p>
+<p>生产者将消息发送给交换器时，需要一个RoutingKey,当 BindingKey 和 RoutingKey 相匹配时，消息会被路由到对应的队列中。在绑定多个队列到同一个交换器的时候，这些绑定允许使用相同的 BindingKey。BindingKey 并不是在所有的情况下都生效，它依赖于交换器类型，比如fanout类型的交换器就会无视，而是将消息路由到所有绑定到该交换器的队列中。</p>
+<p>生产者  ===》RouteKey ===&gt; Exchange ===&gt; BindKey ==(mutiple allowed)=&gt; Queue</p>
+<h2 id="RabbitMq工作流程"><a href="#RabbitMq工作流程" class="headerlink" title="RabbitMq工作流程"></a>RabbitMq工作流程</h2><p>对于 RabbitMQ 来说，一个 RabbitMQ Broker 可以简单地看作一个 RabbitMQ 服务节点，或者RabbitMQ服务实例。大多数情况下也可以将一个 RabbitMQ Broker 看作一台 RabbitMQ 服务器。</p>
+<p>下图展示了生产者将消息存入 RabbitMQ Broker,以及消费者从Broker中消费数据的整个流程。</p>
+<p><img src="http://my-blog-to-use.oss-cn-beijing.aliyuncs.com/18-12-16/67952922.jpg" alt="image"></p>
+<h2 id="交换机类型"><a href="#交换机类型" class="headerlink" title="交换机类型"></a>交换机类型</h2><p>RabbitMQ 常用的 Exchange Type 有 fanout、direct、topic、headers 这四种（AMQP规范里还提到两种 Exchange Type，分别为 system 与 自定义，这里不予以描述）。</p>
+<h3 id="①-fanout"><a href="#①-fanout" class="headerlink" title="① fanout"></a>① fanout</h3><p>fanout 类型的Exchange路由规则非常简单，它会把所有发送到该Exchange的消息路由到所有与它绑定的Queue中，不需要做任何判断操作，所以 fanout 类型是所有的交换机类型里面速度最快的。fanout 类型常用来广播消息。</p>
+<h3 id="②-direct"><a href="#②-direct" class="headerlink" title="② direct"></a>② direct</h3><p>direct 类型的Exchange路由规则也很简单，它会把消息路由到那些 Bindingkey 与 RoutingKey 完全匹配的 Queue 中。</p>
+<p><img src="http://my-blog-to-use.oss-cn-beijing.aliyuncs.com/18-12-16/37008021.jpg" alt="image"></p>
+<h3 id="③-topic"><a href="#③-topic" class="headerlink" title="③ topic"></a>③ topic</h3><p>前面讲到direct类型的交换器路由规则是完全匹配 BindingKey 和 RoutingKey ，但是这种严格的匹配方式在很多情况下不能满足实际业务的需求。topic类型的交换器在匹配规则上进行了扩展，它与 direct 类型的交换器相似，也是将消息路由到 BindingKey 和 RoutingKey 相匹配的队列中，但这里的匹配规则有些不同，它约定：</p>
+<p>RoutingKey 为一个点号“．”分隔的字符串（被点号“．”分隔开的每一段独立的字符串称为一个单词），如 “com.rabbitmq.client”、“java.util.concurrent”、“com.hidden.client”;<br>BindingKey 和 RoutingKey 一样也是点号“．”分隔的字符串；<br>BindingKey 中可以存在两种特殊字符串“ <em> ”和“ # ”，用于做模糊匹配，其中“ </em> ”用于匹配一个单词，“#”用于匹配多个单词(可以是零个)。</p>
+<p><img src="http://my-blog-to-use.oss-cn-beijing.aliyuncs.com/18-12-16/73843.jpg" alt="image"></p>
+<h3 id="④-headers-不推荐"><a href="#④-headers-不推荐" class="headerlink" title="④ headers(不推荐)"></a>④ headers(不推荐)</h3><p>headers 类型的交换器不依赖于路由键的匹配规则来路由消息，而是根据发送的消息内容中的 headers 属性进行匹配。在绑定队列和交换器时制定一组键值对，当发送消息到交换器时，RabbitMQ会获取到该消息的 headers（也是一个键值对的形式)’对比其中的键值对是否完全匹配队列和交换器绑定时指定的键值对，如果完全匹配则消息会路由到该队列，否则不会路由到该队列。headers 类型的交换器性能会很差，而且也不实用，基本上不会看到它的存在。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2019/12/02/优秀开源项目/">优秀开源项目</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-12-02T04:30:00.000Z" itemprop="datePublished">2019-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/拓展/">拓展</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="优秀开源项目"><a href="#优秀开源项目" class="headerlink" title="优秀开源项目"></a>优秀开源项目</h1><h2 id="运维"><a href="#运维" class="headerlink" title="运维"></a>运维</h2><h3 id="Yearning-SQL-审核平台"><a href="#Yearning-SQL-审核平台" class="headerlink" title="Yearning SQL 审核平台"></a>Yearning SQL 审核平台</h3><p>基于Inception的企业级web端 SQL审核平台。</p>
+<p><a href="http://yearning.io/" target="_blank" rel="noopener">官网</a></p>
+<p><a href="https://gitee.com/mirrors/Yearning" target="_blank" rel="noopener">git</a><br>项目地址：<br><a href="https://gitee.com/mirrors/Yearning" target="_blank" rel="noopener">https://gitee.com/mirrors/Yearning</a></p>
+<h3 id="Spug-自动运维"><a href="#Spug-自动运维" class="headerlink" title="Spug 自动运维"></a>Spug 自动运维</h3><p>Spug是面向中小型企业设计的轻量级无Agent的自动化运维平台，整合了主机管理、主机批量执行、主机在线终端、应用发布部署、在线任务计划、配置中心、监控、报警等一系列功能。</p>
+<p><a href="https://github.com/openspug/spug" target="_blank" rel="noopener">git</a><br>项目地址：<br><a href="https://github.com/openspug/spug" target="_blank" rel="noopener">https://github.com/openspug/spug</a></p>
+<p><a href="https://demo.spug.dev/home" target="_blank" rel="noopener">演示地址</a> <a href="https://demo.spug.dev/home" target="_blank" rel="noopener">https://demo.spug.dev/home</a></p>
+<h4 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h4><ul>
+<li>批量执行: 主机命令在线批量执行</li>
+<li>在线终端: 主机支持浏览器在线终端登录</li>
+<li>文件管理: 主机文件在线上传下载</li>
+<li>任务计划: 灵活的在线任务计划</li>
+<li>发布部署: 支持自定义发布部署流程</li>
+<li>配置中心: 支持KV、文本、json等格式的配置</li>
+<li>监控中心: 支持站点、端口、进程、自定义等监控</li>
+<li>报警中心: 支持短信、邮件、钉钉、微信等报警方式</li>
+<li>优雅美观: 基于 Ant Design 的UI界面</li>
+<li>开源免费: 前后端代码完全开源</li>
+<li><h3 id="J-IM"><a href="#J-IM" class="headerlink" title="J-IM"></a>J-IM</h3></li>
+</ul>
+<p>J-IM 是用JAVA语言,基于t-io开发的轻量、高性能、单机支持几十万至百万在线用户IM，主要目标降低即时通讯门槛，快速打造低成本接入在线IM系统，通过极简洁的消息格式就可以实现多端不同协议间的消息发送如内置(Http、Websocket、Tcp自定义IM协议)等，并提供通过http协议的api接口进行消息发送无需关心接收端属于什么协议，一个消息格式搞定一切！</p>
 <blockquote>
-<p>Q4: int 和 Integer 有什么区别?</p>
+<p>t-io <a href="https://www.tiocloud.com/tio.pdf" target="_blank" rel="noopener">https://www.tiocloud.com/tio.pdf</a></p>
 </blockquote>
-<p>Java 提供两种不同的类型：引用类型和原始类型（或内置类型）。Int是java的原始数据类型，Integer是java为int提供的封装类。Java为每个原始类型提供了封装类。</p>
-<blockquote>
-<p>Q5: String 和 StringBuffer的区别?</p>
-</blockquote>
-<p>JAVA平台提供了两个类：String和StringBuffer，它们可以储存和操作字符串，即包含多个字符的字符数据。这个String类提供了数值不可改变的字符串。而这个StringBuffer类提供的字符串进行修改。</p>
-<blockquote>
-<p>Q6: ArrayList,Vector,LinkedList的存储性能和特性?</p>
-</blockquote>
-<p>ArrayList和Vector都是使用数组方式存储数据，此数组元素数大于实际存储的数据以便增加和插入元素，它们都允许直接按序号索引元素，但是插入元素要涉及数组元素移动等内存操作，所以索引数据快而插入数据慢，Vector由于使用了synchronized方法（线程安全），通常性能上较ArrayList差，而LinkedList使用双向链表实现存储，按序号索引数据需要进行前向或后向遍历，但是插入数据时只需要记录本项的前后项即可，所以插入速度较快。<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">List的子类特点</span><br><span class="line"><span class="symbol">        ArrayList:</span></span><br><span class="line">            底层数据结构是数组，查询快，增删慢</span><br><span class="line">            线程不安全，效率高</span><br><span class="line"><span class="symbol">        Vector:</span></span><br><span class="line">            底层数据结构是数组，查询快，增删慢</span><br><span class="line">            线程安全，效率低</span><br><span class="line"><span class="symbol">        LinkedList:</span></span><br><span class="line">            底层数据结构是链表，查询慢，增删快</span><br><span class="line">            线程不安全，效率高</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>Q7: Collection 和 Collections的区别 </p>
-</blockquote>
-<p>Collection是集合类的上级接口，继承与他的接口主要有Set和List. </p>
-<p>Collections是针对集合类的一个帮助类，他提供一系列静态方法实现对各种集合的搜索、排序、线程安全化等操作。<br>集合的继承体系：<br><img src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1551609409314&amp;di=26c716fbc7abe264f61d07f051639caf&amp;imgtype=0&amp;src=http%3A%2F%2Faliyunzixunbucket.oss-cn-beijing.aliyuncs.com%2Fjpg%2F16f3e1d844693be57f7e0f55c969f42d.jpg%3Fx-oss-process%3Dimage%2Fresize%2Cp_100%2Fauto-orient%2C1%2Fquality%2Cq_90%2Fformat%2Cjpg%2Fwatermark%2Cimage_eXVuY2VzaGk%3D%2Ct_100" alt="image"></p>
+<p><a href="https://gitee.com/LuckyFishSpace/j-im" target="_blank" rel="noopener">git</a></p>
+<p>项目地址：<br><a href="https://gitee.com/LuckyFishSpace/j-im" target="_blank" rel="noopener">https://gitee.com/LuckyFishSpace/j-im</a></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2019/12/02/Eureka 服务注册与发现/">Eureka服务注册与发现</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-12-02T04:30:00.000Z" itemprop="datePublished">2019-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h2 id="Eureka服务注册与发现"><a href="#Eureka服务注册与发现" class="headerlink" title="Eureka服务注册与发现"></a>Eureka服务注册与发现</h2><h3 id="概念原理"><a href="#概念原理" class="headerlink" title="概念原理"></a>概念原理</h3><p>过去，每个应用都是一个CPU，一个主机上的单一系统。然而今天，随着大数据和云计算时代的到来，任何独立的程序都可以运行在多个计算机上。并且随着业务的发展，访问用户量的增加，开发人员或小组的增加，<br>系统会被拆分成多个功能模块。拆分后每个功能模块可以作为一个独立的子系统提供其职责范围内的功能。而多个子系统中，由于职责不同并且会存在相互调用，同时可能每个子系统还需要多个实例部署在多台<br>服务器或者镜像中，导致了子系统间的相互调用形成了一个错综复杂的网状结构。</p>
+<p>从单体演变成分布式架构。随着系统结构、架构的演变，系统功能的增加，用户量的增加，开发人员的增加等各种增加情况下，需要有一个比较好扩展的系统架构来快速、尽量减少代码改动的前提下以支持系统功能<br>的开发，用户量增加导致的硬件资源横向扩容，以及开发人员增加时的协同工作效率。在此基础上需要解决系统的稳定性、容错性、高并发的支持性等。以及随着系统功能的增加如何有效的管理系统，排查、<br>定位系统问题。同时当参与项目的人（包含测试、运维、业务等人员）越来越多时，如何能更高效的彼此之间协同办公的效率等等。所以微服务架构需要考虑的不仅仅是软件架构本身，需要从参与到整个项目实施<br>过程中的各个环节，可能的问题以及人员协同的整体情况去考虑。让整个项目做到可用（满足功能以及硬件资源的横向扩容）、可行（满足整个系统运行中的各个点的监控、排错等）、可持续（满足系统功能的可持续集成、<br>以及系统运行的可持续性）以及高效（系统运行的高效、人员协同工作的高效、功能迭代的高效等）。</p>
+<h3 id="微服务通俗讲解"><a href="#微服务通俗讲解" class="headerlink" title="微服务通俗讲解"></a>微服务通俗讲解</h3><p>Spring Cloud提供了微服务解决的一整套方案，而Eureka是其重要组件，所以先要了解什么是“微服务”。</p>
+<p>在大型系统架构中，会拆分多个子系统。这些系统往往都有这几个功能：提供接口，调用接口，以及该子系统自身的业务功能。这样的一个子系统就称为一个“微服务”。（可以理解为一个子系统的代码所实现的功能）</p>
+<p>实例：<br>每个服务都会部署到多个机器（或镜像）中，这些多个部署的应用就是实例。（可以理解为一套子系统代码被部署到了多个机器上）</p>
+<h4 id="Eureka的管理"><a href="#Eureka的管理" class="headerlink" title="Eureka的管理"></a>Eureka的管理</h4><p>基于以上概念，使用Eureka管理时会具备几个特性：</p>
+<ul>
+<li>服务需要有一个统一的名称（或服务ID）并且是唯一标识，以便于接口调用时各个接口的区分。并且需要将其注册到Eureka Server中，其他服务调用该接口时，也是根据这个唯一标识来获取。</li>
+<li>服务下有多个实例，每个实例也有一个自己的唯一实例ID。因为它们各自有自己的基础信息如：不同的IP。所以它们的信息也需要注册到Eureka Server中，其他服务调用它们的服务接口时，<br>可以查看到多个该服务的实例信息，根据负载策略提供某个实例的调用信息后，调用者根据信息直接调用该实例。</li>
+</ul>
+<h3 id="eureka如何管理服务调用"><a href="#eureka如何管理服务调用" class="headerlink" title="eureka如何管理服务调用"></a>eureka如何管理服务调用</h3><ul>
+<li><p>在Eureka Client启动的时候，将自身的服务的信息发送到Eureka Server。然后进行2调用当前服务器节点中的其他服务信息，保存到Eureka Client中。当服务间相互调用其它服务时，在Eureka Client中<br>获取服务信息（如服务地址，端口等）后，进行第3步，根据信息直接调用服务。（注：服务的调用通过http(s)调用）</p>
+</li>
+<li><p>当某个服务仅需要调用其他服务，自身不提供服务调用时。在Eureka Client启动后会拉取Eureka Server的其他服务信息，需要调用时，在Eureka Client的本地缓存中获取信息，调用服务。</p>
+</li>
+<li><p>Eureka Client通过向Eureka Serve发送心跳（默认每30秒）来续约服务的。 如果客户端持续不能续约，那么，它将在大约90秒内从服务器注册表中删除。 注册信息和续订被复制到集群中的Eureka Serve所有节点。 以此来确保当前服务还“活着”，可以被调用。</p>
+</li>
+<li><p>来自任何区域的Eureka Client都可以查找注册表信息（每30秒发生一次），以此来确保调用到的服务是“活的”。并且当某个服务被更新或者新加进来，也可以调用到新的服务。</p>
+</li>
+</ul>
+<h3 id="Eureka-Server："><a href="#Eureka-Server：" class="headerlink" title="Eureka Server："></a>Eureka Server：</h3><ul>
+<li><p>提供服务注册：各个微服务启动时，会通过Eureka Client向Eureka Server进行注册自己的信息（例如服务信息和网络信息），Eureka Server会存储该服务的信息。</p>
+</li>
+<li><p>提供服务信息提供：服务消费者在调用服务时，本地Eureka Client没有的情况下，会到Eureka Server拉取信息。</p>
+</li>
+<li><p>提供服务管理：通过Eureka Client的Cancel、心跳监控、renew等方式来维护该服务提供的信息以确保该服务可用以及服务的更新。</p>
+</li>
+<li><p>信息同步：每个Eureka Server同时也是Eureka Client，多个Eureka Server之间通过P2P复制的方式完成服务注册表的同步。同步时，被同步信息不会同步出去。也就是说有3个Eureka Server，Server1有新的服务信息时，同步到Server2后，Server2和Server3同步时，Server2不会把从Server1那里同步到的信息同步给Server3，只能由Server1自己同步给Server3。</p>
+</li>
+<li><p>每个可用区有一个Eureka集群，并且每个可用区至少有一个eureka服务器来处理区内故障。为了实现高可用，一般一个可用区中由三个Eureka Server组成。</p>
+</li>
+</ul>
+<h3 id="Eureka-Client："><a href="#Eureka-Client：" class="headerlink" title="Eureka Client："></a>Eureka Client：</h3><ul>
+<li><p>Eureka Client是一个Java客户端，用于简化与Eureka Server的交互。并且管理当前微服务，同时为当前的微服务提供服务提供者信息。</p>
+</li>
+<li><p>Eureka Client会拉取、更新和缓存Eureka Server中的信息。即使所有的Eureka Server节点都宕掉，服务消费者依然可以使用缓存中的信息找到服务提供者。</p>
+</li>
+<li><p>Eureka Client在微服务启动后，会周期性地向Eureka Server发送心跳（默认周期为30秒）以续约自己的信息。如果Eureka Server在一定时间内没有接收到某个微服务节点的心跳，Eureka Server将会注销该微服务节点（默认90秒）。</p>
+</li>
+<li><p>Eureka Client包含服务提供者Applicaton Service和服务消费者Application Client</p>
+</li>
+<li><p>Applicaton Service：服务提供者，提供服务给别个调用。</p>
+</li>
+<li><p>Application Client：服务消费者，调用别个提供的服务。</p>
+</li>
+<li><p>往往大多数服务本身既是服务提供者，也是服务消费者。</p>
+</li>
+</ul>
+<h3 id="动作"><a href="#动作" class="headerlink" title="动作"></a>动作</h3><h4 id="Register：服务注册"><a href="#Register：服务注册" class="headerlink" title="Register：服务注册"></a>Register：服务注册</h4><p>当Eureka客户端向Eureka Server注册时，它提供自身的元数据，比如IP地址、端口，运行状况指示符URL，主页等。</p>
+<h4 id="Renew：服务续约"><a href="#Renew：服务续约" class="headerlink" title="Renew：服务续约"></a>Renew：服务续约</h4><p>Eureka Client会每隔30秒发送一次心跳来续约。 通过续约来告知Eureka Server该Eureka客户仍然存在，没有出现问题。 正常情况下，如果Eureka Server在90秒没有收到Eureka客户的续约，它会将实例从其注册表中删除。 建议不要更改续约间隔。</p>
+<h4 id="Fetch-Registries：获取注册列表信息"><a href="#Fetch-Registries：获取注册列表信息" class="headerlink" title="Fetch Registries：获取注册列表信息"></a>Fetch Registries：获取注册列表信息</h4><p>Eureka客户端从服务器获取注册表信息，并将其缓存在本地。客户端会使用该信息查找其他服务，从而进行远程调用。该注册列表信息定期（每30秒钟）更新一次。每次返回注册列表信息可能与Eureka客户端的缓存信息不同， Eureka客户端自动处理。如果由于某种原因导致注册列表信息不能及时匹配，Eureka客户端则会重新获取整个注册表信息。 Eureka服务器缓存注册列表信息，整个注册表以及每个应用程序的信息进行了压缩，压缩内容和没有压缩的内容完全相同。Eureka客户端和Eureka 服务器可以使用JSON / XML格式进行通讯。在默认的情况下Eureka客户端使用压缩JSON格式来获取注册列表的信息。</p>
+<h4 id="Cancel：服务下线"><a href="#Cancel：服务下线" class="headerlink" title="Cancel：服务下线"></a>Cancel：服务下线</h4><p>Eureka客户端在程序关闭时向Eureka服务器发送取消请求。 发送请求后，该客户端实例信息将从服务器的实例注册表中删除。该下线请求不会自动完成，它需要调用以下内容：</p>
+<p>DiscoveryManager.getInstance().shutdownComponent()；</p>
+<h5 id="Eviction：服务剔除"><a href="#Eviction：服务剔除" class="headerlink" title="Eviction：服务剔除"></a>Eviction：服务剔除</h5><p>在默认的情况下，当Eureka客户端连续90秒没有向Eureka服务器发送服务续约，即心跳，Eureka服务器会将该服务实例从服务注册列表删除，即服务剔除。</p>
 
         
     </section>
@@ -734,7 +770,7 @@
 
 
 <nav class="page-nav">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/2/">下一页 &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/">23</a><a class="extend next" rel="next" href="/page/2/">下一页 &raquo;</a>
 </nav>
 
 

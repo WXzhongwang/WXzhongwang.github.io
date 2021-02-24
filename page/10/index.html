@@ -131,7 +131,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/03/06/Linux 文件属性/">Linux 文件属性</a>
+            <a href="/2018/12/02/Linux 高版本nginx Centos7/">Linux 高版本nginx Centos7</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -139,7 +139,7 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-03-06T08:18:02.000Z" itemprop="datePublished">2018-03-06</time>
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
 </a>
 
             
@@ -154,27 +154,12 @@
     
     <section class="article-body markdown-body">
         
-        <h2 id="Linux-文件属性"><a href="#Linux-文件属性" class="headerlink" title="Linux 文件属性"></a>Linux 文件属性</h2><p>在Linux中我们可以使用命令来显示一个文件的属性以及文件所属的用户和组，如：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@www /]# ls -l</span><br><span class="line">total <span class="number">64</span></span><br><span class="line">dr-xr-xr-x   <span class="number">2</span> root root <span class="number">4096</span> Dec <span class="number">14</span>  <span class="number">2012</span> bin</span><br><span class="line">dr-xr-xr-x   <span class="number">4</span> root root <span class="number">4096</span> Apr <span class="number">19</span>  <span class="number">2012</span> boot</span><br><span class="line">……</span><br></pre></td></tr></table></figure></p>
-<p>note: “ll” 也可以。</p>
-<p>在Linux中第一个字符代表这个文件是目录、文件或链接文件等等。”d”在Linux中代表该文件是一个目录文件。</p>
-<ul>
-<li>当为[ d ]则是目录</li>
-<li>当为[ - ]则是文件；</li>
-<li>若是[ l ]则表示为链接文档(link file)；</li>
-<li>若是[ b ]则表示为装置文件里面的可供储存的接口设备(可随机存取装置)；</li>
-<li>若是[ c ]则表示为装置文件里面的串行端口设备，例如键盘、鼠标(一次性读取装置)。</li>
-</ul>
-<p>接下来的字符中，以三个为一组，且均为『rwx』 的三个参数的组合。</p>
-<ul>
-<li>[ r ]代表可读(read)</li>
-<li>[ w ]代表可写(write)</li>
-<li>[ x ]代表可执行(execute)</li>
-</ul>
-<p>要注意的是，这三个权限的位置不会改变，如果没有权限，就会出现减号[ - ]而已。</p>
-<blockquote>
-<p>对于文件来说，它都有一个特定的所有者，也就是对该文件具有所有权的用户。同时，在Linux系统中，用户是按组分类的，一个用户属于一个或多个组。文件所有者以外的用户又可以分为文件所有者的同组用户和其他用户。因此，Linux系统按文件所有者、文件所有者同组用户和其他用户来规定了不同的文件访问权限。</p>
-</blockquote>
-<p>对于 root 用户来说，一般情况下，文件的权限对其不起作用。</p>
+        <h1 id="Linux-高版本nginx-Centos7"><a href="#Linux-高版本nginx-Centos7" class="headerlink" title="Linux 高版本nginx Centos7"></a>Linux 高版本nginx Centos7</h1><p>Install the prerequisites:<br><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum <span class="keyword">install</span> yum-utils</span><br></pre></td></tr></table></figure></p>
+<p>To set up the yum repository, create the file named<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/yum<span class="selector-class">.repos</span><span class="selector-class">.d</span>/nginx.repo</span><br></pre></td></tr></table></figure></p>
+<p>with the following contents:<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[nginx-stable]</span></span><br><span class="line"><span class="attr">name</span>=nginx stable repo</span><br><span class="line"><span class="attr">baseurl</span>=http://nginx.org/packages/centos/<span class="variable">$releasever</span>/<span class="variable">$basearch</span>/</span><br><span class="line"><span class="attr">gpgcheck</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">enabled</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">gpgkey</span>=https://nginx.org/keys/nginx_signing.key</span><br><span class="line"><span class="attr">module_hotfixes</span>=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="section">[nginx-mainline]</span></span><br><span class="line"><span class="attr">name</span>=nginx mainline repo</span><br><span class="line"><span class="attr">baseurl</span>=http://nginx.org/packages/mainline/centos/<span class="variable">$releasever</span>/<span class="variable">$basearch</span>/</span><br><span class="line"><span class="attr">gpgcheck</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">enabled</span>=<span class="number">0</span></span><br><span class="line"><span class="attr">gpgkey</span>=https://nginx.org/keys/nginx_signing.key</span><br><span class="line"><span class="attr">module_hotfixes</span>=<span class="literal">true</span></span><br></pre></td></tr></table></figure></p>
+<p>By default, the repository for stable nginx packages is used. If you would like to use mainline nginx packages, run the following command:<br><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum-<span class="built_in">config</span>-manager <span class="comment">--enable nginx-mainline</span></span><br></pre></td></tr></table></figure></p>
+<p>To install nginx, run the following command:<br><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum <span class="keyword">install</span> nginx</span><br></pre></td></tr></table></figure></p>
+<p>When prompted to accept the GPG key, verify that the fingerprint matches 573B FD6B 3D8F BC64 1079 A6AB ABF5 BD82 7BD9 BF62, and if so, accept it.</p>
 
         
     </section>
@@ -186,7 +171,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/03/06/Linux 用户和用户组管理/">Linux用户和用户组管理</a>
+            <a href="/2018/12/02/Linux 防火墙开放端口 /">防火墙开放端口</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -194,7 +179,7 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-03-06T08:18:02.000Z" itemprop="datePublished">2018-03-06</time>
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
 </a>
 
             
@@ -209,68 +194,18 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="Linux用户和用户组管理"><a href="#Linux用户和用户组管理" class="headerlink" title="Linux用户和用户组管理"></a>Linux用户和用户组管理</h1><p>与用户和用户组相关的信息都存放在一些系统文件中，这些文件包括/etc/passwd, /etc/shadow, /etc/group等。完成用户管理的工作有许多种方法，但是每一种方法实际上都是对有关的系统文件进行修改。</p>
-<h2 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h2><p>每个用户账号都拥有一个惟一的用户名和各自的口令。</p>
-<p>用户在登录时键入正确的用户名和口令后，就能够进入系统和自己的主目录。</p>
-<p>实现用户账号的管理，要完成的工作主要有如下几个方面：</p>
-<ul>
-<li>用户账号的添加、删除与修改。</li>
-<li>用户口令的管理。</li>
-<li>用户组的管理。</li>
-</ul>
-<h3 id="用户账号的管理"><a href="#用户账号的管理" class="headerlink" title="用户账号的管理"></a>用户账号的管理</h3><h4 id="添加账号：-useradd"><a href="#添加账号：-useradd" class="headerlink" title="添加账号： useradd"></a>添加账号： useradd</h4><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">useradd</span> 选项 用户名</span><br></pre></td></tr></table></figure>
-<p>参数说明：</p>
-<p>选项:</p>
-<ul>
-<li>-c comment 指定一段注释性描述。</li>
-<li>-d 目录 指定用户主目录，如果此目录不存在，则同时使用-m选项，可以创建主目录。</li>
-<li>-g 用户组 指定用户所属的用户组。</li>
-<li>-G 用户组，用户组 指定用户所属的附加组。</li>
-<li>-s Shell文件 指定用户的登录Shell。</li>
-<li>-u 用户号 指定用户的用户号，如果同时有-o选项，则可以重复使用其他用户的标识号。</li>
-</ul>
-<p>用户名:<br>指定新账号的登录名。</p>
-<figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># useradd –d /usr/sam -m sam</span></span><br></pre></td></tr></table></figure>
-<p>此命令创建了一个用户sam，其中-d和-m选项用来为登录名sam产生一个主目录/usr/sam（/usr为默认的用户主目录所在的父目录）。</p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># useradd -s <span class="regexp">/bin/</span>sh -g <span class="keyword">group</span> –G adm,root gem</span><br></pre></td></tr></table></figure>
-<p>此命令新建了一个用户gem，该用户的登录Shell是 /bin/sh，它属于group用户组，同时又属于adm和root用户组，其中group用户组是其主组。</p>
-<p>这里可能新建组：#groupadd group及groupadd adm</p>
-<p>增加用户账号就是在/etc/passwd文件中为新用户增加一条记录，同时更新其他系统文件如/etc/shadow, /etc/group等。</p>
-<h4 id="删除账号-userdel"><a href="#删除账号-userdel" class="headerlink" title="删除账号 userdel"></a>删除账号 userdel</h4><p>如果一个用户的账号不再使用，可以从系统中删除。删除用户账号就是要将/etc/passwd等系统文件中的该用户记录删除，必要时还删除用户的主目录。<br>删除一个已有的用户账号使用userdel命令，其格式如下：<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">userdel</span> 选项 用户名</span><br></pre></td></tr></table></figure></p>
-<p>常用的选项是 -r，它的作用是把用户的主目录一起删除。<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># userdel -r sam</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="修改账号-usermod"><a href="#修改账号-usermod" class="headerlink" title="修改账号 usermod"></a>修改账号 usermod</h4><p>修改用户账号就是根据实际情况更改用户的有关属性，如用户号、主目录、用户组、登录Shell等。</p>
-<p>修改已有用户的信息使用usermod命令，其格式如下：<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">usermod</span> 选项 用户名</span><br></pre></td></tr></table></figure></p>
-<p>常用的选项包括-c, -d, -m, -g, -G, -s, -u以及-o等，这些选项的意义与useradd命令中的选项一样，可以为用户指定新的资源值。</p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># usermod -s <span class="regexp">/bin/</span>ksh -d <span class="regexp">/home/</span>z –g developer sam</span><br></pre></td></tr></table></figure>
-<p>此命令将用户sam的登录Shell修改为ksh，主目录改为/home/z，用户组改为developer。</p>
-<h4 id="密码管理（口令）"><a href="#密码管理（口令）" class="headerlink" title="密码管理（口令）"></a>密码管理（口令）</h4><p>用户管理的一项重要内容是用户口令的管理。用户账号刚创建时没有口令，但是被系统锁定，无法使用，必须为其指定口令后才可以使用，即使是指定空口令。</p>
-<p>指定和修改用户口令的Shell命令是passwd。超级用户可以为自己和其他用户指定口令，普通用户只能用它修改自己的口令。命令的格式为：<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">passwd</span> 选项 用户名</span><br></pre></td></tr></table></figure></p>
-<p>可使用的选项：</p>
-<ul>
-<li>-l 锁定口令，即禁用账号。</li>
-<li>-u 口令解锁。</li>
-<li>-d 使账号无口令。</li>
-<li>-f 强迫用户下次登录时修改口令。<br>如果默认用户名，则修改当前用户的口令。</li>
-</ul>
-<p>例如，假设当前用户是sam，则下面的命令修改该用户自己的口令：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ passwd </span><br><span class="line">Old <span class="string">password:</span>****** </span><br><span class="line">New <span class="string">password:</span>******* </span><br><span class="line">Re-enter <span class="keyword">new</span> <span class="string">password:</span>*******</span><br></pre></td></tr></table></figure></p>
-<p>如果是超级用户，可以用下列形式指定任何用户的口令：<br><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># passwd sam </span></span><br><span class="line">New password:<span class="strong">*****</span>** </span><br><span class="line">Re-enter new password:<span class="strong">*****</span>**</span><br></pre></td></tr></table></figure></p>
-<h2 id="用户组管理"><a href="#用户组管理" class="headerlink" title="用户组管理"></a>用户组管理</h2><h3 id="添加组-groupadd"><a href="#添加组-groupadd" class="headerlink" title="添加组 groupadd"></a>添加组 groupadd</h3><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">groupadd</span> 选项 用户组</span><br></pre></td></tr></table></figure>
-<p>可以使用的选项有：(选项不常用)</p>
-<p>-g GID 指定新用户组的组标识号（GID）。<br>-o 一般与-g选项同时使用，表示新用户组的GID可以与系统已有用户组的GID相同。<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># groupadd group1</span></span><br></pre></td></tr></table></figure></p>
-<p>此命令向系统中增加了一个新组group1，新组的组标识号是在当前已有的最大组标识号的基础上加1。</p>
-<figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># groupadd -g 101 group2</span></span><br></pre></td></tr></table></figure>
-<p>此命令向系统中增加了一个新组group2，同时指定新组的组标识号是101。</p>
-<h3 id="删除组-groupdel"><a href="#删除组-groupdel" class="headerlink" title="删除组 groupdel"></a>删除组 groupdel</h3><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">groupdel</span> 用户组</span><br><span class="line"></span><br><span class="line"><span class="comment"># groupdel group1</span></span><br></pre></td></tr></table></figure>
-<h3 id="修改组-groupmod"><a href="#修改组-groupmod" class="headerlink" title="修改组 groupmod"></a>修改组 groupmod</h3><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">groupmod</span> 选项 用户组</span><br></pre></td></tr></table></figure>
-<p>常用的选项有：</p>
-<ul>
-<li>-g GID 为用户组指定新的组标识号。</li>
-<li>-o 与-g选项同时使用，用户组的新GID可以与系统已有用户组的GID相同。</li>
-<li>-n 新用户组 将用户组的名字改为新名字</li>
-</ul>
-<h3 id="切换"><a href="#切换" class="headerlink" title="切换"></a>切换</h3><p>如果一个用户同时属于多个用户组，那么用户可以在用户组之间切换，以便具有其他用户组的权限</p>
-<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="keyword">new</span><span class="type">grp</span> root</span><br></pre></td></tr></table></figure>
-<p>这条命令将当前用户切换到root用户组，前提条件是root用户组确实是该用户的主组或附加组。</p>
+        <h1 id="Linux-防火墙开放端口"><a href="#Linux-防火墙开放端口" class="headerlink" title="Linux 防火墙开放端口"></a>Linux 防火墙开放端口</h1><p>如果想开放端口（如：8889）</p>
+<p>（1）通过vi /etc/sysconfig/iptables 进入编辑增添一条-A INPUT -p tcp -m tcp –dport 8889 -j ACCEPT 即可</p>
+<p>（2）执行 /etc/init.d/iptables restart 命令将iptables服务重启</p>
+<p>#（3）保存 /etc/rc.d/init.d/iptables save</p>
+<p>注：如若不想修改iptables表，可以直接输入下面命令：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -I INPUT -<span class="selector-tag">p</span> tcp --dport <span class="number">8889</span> -j ACCEPT</span><br></pre></td></tr></table></figure></p>
+<p> 附：参考自：<a href="http://www.cnblogs.com/alimac/p/5848372.html" target="_blank" rel="noopener">http://www.cnblogs.com/alimac/p/5848372.html</a></p>
+<p>若/etc/sysconfig/iptables不存在，</p>
+<p>原因：在新安装的linux系统中，防火墙默认是被禁掉的，一般也没有配置过任何防火墙的策略，所有不存在/etc/sysconfig/iptables文件。</p>
+<p>解决：</p>
+<p> 在控制台使用iptables命令随便写一条防火墙规则，如：<br><figure class="highlight tp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -<span class="keyword">P</span> OUTPUT <span class="keyword">ACC</span>EPT</span><br></pre></td></tr></table></figure></p>
+<p>使用<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">service iptables save</span></span><br></pre></td></tr></table></figure></p>
+<p>进行保存，默认就保存到了/etc/sysconfig目录下的iptables文件中</p>
 
         
     </section>
@@ -282,7 +217,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/03/03/Linux Java安装环境变量 /">Linux Java 安装环境变量</a>
+            <a href="/2018/12/02/Granafa + Prometheus监控MySQL.md/">Granafa + Prometheus监控MySQL</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -290,7 +225,60 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-03-03T06:22:30.000Z" itemprop="datePublished">2018-03-03</time>
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Prometheus/">Prometheus</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Granafa-Prometheus监控MySQL"><a href="#Granafa-Prometheus监控MySQL" class="headerlink" title="Granafa + Prometheus监控MySQL"></a>Granafa + Prometheus监控MySQL</h1><h2 id="0-安装mysql-exporter"><a href="#0-安装mysql-exporter" class="headerlink" title="0.安装mysql_exporter"></a>0.安装mysql_exporter</h2><p>1、下载到被监控端解压压缩包</p>
+<p>tar zxvf mysqld_exporter-0.11.0.linux-amd64.tar.gz </p>
+<p>2、改名并移动到指定目录<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mv mysqld_exporter-0.11.0.linux-amd64 /usr/<span class="built_in">local</span>/mysql_exporter</span><br><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/mysql_exporter</span><br></pre></td></tr></table></figure></p>
+<p>3、登录mysql为exporter创建账号并授权</p>
+<h2 id="创建数据库用户。"><a href="#创建数据库用户。" class="headerlink" title="创建数据库用户。"></a>创建数据库用户。</h2><figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; <span class="keyword">CREATE</span> USER <span class="string">'exporter'</span>@<span class="string">'localhost'</span> IDENTIFIED <span class="keyword">BY</span> <span class="string">'XXXXXXXX'</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="可查看主从运行情况查看线程，及所有数据库。"><a href="#可查看主从运行情况查看线程，及所有数据库。" class="headerlink" title="可查看主从运行情况查看线程，及所有数据库。"></a>可查看主从运行情况查看线程，及所有数据库。</h2><figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; GRANT <span class="keyword">PROCESS</span>, REPLICATION CLIENT, <span class="keyword">SELECT</span> <span class="keyword">ON</span> *.* <span class="keyword">TO</span> <span class="symbol">'exporter</span>'@<span class="symbol">'localhost</span>';</span><br></pre></td></tr></table></figure>
+<h2 id="4、创建mysql配置文件、运行时可免密码连接数据库：vim-usr-local-mysql-exporter-my-cnf"><a href="#4、创建mysql配置文件、运行时可免密码连接数据库：vim-usr-local-mysql-exporter-my-cnf" class="headerlink" title="4、创建mysql配置文件、运行时可免密码连接数据库：vim /usr/local/mysql_exporter/.my.cnf"></a>4、创建mysql配置文件、运行时可免密码连接数据库：vim /usr/local/mysql_exporter/.my.cnf</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[client]</span></span><br><span class="line"><span class="attr">user</span>=exporter</span><br><span class="line"><span class="attr">password</span>=xxxxx</span><br></pre></td></tr></table></figure>
+<h2 id="5、启动exporter客户端"><a href="#5、启动exporter客户端" class="headerlink" title="5、启动exporter客户端"></a>5、启动exporter客户端</h2><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">./mysqld_exporter</span> <span class="params">--config</span>.my-cnf=<span class="string">.my.cnf</span></span><br></pre></td></tr></table></figure>
+<p>常用参数：<br><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 选择采集innodb</span></span><br><span class="line"><span class="params">--collect</span>.info_schema.innodb_cmp</span><br><span class="line"><span class="comment"># innodb存储引擎状态</span></span><br><span class="line"><span class="params">--collect</span>.engine_innodb_status</span><br><span class="line"><span class="comment"># 指定配置文件</span></span><br><span class="line"><span class="params">--config</span>.my-cnf=<span class="string">".my.cnf"</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="6、添加系统服务"><a href="#6、添加系统服务" class="headerlink" title="6、添加系统服务"></a>6、添加系统服务</h2><p>vi /usr/lib/systemd/system/mysql_exporter.service<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[Unit]</span></span><br><span class="line"><span class="attr">Description</span>=https://prometheus.io</span><br><span class="line"></span><br><span class="line"><span class="section">[Service]</span></span><br><span class="line"><span class="attr">Restart</span>=<span class="literal">on</span>-failure</span><br><span class="line"><span class="attr">ExecStart</span>=/usr/local/mysql_exporter/mysqld_exporter --config.my-cnf=.my.cnf </span><br><span class="line"></span><br><span class="line"><span class="section">[Install]</span></span><br><span class="line"><span class="attr">WantedBy</span>=multi-user.target</span><br></pre></td></tr></table></figure></p>
+<h2 id="7、启动添加后的系统服务"><a href="#7、启动添加后的系统服务" class="headerlink" title="7、启动添加后的系统服务"></a>7、启动添加后的系统服务</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">systemctl</span> <span class="selector-tag">daemon-reload</span></span><br><span class="line"><span class="selector-tag">systemctl</span> <span class="selector-tag">restart</span> <span class="selector-tag">mysql_exporter</span><span class="selector-class">.service</span></span><br></pre></td></tr></table></figure>
+<h2 id="8、网站查看捕获mysql数据"><a href="#8、网站查看捕获mysql数据" class="headerlink" title="8、网站查看捕获mysql数据"></a>8、网站查看捕获mysql数据</h2><p>访问：<a href="http://172.16.129.98:9104/metrics" target="_blank" rel="noopener">http://172.16.129.98:9104/metrics</a></p>
+<h2 id="9、使用prometheus监控修改监控端配置文件：vim-prometheus-yml"><a href="#9、使用prometheus监控修改监控端配置文件：vim-prometheus-yml" class="headerlink" title="9、使用prometheus监控修改监控端配置文件：vim prometheus.yml"></a>9、使用prometheus监控修改监控端配置文件：vim prometheus.yml</h2><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">scrape_configs:</span></span><br><span class="line">  <span class="comment"># 添加作业并命名</span></span><br><span class="line"><span class="attr">  - job_name:</span> <span class="string">'mysql'</span></span><br><span class="line">    <span class="comment"># 静态添加node</span></span><br><span class="line"><span class="attr">    static_configs:</span></span><br><span class="line">    <span class="comment"># 指定监控端</span></span><br><span class="line"><span class="attr">    - targets:</span> <span class="string">['47.98.138.176:9104']</span></span><br></pre></td></tr></table></figure>
+<h2 id="10、检查并重启服务"><a href="#10、检查并重启服务" class="headerlink" title="10、检查并重启服务"></a>10、检查并重启服务</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./promtool check<span class="built_in"> config </span>prometheus.yml </span><br><span class="line">kill -hup 5997</span><br></pre></td></tr></table></figure>
+<h2 id="11、查看监控端是否接入"><a href="#11、查看监控端是否接入" class="headerlink" title="11、查看监控端是否接入"></a>11、查看监控端是否接入</h2><p>访问 promethues<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">http:</span><span class="comment">//172.16.129.98:9090/targets</span></span><br></pre></td></tr></table></figure></p>
+<p>这时候能看到mMySQL已经接入成功 </p>
+<h2 id="12、使用promSQL查看mysql监控信息"><a href="#12、使用promSQL查看mysql监控信息" class="headerlink" title="12、使用promSQL查看mysql监控信息"></a>12、使用promSQL查看mysql监控信息</h2><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">在promethues控制台查看指定参数 ：</span><br><span class="line"></span><br><span class="line">测试查看mysqlglobal状态信息</span><br><span class="line">mysql_global_status_aborted_clients</span><br><span class="line"></span><br><span class="line"><span class="symbol">http:</span><span class="comment">//172.16.129.98:9090/graph</span></span><br></pre></td></tr></table></figure>
+<h2 id="13、Granfana-导入Mysql-监控图表"><a href="#13、Granfana-导入Mysql-监控图表" class="headerlink" title="13、Granfana 导入Mysql 监控图表"></a>13、Granfana 导入Mysql 监控图表</h2><p>推荐图标ID：<a href="https://grafana.com/dashboards/7362" target="_blank" rel="noopener">https://grafana.com/dashboards/7362</a></p>
+<h2 id="推荐教程"><a href="#推荐教程" class="headerlink" title="推荐教程"></a>推荐教程</h2><p><a href="https://www.cnblogs.com/xiangsikai/p/11289675.html" target="_blank" rel="noopener">https://www.cnblogs.com/xiangsikai/p/11289675.html</a></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/Java锁膨胀/">Java锁膨胀</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
 </a>
 
             
@@ -305,9 +293,12 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="Linux-Java-安装环境变量"><a href="#Linux-Java-安装环境变量" class="headerlink" title="Linux Java 安装环境变量"></a>Linux Java 安装环境变量</h1><p>如下安装目录为 /usr/java<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tar -zxf jdk-8u211-linux-x64.tag.gz</span><br><span class="line">vim etc/profile</span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">JAVA_HOME</span>=/usr/java/jdk-8u221</span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">PATH</span>=<span class="variable">$JAVA_HOME</span>/bin:$PATH</span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">CLASSPATH</span>=.$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar</span><br></pre></td></tr></table></figure></p>
-<p>修改.bash_profile文件 </p>
-<p>这种方法更为安全，它可以把使用这些环境变量的权限控制到用户级别，如果你需要给某个用户权限使用这些环境变量，你只需要修改其个人用户主目录下的.bash_profile文件就可以了。<br>·用文本编辑器打开用户目录下的.bash_profile文件<br>·在.bash_profile文件末尾加入：<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=<span class="regexp">/usr/java</span><span class="regexp">/jdk-8u221</span></span><br><span class="line"><span class="regexp">export PATH=$JAVA_HOME/bin</span>:$PATH </span><br><span class="line">export CLASSPATH=.:$JAVA_HOME/<span class="class"><span class="keyword">lib</span>/<span class="title">dt</span>.<span class="title">jar</span>:$<span class="title">JAVA_HOME</span>/<span class="title">lib</span>/<span class="title">tools</span>.<span class="title">jar</span></span></span><br></pre></td></tr></table></figure></p>
+        <h1 id="Java锁膨胀"><a href="#Java锁膨胀" class="headerlink" title="Java锁膨胀"></a>Java锁膨胀</h1><blockquote>
+<p>偏所锁，轻量级锁都是乐观锁，重量级锁是悲观锁。</p>
+</blockquote>
+<p>一个对象刚开始实例化的时候，没有任何线程来访问它的时候。它是可偏向的，意味着，它现在认为只可能有一个线程来访问它，所以当第一个线程来访问它的时候，它会偏向这个线程，此时，对象持有==偏向锁==。偏向第一个线程，这个线程在修改对象头成为偏向锁的时候使用CAS操作，并将对象头中的ThreadID改成自己的ID，之后再次访问这个对象时，只需要对比ID，不需要再使用CAS在进行操作。</p>
+<p>一旦有第二个线程访问这个对象，因为偏向锁不会主动释放，所以第二个线程可以看到对象时偏向状态，这时表明在这个对象上已经存在竞争了，检查原来持有该对象锁的线程是否依然存活，如果挂了，则可以将对象变为==无锁状态==，然后重新偏向新的线程，如果原来的线程依然存活，则马上执行那个线程的操作栈，检查该对象的使用情况，如果仍然需要持有偏向锁，则偏向锁升级为==轻量级锁==，（偏向锁就是这个时候升级为轻量级锁的）。如果不存在使用了，则可以将对象回复成无锁状态，然后重新偏向。轻量级锁认为竞争存在，但是竞争的程度很轻，一般两个线程对于同一个锁的操作都会错开，或者说稍微等待一下（自旋），另一个线程就会释放锁。但是当自旋超过一定的次数，或者一个线程在持有锁，一个在自旋，又有第三个来访时，轻量级锁膨胀为重量级锁，重量级锁使除了拥有锁的线程以外的线程都阻塞，防止CPU空转。</p>
+<p><img src="https://oscimg.oschina.net/oscnet/2bcc8161c52eb100d2c7c4c96c70d3c5823.jpg" alt="锁膨胀"></p>
 
         
     </section>
@@ -319,7 +310,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/03/03/Maven添加阿里云镜像/">Maven 添加阿里云镜像</a>
+            <a href="/2018/12/02/总览/">SpringCloud总览</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -327,13 +318,13 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-03-03T06:22:30.000Z" itemprop="datePublished">2018-03-03</time>
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
 </a>
 
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Maven/">Maven</a>
+    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
 </div>
 
 
@@ -342,8 +333,329 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="Maven-添加阿里云镜像"><a href="#Maven-添加阿里云镜像" class="headerlink" title="Maven 添加阿里云镜像"></a>Maven 添加阿里云镜像</h1><p>setting.xml</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mirror</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span>&gt;</span>nexus-aliyun<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>*<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>Nexus aliyun<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.aliyun.com/nexus/content/groups/public<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br></pre></td></tr></table></figure>
+        <h2 id="总览"><a href="#总览" class="headerlink" title="总览"></a>总览</h2><p>Spring Cloud 为开发人员提供了快速构建分布式系统中一些常见模式的工具（例如配置管理、服务发现、断路器、智能路由、微代理、控制总线、一次性令牌、全局锁、leader选举、分布式session、集群状态）。<br>分布式系统的协调导致了样板模式, 使用 Spring Cloud 开发人员可以快速地支持实现这些模式的服务和应用程序。它们可以在任何分布式环境中很好地工作，包括开发人员自己的笔记本电脑，裸机数据中心，<br>以及Cloud Foundry等托管平台。</p>
+<p>Spring Cloud专注于为典型用例提供良好的开箱即用体验，并为其他用户提供可扩展性机制。</p>
+<h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h2><table>
+<thead>
+<tr>
+<th>功能（english）</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Distributed/versioned configuration</td>
+<td>分布式/版本化配置</td>
+</tr>
+<tr>
+<td>Service registration and discovery</td>
+<td>服务注册和发现</td>
+</tr>
+<tr>
+<td>Routing</td>
+<td>智能路由</td>
+</tr>
+<tr>
+<td>Service-to-service calls</td>
+<td>service-to-service调用</td>
+</tr>
+<tr>
+<td>Load balancing</td>
+<td>负载均衡</td>
+</tr>
+<tr>
+<td>Circuit Breakers</td>
+<td>断路器</td>
+</tr>
+<tr>
+<td>Global locks</td>
+<td>全局锁</td>
+</tr>
+<tr>
+<td>Leadership election and cluster state</td>
+<td>leader选举和集群状态管理</td>
+</tr>
+<tr>
+<td>Distributed messaging</td>
+<td>分布式消息</td>
+</tr>
+</tbody>
+</table>
+<h2 id="主要项目"><a href="#主要项目" class="headerlink" title="主要项目"></a>主要项目</h2><table>
+<thead>
+<tr>
+<th>项目名称</th>
+<th>项目职能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Spring Cloud Config</td>
+<td>Spring Cloud提供的分布式配置中心，为外部配置提供了客户端和服务端的支持。</td>
+</tr>
+<tr>
+<td>Spring Cloud Netflix</td>
+<td>与各种NetflixOSS组件集成（Eureka，Hystrix，Zuul，Archaius等）。</td>
+</tr>
+<tr>
+<td>Spring Cloud Bus</td>
+<td>用于将服务和服务实例与分布式消息传递连接在一起的事件总线。用于跨群集传播状态更改（例如，配置更改事件）。</td>
+</tr>
+<tr>
+<td>Spring Cloud Cloudfoundry</td>
+<td>提供应用程序与 Pivotal Cloud Foundry 集成。提供服务发现实现，还可以轻松实现受SSO和OAuth2保护的资源。</td>
+</tr>
+<tr>
+<td>Spring Cloud Open Service Broker</td>
+<td>为构建实现 Open service broker API 的服务代理提供了一个起点。    </td>
+</tr>
+<tr>
+<td>Spring Cloud Cluster</td>
+<td>提供Leadership选举，如：Zookeeper, Redis, Hazelcast, Consul等常见状态模式的抽象和实现。</td>
+</tr>
+<tr>
+<td>Spring Cloud Consul</td>
+<td>封装了Consul操作，consul 是一个服务发现与配置工具，与Docker容器可以无缝集成。</td>
+</tr>
+<tr>
+<td>Spring Cloud Security</td>
+<td>基于Spring security的安全工具包，为你的应用程序添加安全控制。在Zuul代理中为负载平衡的OAuth2 rest客户端和身份验证头中继提供支持。</td>
+</tr>
+<tr>
+<td>Spring Cloud Sleuth</td>
+<td>Spring Cloud 提供的分布式链路跟踪组件，兼容zipkin、HTracer和基于日志的跟踪（ELK）</td>
+</tr>
+<tr>
+<td>Spring Cloud Data Flow</td>
+<td>大数据操作工具，作为Spring XD的替代产品，它是一个混合计算模型，结合了流数据与批量数据的处理方式。</td>
+</tr>
+<tr>
+<td>Spring Cloud Stream</td>
+<td>数据流操作开发包，封装了与Redis,Rabbit、Kafka等发送接收消息。</td>
+</tr>
+<tr>
+<td>Spring Cloud CLI</td>
+<td>基于 Spring Boot CLI，可以让你以命令行方式快速建立云组件。</td>
+</tr>
+<tr>
+<td>Spring Cloud OpenFeign</td>
+<td>一个http client客户端，致力于减少http client客户端构建的复杂性。</td>
+</tr>
+<tr>
+<td>Spring Cloud Gateway</td>
+<td>Spring Cloud 提供的网关服务组件</td>
+</tr>
+<tr>
+<td>Spring Cloud Stream App Starters</td>
+<td>Spring Cloud Stream App Starters是基于Spring Boot的Spring 集成应用程序，可提供与外部系统的集成。</td>
+</tr>
+<tr>
+<td>Spring Cloud Task</td>
+<td>提供云端计划任务管理、任务调度。</td>
+</tr>
+<tr>
+<td>Spring Cloud Task App Starters</td>
+<td>SpringCloud任务应用程序启动器是SpringBoot应用程序，它可以是任何进程，包括不会永远运行的Spring批处理作业，并且在有限的数据处理周期后结束/停止。</td>
+</tr>
+<tr>
+<td>Spring Cloud Zookeeper</td>
+<td>操作Zookeeper的工具包，用于使用zookeeper方式的服务发现和配置管理。</td>
+</tr>
+<tr>
+<td>Spring Cloud AWS</td>
+<td>提供与托管的AWS集成</td>
+</tr>
+<tr>
+<td>Spring Cloud Connectors</td>
+<td>便于云端应用程序在各种PaaS平台连接到后端，如：数据库和消息代理服务。</td>
+</tr>
+<tr>
+<td>Spring Cloud Starters</td>
+<td>Spring Boot式的启动项目，为Spring Cloud提供开箱即用的依赖管理。</td>
+</tr>
+<tr>
+<td>Spring Cloud Contract</td>
+<td>Spring Cloud Contract是一个总体项目，其中包含帮助用户成功实施消费者驱动合同方法的解决方案。</td>
+</tr>
+<tr>
+<td>Spring Cloud Pipelines</td>
+<td>Spring Cloud Pipelines提供了一个固定意见的部署管道，其中包含确保您的应用程序可以零停机方式部署并轻松回滚出错的步骤。</td>
+</tr>
+<tr>
+<td>Spring Cloud Function</td>
+<td>Spring Cloud Function通过函数促进业务逻辑的实现。 它支持Serverless 提供商之间的统一编程模型，以及独立运行（本地或PaaS）的能力。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="SpringCloud-与-SpringBoot-版本兼容关系"><a href="#SpringCloud-与-SpringBoot-版本兼容关系" class="headerlink" title="SpringCloud 与 SpringBoot 版本兼容关系"></a>SpringCloud 与 SpringBoot 版本兼容关系</h2><table>
+<thead>
+<tr>
+<th>Release Train</th>
+<th>Boot Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Greenwich</td>
+<td>2.1.x</td>
+</tr>
+<tr>
+<td>Finchley</td>
+<td>2.0.x</td>
+</tr>
+<tr>
+<td>Edgware</td>
+<td>1.5.x</td>
+</tr>
+<tr>
+<td>Dalston</td>
+<td>1.5.x</td>
+</tr>
+</tbody>
+</table>
+<h2 id="SpringCloud-与子工程版本关系"><a href="#SpringCloud-与子工程版本关系" class="headerlink" title="SpringCloud 与子工程版本关系"></a>SpringCloud 与子工程版本关系</h2><table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Edgware.SR5</th>
+<th>Finchley.SR2</th>
+<th>Finchley.BUILD-SNAPSHOT</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>spring-cloud-aws</td>
+<td>1.2.3.RELEASE</td>
+<td>2.0.1.RELEASE</td>
+<td>2.0.1.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-bus</td>
+<td>1.3.3.RELEASE</td>
+<td>2.0.0.RELEASE</td>
+<td>2.0.1.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-cli</td>
+<td>1.4.1.RELEASE</td>
+<td>2.0.0.RELEASE</td>
+<td>2.0.1.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-commons</td>
+<td>1.3.5.RELEASE</td>
+<td>2.0.2.RELEASE</td>
+<td>2.0.2.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-contract</td>
+<td>1.2.6.RELEASE</td>
+<td>2.0.2.RELEASE</td>
+<td>2.0.2.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-config</td>
+<td>1.4.5.RELEASE</td>
+<td>2.0.2.RELEASE</td>
+<td>2.0.2.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-netflix</td>
+<td>1.4.6.RELEASE</td>
+<td>2.0.2.RELEASE</td>
+<td>2.0.2.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-security</td>
+<td>1.2.3.RELEASE</td>
+<td>2.0.1.RELEASE</td>
+<td>2.0.1.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-cloudfoundry</td>
+<td>1.1.2.RELEASE</td>
+<td>2.0.1.RELEASE</td>
+<td>2.0.1.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-consul</td>
+<td>1.3.5.RELEASE</td>
+<td>2.0.1.RELEASE</td>
+<td>2.0.2.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-sleuth</td>
+<td>1.3.5.RELEASE</td>
+<td>2.0.2.RELEASE</td>
+<td>2.0.2.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-stream</td>
+<td>Ditmars.SR4</td>
+<td>Elmhurst.SR1</td>
+<td>Elmhurst.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-zookeeper</td>
+<td>1.2.2.RELEASE</td>
+<td>2.0.0.RELEASE</td>
+<td>2.0.1.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-boot</td>
+<td>1.5.16.RELEASE</td>
+<td>2.0.6.RELEASE</td>
+<td>2.0.7.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-task</td>
+<td>1.2.3.RELEASE</td>
+<td>2.0.0.RELEASE</td>
+<td>2.0.1.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-vault</td>
+<td>1.1.2.RELEASE</td>
+<td>2.0.2.RELEASE</td>
+<td>2.0.2.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-gateway</td>
+<td>1.0.2.RELEASE</td>
+<td>2.0.2.RELEASE</td>
+<td>2.0.2.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-openfeign</td>
+<td></td>
+<td>2.0.2.RELEASE</td>
+<td>2.0.2.BUILD-SNAPSHOT</td>
+</tr>
+<tr>
+<td>spring-cloud-function</td>
+<td>1.0.1.RELEASE</td>
+<td>1.0.0.RELEASE</td>
+<td>1.0.1.BUILD-SNAPSHOT</td>
+</tr>
+</tbody>
+</table>
+<h2 id="兼容"><a href="#兼容" class="headerlink" title="兼容"></a>兼容</h2><ul>
+<li><p>Finchley 构建并使用Spring Boot 2.0.x，与 Spring Boot 1.5.x 不兼容。</p>
+</li>
+<li><p>Dalston 和 Edgware 基于 Spring Boot 1.5.x 构建，不兼容 SpringBoot 2.0.x</p>
+</li>
+<li><p>Camden 版本迭代正式结束，Dalston 将于2018年12月结束使用，Edgware 将遵循 Spring Boot 1.5.x 的生命周期结束。</p>
+</li>
+<li><p>Camden 基于SpringBoot 1.4.x 构建，但是也会支持 1.5.x 版本</p>
+</li>
+<li><p>Brixton 和 Angel 迭代结束时间是2017年7月，Brixton 基于SpringBoot 1.3.x ，同时也支持 1.4.x 版本</p>
+</li>
+<li><p>Angel 基于 SpringBoot 1.2.x ,在某些方式不兼容 SpringBoot 1.3.x 。</p>
+</li>
+<li><p>Brixton 构建在SpringBoot 1.3.x ，不兼容 SpringBoot 1.2.x 。一些基于Angel的库和大多数应用程序可以在Brixton上正常运行，但如果OAuth2具备spring-cloud-security 1.0的特性，则需要在任何地方进行更改。x被使用(它们大多在1.3.0中被移到Spring Boot中)。</p>
+</li>
+</ul>
+
         
     </section>
 </article>
@@ -354,7 +666,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/03/03/Log 配置文件/">log4j</a>
+            <a href="/2018/12/02/集群版本Nacos/">集群Nacos</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -362,7 +674,107 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-03-03T06:22:30.000Z" itemprop="datePublished">2018-03-03</time>
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/SpringCloud/">SpringCloud</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="集群Nacos"><a href="#集群Nacos" class="headerlink" title="集群Nacos"></a>集群Nacos</h1><h2 id="工作模式："><a href="#工作模式：" class="headerlink" title="工作模式："></a>工作模式：</h2><p>因此开源的时候推荐用户把所有服务列表放到一个vip下面，然后挂到一个域名下面</p>
+<p><a href="http://ip1:port/openAPI" target="_blank" rel="noopener">http://ip1:port/openAPI</a> 直连ip模式，机器挂则需要修改ip才可以使用。</p>
+<p><a href="http://VIP:port/openAPI" target="_blank" rel="noopener">http://VIP:port/openAPI</a> 挂载VIP模式，直连vip即可，下面挂server真实ip，可读性不好。</p>
+<p><a href="http://nacos.com:port/openAPI" target="_blank" rel="noopener">http://nacos.com:port/openAPI</a> 域名 + VIP模式，可读性好，而且换ip方便，推荐模式</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/338441/1561258986171-4ddec33c-a632-4ec3-bfff-7ef4ffc33fb9.jpeg" alt="工作模式"></p>
+<h2 id="环境说明："><a href="#环境说明：" class="headerlink" title="环境说明："></a>环境说明：</h2><ol>
+<li>64 bit OS Linux/Unix/Mac，推荐使用Linux系统。</li>
+<li>64 bit JDK 1.8+；下载.配置。</li>
+<li>Maven 3.2.x+；下载.配置。</li>
+<li>3个或3个以上Nacos节点才能构成集群。</li>
+</ol>
+<h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><p>使用源码编译：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">unzip nacos-source.zip</span><br><span class="line">cd nacos/</span><br><span class="line">mvn -Prelease-nacos clean <span class="keyword">install</span> -U  </span><br><span class="line">cd nacos/distribution/target/nacos-<span class="keyword">server</span><span class="number">-1.3</span><span class="number">.0</span>/nacos/<span class="keyword">bin</span></span><br></pre></td></tr></table></figure></p>
+<p>直接使用压缩包：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">unzip nacos-server-<span class="number">1.3</span>.<span class="number">0</span>.zip</span><br><span class="line">or</span><br><span class="line">tar -xvf nacos-server-<span class="number">1.3</span>.<span class="number">0</span><span class="selector-class">.tar</span><span class="selector-class">.gz</span></span><br><span class="line"></span><br><span class="line">cd nacos/bin</span><br></pre></td></tr></table></figure></p>
+<h2 id="配置集群配置文件"><a href="#配置集群配置文件" class="headerlink" title="配置集群配置文件"></a>配置集群配置文件</h2><p>在nacos的解压目录nacos/的conf目录下，有配置文件cluster.conf，请每行配置成ip:port。（请配置3个或3个以上节点）<br><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">ip1:</span><span class="number">8848</span></span><br><span class="line"><span class="symbol">ip2:</span><span class="number">8848</span></span><br><span class="line"><span class="symbol">ip3:</span><span class="number">8848</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="确定数据源"><a href="#确定数据源" class="headerlink" title="确定数据源"></a>确定数据源</h2><h3 id="使用内置数据源"><a href="#使用内置数据源" class="headerlink" title="使用内置数据源"></a>使用内置数据源</h3><p>无需进行任何配置</p>
+<h3 id="使用外置数据源"><a href="#使用外置数据源" class="headerlink" title="使用外置数据源"></a>使用外置数据源</h3><p>生产使用建议至少主备模式，或者采用高可用数据库。</p>
+<h2 id="初始化-MySQL-数据库"><a href="#初始化-MySQL-数据库" class="headerlink" title="初始化 MySQL 数据库"></a>初始化 MySQL 数据库</h2><p>在nacos的解压目录nacos/的conf目录下，存在sql文件 nacos-mysql.sql</p>
+<h2 id="修改application-properties-配置"><a href="#修改application-properties-配置" class="headerlink" title="修改application.properties 配置"></a>修改application.properties 配置</h2><p>application.properties配置文件</p>
+<h2 id="启动服务器"><a href="#启动服务器" class="headerlink" title="启动服务器"></a>启动服务器</h2><p>Linux/Unix/Mac<br>Stand-alone mode<br><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sh </span>startup.<span class="keyword">sh </span>-m standalone</span><br></pre></td></tr></table></figure></p>
+<p>集群模式 + 使用内置数据源<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh startup<span class="selector-class">.sh</span> -<span class="selector-tag">p</span> embedded</span><br></pre></td></tr></table></figure></p>
+<p>集群模式 + 使用外置数据源<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sh</span> startup.<span class="keyword">sh</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="服务注册发现-和-配置管理"><a href="#服务注册发现-和-配置管理" class="headerlink" title="服务注册发现 和 配置管理"></a>服务注册发现 和 配置管理</h2><p>服务注册<br><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X PUT 'http://127.0.0.1:<span class="number">8848</span>/nacos/v1/ns/instance?serviceName=nacos.naming.serviceName&amp;ip=20.18.7.10&amp;port=<span class="number">8080</span>'</span><br></pre></td></tr></table></figure></p>
+<p>服务发现<br><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X GET 'http://127.0.0.1:<span class="number">8848</span>/nacos/v1/ns/instances?serviceName=nacos.naming.serviceName'</span><br></pre></td></tr></table></figure></p>
+<p>发布配置<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">curl</span> -X POST <span class="string">"http://127.0.0.1:8848/nacos/v1/cs/configs?dataId=nacos.cfg.dataId&amp;group=test&amp;content=helloWorld"</span></span><br></pre></td></tr></table></figure></p>
+<p>获取配置<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X <span class="builtin-name">GET</span> <span class="string">"http://127.0.0.1:8848/nacos/v1/cs/configs?dataId=nacos.cfg.dataId&amp;group=test"</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="关闭服务器"><a href="#关闭服务器" class="headerlink" title="关闭服务器"></a>关闭服务器</h2><p>Linux/Unix/Mac<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sh</span> shutdown.<span class="keyword">sh</span></span><br></pre></td></tr></table></figure></p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/事务简介/">（二）事务简介</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/分布式事务/">分布式事务</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="事务简介"><a href="#事务简介" class="headerlink" title="事务简介"></a>事务简介</h1><p>事务(Transaction)是访问并可能更新数据库中各种数据项的一个程序执行单元(unit)。在关系数据库中，一个事务由一组SQL语句组成。事务应该具有4个属性：原子性、一致性、隔离性、持久性。这四个属性通常称为ACID特性。</p>
+<h2 id="原子性（atomicity）"><a href="#原子性（atomicity）" class="headerlink" title="原子性（atomicity）"></a>原子性（atomicity）</h2><p>一个事务是一个不可分割的工作单位，事务中包括的诸操作要么都做，要么都不做。</p>
+<h2 id="一致性（consistency）"><a href="#一致性（consistency）" class="headerlink" title="一致性（consistency）"></a>一致性（consistency）</h2><p>事务必须是使数据库从一个一致性状态变到另一个一致性状态，事务的中间状态不能被观察到的。</p>
+<h2 id="隔离性（isolation）"><a href="#隔离性（isolation）" class="headerlink" title="隔离性（isolation）"></a>隔离性（isolation）</h2><p>一个事务的执行不能被其他事务干扰。即一个事务内部的操作及使用的数据对并发的其他事务是隔离的，并发执行的各个事务之间不能互相干扰。隔离性又分为四个级别：读未提交(read uncommitted)、读已提交(read committed，解决脏读)、可重复读(repeatable read，解决虚读)、串行化(serializable，解决幻读)。</p>
+<h2 id="持久性（durability）"><a href="#持久性（durability）" class="headerlink" title="持久性（durability）"></a>持久性（durability）</h2><p>持久性也称永久性（permanence），指一个事务一旦提交，它对数据库中数据的改变就应该是永久性的。接下来的其他操作或故障不应该对其有任何影响。</p>
+<p>任何事务机制在实现时，都应该考虑事务的ACID特性，包括：本地事务、分布式事务，即使不能都很好的满足，也要考虑支持到什么程度。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/GC参数/">线上排查基本操作</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
 </a>
 
             
@@ -377,8 +789,46 @@
     
     <section class="article-body markdown-body">
         
-        <figure class="highlight roboconf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">### 设置###</span></span><br><span class="line">log4j.rootLogger = debug,stdout,D,E</span><br><span class="line"></span><br><span class="line"><span class="comment">### 输出信息到控制台  ###</span></span><br><span class="line">log4j.appender.stdout = org.apache.log4j.ConsoleAppender</span><br><span class="line">log4j.appender.stdout.Target = System.out</span><br><span class="line">log4j.appender.stdout.layout = org.apache.log4j.PatternLayout</span><br><span class="line">log4j.appender.stdout.layout.ConversionPattern = [%-5p] %d&#123;<span class="attribute">yyyy-MM-dd HH</span>:mm:ss,SSS&#125; method:%l%n%m%n</span><br><span class="line"></span><br><span class="line">### 输出DEBUG 级别以上的日志文件设置 ###</span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.D</span> = org<span class="variable">.apache</span><span class="variable">.log</span>4j<span class="variable">.DailyRollingFileAppender</span></span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.D</span><span class="variable">.File</span> = logs/debug<span class="variable">.log</span></span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.D</span><span class="variable">.Append</span> = true</span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.D</span><span class="variable">.Threshold</span> = DEBUG </span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.D</span><span class="variable">.layout</span> = org<span class="variable">.apache</span><span class="variable">.log</span>4j<span class="variable">.PatternLayout</span></span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.D</span><span class="variable">.layout</span><span class="variable">.ConversionPattern</span> = %-d&#123;yyyy-MM-dd HH:mm:ss&#125;  [ %t:%r ] - [ %p ]  %m%n</span><br><span class="line"></span><br><span class="line">### 输出ERROR 级别以上的日志文件设置 ###</span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.E</span> = org<span class="variable">.apache</span><span class="variable">.log</span>4j<span class="variable">.DailyRollingFileAppender</span></span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.E</span><span class="variable">.File</span> = logs/error<span class="variable">.log</span></span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.E</span><span class="variable">.Append</span> = true</span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.E</span><span class="variable">.Threshold</span> = ERROR </span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.E</span><span class="variable">.layout</span> = org<span class="variable">.apache</span><span class="variable">.log</span>4j<span class="variable">.PatternLayout</span></span><br><span class="line">log4j<span class="variable">.appender</span><span class="variable">.E</span><span class="variable">.layout</span><span class="variable">.ConversionPattern</span> = %-d&#123;yyyy-MM-dd HH:mm:ss&#125;  [ %t:%r ] - [ %p ]  %m%n</span><br></pre></td></tr></table></figure>
-<p>测试 ：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">package com.test.util;</span><br><span class="line"></span><br><span class="line">import org.apache.log4j.*;</span><br><span class="line"></span><br><span class="line">public class LogUtil &#123;</span><br><span class="line">	private static Logger logger = Logger.getLogger(LogUtil.class);</span><br><span class="line">    </span><br><span class="line">    public static void main(String[] args) throws Exception &#123;</span><br><span class="line">        // 记录debug级别的信息  </span><br><span class="line">        logger.debug(&quot;This is debug message.&quot;);  </span><br><span class="line">        // 记录info级别的信息  </span><br><span class="line">        logger.info(&quot;This is info message.&quot;);  </span><br><span class="line">        // 记录error级别的信息  </span><br><span class="line">        logger.error(&quot;This is error message.&quot;); </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        <h1 id="GC-参数"><a href="#GC-参数" class="headerlink" title="GC 参数"></a>GC 参数</h1><ol>
+<li>-Xms2048m                      初始堆大小</li>
+<li>-Xmx2048m                        最大堆大小</li>
+<li>-Xss:1024k                  设置每个线程堆栈大小，设置每个线程的堆栈大小。<br>JDK5.0以后每个线程堆栈大小为1M，以前每个线程堆栈大小为256K。<br>更具应用的线程所需内存大小进行调整。在相同物理内存下，减小这个值能生成更多的线程。但是操作系统对一个进程内的线程数还是有限制的，不能无限生成，经验值在3000~5000左右。</li>
+<li>-XX:NewSize=n                  设置年轻代大小</li>
+<li>-XX:NewRatio=2                 设置年轻代和年老代的比值。</li>
+<li>-XX:SurvivorRatio=8         年轻代中Eden区与两个Survivor区的比值Eden:S1:S2 = 8:1:1  Eden:Survivor = 8 : 2</li>
+<li>-XX:MaxPermSize=64m         设置持久代大小,持久代一般固定大小为64m</li>
+<li>-XX:MaxMetaspaceSize=512m   元空间大小</li>
+<li>-XX:MetaspaceSize=512m        最大元空间大小</li>
+</ol>
+<p>GC:</p>
+<ol>
+<li>-XX:+PrintGC                      打印GC</li>
+<li>-XX:+PrintGCDetails               打印GC，格式不一样，详细</li>
+<li>-XX:+PrintGCTimeStamps            PrintGCTimeStamps可与上面两个混合使用</li>
+<li>-XX:+PrintHeapAtGC                打印GC前后的详细堆栈信息</li>
+<li>-Xloggc:D:/temp/gclog/idea.gc.log 与上面几个配合使用，把相关日志信息记录到文件以便分析</li>
+</ol>
+<p>垃圾收集器：</p>
+<ol>
+<li>-XX:+UseSerialGC:设置串行收集器</li>
+<li>-XX:+UseParallelGC:设置并行收集器</li>
+<li>-XX:+UseParalledlOldGC:设置并行年老代收集器</li>
+<li>-XX:+UseConcMarkSweepGC:设置并发收集器</li>
+<li>-XX:InitialBootClassLoaderMetaspaceSize=64M</li>
+<li>-XX:MaxTenuringThreshold=6        设置垃圾最大年龄，如果设置为0的话，则年轻代对象不经过Survivor区，直接进入年老代。对于年老代比较多的应用，可以提高效率。如果将此值设置为一个较大值，则年轻代对象会在Survivor区进行多次复制，这样可以增加对象再年轻代的存活时间，增加在年轻代即被回收的概论。</li>
+<li>-XX:+UseConcMarkSweepGC</li>
+<li><p>-XX:CMSFullGCsBeforeCompaction=5  使用并发收集器时，开启对年老代的压缩。由于并发收集器不对内存空间进行压缩、整理，所以运行一段时间以后会产生“碎片”，使得运行效率降低。此值设置运行多少次GC以后对内存空间进行压缩、整理。</p>
+</li>
+<li><p>-XX:+CMSParallelRemarkEnabled</p>
+</li>
+<li><p>-XX:+CMSClassUnloadingEnabled</p>
+</li>
+<li><p>-XX:+DisableExplicitGC</p>
+</li>
+<li>-XX:+ExplicitGCInvokesConcurrentAndUnloadsClasses</li>
+<li>-XX:ReservedCodeCacheSize=240m</li>
+<li>-XX:SoftRefLRUPolicyMSPerMB=50<br>-ea<br>-Dsun.io.useCanonCaches=false<br>-Djava.net.preferIPv4Stack=true<br>-XX:+HeapDumpOnOutOfMemoryError<br>-XX:-OmitStackTraceInFastThrow</li>
+</ol>
 
         
     </section>
@@ -390,7 +840,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/03/01/String StringBuffer 和 StringBuilder/">String StringBuffer 和 StringBuilder</a>
+            <a href="/2018/12/02/Canal /">Canal准备</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -398,13 +848,13 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-03-01T02:10:00.000Z" itemprop="datePublished">2018-03-01</time>
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
 </a>
 
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
+    <a class="article-tag-link" href="/tags/Canal/">Canal</a>
 </div>
 
 
@@ -413,242 +863,76 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="String、StringBuffer-和-StringBuilder"><a href="#String、StringBuffer-和-StringBuilder" class="headerlink" title="String、StringBuffer 和 StringBuilder"></a>String、StringBuffer 和 StringBuilder</h1><h3 id="可变性"><a href="#可变性" class="headerlink" title="可变性"></a>可变性</h3><p>String:</p>
-<p>简单的来说：String 类中使用 final 关键字修饰字符数组来保存字符串，private　final　char　value[]，所以 String 对象是不可变的。</p>
-<p>StringBuilder 与 StringBuffer:</p>
-<p>而StringBuilder 与 StringBuffer 都继承自 AbstractStringBuilder 类，<br>在 AbstractStringBuilder 中也是使用字符数组保存字符串char[]value 但是没有用 final 关键字修饰，所以这两种对象都是可变的。</p>
-<h3 id="线程安全性"><a href="#线程安全性" class="headerlink" title="线程安全性"></a>线程安全性</h3><p>String 中的对象是不可变的，也就可以理解为常量，线程安全。</p>
-<p>AbstractStringBuilder 是 StringBuilder 与 StringBuffer 的公共父类，定义了一些字符串的基本操作，<br>如 expandCapacity、append、insert、indexOf 等公共方法。</p>
-<p>StringBuffer 对方法加了同步锁或者对调用的方法加了同步锁，所以是线程安全的。</p>
-<p>StringBuilder 并没有对方法进行加同步锁，所以是非线程安全的。　</p>
-<p>对于三者使用的总结：</p>
-<p>操作少量的数据: 适用String</p>
-<p>单线程操作字符串缓冲区下操作大量数据: 适用StringBuilder</p>
-<p>多线程操作字符串缓冲区下操作大量数据: 适用StringBuffer</p>
-<p>装箱与拆箱</p>
+        <h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>对于自建 MySQL , 需要先开启 Binlog 写入功能，配置 binlog-format 为 ROW 模式，my.cnf 中配置如下<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[mysqld]</span></span><br><span class="line"><span class="attr">log-bin</span>=mysql-bin <span class="comment"># 开启 binlog</span></span><br><span class="line"><span class="attr">binlog-format</span>=ROW <span class="comment"># 选择 ROW 模式</span></span><br><span class="line"><span class="attr">server_id</span>=<span class="number">1</span></span><br></pre></td></tr></table></figure></p>
+<p>配置 MySQL replaction 需要定义，不要和 canal 的 slaveId 重复</p>
+<blockquote>
+<p>注意：针对阿里云 RDS for MySQL , 默认打开了 binlog , 并且账号默认具有 binlog dump 权限 , 不需要任何权限或者 binlog 设置,可以直接跳过这一步<br>授权 canal 链接 MySQL 账号具有作为 MySQL slave 的权限, 如果已有账户可直接 grant<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">USER</span> canal <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'canal'</span>;  </span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">SELECT</span>, <span class="keyword">REPLICATION</span> <span class="keyword">SLAVE</span>, <span class="keyword">REPLICATION</span> <span class="keyword">CLIENT</span> <span class="keyword">ON</span> *.* <span class="keyword">TO</span> <span class="string">'canal'</span>@<span class="string">'%'</span>;</span><br><span class="line"><span class="comment">-- GRANT ALL PRIVILEGES ON *.* TO 'canal'@'%' ;</span></span><br><span class="line"><span class="keyword">FLUSH</span> <span class="keyword">PRIVILEGES</span>;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/02/CAP理论/">（三）CAP理论和BASE理论</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/分布式事务/">分布式事务</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="CAP理论"><a href="#CAP理论" class="headerlink" title="CAP理论"></a>CAP理论</h1><p>CAP理论说的是：在一个分布式系统中，最多只能满足C、A、P中的两个需求。</p>
+<p>CAP的含义：</p>
 <ul>
-<li>装箱：将基本类型用它们对应的引用类型包装起来；</li>
-<li>拆箱：将包装类型转换为基本数据类型；</li>
+<li><p>C：Consistency 一致性 同一数据的多个副本是否实时相同。</p>
+</li>
+<li><p>A：Availability 可用性 一定时间内 &amp; 系统返回一个明确的结果 则称为该系统可用。</p>
+</li>
+<li><p>P：Partition tolerance 分区容错性 将同一服务分布在多个系统中，从而保证某一个系统宕机，仍然有其他系统提供相同的服务。</p>
+</li>
 </ul>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/02/24/4.0 Class文件/">JVM 4.0</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-02-24T02:10:00.000Z" itemprop="datePublished">2018-02-24</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Class文件"><a href="#Class文件" class="headerlink" title="Class文件"></a>Class文件</h1><p>Class文件是一组以8位字节为基础单位的二进制流，各个数据项目严格按照顺序紧凑地排列在Class文件中，<br>中间没有添加任何分隔符号。Class文件采用一种类似于C语言结构体的伪结构来存储数据，这种伪结构中只包含两种数据类型，<br>无符号数和表。无符号数属于基本的数据类型，以u1,u2,u4,u8分别代表1个字节，2个字节，4个字节和8个字节的无符号数，<br>可以用来描述数字、索引引用、数量值或者按照utf-8编码构成字符串值。表是由多个无符号数或者其他表作为数据项构成的<br>复合数据类型，所有表都习惯性地以“_info”结尾，用来描述有层次关系的复合结构数据。</p>
-<p>Class文件的内容包括：</p>
-<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">ClassFile</span> &#123;</span><br><span class="line"></span><br><span class="line">   <span class="selector-tag">u4</span> <span class="selector-tag">magic</span>;                                     <span class="comment">//魔数：0xCAFEBABE，用来判断是否是Java class文件</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">minor_version</span>;                             <span class="comment">//次版本号</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">major_version</span>;                             <span class="comment">//主版本号</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">constant_pool_count</span>;                       <span class="comment">//常量池大小</span></span><br><span class="line">   <span class="selector-tag">cp_info</span> <span class="selector-tag">constant_pool</span><span class="selector-attr">[constant_pool_count-1]</span>; <span class="comment">//常量池</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">access_flags</span>;                              <span class="comment">//类和接口层次的访问标志（通过|运算得到）</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">this_class</span>;                                <span class="comment">//类索引（指向常量池中的类常量）</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">super_class</span>;                               <span class="comment">//父类索引（指向常量池中的类常量）</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">interfaces_count</span>;                          <span class="comment">//接口索引计数器</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">interfaces</span><span class="selector-attr">[interfaces_count]</span>;              <span class="comment">//接口索引集合</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">fields_count</span>;                              <span class="comment">//字段数量计数器</span></span><br><span class="line">   <span class="selector-tag">field_info</span> <span class="selector-tag">fields</span><span class="selector-attr">[fields_count]</span>;              <span class="comment">//字段表集合</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">methods_count</span>;                             <span class="comment">//方法数量计数器</span></span><br><span class="line">   <span class="selector-tag">method_info</span> <span class="selector-tag">methods</span><span class="selector-attr">[methods_count]</span>;           <span class="comment">//方法表集合</span></span><br><span class="line">   <span class="selector-tag">u2</span> <span class="selector-tag">attributes_count</span>;                          <span class="comment">//属性个数</span></span><br><span class="line">   <span class="selector-tag">attribute_info</span> <span class="selector-tag">attributes</span><span class="selector-attr">[attributes_count]</span>;  <span class="comment">//属性表</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>访问标志：类还是接口；是否定义为public类型，abstract类型；若为类，是否声明为final。</li>
-<li>字段：用来描述接口或类中的变量，但不包括在方法内部的变量。</li>
-<li>字面量：文本字符串，声明为final的常量值等。</li>
-<li>符号引用：类和接口的全限定名；字段的名称和描述符；方法的名称和描述符。</li>
-<li>类索引，父类索引，接口索引：用来确定类的继承关系。</li>
-</ul>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/02/24/3.0 Java虚拟机的内部体系结构/">JVM 3.0</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-02-24T02:10:00.000Z" itemprop="datePublished">2018-02-24</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Java虚拟机的内部体系结构"><a href="#Java虚拟机的内部体系结构" class="headerlink" title="Java虚拟机的内部体系结构"></a>Java虚拟机的内部体系结构</h1><p>在 Java虚拟机规范中，一个虚拟机实例的行为是分别按照子系统、内存区、数据类型和指令来描述的，<br>这些组成部分一起展示了抽象的虚拟机内部体系结构。</p>
-<p><img src="https://www.javazhiyin.com/wp-content/uploads/2019/01/java3-1547432465-1.jpg" alt="image"></p>
-<h2 id="运行时数据区"><a href="#运行时数据区" class="headerlink" title="运行时数据区"></a>运行时数据区</h2><p>Java虚拟机在执行Java程序的时候会把它管理的内存划分为若干个不同的数据区域，这些区域有各自的用途以及创建<br>和销毁的时机，有的区域随着虚拟机进程的启动而存在（线程共享），有的区域则随着用户线程的启动和结束而建立<br>和销毁（线程私有）。Java虚拟机所管理的内存包括以下几个运行时数据区域:</p>
-<h3 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h3><p>对于一个运行中的Java程序而言，每一个线程都有它的程序计数器，也叫PC寄存器，可以看做当前线程所执行的字节<br>码的行号指示器。在虚拟机的概念模型里，字节码解释器就是通过改变这个计数器的值来选取下一条需要执行的字节码指令，<br>分支，循环，跳转，异常处理，线程恢复等都需要依赖这个计数器。</p>
-<p>程序计数器既能持有一个本地指针，也能持有一个returnAddress。当线程执行某个Java方法时，程序计数器的值总是<br>下一条被执行指令的地址。这里的地址可以是一个本地指针，也可以是方法字节码中相对该方法起始指令的偏移量。<br>如果该线程正在执行一个本地方法，那么此时程序计数器的值是“undefined”。<br>程序计数器属于线程私有的内存，也就是说，每当创建一个线程，都将得到该线程自己的一个程序计数器。<br>Java虚拟机的多线程是通过线程的轮换并且分配处理器的执行时间来实现的，在一个确定的时刻，一个处理器都只会执行一条<br>线程中的指令。</p>
 <blockquote>
-<p>为了线程切换后能恢复到正确的执行位置，每条线程都需要有一个独立的程序计数器。</p>
+<p>++CAP理论告诉我们，在分布式系统中，C、A、P三个条件中我们最多只能选择两个。++</p>
 </blockquote>
-<h3 id="Java虚拟机栈（Java栈）"><a href="#Java虚拟机栈（Java栈）" class="headerlink" title="Java虚拟机栈（Java栈）"></a>Java虚拟机栈（Java栈）</h3><p>Java虚拟机栈也是线程私有的，它的生命周期和线程相同。Java虚拟机栈描述的是Java方法执行的内存模型，每个方法在执行时会创建一个栈帧，用于存放局部变量表，操作数栈，动态链接，方法出口等信息。一个Java方法从调用到执行结束的过程，相当于一个栈帧在Java虚拟机栈中从入栈到出栈的过程。</p>
-<p><strong>局部变量表</strong></p>
-<p>局部变量表用于存放编译时期可知的各种基本数据类型，对象的引用（不等同于对象，可能是指向对象的起始地址的指针，也可<br>能是指向一个代表对象的句柄）以及returnAddress类型（指向了一条字节码地址）。局部变量在方法执行时被创建，<br>在方法执行结束时销毁。字节码指令通过从0开始的索引使用其中的数据。类型为int, float, reference和returnAddress的值<br>在数组中占据一项，而类型为byte, short和char的值在存入数组前都被转换为int值，也占据一项。但类型为long和double的值<br>在数组中却占据连续的两项。</p>
-<p><strong>操作数栈</strong></p>
-<p>和局部变量区一样，操作数栈也是被组织成一个以字长为单位的数组。它通过标准的栈操作访问–压栈和出栈。由于程序计数器<br>无法被程序指令直接访问，Java虚拟机的指令是从操作数栈中取得操作数，所以它的运行方式是基于栈而不是基于寄存器。<br>虚拟机把操作数栈作为它的工作区，因为大多数指令都要从这里弹出数据，执行运算，然后把结果压回操作数栈。</p>
-<p><strong>帧数据区</strong></p>
-<p>除了局部变量区和操作数栈，Java栈帧还需要帧数据区来支持常量池解析、正常方法返回以及异常派发机制。<br>每当虚拟机要执行某个需要用到常量池数据的指令时，它会通过帧数据区中指向常量池的指针来访问它。除了常量池的解析外，<br>帧数据区还要帮助虚拟机处理Java方法的正常结束或异常中止。如果通过return正常结束，虚拟机必须恢复发起调用的方法的<br>栈帧，包括设置程序计数器指向发起调用方法的下一个指令；如果方法有返回值，虚拟机需要将它压入到发起调用的方法的操作数栈。<br>为了处理Java方法执行期间的异常退出情况，帧数据区还保存一个对此方法异常表的引用。</p>
-<h3 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h3><p>任何本地方法接口都会使用某种本地方法栈，本地方法栈与Java虚拟机栈发挥的作用类似。当线程调用Java方法时，<br>虚拟机会创建一个新的栈帧并压入Java栈。当它调用的是本地方法时，虚拟机会保持Java栈不变，不再在线程的Java栈中压入新<br>的栈，虚拟机只是简单地动态连接并直接调用指定的本地方法。</p>
-<h3 id="堆-Heap"><a href="#堆-Heap" class="headerlink" title="堆(Heap)"></a>堆(Heap)</h3><p>Java程序在运行时创建的所有类实例或数组（数组在Java虚拟机中是一个真正的对象）都放在同一个堆中，堆是虚拟机管理的<br>内存最大的一块，被所有线程所共享，在虚拟机启动的时候创建。堆内存的唯一目的就是存放对象实例，几乎所有的对象实例<br>都在堆中分配内存。(大对象)</p>
-<h3 id="方法区-Method-Area"><a href="#方法区-Method-Area" class="headerlink" title="方法区(Method Area)"></a>方法区(Method Area)</h3><p>方法区同Java堆一样，是各个线程共享的内存区域，用于存储已经被虚拟机加载的类信息，常量，静态变量以及<br>及时编译器（JIT）编译后的代码等信息。</p>
-<p>当虚拟机装载某个类型时，它使用类装载器定位相应的class文件，然后读入这个class文件并将它传输到虚拟机中，接着虚拟机<br>提取其中的类型信息，并将这些信息存储到方法区。方法区也可以被垃圾回收器收集，因为虚拟机允许通过用户定义的类装载器<br>来动态扩展Java程序。</p>
-<p>方法区中存放了以下信息：</p>
-<pre><code>• 这个类型的全限定名（如全限定名java.lang.Object）
-• 这个类型的直接超类的全限定名
-• 这个类型是类类型还是接口类型
-• 这个类型的访问修饰符（public, abstract, final的某个子集）
-• 任何直接超接口的全限定名的有序列表
-• 该类型的常量池，Class文件中除了有类的版本，字段，方法，接口等描述信息外，还有一项是常量池，用于存放编译时生成的各种字面量和符号引用，这部分内容将在类加载后进入方法区的运行时常量池中存放
-• 字段信息（字段名、类型、修饰符）
-• 方法信息（方法名、返回类型、参数数量和类型、修饰符）
-• 除了常量以外的所有类（静态）变量
-• 指向ClassLoader类的引用（每个类型被装载时，虚拟机必须跟踪它是由启动类装载器还是由用户自定义类装载器装载的）
-• 指向Class类的引用（对于每一个被装载的类型，虚拟机相应地为它创建一个java.lang.Class类的实例存于堆中。比如你有一个到java.lang.Integer类的对象的引用，那么只需要调用Integer对象引用的getClass()方法，就可以得到表示java.lang.Integer类的Class对象）
-</code></pre><h2 id="类加载子系统"><a href="#类加载子系统" class="headerlink" title="类加载子系统"></a>类加载子系统</h2><p>虚拟机把Java描述类的信息加载到内存，并对数据进行校验，转换解析和初始化，形成可以被Java虚拟机直接使用的Java类型，这就是Java虚拟机的类加载机制。类从加载到虚拟机开始，到卸载出内存为止，它的整个生命周期包括：</p>
-<blockquote>
-<p>加载，验证，准备，解析，初始化，使用和卸载7个阶段。</p>
-</blockquote>
-<p><img src="https://www.javazhiyin.com/wp-content/uploads/2019/01/java2-1547432466.png" alt="image"></p>
-<h3 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h3><p>加载是类加载的一个阶段，在该阶段，Java虚拟机主要完成以下三件事情：</p>
-<pre><code>• 根据此类的全限定名来确定该类的二进制字节流；
-• 将这个字节流所代表的静态数据存储结构转换为方法区的运行时数据结构；
-• 在堆内存中生成一个代表这个类的java.lang.Class对象，作为方法区这个类的各种数据的访问入口。
-</code></pre><h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><p>验证是连接的第一步，这一阶段的目的是为了确保Class文件的字节流中包含的信息是否符合该虚拟机的要求。</p>
-<h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><p>准备阶段正式为类变量在方法区中分配内存并且赋初始值，初始值一般为该类变量类型的零值。</p>
-<h3 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h3><p>解析阶段虚拟机将常量池内的符号引用替换为直接引用。<br>符号引用：以一组符号来描述所引用的目标，符号可以是任何形式的字面量，只要使用时能无歧义的定位到目标即可。<br>直接引用：是指能直接指向目标的指针，相对偏移量或是一个能间接定位到目标的句柄。</p>
-<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>初始化是类加载过程的最后一个阶段，在前面的类加载过程中，除了在加载阶段用户可以自定义类加载器参与之外，其余动作完全由虚拟机主导和控制，到了初始化阶段，才真正开始执行类中定义的Java代码（字节码）。准备阶段为类变量分配内存并且赋初始值，赋值操作在初始化阶段执行。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/02/13/Git远程仓库/">Git 远程仓库</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-02-13T02:10:00.000Z" itemprop="datePublished">2018-02-13</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Git/">Git</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="Git-远程仓库"><a href="#Git-远程仓库" class="headerlink" title="Git 远程仓库"></a>Git 远程仓库</h1><p>为了能在任意 Git 项目上协作，你需要知道如何管理自己的远程仓库。远程仓库是指托管在因特网或其他网络中的你的项目的版本库。你可以有好几个远程仓库，通常有些仓库对你只读，有些则可以读写。 与他人协作涉及管理远程仓库以及根据需要推送或拉取数据。管理远程仓库包括了解如何添加远程仓库、移除无效的远程仓库、管理不同的远程分支并定义它们是否被跟踪等等。</p>
-<h2 id="查看远程仓库"><a href="#查看远程仓库" class="headerlink" title="查看远程仓库"></a>查看远程仓库</h2><p>如果想查看你已经配置的远程仓库服务器，可以运行 <strong>git remote</strong> 命令。 它会列出你指定的每一个远程服务器的简写。 如果你已经克隆了自己的仓库，那么至少应该能看到 origin - 这是 Git 给你克隆的仓库服务器的默认名字：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>git clone git<span class="variable">@172</span>.<span class="number">16.5</span>.<span class="number">77</span><span class="symbol">:shengwangzhong/storelcoator</span>.git</span><br><span class="line">Cloning into <span class="string">'storelcoator'</span>...</span><br><span class="line"><span class="symbol">remote:</span> Reusing existing <span class="symbol">pack:</span> <span class="number">1857</span>, done.</span><br><span class="line"><span class="symbol">remote:</span> Total <span class="number">1857</span> (delta <span class="number">0</span>), reused <span class="number">0</span> (delta <span class="number">0</span>)</span><br><span class="line">Receiving <span class="symbol">objects:</span> <span class="number">100</span>% (<span class="number">1857</span>/<span class="number">1857</span>), <span class="number">374.35</span> KiB | <span class="number">268.00</span> KiB/s, done.</span><br><span class="line">Resolving <span class="symbol">deltas:</span> <span class="number">100</span>% (<span class="number">772</span>/<span class="number">772</span>), done.</span><br><span class="line">Checking connectivity... done.</span><br><span class="line"><span class="variable">$ </span>cd storelcoator</span><br><span class="line"><span class="variable">$ </span>git remote</span><br><span class="line">origin</span><br></pre></td></tr></table></figure></p>
-<p>你也可以指定选项 -v，会显示需要读写远程仓库使用的 Git 保存的简写与其对应的 URL。<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>git remote -v</span><br><span class="line">origin  git<span class="variable">@172</span>.<span class="number">16.5</span>.<span class="number">77</span><span class="symbol">:shengwangzhong/vue-myblog</span>.git (fetch)</span><br><span class="line">origin  git<span class="variable">@172</span>.<span class="number">16.5</span>.<span class="number">77</span><span class="symbol">:shengwangzhong/vue-myblog</span>.git (push)</span><br></pre></td></tr></table></figure></p>
-<p>如果你的远程仓库不止一个，该命令会将它们全部列出。 例如，与几个协作者合作的，拥有多个远程仓库的仓库看起来像下面这样：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ cd grit</span><br><span class="line">$ git remote -v</span><br><span class="line">bakkdoor  <span class="string">https:</span><span class="comment">//github.com/bakkdoor/grit (fetch)</span></span><br><span class="line">bakkdoor  <span class="string">https:</span><span class="comment">//github.com/bakkdoor/grit (push)</span></span><br><span class="line">cho45     <span class="string">https:</span><span class="comment">//github.com/cho45/grit (fetch)</span></span><br><span class="line">cho45     <span class="string">https:</span><span class="comment">//github.com/cho45/grit (push)</span></span><br><span class="line">defunkt   <span class="string">https:</span><span class="comment">//github.com/defunkt/grit (fetch)</span></span><br><span class="line">defunkt   <span class="string">https:</span><span class="comment">//github.com/defunkt/grit (push)</span></span><br><span class="line">koke      <span class="string">git:</span><span class="comment">//github.com/koke/grit.git (fetch)</span></span><br><span class="line">koke      <span class="string">git:</span><span class="comment">//github.com/koke/grit.git (push)</span></span><br><span class="line">origin    git<span class="meta">@github</span>.<span class="string">com:</span>mojombo/grit.git (fetch)</span><br><span class="line">origin    git<span class="meta">@github</span>.<span class="string">com:</span>mojombo/grit.git (push)</span><br></pre></td></tr></table></figure></p>
-<h2 id="添加远程仓库"><a href="#添加远程仓库" class="headerlink" title="添加远程仓库"></a>添加远程仓库</h2><p>运行 git remote add <shortname> <url> 添加一个新的远程 Git 仓库，同时指定一个你可以轻松引用的简写：<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ git remote</span><br><span class="line">origin</span><br><span class="line">$ git remote <span class="built_in">add</span> pb http<span class="variable">s:</span>//github.<span class="keyword">com</span>/paulboone/ticgit</span><br><span class="line">$ git remote -v</span><br><span class="line">origin	http<span class="variable">s:</span>//github.<span class="keyword">com</span>/schacon/ticgit (fetch)</span><br><span class="line">origin	http<span class="variable">s:</span>//github.<span class="keyword">com</span>/schacon/ticgit (push)</span><br><span class="line">pb	http<span class="variable">s:</span>//github.<span class="keyword">com</span>/paulboone/ticgit (fetch)</span><br><span class="line">pb	http<span class="variable">s:</span>//github.<span class="keyword">com</span>/paulboone/ticgit (push)</span><br></pre></td></tr></table></figure></url></shortname></p>
-<p>现在你可以在命令行中使用字符串 pb 来代替整个 URL。 例如，如果你想拉取 Paul 的仓库中有但你没有的信息，可以运行 git fetch pb：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ git fetch pb</span><br><span class="line"><span class="string">remote:</span> Counting <span class="string">objects:</span> <span class="number">43</span>, done.</span><br><span class="line"><span class="string">remote:</span> Compressing <span class="string">objects:</span> <span class="number">100</span>% (<span class="number">36</span>/<span class="number">36</span>), done.</span><br><span class="line"><span class="string">remote:</span> Total <span class="number">43</span> (delta <span class="number">10</span>), reused <span class="number">31</span> (delta <span class="number">5</span>)</span><br><span class="line">Unpacking <span class="string">objects:</span> <span class="number">100</span>% (<span class="number">43</span>/<span class="number">43</span>), done.</span><br><span class="line">From <span class="string">https:</span><span class="comment">//github.com/paulboone/ticgit</span></span><br><span class="line"> * [<span class="keyword">new</span> branch]      master     -&gt; pb/master</span><br><span class="line"> * [<span class="keyword">new</span> branch]      ticgit     -&gt; pb/ticgit</span><br></pre></td></tr></table></figure></p>
-<p>现在 Paul 的 master 分支可以在本地通过 pb/master 访问到 - 你可以将它合并到自己的某个分支中，或者如果你想要查看它的话，可以检出一个指向该点的本地分支。 </p>
-<h2 id="从远程仓库中抓取与拉取"><a href="#从远程仓库中抓取与拉取" class="headerlink" title="从远程仓库中抓取与拉取"></a>从远程仓库中抓取与拉取</h2><p>就如刚才所见，从远程仓库中获得数据，可以执行：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git fetch <span class="string">[remote-name]</span></span><br></pre></td></tr></table></figure></p>
-<p>这个命令会访问远程仓库，从中拉取所有你还没有的数据。 执行完成后，你将会拥有那个远程仓库中所有分支的引用，可以随时合并或查看。</p>
-<blockquote>
-<p>如果你使用 clone 命令克隆了一个仓库，命令会自动将其添加为远程仓库并默认以 “origin” 为简写。 所以，git fetch origin 会抓取克隆（或上一次抓取）后新推送的所有工作。 必须注意 git fetch 命令会将数据拉取到你的本地仓库 - 它并不会自动合并或修改你当前的工作。 当准备好时你必须手动将其合并入你的工作。</p>
-</blockquote>
-<blockquote>
-<p>如果你有一个分支设置为跟踪一个远程分支，可以使用 <strong>git pull</strong> 命令来自动的抓取然后合并远程分支到当前分支。这对你来说可能是一个更简单或更舒服的工作流程；==默认情况下，git clone 命令会自动设置本地 master 分支跟踪克隆的远程仓库的 master 分支（或不管是什么名字的默认分支）。== 运行 git pull 通常会从最初克隆的服务器上抓取数据并自动尝试合并到当前所在的分支。</p>
-</blockquote>
-<h2 id="推送到远程仓库"><a href="#推送到远程仓库" class="headerlink" title="推送到远程仓库"></a>推送到远程仓库</h2><p>当你想分享你的项目时，必须将其推送到上游。 这个命令很简单：git push [remote-name] [branch-name]。 当你想要将 master 分支推送到 origin 服务器时（再次说明，克隆时通常会自动帮你设置好那两个名字），那么运行这个命令就可以将你所做的备份到服务器：<br><figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">push</span> <span class="built_in">origin</span> master</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>只有当你有所克隆服务器的写入权限，并且之前没有人推送过时，这条命令才能生效。 当你和其他人在同一时间克隆，他们先推送到上游然后你再推送到上游，你的推送就会毫无疑问地被拒绝。 你必须先将他们的工作拉取下来并将其合并进你的工作后才能推送。 </p>
-</blockquote>
-<h2 id="查看远程仓库-详细"><a href="#查看远程仓库-详细" class="headerlink" title="查看远程仓库(详细)"></a>查看远程仓库(详细)</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ git remote <span class="keyword">show</span> origin</span><br><span class="line">* remote origin</span><br><span class="line">  <span class="keyword">Fetch</span> <span class="keyword">URL</span>: git@<span class="number">172.16</span><span class="number">.5</span><span class="number">.77</span>:shengwangzhong/vue-myblog.git</span><br><span class="line">  Push  <span class="keyword">URL</span>: git@<span class="number">172.16</span><span class="number">.5</span><span class="number">.77</span>:shengwangzhong/vue-myblog.git</span><br><span class="line">  <span class="keyword">HEAD</span> branch: <span class="keyword">master</span></span><br><span class="line">  Remote branch:</span><br><span class="line">    <span class="keyword">master</span> tracked</span><br><span class="line">  <span class="keyword">Local</span> branch configured <span class="keyword">for</span> <span class="string">'git pull'</span>:</span><br><span class="line">    <span class="keyword">master</span> merges <span class="keyword">with</span> remote <span class="keyword">master</span></span><br><span class="line">  <span class="keyword">Local</span> <span class="keyword">ref</span> configured <span class="keyword">for</span> <span class="string">'git push'</span>:</span><br><span class="line">    <span class="keyword">master</span> pushes <span class="keyword">to</span> <span class="keyword">master</span> (up <span class="keyword">to</span> <span class="built_in">date</span>)</span><br></pre></td></tr></table></figure>
-<p>这个命令列出了当你在特定的分支上执行 git push 会自动地推送到哪一个远程分支。 它也同样地列出了哪些远程分支不在你的本地，哪些远程分支已经从服务器上移除了，还有当你执行 git pull 时哪些分支会自动合并。</p>
-<h2 id="远程仓库的移除与重命名"><a href="#远程仓库的移除与重命名" class="headerlink" title="远程仓库的移除与重命名"></a>远程仓库的移除与重命名</h2><p>如果想要重命名引用的名字可以运行 git remote rename 去修改一个远程仓库的简写名。 例如，想要将 pb 重命名为 paul，可以用 git remote rename 这样做：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>git remote rename pb paul</span><br><span class="line"><span class="variable">$ </span>git remote</span><br><span class="line">origin</span><br><span class="line">paul</span><br></pre></td></tr></table></figure></p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/02/12/2.0 Java虚拟机/">JVM 2.0</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/10/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-02-12T02:10:00.000Z" itemprop="datePublished">2018-02-12</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>#Java虚拟机</p>
-<p>作用：</p>
-<blockquote>
-<p>Java虚拟机的主要任务是装载class文件并且执行其中的字节码。<br>Java虚拟机包含一个类装载器（class loader），它可以从程序和API中装载class文件，<br>Java API中只有程序执行时需要的类才会被装载，字节码由执行引擎来执行。</p>
-</blockquote>
-<p>当Java虚拟机由主机操作系统上的软件实现时，Java程序通过调用本地方法和主机进行交互。<br>Java方法由Java语言编写，编译成字节码，存储在class文件中。<br>本地方法由C/C++/汇编语言编写，编译成和处理器相关的机器代码，存储在动态链接库中，格式是各个平台专有。<br>所以本地方法是联系Java程序和底层主机操作系统的连接方式。（跨平台）</p>
-<p><img src="https://www.javazhiyin.com/wp-content/uploads/2019/01/java8-1547432465.png" alt="image"></p>
+<p>那么问题来了，究竟选择哪两个条件较为合适呢？</p>
+<p>对于一个业务系统来说，可用性和分区容错性是必须要满足的两个条件，并且这两者是相辅相成的。业务系统之所以使用分布式系统，主要原因有两个：</p>
+<ol>
+<li>提升整体性能</li>
+</ol>
+<p>当业务量猛增，单个服务器已经无法满足我们的业务需求的时候，就需要使用分布式系统，使用多个节点提供相同的功能，从而整体上提升系统的性能，这就是使用分布式系统的第一个原因。</p>
+<ol start="2">
+<li>实现分区容错性</li>
+</ol>
+<p>单一节点 或 多个节点处于相同的网络环境下，那么会存在一定的风险，万一该机房断电、该地区发生自然灾害，那么业务系统就全面瘫痪了。为了防止这一问题，采用分布式系统，将多个子系统分布在不同的地域、不同的机房中，从而保证系统高可用性。</p>
+<p>这说明分区容错性是分布式系统的根本，如果分区容错性不能满足，那使用分布式系统将失去意义。</p>
+<p>此外，可用性对业务系统也尤为重要。在大谈用户体验的今天，如果业务系统时常出现“系统异常”、响应时间过长等情况，这使得用户对系统的好感度大打折扣，在互联网行业竞争激烈的今天，相同领域的竞争者不甚枚举，系统的间歇性不可用会立马导致用户流向竞争对手。因此，我们只能通过牺牲一致性来换取系统的可用性和分区容错性。这也就是下面要介绍的BASE理论。</p>
+<h1 id="BASE理论"><a href="#BASE理论" class="headerlink" title="BASE理论"></a>BASE理论</h1><p>CAP理论告诉我们一个悲惨但不得不接受的事实——我们只能在C、A、P中选择两个条件。而对于业务系统而言，我们往往选择牺牲一致性来换取系统的可用性和分区容错性。不过这里要指出的是，所谓的“牺牲一致性”并不是完全放弃数据一致性，而是牺牲强一致性换取弱一致性。下面来介绍下BASE理论。</p>
+<h2 id="BA：Basic-Available-基本可用"><a href="#BA：Basic-Available-基本可用" class="headerlink" title="BA：Basic Available 基本可用"></a>BA：Basic Available 基本可用</h2><p>整个系统在某些不可抗力的情况下，仍然能够保证“可用性”，即一定时间内仍然能够返回一个明确的结果。只不过“基本可用”和“高可用”的区别是：<br>“一定时间”可以适当延长<br>当举行大促时，响应时间可以适当延长</p>
+<p>给部分用户返回一个降级页面<br>给部分用户直接返回一个降级页面，从而缓解服务器压力。但要注意，返回降级页面仍然是返回明确结果。</p>
+<h2 id="S：Soft-State：柔性状态"><a href="#S：Soft-State：柔性状态" class="headerlink" title="S：Soft State：柔性状态"></a>S：Soft State：柔性状态</h2><p>同一数据的不同副本的状态，可以不需要实时一致。</p>
+<h2 id="E：Eventual-Consisstency：最终一致性"><a href="#E：Eventual-Consisstency：最终一致性" class="headerlink" title="E：Eventual Consisstency：最终一致性"></a>E：Eventual Consisstency：最终一致性</h2><p>同一数据的不同副本的状态，可以不需要实时一致，但一定要保证经过一定时间后仍然是一致的。</p>
+<h1 id="酸碱平衡"><a href="#酸碱平衡" class="headerlink" title="酸碱平衡"></a>酸碱平衡</h1><p>ACID能够保证事务的强一致性，即数据是实时一致的。这在本地事务中是没有问题的，在分布式事务中，强一致性会极大影响分布式系统的性能，因此分布式系统中遵循BASE理论即可。但分布式系统的不同业务场景对一致性的要求也不同。如交易场景下，就要求强一致性，此时就需要遵循ACID理论，而在注册成功后发送短信验证码等场景下，并不需要实时一致，因此遵循BASE理论即可。因此要根据具体业务场景，在ACID和BASE之间寻求平衡。</p>
 
         
     </section>
@@ -658,7 +942,7 @@
 
 
 <nav class="page-nav">
-    <a class="extend prev" rel="prev" href="/page/9/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/11/">下一页 &raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/9/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/">23</a><a class="extend next" rel="next" href="/page/11/">下一页 &raquo;</a>
 </nav>
 
 

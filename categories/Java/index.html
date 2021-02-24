@@ -131,70 +131,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/08/07/Java基础面试题五/">Java基础面试题五</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2019-08-07T14:37:25.985Z" itemprop="datePublished">2019-08-07</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/面试题/">面试题</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>Java基础面试题五</p>
-<blockquote>
-<p>Q1: &amp; 和 &amp;&amp; 的区别</p>
-</blockquote>
-<p>&amp;是位运算符，表示按位与运算，&amp;&amp;是逻辑运算符，表示逻辑与（and）。</p>
-<blockquote>
-<p>Q2: final, finally, finalize的区别</p>
-</blockquote>
-<ul>
-<li>final 用于声明属性，方法和类，分别表示属性不可变，方法不可覆盖，类不可继承。 </li>
-<li>finally,异常处理语句结构的一部分，表示总是执行。 </li>
-<li>finalize是Object类的一个方法，垃圾收集器执行的时候会调用被回收对象的此方法，可以覆盖此方法提供垃圾收集时的其他资源回收，例如关闭文件等。</li>
-</ul>
-<blockquote>
-<p>Q3: sleep() 和 wait() 有什么区别? </p>
-</blockquote>
-<p>sleep是线程类（Thread）的方法，导致此线程暂停执行指定时间，给执行机会给其他线程，但是监控状态依然保持，到时后会自动恢复。调用sleep不会释放对象锁。 </p>
-<p>wait是Object类的方法，对此对象调用wait方法导致本线程放弃对象锁，进入等待此对象的等待锁定池，只有针对此对象发出notify方法（或not ifyAll）后本线程才进入对象锁定池准备获得对象锁进入运行状态。</p>
-<blockquote>
-<p>Q4: error和exception有什么区别? </p>
-</blockquote>
-<ul>
-<li>error:<br>表示恢复不是不可能但很困难的情况下的一种严重问题。比如说内存溢出。不可能指望程序能处理这样的情况。 </li>
-<li>exception: 表示一种设计或实现问题。也就是说，它表示如果程序运行正常，从不会发生的情况。</li>
-</ul>
-<blockquote>
-<p>Q5: GC是什么? 为什么要有GC? </p>
-</blockquote>
-<p>GC是垃圾收集的意思（Gabage Collection）,内存处理是编程人员容易出现问题的地方，忘记或者错误的内存回收会导致程序或系统的不稳定甚至崩溃，Java提供的GC功能可以自动监测对象是否超过作用域从而达到自动回收内存的目的，Java语言没有提供释放已分配内存的显示操作方法。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">要请求垃圾收集，可以调用下面的方法之一：  </span><br><span class="line"><span class="selector-tag">System</span><span class="selector-class">.gc</span>() </span><br><span class="line"><span class="selector-tag">Runtime</span><span class="selector-class">.getRuntime</span>()<span class="selector-class">.gc</span>()</span><br></pre></td></tr></table></figure></p>
-<p>当然，如果需要，程序员可以在Java程序中显式地使用System.gc()来强制进行一次立即的内存清理。<br>因为显式声明是做堆内存全扫描，也就是FullGC，是需要停止所有的活动的（Stop The World Collection），你的应用能承受这个吗？而其显示调用System.gc()只是给虚拟机一个建议，不一定会执行，因为System.gc()在一个优先级很低的线程中执行。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2019/08/07/Java基础面试题四/">Java基础面试题四</a>
         </h1>
         
@@ -270,7 +206,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2019/08/07/Java基础面试题二/">Java基础面试题二</a>
+            <a href="/2019/08/07/Java基础面试题五/">Java基础面试题五</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -278,7 +214,7 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2019-08-07T14:37:25.984Z" itemprop="datePublished">2019-08-07</time>
+    <time datetime="2019-08-07T14:37:25.985Z" itemprop="datePublished">2019-08-07</time>
 </a>
 
             
@@ -293,13 +229,36 @@
     
     <section class="article-body markdown-body">
         
-        <p>Java基础面试题二</p>
+        <p>Java基础面试题五</p>
 <blockquote>
-<p>Q1: 什么是死锁(deadlock)？ </p>
+<p>Q1: &amp; 和 &amp;&amp; 的区别</p>
 </blockquote>
-<p>两个进程都在等待对方执行完毕才能继续往下执行的时候就发生了死锁。结果就是两个进程都陷入了无限的等待中。<br>代码表示：<br><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLockDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> void main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">    DieLock dl1 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">true</span>);</span><br><span class="line">    DieLock dl2 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">false</span>);</span><br><span class="line">    dl1.start();</span><br><span class="line">    dl2.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>理想状态下dl1线程为true从if执行先打出”if objA”然后再接着打出”if objB”之后释放A、B的锁对象，之后dl2线程执行else语句打出”else objB”，”else objA”。<br>非理想状态下dl1先打出”if objA”，之后线程dl2执行打出”else objB”，然后1、2线程的锁对象A和B都处于被锁的状态，两个线程争夺锁对象发生死锁现象。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLock</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> flag;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DieLock</span><span class="params">(<span class="keyword">boolean</span> flag)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.flag = flag;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (flag) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                System.out.println(<span class="string">"if objA"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"if objB"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                System.out.println(<span class="string">"else objB"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"else objA"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>&amp;是位运算符，表示按位与运算，&amp;&amp;是逻辑运算符，表示逻辑与（and）。</p>
+<blockquote>
+<p>Q2: final, finally, finalize的区别</p>
+</blockquote>
+<ul>
+<li>final 用于声明属性，方法和类，分别表示属性不可变，方法不可覆盖，类不可继承。 </li>
+<li>finally,异常处理语句结构的一部分，表示总是执行。 </li>
+<li>finalize是Object类的一个方法，垃圾收集器执行的时候会调用被回收对象的此方法，可以覆盖此方法提供垃圾收集时的其他资源回收，例如关闭文件等。</li>
+</ul>
+<blockquote>
+<p>Q3: sleep() 和 wait() 有什么区别? </p>
+</blockquote>
+<p>sleep是线程类（Thread）的方法，导致此线程暂停执行指定时间，给执行机会给其他线程，但是监控状态依然保持，到时后会自动恢复。调用sleep不会释放对象锁。 </p>
+<p>wait是Object类的方法，对此对象调用wait方法导致本线程放弃对象锁，进入等待此对象的等待锁定池，只有针对此对象发出notify方法（或not ifyAll）后本线程才进入对象锁定池准备获得对象锁进入运行状态。</p>
+<blockquote>
+<p>Q4: error和exception有什么区别? </p>
+</blockquote>
+<ul>
+<li>error:<br>表示恢复不是不可能但很困难的情况下的一种严重问题。比如说内存溢出。不可能指望程序能处理这样的情况。 </li>
+<li>exception: 表示一种设计或实现问题。也就是说，它表示如果程序运行正常，从不会发生的情况。</li>
+</ul>
+<blockquote>
+<p>Q5: GC是什么? 为什么要有GC? </p>
+</blockquote>
+<p>GC是垃圾收集的意思（Gabage Collection）,内存处理是编程人员容易出现问题的地方，忘记或者错误的内存回收会导致程序或系统的不稳定甚至崩溃，Java提供的GC功能可以自动监测对象是否超过作用域从而达到自动回收内存的目的，Java语言没有提供释放已分配内存的显示操作方法。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">要请求垃圾收集，可以调用下面的方法之一：  </span><br><span class="line"><span class="selector-tag">System</span><span class="selector-class">.gc</span>() </span><br><span class="line"><span class="selector-tag">Runtime</span><span class="selector-class">.getRuntime</span>()<span class="selector-class">.gc</span>()</span><br></pre></td></tr></table></figure></p>
+<p>当然，如果需要，程序员可以在Java程序中显式地使用System.gc()来强制进行一次立即的内存清理。<br>因为显式声明是做堆内存全扫描，也就是FullGC，是需要停止所有的活动的（Stop The World Collection），你的应用能承受这个吗？而其显示调用System.gc()只是给虚拟机一个建议，不一定会执行，因为System.gc()在一个优先级很低的线程中执行。</p>
 
         
     </section>
@@ -404,6 +363,47 @@
 </blockquote>
 <p>HashSet是由一个hash表来实现的，因此，它的元素是无序的。add()，remove()，contains()方法的时间复杂度是O(1)。 </p>
 <p>TreeSet是由一个树形的结构来实现的，它里面的元素是有序的。因此，add()，remove()，contains()方法的时间复杂度是O(logn)。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2019/08/07/Java基础面试题二/">Java基础面试题二</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-08-07T14:37:25.984Z" itemprop="datePublished">2019-08-07</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/面试题/">面试题</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>Java基础面试题二</p>
+<blockquote>
+<p>Q1: 什么是死锁(deadlock)？ </p>
+</blockquote>
+<p>两个进程都在等待对方执行完毕才能继续往下执行的时候就发生了死锁。结果就是两个进程都陷入了无限的等待中。<br>代码表示：<br><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLockDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> void main(<span class="keyword">String</span>[] args) &#123;</span><br><span class="line">    DieLock dl1 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">true</span>);</span><br><span class="line">    DieLock dl2 = <span class="keyword">new</span> <span class="type">DieLock</span>(<span class="literal">false</span>);</span><br><span class="line">    dl1.start();</span><br><span class="line">    dl2.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>理想状态下dl1线程为true从if执行先打出”if objA”然后再接着打出”if objB”之后释放A、B的锁对象，之后dl2线程执行else语句打出”else objB”，”else objA”。<br>非理想状态下dl1先打出”if objA”，之后线程dl2执行打出”else objB”，然后1、2线程的锁对象A和B都处于被锁的状态，两个线程争夺锁对象发生死锁现象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DieLock</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> flag;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DieLock</span><span class="params">(<span class="keyword">boolean</span> flag)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.flag = flag;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (flag) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                System.out.println(<span class="string">"if objA"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"if objB"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (MyLock.objB) &#123;</span><br><span class="line">                System.out.println(<span class="string">"else objB"</span>);</span><br><span class="line">                <span class="keyword">synchronized</span> (MyLock.objA) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"else objA"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
         
     </section>
@@ -522,6 +522,44 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2019/03/01/字符型常量和字符串常量的区别/">字符型常量和字符串常量的区别</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-03-01T02:10:00.000Z" itemprop="datePublished">2019-03-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Java/">Java</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="字符型常量和字符串常量的区别"><a href="#字符型常量和字符串常量的区别" class="headerlink" title="字符型常量和字符串常量的区别"></a>字符型常量和字符串常量的区别</h1><p>形式上: 字符常量是单引号引起的一个字符; 字符串常量是双引号引起的若干个字符</p>
+<p>含义上: 字符常量相当于一个整型值( ASCII 值),可以参加表达式运算; 字符串常量代表一个地址值(该字符串在内存中存放位置)</p>
+<p>占内存大小: 字符常量只占2个字节; 字符串常量占若干个字节(至少一个字符结束标志) (注意： char在Java中占两个字节)</p>
+<p>数据类型     大小        包装器类型<br>boolean      -           Boolean<br>char       16bits        Character<br>byte        8bits        Byte<br>short      16bits        Short<br>int        32bits        Integer<br>long       64bits        Long<br>float      32bits        Float<br>double     64bits        Double</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2019/03/01/Java 并发进阶常见面试题总结/">Java 并发进阶常见面试题总结</a>
         </h1>
         
@@ -562,44 +600,6 @@
 </ul>
 <p>但是由于 JVM 具有指令重排的特性，执行顺序有可能变成 1-&gt;3-&gt;2。指令重排在单线程环境下不会出先问题，但是在多线程环境下会导致一个线程获得还没有初始化的实例。例如，线程 T1 执行了 1 和 3，此时 T2 调用 getUniqueInstance() 后发现 uniqueInstance 不为空，因此返回 uniqueInstance，但此时 uniqueInstance 还未被初始化。</p>
 <p>使用 volatile 可以禁止 JVM 的指令重排，保证在多线程环境下也能正常运行。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2019/03/01/字符型常量和字符串常量的区别/">字符型常量和字符串常量的区别</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/categories/Java/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2019-03-01T02:10:00.000Z" itemprop="datePublished">2019-03-01</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Java/">Java</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="字符型常量和字符串常量的区别"><a href="#字符型常量和字符串常量的区别" class="headerlink" title="字符型常量和字符串常量的区别"></a>字符型常量和字符串常量的区别</h1><p>形式上: 字符常量是单引号引起的一个字符; 字符串常量是双引号引起的若干个字符</p>
-<p>含义上: 字符常量相当于一个整型值( ASCII 值),可以参加表达式运算; 字符串常量代表一个地址值(该字符串在内存中存放位置)</p>
-<p>占内存大小: 字符常量只占2个字节; 字符串常量占若干个字节(至少一个字符结束标志) (注意： char在Java中占两个字节)</p>
-<p>数据类型     大小        包装器类型<br>boolean      -           Boolean<br>char       16bits        Character<br>byte        8bits        Byte<br>short      16bits        Short<br>int        32bits        Integer<br>long       64bits        Long<br>float      32bits        Float<br>double     64bits        Double</p>
 
         
     </section>
@@ -678,7 +678,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/10/01/JVM课程七/">JVM课程七</a>
+            <a href="/2018/12/02/Synchronized 原理/">Synchronized 原理</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -686,13 +686,13 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-10-01T14:22:22.000Z" itemprop="datePublished">2018-10-01</time>
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
 </a>
 
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+    <a class="article-tag-link" href="/tags/Java/">Java</a>
 </div>
 
 
@@ -701,46 +701,21 @@
     
     <section class="article-body markdown-body">
         
-        <h2 id="分代收集器"><a href="#分代收集器" class="headerlink" title="分代收集器"></a>分代收集器</h2><p>一起七个 3 + 3 + 1</p>
-<p>在收集器使用的时候都是：新老搭配的。</p>
-<p>新生代收集器：</p>
-<ul>
-<li>Serial</li>
-<li>ParNew</li>
-<li>Parallel Scavenge</li>
-</ul>
-<p>老年代收集器：</p>
-<ul>
-<li>CMS(Concurrent Mark Sweep)</li>
-<li>Serial Old </li>
-<li>Parallel Old</li>
-</ul>
-<p>新老通吃：<br>G1: Garbadge First</p>
-<h2 id="新生代收集器"><a href="#新生代收集器" class="headerlink" title="新生代收集器"></a>新生代收集器</h2><h3 id="Serial-GC-串行"><a href="#Serial-GC-串行" class="headerlink" title="Serial GC(串行)"></a>Serial GC(串行)</h3><p>HotSpot运行在client模式下的默认新生代收集器。只用一个CPU/一个收集器线程去完成GC。<br>“Stop The World” -XX:+UseSerialGC</p>
+        <h1 id="Synchronized-原理"><a href="#Synchronized-原理" class="headerlink" title="Synchronized 原理"></a>Synchronized 原理</h1><p>JVM规范中描述：每个对象有一个监视器锁（monitor）。</p>
+<p>当monitor被占用时就会处于锁定状态，线程执行monitorenter指令时尝试获取monitor的所有权，过程如下：</p>
 <ol>
-<li>启动回收</li>
-<li>暂停其他所有工作线程。新生代回收采用<strong>复制</strong>算法。</li>
-<li>暂停其他所有工作线程。老年代回收采用<strong>标记整理算法</strong>。单线程收集，但是简单高效。<br>在内存占用不大的应用中，效率很高。</li>
+<li><p>如果monitor的进入数为0，则该线程进入monitor，然后将进入数设置为1，该线程即为monitor的所有者。</p>
+</li>
+<li><p>如果线程已经占有该monitor，只是重新进入，则进入monitor的进入数加1.</p>
+</li>
+<li><p>如果其他线程已经占用了monitor，则该线程进入阻塞状态，直到monitor的进入数为0，再重新尝试获取monitor的所有权。</p>
+</li>
 </ol>
-<h3 id="ParNew-并行"><a href="#ParNew-并行" class="headerlink" title="ParNew(并行)"></a>ParNew(并行)</h3><p>其本质是Serial的多线程版本，目的是缩短垃圾收集的时间，也就是占用工作线程时间的问题。单CPU甚至不如Serial，但是在多核CPU配合多线程效果明显。多核CPU + 超线程技术。<br>若VM启用老年代使用CMS(concurrent mark sweep)时候，<br>参数： -XX:+UseConcMarkSweepGC<br>新生代次收集器默认为ParNew。<br>多核CPU时候一般配置为CPU核数。-XX:ParallelGCThreads=<n> 参数控制GC线程数。</n></p>
-<ol>
-<li>启动回收</li>
-<li>暂停其他所有工作线程。新生代回收采用<strong>复制</strong>算法。 (GC线程多个同时工作，并行执行)</li>
-<li>暂停其他所有工作线程。老年代回收采用<strong>标记整理算法</strong>。</li>
-</ol>
-<h3 id="Parallel-Scavenge"><a href="#Parallel-Scavenge" class="headerlink" title="Parallel Scavenge"></a>Parallel Scavenge</h3><p>并行多线程，复制算法。关注点与ParNew不同，关注的是系统吞吐量。</p>
-<p>系统吞吐量 = 运行用户代码时间 /（运行用户代码时间 + 垃圾回收时间）</p>
-<p>停顿时间越短就越适用于用户交互的程序。良好的响应速度提升用户体验。<br>而高吞吐则适用于后台计算而不需要太多交互的任务，可以最高效率的利用CPU时间，<br>尽快的完成程序的运算任务。</p>
-<h2 id="老年代收集器"><a href="#老年代收集器" class="headerlink" title="老年代收集器"></a>老年代收集器</h2><h3 id="Serial-Old"><a href="#Serial-Old" class="headerlink" title="Serial Old"></a>Serial Old</h3><ol>
-<li>启动回收</li>
-<li>暂停其他所有工作线程。新生代回收采用复制算法。</li>
-<li>暂停其他所有工作线程。老年代回收采用标记整理算法。单线程收集，但是简单高效。<br>在内存占用不大的应用中，效率很高。</li>
-</ol>
-<p>可以与任意的新生代收集器配置使用</p>
-<h3 id="Parallel-Old"><a href="#Parallel-Old" class="headerlink" title="Parallel Old"></a>Parallel Old</h3><p>只能配合Parallel Scavenge收集器一起使用。</p>
-<h3 id="CMS-并发"><a href="#CMS-并发" class="headerlink" title="CMS (并发)"></a>CMS (并发)</h3><p>Concurrent Mark Sweep,可以和用户线程同时工作。是一款并发收集器。<br>虽然有理论上表现更好的G1收集器，主流的仍然是CMS收集器。<br>能用于server模式下的JVM优化。能结合新生代的Serial 和 ParNew一起使用。</p>
-<h2 id="G1"><a href="#G1" class="headerlink" title="G1"></a>G1</h2><p>Garbage-First。可以运用在新生代和老年代的直接分区收集。面向服务端的垃圾收集器。 –XX:+UseG1GC<br>将Java堆划分为多个相等的独立区域Region，保留新生代和老年代的概念。但是不再是物理隔离。</p>
-<p>优化方式：<br>1.选择JVM版本<br>2.对于堆区大小的分配<br>3.垃圾回收的方式</p>
+<p>Synchronized的语义底层是通过一个monitor的对象来完成，其实wait/notify等方法也依赖于monitor对象，这就是为什么只有在同步的块或者方法中才能调用wait/notify等方法，否则会抛出java.lang.IllegalMonitorStateException的异常的原因。</p>
+<blockquote>
+<p>Synchronized是通过对象内部的一个叫做监视器锁（monitor）来实现的。</p>
+</blockquote>
+<p>但是监视器锁本质又是依赖于底层的操作系统的互斥锁（Mutex Lock）来实现的。而操作系统实现线程之间的切换这就需要从用户态转换到核心态，这个成本非常高，状态之间的转换需要相对比较长的时间，这就是为什么Synchronized效率低的原因。因此，这种依赖于操作系统互斥锁（Mutex Lock）所实现的锁我们称之为“重量级锁”。</p>
 
         
     </section>
@@ -752,7 +727,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/09/20/JVM课程八/">JVM课程八</a>
+            <a href="/2018/12/02/fastjson autoType 问题/">fastjson enable_autotype</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -760,13 +735,13 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-09-20T06:55:00.000Z" itemprop="datePublished">2018-09-20</time>
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
 </a>
 
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+    <a class="article-tag-link" href="/tags/Java/">Java</a>
 </div>
 
 
@@ -775,25 +750,31 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="JVM性能监测工具"><a href="#JVM性能监测工具" class="headerlink" title="JVM性能监测工具"></a>JVM性能监测工具</h1><p><strong>jps</strong><br>      查询运行于jvm的线程jps -l</p>
-<p><strong>jstat</strong><br>        查看HotSpot VM运行的信息<br>        jstat -gc pid 毫秒数 次数</p>
-<pre><code>From Created
-From Used
-To Created 
-To Used
-Eden Created
-Eden Used
-Old Created
-Old Used
-Permanent Created
-Permanent Used
-Young GC 次收集器收集次数
-Young GC Time 次收集器时间
-Full GC  全收集次数
-Full GC Time 全收集时间
-GC Time 收集总时间
-S0C S1C S0U S1U EC EU OC OU PC PU YGC YGCT FGC FGCT GCT
-</code></pre><p><strong>jvisualvm</strong><br>        可视化工具<br>        jvisualvm</p>
+        <h1 id="fastjson-enable-autotype"><a href="#fastjson-enable-autotype" class="headerlink" title="fastjson enable_autotype"></a>fastjson enable_autotype</h1><p><a href="https://github.com/alibaba/fastjson/wiki/enable_autotype" target="_blank" rel="noopener">https://github.com/alibaba/fastjson/wiki/enable_autotype</a></p>
+<h2 id="打开AutoType功能"><a href="#打开AutoType功能" class="headerlink" title="打开AutoType功能"></a>打开AutoType功能</h2><p>在1.2.25之后的版本，以及所有的.sec01后缀版本中，autotype功能是受限的，和之前的版本不同，如果在升级的过程中遇到问题，可以通过以下方法配置。</p>
+<h2 id="一、添加autotype白名单"><a href="#一、添加autotype白名单" class="headerlink" title="一、添加autotype白名单"></a>一、添加autotype白名单</h2><p>添加白名单有三种方式，三选一，如下:<br></p>
+<h3 id="1-在代码中配置"><a href="#1-在代码中配置" class="headerlink" title="1. 在代码中配置"></a>1. 在代码中配置</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ParserConfig.getGlobalInstance().addAccept(<span class="string">"com.taobao.pac.client.sdk.dataobject."</span>);</span><br></pre></td></tr></table></figure>
+<p>如果有多个包名前缀，分多次addAccept</p>
+<h3 id="2-加上JVM启动参数"><a href="#2-加上JVM启动参数" class="headerlink" title="2. 加上JVM启动参数"></a>2. 加上JVM启动参数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Dfastjson.parser.autoTypeAccept=com.taobao.pac.client.sdk.dataobject.,com.cainiao.</span><br></pre></td></tr></table></figure>
+<p>如果有多个包名前缀，用逗号隔开</p>
+<h3 id="3-通过fastjson-properties文件配置。"><a href="#3-通过fastjson-properties文件配置。" class="headerlink" title="3. 通过fastjson.properties文件配置。"></a>3. 通过fastjson.properties文件配置。</h3><p>在1.2.25/1.2.26版本支持通过类路径的fastjson.properties文件来配置，配置方式如下：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastjson<span class="selector-class">.parser</span><span class="selector-class">.autoTypeAccept</span>=com<span class="selector-class">.taobao</span><span class="selector-class">.pac</span><span class="selector-class">.client</span><span class="selector-class">.sdk</span><span class="selector-class">.dataobject</span>.,com<span class="selector-class">.cainiao</span>. <span class="comment">// 如果有多个包名前缀，用逗号隔开</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="二、打开autotype功能"><a href="#二、打开autotype功能" class="headerlink" title="二、打开autotype功能"></a>二、打开autotype功能</h2><p>如果通过配置白名单解决不了问题，可以选择继续打开autotype功能，fastjson在新版本中内置了多重防护，但是还是可能会存在一定风险。两种方法打开autotype，二选一，如下：</p>
+<h3 id="1、JVM启动参数"><a href="#1、JVM启动参数" class="headerlink" title="1、JVM启动参数"></a>1、JVM启动参数</h3><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">-Dfastjson.parser.autoTypeSupport</span>=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<h3 id="2、代码中设置"><a href="#2、代码中设置" class="headerlink" title="2、代码中设置"></a>2、代码中设置</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ParserConfig.getGlobalInstance().setAutoTypeSupport(<span class="keyword">true</span>);</span><br></pre></td></tr></table></figure>
+<p>如果有使用非全局ParserConfig则用另外调用setAutoTypeSupport(true)；</p>
+<h2 id="三、配置autoType黑名单"><a href="#三、配置autoType黑名单" class="headerlink" title="三、配置autoType黑名单"></a>三、配置autoType黑名单</h2><p>打开AutoType之后，是基于内置黑名单来实现安全的，但黑名单是穷举不完的，如果发现了新的风险类，可以通过以下配置来增加黑名单：</p>
+<h3 id="1-配置JVM启动参数"><a href="#1-配置JVM启动参数" class="headerlink" title="1. 配置JVM启动参数"></a>1. 配置JVM启动参数</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Dfastjson<span class="selector-class">.parser</span><span class="selector-class">.deny</span>=xx.xxx</span><br></pre></td></tr></table></figure>
+<ul>
+<li>这里的xx.xxx是包名前缀，如果有多个包名前缀，用逗号隔开</li>
+</ul>
+<h3 id="2-通过fastjson-properties来配置"><a href="#2-通过fastjson-properties来配置" class="headerlink" title="2. 通过fastjson.properties来配置"></a>2. 通过fastjson.properties来配置</h3><p>在1.2.25之后的版本支持通过类路径的fastjson.properties文件来配置，配置方式如下：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Dfastjson<span class="selector-class">.parser</span><span class="selector-class">.deny</span>=xx.xxx</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>这里的xx.xxx是包名前缀，如果有多个包名前缀，用逗号隔开</li>
+</ul>
+<h3 id="3-代码中配置"><a href="#3-代码中配置" class="headerlink" title="3. 代码中配置"></a>3. 代码中配置</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ParserConfig.getGlobalInstance().addDeny(<span class="string">"xx.xxx"</span>);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>这里的xx.xxx是包名前缀，如果有多个包名前缀，用逗号隔开</li>
+</ul>
 
         
     </section>
@@ -803,7 +784,7 @@ S0C S1C S0U S1U EC EU OC OU PC PU YGC YGCT FGC FGCT GCT
 
 
 <nav class="page-nav">
-    <span class="page-number current">1</span><a class="page-number" href="/categories/Java/page/2/">2</a><a class="page-number" href="/categories/Java/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/categories/Java/page/8/">8</a><a class="extend next" rel="next" href="/categories/Java/page/2/">下一页 &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/categories/Java/page/2/">2</a><a class="page-number" href="/categories/Java/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/categories/Java/page/9/">9</a><a class="extend next" rel="next" href="/categories/Java/page/2/">下一页 &raquo;</a>
 </nav>
 
 

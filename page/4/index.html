@@ -131,6 +131,341 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2019/02/04/Greenplum 从入门到放弃（四）/">Greenplum 从入门到放弃 四</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/4/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-02-04T02:10:00.000Z" itemprop="datePublished">2019-02-04</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Greenplum/">Greenplum</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Greenplum-从入门到放弃（四）"><a href="#Greenplum-从入门到放弃（四）" class="headerlink" title="Greenplum 从入门到放弃（四）"></a>Greenplum 从入门到放弃（四）</h1><h2 id="PostgreSQL与Greenplum的关系"><a href="#PostgreSQL与Greenplum的关系" class="headerlink" title="PostgreSQL与Greenplum的关系"></a>PostgreSQL与Greenplum的关系</h2><h3 id="PostgreSQL"><a href="#PostgreSQL" class="headerlink" title="PostgreSQL"></a>PostgreSQL</h3><p>PostgreSQL是一种非常先进的对象–关系型数据库管理系统（ORDBMS），是目前功能最强大，特性最丰富和技术最先进的自由软件数据库系统之一，其某些特性甚至连商业数据库都不具备。</p>
+<p>PostgreSQL的特点可以说是数不胜数，称其为最先进的开<br>源软件数据库当之无愧，支持绝大部分的主流数据库特性，主<br>要体现在如下几方面：</p>
+<ol>
+<li>函数/存储过程</li>
+</ol>
+<p>PostgreSQL对非常丰富的过程类语言提供支持，可以编写自定义函数/存储过程</p>
+<ul>
+<li>内置的plpgsql，一种类似Oracle的PLsql的语言</li>
+<li>支持的脚本语言有：PL/Lua、PL/LOLCODE、PL/Perl、PL/HP、PL/Python、PL/Ruby、PL/sh、PL/Tcl和PL/Scheme。、</li>
+<li>编译语言有C、C++和JAVA。</li>
+<li>·统计语言PL/R</li>
+</ul>
+<ol start="2">
+<li>索引</li>
+</ol>
+<p>PostgreSQL支持用户定义的索引访问方法，并且内置了Btree、哈希和GiST索引。PostgreSQL中的索引有下面几个特点：</p>
+<ul>
+<li>可以从后向前扫描</li>
+<li>可以创建表达式索引</li>
+<li>部分索引</li>
+</ul>
+<ol start="3">
+<li>触发器</li>
+</ol>
+<p>触发器是由SQL查询的动作触发的事件。比如，一个INSERT查询可能激活一个检查输入值是否有效的触发器。大多数触发器都只对INSERT或者UPDATE查询有效。PostgreSQL完全支持触发器，可以附着在表上，但是不能在视图上。不过视图可以有规则。多个触发器是按照字母顺序触发的。我们还可以用其他过程语言书写触发器函数，不仅仅PL/PgSQL。</p>
+<ol start="4">
+<li>并发管理（MVCC）</li>
+</ol>
+<p>PostgreSQL的并发管理使用的是一种叫做“MVCC”（多版本并发机制）的机制，这种机制实际上就是现在在众多所谓的编程语言中极其火爆的“Lock Free”，其本质是通过类似科幻世界的时空穿梭的原理，给予每个用户一个自己的“时空”<br>，然后通过原子的“时空”控制来控制时间基线，并以此控制并发更改的可见区域，从而实现近乎无锁的并发，而同时还能在很大程度上保证数据库的ACID特性。</p>
+<ol start="5">
+<li>规则（RULE）</li>
+</ol>
+<p>规则允许我们对由一个查询生成的查询树进行改写。</p>
+<ol start="6">
+<li>数据类型</li>
+</ol>
+<p>PostgreSQL支持非常广泛的数据类型，包括：</p>
+<ul>
+<li>任意精度的数值类型；</li>
+<li>无限长度的文本类型；</li>
+<li>几何原语；</li>
+<li>IPv4和IPv6类型；</li>
+<li>CIDR块和MAC地址；</li>
+<li>数组。</li>
+</ul>
+<p>用户还可以创建自己的类型，并且可以利用GiST框架把这些类型做成完全可索引的，比如来自PostGIS的地理信息系统（GIS）的数据类型。</p>
+<ol start="7">
+<li>用户定义对象</li>
+</ol>
+<p>因为PostgreSQL使用一种基于系统表的可扩展的结构设计，所以PostgreSQL内部的几乎所有对象都可以由用户定义，这些对象包括：</p>
+<ul>
+<li>索引；</li>
+<li>操作符（内部操作符可以被覆盖）；</li>
+<li>聚集函数；</li>
+<li>域；</li>
+<li>类型转换；</li>
+<li>编码转换。</li>
+</ul>
+<ol start="8">
+<li>继承</li>
+</ol>
+<p>PostgreSQL的表是可以相互继承的。一个表可以有父表，<br>父表的结构变化会导致子表的结构变化，而对子表的插入和数<br>据更新等也会反映到父表中。</p>
+<ol start="9">
+<li>其他特性与扩展</li>
+</ol>
+<ul>
+<li>二进制和文本大对象存储；</li>
+<li>在线备份；</li>
+<li>TOAST（The Oversized-Attribute Storage Technique）用于透明地在独立的地方保存大的数据库属性，当数据超过一定大小的时候，会自动进行压缩以节省空间；</li>
+<li>正则表达式。</li>
+</ul>
+<p>此外PostgreSQL还有大量的附加模块和扩展版本，比如，多种不同的主从/主主复制方案:</p>
+<ul>
+<li>Slony-I；</li>
+<li>pgcluster；</li>
+<li>Mammoth replicator；</li>
+<li>Bucardo。</li>
+</ul>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2019/02/03/Greenplum 从入门到放弃（三）/">Greenplum 从入门到放弃 三</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/4/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-02-03T02:10:00.000Z" itemprop="datePublished">2019-02-03</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Greenplum/">Greenplum</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Greenplum-从入门到放弃（三）"><a href="#Greenplum-从入门到放弃（三）" class="headerlink" title="Greenplum 从入门到放弃（三）"></a>Greenplum 从入门到放弃（三）</h1><h2 id="master-和-segment关系"><a href="#master-和-segment关系" class="headerlink" title="master 和 segment关系"></a>master 和 segment关系</h2><p>Master和Segment其实都是一个单独的PostgreSQL数据库。<br>每一个都有自己单独的一套元数据字典，在这里，Master节点<br>一般也叫主节点，Segment也叫做数据节点。<br>Segment节点与Master节点的通信，通过千兆（或万兆）<br>网卡组成的内部连接（InterConnect），在同一台数据节点机<br>器上可以放多个Segment，不同的Segment节点会被赋予不同的<br>端口，同时，Segment之间也不断地进行着交互。为了实现高<br>可用，每个Segment都有对应的备节点（Mirror Segment），分<br>别存在于不同的机器上。</p>
+<blockquote>
+<p>Client一般只能与Master节点进行交互，Client将SQL发给Master，然后Master对SQL进行分析后，再将其分配给所有的Segment进行操作，并且将汇总结果返回给客户端。</p>
+</blockquote>
+<h2 id="数据库存储"><a href="#数据库存储" class="headerlink" title="数据库存储"></a>数据库存储</h2><p>对于数据库来说，在性能上磁盘IO很容易成为瓶颈，由于数据库的特性，每一个SQL基本都是对全表数据进行分析，每次处理的数据量非常大，数据基本上都是没有缓存的（数据字典除外），极度消耗IO资源（全表扫描主要都是顺序IO），所以Greenplum对存储的要求比较高。在文件系统的选择上，在Linux下建议使用XFS，在Solaris下建议使用ZFS，对于Raid根据需求选择硬Raid或软Raid，如果需要更大的空间，建议使用Raid5，如果对性能有更高的要求，可以选择Raid 1+0。</p>
+<h2 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h2><p>在确定机器配置的时候，要保证所有机器的网络都是通的，并且每台机器的防火墙都是关闭的，避免存在网络不通的问题。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2019/02/02/Greenplum 从入门到放弃（二）/">Greenplum 从入门到放弃 二</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/4/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-02-02T02:10:00.000Z" itemprop="datePublished">2019-02-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Greenplum/">Greenplum</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Greenplum-从入门到放弃（二）"><a href="#Greenplum-从入门到放弃（二）" class="headerlink" title="Greenplum 从入门到放弃（二）"></a>Greenplum 从入门到放弃（二）</h1><h2 id="OLTP与OLAP"><a href="#OLTP与OLAP" class="headerlink" title="OLTP与OLAP"></a>OLTP与OLAP</h2><p>数据库系统一般分为两种类型，一种是面向前台应用的，应用比较简单，但是重吞吐和高并发的OLTP类型；一种是重计算的，对大数据集进行统计分析的OLAP类型。Greenplum属于后者。</p>
+<p>OLTP（On-Line Transaction<br>Processing，联机事务处理）系统也称为生产系统，它是事件驱动的、面向应用的，比如电<br>子商务网站的交易系统就是一个典型的OLTP系统。OLTP的基本特点是：</p>
+<ul>
+<li>数据在系统中产生</li>
+<li>基于交易的处理系统（Transaction-Based）</li>
+<li>每次交易牵涉的数据量很小</li>
+<li>对响应时间要求非常高</li>
+<li>用户数量非常庞大，主要是操作人员</li>
+<li>数据库的各种操作主要基于索引进行</li>
+</ul>
+<p>OLAP（On-Line Analytical Processing，联机分析处理）是基于数据仓库的信息分析处理过程，是数据仓库的用户接口部分。OLAP系统是跨部门的、面向主题的，其基本特点是：</p>
+<ul>
+<li>本身不产生数据，其基础数据来源于生产系统中的操作数据（OperationalData）</li>
+<li>基于查询的分析系统</li>
+<li>复杂查询经常使用多表联结、全表扫描等，牵涉的数据量往往十分庞大</li>
+<li>响应时间与具体查询有很大关系</li>
+<li>用户数量相对较小，其用户主要是业务人员与管理人员</li>
+<li>由于业务问题不固定，数据库的各种操作不能完全基于索引进行</li>
+</ul>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2019/02/01/Greenplum 从入门到放弃（一）/">Greenplum 从入门到放弃 一</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/4/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-02-01T02:10:00.000Z" itemprop="datePublished">2019-02-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Greenplum/">Greenplum</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Greenplum-从入门到放弃（一）"><a href="#Greenplum-从入门到放弃（一）" class="headerlink" title="Greenplum 从入门到放弃（一）"></a>Greenplum 从入门到放弃（一）</h1><ul>
+<li><p>Greenplum的性能在数据量为TB级别时表现非常优秀，单机性能相比Hadoop要快好几倍</p>
+</li>
+<li><p>Greenplum是基于PostgreSQL的一个完善的数据库，在功能和语法上都要比Hadoop上的SQL引擎Hive好用很多，对于普通用户来说更加容易上手。</p>
+</li>
+<li><p>Greenplum有着完善的工具，相比Hive，整个体系都比较完善，不需要像Hive一样花太多的时间和精力进行改造，非常适合作为一些大型的数据仓库解决方案。</p>
+</li>
+<li><p>Greenplum能够方便地与Hadoop进行结合，可直接把数据写在Hadoop上，还可以直接在数据库上写MapReduce任务，并且配置简单。</p>
+</li>
+</ul>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2019/01/29/世界以痛吻我，我却报之以歌/">世界以痛吻我 我却报之以歌</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/4/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-01-29T09:10:10.000Z" itemprop="datePublished">2019-01-29</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/个人/">个人</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>今年发生不好的事，一切都显得不那么美好，就很多事情都不按大家的预想在发展。就一起都感觉不顺利，2018已经不够友好了，还记得刚刚过去的23岁生日，记得自己的愿望是希望，真挚希望所有的亲朋好友能够健康，健康就够了，钱多钱少不重要，就是健康就够了。。。</p>
+<p>但是偏偏还是发生了。</p>
+<h1 id="世界以痛吻我-我却报之以歌"><a href="#世界以痛吻我-我却报之以歌" class="headerlink" title="世界以痛吻我 我却报之以歌"></a>世界以痛吻我 我却报之以歌</h1><p>亲人已仙游，未呈儿孙福，幽魂于千里，如何度思量。</p>
+<p>2018年06月14日早9：00点，在杭州，还在床上的我猛的收到了家人群的消息，早已患糖尿病多年的舅舅病逝。尽管心里有多不愿意接受，但是心里也算是做好了准备。在五一回家时间便已经被告知舅舅身体日渐消瘦，骨瘦如柴。我还趁着工作之余，抽空去看望了。当看到那一瞬间，我感觉我整个人就不好了，眼泪一下就出来了，整个人像楞住了一般，久久说不出话，手也不知道往哪里放。当舅舅看到我，一把把我拽住，死死捏着，这一幕到现在我也忘不了…</p>
+<p>又是在杭州，2019年01月29日早8: 00点，同样的戏码，姨夫病逝，癌症晚期，距离收到通知，也就短短三个多月时间，大概一百多天，原本一个看上去健健康康的人，就突然离开，就像上帝给你的人生突然上了锁，然后把钥匙给扔掉了的感觉…</p>
+<p>醒来又是一天，开始干活，累…</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2019/01/11/Hadoop Hive Hbase 简单区别及应用场景/">Hadoop Hive Hbase 简单区别及应用场景</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/page/4/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-01-11T02:10:00.000Z" itemprop="datePublished">2019-01-11</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Hadoop/">Hadoop</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Hadoop-Hive-Hbase-简单区别及应用场景"><a href="#Hadoop-Hive-Hbase-简单区别及应用场景" class="headerlink" title="Hadoop Hive Hbase 简单区别及应用场景"></a>Hadoop Hive Hbase 简单区别及应用场景</h1><h2 id="Hadoop"><a href="#Hadoop" class="headerlink" title="Hadoop"></a>Hadoop</h2><p>它是一个分布式计算+分布式文件系统，前者其实就是MapReduce，后者是HDFS。后者可以独立运行，前者可以选择性使用，也可以不使用。</p>
+<h2 id="Hive"><a href="#Hive" class="headerlink" title="Hive"></a>Hive</h2><p>通俗的说是一个数据仓库，仓库中的数据是被HDFS管理的数据文件，它支持类似sql语句的功能，<br>你可以通过该语句完成分布式环境下的计算功能，Hive会把语句转换成MapReduce，然后交给Hadoop执行。<br>这里的计算，仅限于查找和分析，而不是更新、增加和删除。它的优势是对历史数据进行处理，<br>用时下流行的说法是离线计算，因为它的底层是MapReduce，MapReduce在实时计算上性能很差。<br>它的做法是把数据文件加载进来作为一个Hive表（或者外部表），让你觉得你的sql操作的是传统的表。</p>
+<h2 id="HBase"><a href="#HBase" class="headerlink" title="HBase"></a>HBase</h2><p>通俗的说，HBase的作用类似于数据库，传统数据库管理的是集中的本地数据文件，<br>而HBase基于Hdfs实现对分布式数据文件的管理，比如增删改查。也就是说，HBase只是利用Hadoop的Hdfs帮助其管理数据的持久化文件（HFile），它跟MapReduce没任何关系。HBase的优势在于实时计算，所有实时数据都直接存入Hbase中，客户端通过API直接访问Hbase，实现实时计算。由于它使用的是nosql，或者说是列式结构，从而提高了查找性能，使其能运用于大数据场景，这是它跟MapReduce的区别。</p>
+<h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><ol>
+<li>Hadoop是Hive和HBase的基础，Hive依赖Hadoop</li>
+<li>HBase仅依赖Hadoop的Hdfs模块。</li>
+<li>Hive适用于离线数据的分析，操作的是通用格式的（如通用的日志文件）、被Hadoop管理的数据文件，它支持类sql，<br>比编写MapReduce的java代码来的更加方便，它的定位是数据仓库，存储和分析历史数据</li>
+<li>Hbase适用于实时计算，采用列式结构的nosql，操作的是自己生成的特殊格式的HFile、被hadoop管理的数据文件，<br>它的定位是数据库，或者叫DBMS</li>
+</ol>
+<blockquote>
+<p>最后补充一下：Hive可以直接操作Hdfs中的文件作为它的表的数据，也可以使HBase数据库作为它的表</p>
+</blockquote>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2019/01/08/大数据相关技术（Hadoop体系）/">Hadoop技术体系</a>
         </h1>
         
@@ -251,7 +586,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/12/08/消息队列/">消息队列</a>
+            <a href="/2019/01/08/流处理、批处理、交互式查询/">流处理、批处理、交互式查询</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -259,13 +594,13 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-12-08T03:18:02.000Z" itemprop="datePublished">2018-12-08</time>
+    <time datetime="2019-01-08T06:18:02.000Z" itemprop="datePublished">2019-01-08</time>
 </a>
 
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/消息队列/">消息队列</a>
+    <a class="article-tag-link" href="/tags/Hadoop/">Hadoop</a>
 </div>
 
 
@@ -274,43 +609,14 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="一、消息队列的基本概念"><a href="#一、消息队列的基本概念" class="headerlink" title="一、消息队列的基本概念"></a>一、消息队列的基本概念</h1><h2 id="1-1-Broker"><a href="#1-1-Broker" class="headerlink" title="1.1 Broker"></a>1.1 Broker</h2><p>==Broker== 的概念来自与Apache ActiveMQ，通俗的讲就是消息队列服务器。</p>
-<h2 id="1-2-消息生产者和消费者"><a href="#1-2-消息生产者和消费者" class="headerlink" title="1.2 消息生产者和消费者"></a>1.2 消息生产者和消费者</h2><ul>
-<li>消息生产者 ==Producer==：发送消息到消息队列。</li>
-<li>消息消费者 ==Consumer==：从消息队列接收消息。</li>
-</ul>
-<h2 id="1-3-消息模型"><a href="#1-3-消息模型" class="headerlink" title="1.3 消息模型"></a>1.3 消息模型</h2><h3 id="点对点消息队列模型"><a href="#点对点消息队列模型" class="headerlink" title="点对点消息队列模型"></a>点对点消息队列模型</h3><p>消息生产者向一个特定的队列发送消息，消息消费者从该队列中接收消息。消息的生产者和消费者可以不同时处于运行状态。每一个成功处理的消息都由消息消费者签收确认（Acknowledge）。</p>
-<h3 id="发布订阅消息模型-Topic"><a href="#发布订阅消息模型-Topic" class="headerlink" title="发布订阅消息模型-Topic"></a>发布订阅消息模型-Topic</h3><p>发布订阅消息模型中，支持向一个特定的主题Topic发布消息，0个或多个订阅者接收来自这个消息主题的消息。在这种模型下，发布者和订阅者彼此不知道对方。实际操作过程中，必须先订阅，再发送消息，而后接收订阅的消息，这个顺序必须保证。 </p>
-<h2 id="1-4-消息顺序性保证"><a href="#1-4-消息顺序性保证" class="headerlink" title="1.4 消息顺序性保证"></a>1.4 消息顺序性保证</h2><p>基于Queue消息模型，利用FIFO先进先出的特性，可以保证消息的顺序性。</p>
-<h2 id="1-5-消息的ACK确认机制"><a href="#1-5-消息的ACK确认机制" class="headerlink" title="1.5 消息的ACK确认机制"></a>1.5 消息的ACK确认机制</h2><p>即消息的Ackownledge确认机制：<br>为了保证消息不丢失，消息队列提供了消息Acknowledge机制，即ACK机制，当Consumer确认消息已经消费处理，发送一个ACK给消息队列，此时消息队列便可以删除这个消息了。如果Consumer宕机/关闭，没有发送ACK，消息队列将认为这个消息没有被处理，会将这个消息重新发送给其他的Consumer重新消费处理。</p>
-<h2 id="1-6-消息的持久化"><a href="#1-6-消息的持久化" class="headerlink" title="1.6 消息的持久化"></a>1.6 消息的持久化</h2><p>消息的持久化，对于一些关键的核心业务来说是非常重要的，启用消息持久化后，消息队列宕机重启后，消息可以从持久化存储恢复，消息不丢失，可以继续消费处理。</p>
-<h2 id="1-7-消息的同步和异步收发"><a href="#1-7-消息的同步和异步收发" class="headerlink" title="1.7 消息的同步和异步收发"></a>1.7 消息的同步和异步收发</h2><h3 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h3><p>消息的收发支持同步收发的方式<br>同步收发场景下，消息生产者和消费者双向应答模式，例如：张三写封信送到邮局中转站，然后李四从中转站获得信，然后在写一份回执信，放到中转站，然后张三去取，当然张三写信的时候就得写明回信地址。<br>消息的接收如果以同步的方式(Pull)进行接收，如果队列中为空，此时接收将处于同步阻塞状态，会一直等待，直到消息的到达。</p>
-<h3 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h3><p>消息的收发同样支持异步方式：异步发送消息，不需要等待消息队列的接收确认。<br>异步接收消息，以Push的方式触发消息消费者接收消息。</p>
-<h2 id="1-8-消息的事务支持"><a href="#1-8-消息的事务支持" class="headerlink" title="1.8 消息的事务支持"></a>1.8 消息的事务支持</h2><p>消息的收发处理支持事务，例如：在任务中心场景中，一次处理可能涉及多个消息的接收、处理，这处于同一个事务范围内，如果一个消息处理失败，事务回滚，消息重新回到队列中。</p>
-<h1 id="二、JMS消费服务"><a href="#二、JMS消费服务" class="headerlink" title="二、JMS消费服务"></a>二、JMS消费服务</h1><p>Java消息服务（Java Message Service，JMS）应用程序接口是一个Java平台中关于面向消息中间件（MOM）的API，用于在两个应用程序之间，或分布式系统中发送消息，进行异步通信。 点对点与发布订阅最初是由JMS定义的。这两种模式主要区别或解决的问题就是发送到队列的消息能否重复消费(多订阅) 。</p>
-<p>JMS规范目前支持两种消息模型：</p>
-<ol>
-<li>点对点（point to point， queue）</li>
-<li>发布/订阅（publish/subscribe，topic）</li>
-</ol>
-<h2 id="2-1-点对点：Queue，不可重复消费"><a href="#2-1-点对点：Queue，不可重复消费" class="headerlink" title="2.1 点对点：Queue，不可重复消费"></a>2.1 点对点：Queue，不可重复消费</h2><p>消息生产者生产消息发送到queue中，然后消息消费者从queue中取出并且消费消息。<br>消息被消费以后，queue中不再有存储，所以消息消费者不可能消费到已经被消费的消息。<br>Queue支持存在多个消费者，但是对一个消息而言，只会有一个消费者可以消费。 </p>
-<p>P2P模式包含三个角色：</p>
-<ul>
-<li>消息队列（Queue）</li>
-<li>发送者(Sender)</li>
-<li>接收者(Receiver)</li>
-</ul>
-<p>每个消息都被发送到一个特定的队列，接收者从队列中获取消息。队列保留着消息，<br>直到他们被消费或超时。</p>
-<h2 id="2-2-发布-订阅：Topic，可以重复消费"><a href="#2-2-发布-订阅：Topic，可以重复消费" class="headerlink" title="2.2 发布/订阅：Topic，可以重复消费"></a>2.2 发布/订阅：Topic，可以重复消费</h2><p>消息生产者（发布）将消息发布到topic中，同时有多个消息消费者（订阅）消费该消息。<br>和点对点方式不同，发布到topic的消息会被所有订阅者消费。 </p>
-<p>支持订阅组的发布订阅模式：<br>发布订阅模式下，当发布者消息量很大时，显然单个订阅者的处理能力是不足的。实际上现实场景中是多个订阅者节点组成一个订阅组负载均衡消费topic消息即分组订阅，这样订阅者很容易实现消费能力线性扩展。可以看成是一个topic下有多个Queue，每个Queue是点对点的方式，Queue之间是发布订阅方式。 </p>
-<h2 id="2-3-区别"><a href="#2-3-区别" class="headerlink" title="2.3 区别"></a>2.3 区别</h2><h3 id="点对点模式"><a href="#点对点模式" class="headerlink" title="点对点模式"></a>点对点模式</h3><p>生产者发送一条消息到queue，一个queue可以有很多消费者，但是一个消息只能被一个消费者接受，当没有消费者可用时，这个消息会被保存直到有一个可用的消费者，所以Queue实现了一个可靠的负载均衡。</p>
-<h3 id="发布订阅模式"><a href="#发布订阅模式" class="headerlink" title="发布订阅模式"></a>发布订阅模式</h3><p>发布者发送到topic的消息，只有订阅了topic的订阅者才会收到消息。topic实现了发布和订阅，当你发布一个消息，所有订阅这个topic的服务都能得到这个消息，所以从1到N个订阅者都能得到这个消息的拷贝。</p>
-<h1 id="三、流行模型对比"><a href="#三、流行模型对比" class="headerlink" title="三、流行模型对比"></a>三、流行模型对比</h1><p>传统企业型消息队列ActiveMQ遵循了JMS规范，实现了点对点和发布订阅模型，但其他流行的消息队列RabbitMQ、Kafka并没有遵循JMS规范。</p>
-<h2 id="3-1-RabbitMQ"><a href="#3-1-RabbitMQ" class="headerlink" title="3.1 RabbitMQ"></a>3.1 RabbitMQ</h2><p>RabbitMQ实现了AQMP协议，AQMP协议定义了消息路由规则和方式。生产端通过路由规则发送消息到不同queue，消费端根据queue名称消费消息。RabbitMQ既支持内存队列也支持持久化队列，消费端为推模型，消费状态和订阅关系由服务端负责维护，消息消费完后立即删除，不保留历史消息。</p>
-<h3 id="点对点"><a href="#点对点" class="headerlink" title="点对点"></a>点对点</h3><p>生产端发送一条消息通过路由投递到Queue，只有一个消费者能消费到。 </p>
-<h3 id="多订阅"><a href="#多订阅" class="headerlink" title="多订阅"></a>多订阅</h3><p>当RabbitMQ需要支持多订阅时，发布者发送的消息通过路由同时写到多个Queue，不同订阅组消费不同的Queue。所以支持多订阅时，消息会多个拷贝。 </p>
-<h2 id="3-2-Kafka"><a href="#3-2-Kafka" class="headerlink" title="3.2 Kafka"></a>3.2 Kafka</h2><p>Kafka只支持消息持久化，消费端为拉模型，消费状态和订阅关系由客户端端负责维护，消息消费完后不会立即删除，会保留历史消息。因此支持多订阅时，消息只会存储一份就可以了。但是可能产生重复消费的情况。</p>
+        <pre><code>我们将大数据处理按处理时间的跨度要求分为以下几类
 
+基于实时数据流的处理，通常的时间跨度在数百毫秒到数秒之间
+
+基于历史数据的交互式查询，通常时间跨度在数十秒到数分钟之间
+
+复杂的批量数据处理，通常的时间跨度在几分钟到数小时之间
+</code></pre>
         
     </section>
 </article>
@@ -321,7 +627,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2018/10/01/JVM课程七/">JVM课程七</a>
+            <a href="/2019/01/08/Hadoop/">Hadoop概念</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -329,13 +635,13 @@
     
     <i class="icon-calendar"></i>
     
-    <time datetime="2018-10-01T14:22:22.000Z" itemprop="datePublished">2018-10-01</time>
+    <time datetime="2019-01-08T06:18:02.000Z" itemprop="datePublished">2019-01-08</time>
 </a>
 
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+    <a class="article-tag-link" href="/tags/Hadoop/">Hadoop</a>
 </div>
 
 
@@ -344,312 +650,43 @@
     
     <section class="article-body markdown-body">
         
-        <h2 id="分代收集器"><a href="#分代收集器" class="headerlink" title="分代收集器"></a>分代收集器</h2><p>一起七个 3 + 3 + 1</p>
-<p>在收集器使用的时候都是：新老搭配的。</p>
-<p>新生代收集器：</p>
-<ul>
-<li>Serial</li>
-<li>ParNew</li>
-<li>Parallel Scavenge</li>
+        <p>Hadoop是一个开源的框架，可编写和运行分布式应用处理大规模数据，是专为离线和大规模数据分析而设计的，并不适合那种对几个记录随机读写的在线事务处理模式。</p>
+<h1 id="Hadoop"><a href="#Hadoop" class="headerlink" title="Hadoop"></a>Hadoop</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ul>
+<li>Hadoop是一个开源的框架，可编写和运行分布式应用处理大规模数据，是专为离线和大规模数据分析而设计的，并不适合那种对几个记录随机读写的在线事务处理模式。 ==不是为了大数据而大数据==</li>
+<li>Hadoop 是以一种可靠、高效、可伸缩的方式进行处理的。Hadoop 是可靠的，因为它假设计算元素和存储会失败，因此它维护多个工作数据副本，确保能够针对失败的节点重新分布处理。Hadoop 是高效的，因为它以并行的方式工作，通过并行处理加快处理速度。Hadoop 还是可伸缩的，能够处理 PB 级数据。</li>
 </ul>
-<p>老年代收集器：</p>
-<ul>
-<li>CMS(Concurrent Mark Sweep)</li>
-<li>Serial Old </li>
-<li>Parallel Old</li>
+<h2 id="核心"><a href="#核心" class="headerlink" title="核心"></a>核心</h2><p>Hadoop的核心就是==HDFS==和==MapReduce===，Hadoop旗下有很多经典子项目，比如HBase、Hive等，这些都是基于HDFS和MapReduce发展出来的。要想了解Hadoop，就必须知道HDFS和MapReduce是什么。</p>
+<h3 id="HDFS"><a href="#HDFS" class="headerlink" title="HDFS"></a>HDFS</h3><p>Hadoop Distributed File System，Hadoop 分布式文件系统<br>高度容错性的系统，适合部署在廉价的机器上，HDFS能提供高吞吐量的数据访问，<br>适合那些有着超大数据集（large data set）的应用程序。</p>
+<h3 id="MapReduce"><a href="#MapReduce" class="headerlink" title="MapReduce"></a>MapReduce</h3><p>Mapreduce是一个计算框架，一个处理分布式海量数据的软件框架及计算集群。</p>
+<h2 id="用处"><a href="#用处" class="headerlink" title="用处"></a>用处</h2><ul>
+<li>搜索引擎 - 设计Hadoop的初衷，为了针对大规模的网页快速建立索引）</li>
+<li>大数据存储 - 利用Hadoop的分布式存储能力，例如数据备份、数据仓库等。</li>
+<li>大数据处理 - 利用Hadoop的分布式处理能力，例如数据挖掘、数据分析等。</li>
+<li>科学研究 - Hadoop是一种分布式的开源框架，对于分布式计算有很大程度地参考价值。</li>
 </ul>
-<p>新老通吃：<br>G1: Garbadge First</p>
-<h2 id="新生代收集器"><a href="#新生代收集器" class="headerlink" title="新生代收集器"></a>新生代收集器</h2><h3 id="Serial-GC-串行"><a href="#Serial-GC-串行" class="headerlink" title="Serial GC(串行)"></a>Serial GC(串行)</h3><p>HotSpot运行在client模式下的默认新生代收集器。只用一个CPU/一个收集器线程去完成GC。<br>“Stop The World” -XX:+UseSerialGC</p>
-<ol>
-<li>启动回收</li>
-<li>暂停其他所有工作线程。新生代回收采用<strong>复制</strong>算法。</li>
-<li>暂停其他所有工作线程。老年代回收采用<strong>标记整理算法</strong>。单线程收集，但是简单高效。<br>在内存占用不大的应用中，效率很高。</li>
-</ol>
-<h3 id="ParNew-并行"><a href="#ParNew-并行" class="headerlink" title="ParNew(并行)"></a>ParNew(并行)</h3><p>其本质是Serial的多线程版本，目的是缩短垃圾收集的时间，也就是占用工作线程时间的问题。单CPU甚至不如Serial，但是在多核CPU配合多线程效果明显。多核CPU + 超线程技术。<br>若VM启用老年代使用CMS(concurrent mark sweep)时候，<br>参数： -XX:+UseConcMarkSweepGC<br>新生代次收集器默认为ParNew。<br>多核CPU时候一般配置为CPU核数。-XX:ParallelGCThreads=<n> 参数控制GC线程数。</n></p>
-<ol>
-<li>启动回收</li>
-<li>暂停其他所有工作线程。新生代回收采用<strong>复制</strong>算法。 (GC线程多个同时工作，并行执行)</li>
-<li>暂停其他所有工作线程。老年代回收采用<strong>标记整理算法</strong>。</li>
-</ol>
-<h3 id="Parallel-Scavenge"><a href="#Parallel-Scavenge" class="headerlink" title="Parallel Scavenge"></a>Parallel Scavenge</h3><p>并行多线程，复制算法。关注点与ParNew不同，关注的是系统吞吐量。</p>
-<p>系统吞吐量 = 运行用户代码时间 /（运行用户代码时间 + 垃圾回收时间）</p>
-<p>停顿时间越短就越适用于用户交互的程序。良好的响应速度提升用户体验。<br>而高吞吐则适用于后台计算而不需要太多交互的任务，可以最高效率的利用CPU时间，<br>尽快的完成程序的运算任务。</p>
-<h2 id="老年代收集器"><a href="#老年代收集器" class="headerlink" title="老年代收集器"></a>老年代收集器</h2><h3 id="Serial-Old"><a href="#Serial-Old" class="headerlink" title="Serial Old"></a>Serial Old</h3><ol>
-<li>启动回收</li>
-<li>暂停其他所有工作线程。新生代回收采用复制算法。</li>
-<li>暂停其他所有工作线程。老年代回收采用标记整理算法。单线程收集，但是简单高效。<br>在内存占用不大的应用中，效率很高。</li>
-</ol>
-<p>可以与任意的新生代收集器配置使用</p>
-<h3 id="Parallel-Old"><a href="#Parallel-Old" class="headerlink" title="Parallel Old"></a>Parallel Old</h3><p>只能配合Parallel Scavenge收集器一起使用。</p>
-<h3 id="CMS-并发"><a href="#CMS-并发" class="headerlink" title="CMS (并发)"></a>CMS (并发)</h3><p>Concurrent Mark Sweep,可以和用户线程同时工作。是一款并发收集器。<br>虽然有理论上表现更好的G1收集器，主流的仍然是CMS收集器。<br>能用于server模式下的JVM优化。能结合新生代的Serial 和 ParNew一起使用。</p>
-<h2 id="G1"><a href="#G1" class="headerlink" title="G1"></a>G1</h2><p>Garbage-First。可以运用在新生代和老年代的直接分区收集。面向服务端的垃圾收集器。 –XX:+UseG1GC<br>将Java堆划分为多个相等的独立区域Region，保留新生代和老年代的概念。但是不再是物理隔离。</p>
-<p>优化方式：<br>1.选择JVM版本<br>2.对于堆区大小的分配<br>3.垃圾回收的方式</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/09/20/JVM课程八/">JVM课程八</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/4/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-09-20T06:55:00.000Z" itemprop="datePublished">2018-09-20</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="JVM性能监测工具"><a href="#JVM性能监测工具" class="headerlink" title="JVM性能监测工具"></a>JVM性能监测工具</h1><p><strong>jps</strong><br>      查询运行于jvm的线程jps -l</p>
-<p><strong>jstat</strong><br>        查看HotSpot VM运行的信息<br>        jstat -gc pid 毫秒数 次数</p>
-<pre><code>From Created
-From Used
-To Created 
-To Used
-Eden Created
-Eden Used
-Old Created
-Old Used
-Permanent Created
-Permanent Used
-Young GC 次收集器收集次数
-Young GC Time 次收集器时间
-Full GC  全收集次数
-Full GC Time 全收集时间
-GC Time 收集总时间
-S0C S1C S0U S1U EC EU OC OU PC PU YGC YGCT FGC FGCT GCT
-</code></pre><p><strong>jvisualvm</strong><br>        可视化工具<br>        jvisualvm</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/09/15/JVM课程六/">JVM课程六</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/4/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-09-15T15:12:00.000Z" itemprop="datePublished">2018-09-15</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="垃圾收集器"><a href="#垃圾收集器" class="headerlink" title="垃圾收集器"></a>垃圾收集器</h1><p>Scavenge(次收集) 和 Full GC(全收集)区别</p>
-<p>新生代GC (Scavenge GC): 发生在新生代的GC，因为新生代的Java对象大多是朝生夕死，所以Scavenge GC非常频繁。<br>回收速度快，当Eden内存空间不足时，会触发Scavenge GC。<br>一般情况下，当新对象生成时，并且在Eden中申请空间失败，就会触发Scavenge GC,对Eden区进行GC，清除非存活对象，<br>将尚存活的对象移动至Survivor区，然后整理两个Survivor区，这种方式的GC是对年轻代的Eden区进行，不会影响老年代。</p>
-<p>老年代GC (Full GC/Major GC): Full GC是指发生在老年代的GC。出现了Full GC一般至少会伴随一次Minor GC。<br>老年代的对象大多是Minor GC过程中从新生代进入老年代。比如分配担保失败。Full GC的速度一般会比Minor GC慢十倍以上。<br>当老年代内存不足时或者显式调用System.gc()时候，会触发Full GC。</p>
-<p>次收集：<br>当年轻代堆空间紧张会被触发，相对于全收集，收集间隔较短。</p>
-<p>全收集：<br>当老年代或者持久代空间满了时候会触发全收集操作。可以使用System.gc()显式调用。<br>全收集一般会根据堆大小，需要的时间较长。不过全收集时间超过3s-5s,那就太长了。</p>
-<p>新生代收集器：<br>Serial<br>ParNew<br>Parallel scavenge </p>
-<p>老年代收集器：<br>CMS(Concurrent Mark Sweep)<br>Serial Old<br>Parallel Old </p>
-<p>新老通吃：<br>G1: Garbadge First</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/09/15/JVM课程四/">JVM课程四</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/4/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-09-15T02:55:00.000Z" itemprop="datePublished">2018-09-15</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="JVM分代策略"><a href="#JVM分代策略" class="headerlink" title="JVM分代策略"></a>JVM分代策略</h1><h2 id="新生代"><a href="#新生代" class="headerlink" title="新生代"></a>新生代</h2><p>三个区的默认存放空间是Eden : From : To = 8: 1: 1</p>
-<p>目的是因为HotSpot采用复制算法来回收新生代，设置这个比例是为了充分利用空间。</p>
-<p>新生成的对象优先存放在新生代中，在新生代中，常规应用采取一次垃圾收集可以回收70%-90%。</p>
-<p>新生成的对象在Eden区中分配（大对象除外，直接老年代）。</p>
-<p>当Eden没有足够空间，虚拟机发起一次Minor GC。（只会收集一次Eden区）</p>
-<p>GC开始时，对象只会存在于Eden区和From Suvivor区，To Survivor为空。用于复制</p>
-<p>GC进行时，Eden区中所有存活的对象会被复制到To Survivor(连续存储)，<br>而在From Survivor区中仍存活的对象，会根据年龄决定去向。<br>阈值为15，每熬过一次GC,年龄就加1，GC分代年龄值存在对象的header中，<br>大于15，移至老年代中，没有达到15的复制到To Survivor。<br>之后，From和To交换角色。From被清空，变成下一次GC的To区， 而To区成为下一次GC的From区。</p>
-<p>无论如何，保证To区域在下一轮GC中为空的。</p>
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><p>==高可靠性==<br>Hadoop按位存储和处理数据的能力值得信赖。</p>
+<p>==高扩展性==<br>Hadoop是在可用的计算机集簇间分配数据并完成计算任务的，这些集簇可以方便地扩展到数以千计的节点中。</p>
+<p>==高效性==<br>Hadoop能够在节点之间动态地移动数据，并保证各个节点的动态平衡，因此处理速度非常快。</p>
+<p>==高容错性==<br>Hadoop能够自动保存数据的多个副本，并且能够自动将失败的任务重新分配。</p>
+<p>==低成本==<br>与一体机、商用数据仓库以及QlikView、Yonghong Z-Suite等数据集市相比，hadoop是开源的，<br>项目的软件成本因此会大大降低。</p>
 <blockquote>
-<p>note: 当TO区域用于复制From中的对象时，出现空间不足的时候，需要依赖老年代分配内存进行存放。</p>
+<p>Hadoop设计对硬件需求比较低，只须运行在低廉的商用硬件集群上，而无需昂贵的高可用性机器上。<br>廉价的商用机也就意味着大型集群中出现节点故障情况的概率非常高。这就要求设计HDFS时要充分考虑数据的可靠性，<br>安全性及高可用性。</p>
 </blockquote>
-<h2 id="老年代"><a href="#老年代" class="headerlink" title="老年代"></a>老年代</h2><p>在新生代中经历了多次的GC后存活下来的对象会进入老年代。<br>老年代的对象生命周期较长，存活率比较高，在老年代中进行GC的频率较低，效率也较低。</p>
-<h2 id="永久代"><a href="#永久代" class="headerlink" title="永久代"></a>永久代</h2><p>永久代中存放类信息，常量，静态变量，即时编译器编译后的代码等数据。<br>对此区域，Java虚拟机规范指出可以不进行垃圾收集。一般而言不会进行垃圾回收。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/09/15/JVM课程五/">JVM课程五</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/4/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-09-15T02:55:00.000Z" itemprop="datePublished">2018-09-15</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h1 id="垃圾回收算法和收集器"><a href="#垃圾回收算法和收集器" class="headerlink" title="垃圾回收算法和收集器"></a>垃圾回收算法和收集器</h1><h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><h3 id="引用计数（reference-counting）"><a href="#引用计数（reference-counting）" class="headerlink" title="引用计数（reference counting）"></a>引用计数（reference counting）</h3><p>古老的算法。此对象有一个引用，增加一个计数，删除一个引用减少一个引用。垃圾回收时，只用收集为0的对象。<br>致命问题是无法解决循环引用的问题。</p>
-<h3 id="复制（copying）"><a href="#复制（copying）" class="headerlink" title="复制（copying）"></a>复制（copying）</h3><p>eg：survivor from to<br>此算法将内存空间分为两份。每次使用其中一个区域。（占用空间）<br>垃圾回收时，遍历当前使用的区域，把正在使用中的对象复制到另一个区域中。</p>
-<h3 id="标记清楚（Mark-Sweep）"><a href="#标记清楚（Mark-Sweep）" class="headerlink" title="标记清楚（Mark-Sweep）"></a>标记清楚（Mark-Sweep）</h3><p>执行分为两阶段。<br>第一阶段：从对象根节点开始标记所有被引用的对象。<br>第二阶段：遍历整个堆，把未标记的对象清除，此算法需要暂停整个应用(Stop the world)。<br>同时会产生内存碎片。<br>缺点：<br>1）未使用的内存空间不连续，浪费。<br>2）暂停整个应用。</p>
-<h3 id="标记整理（Mark-Compact）"><a href="#标记整理（Mark-Compact）" class="headerlink" title="标记整理（Mark-Compact）"></a>标记整理（Mark-Compact）</h3><p>执行分为两阶段。<br>第一阶段：从对象根节点开始标记所有被引用的对象。<br>第二阶段：遍历整个堆，把未标记的对象清除，同时把存活的对象压缩到一块，顺序排放，避免碎片问题。<br>避免了复制算法的空间问题。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/09/13/JVM课程二/">JVM课程二</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/4/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-09-13T07:55:00.000Z" itemprop="datePublished">2018-09-13</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h2 id="类加载器子系统和方法区："><a href="#类加载器子系统和方法区：" class="headerlink" title="类加载器子系统和方法区："></a>类加载器子系统和方法区：</h2><p>从文件系统中加载class文件，加载类信息。加载的信息存放于一个叫做方法区的内存空间。</p>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><p>==不适合低延迟数据访问==</p>
 <blockquote>
-<p>方法区中包括： 类信息，常量池（字符串字面量和数字常量）</p>
+<p>如果要处理一些用户要求时间比较短的低延迟应用请求，则HDFS不适合。HDFS是为了处理大型数据集分析任务的，主要是为达到高的数据吞吐量而设计的，这就可能要求以高延迟作为代价。</p>
 </blockquote>
-<h2 id="堆："><a href="#堆：" class="headerlink" title="堆："></a>堆：</h2><p>主要内存空间。存放对象的实例。线程共享</p>
-<h2 id="直接内存："><a href="#直接内存：" class="headerlink" title="直接内存："></a>直接内存：</h2><p>NIO允许Java程序直接访问直接内存。</p>
-<p>不受JVM内存 -Xmx 最大堆大小限制。不属于堆内存。直接内存速率高于堆内存。</p>
-<p>读写频繁的场合可能会用到直接内存，与系统内存挂钩。</p>
-<h2 id="垃圾回收系统"><a href="#垃圾回收系统" class="headerlink" title="垃圾回收系统"></a>垃圾回收系统</h2><p>回收java堆，方法区，直接内存都可以回收。java所有的对象的释放都是隐式的。<br>垃圾回收系统后台默默运行，标示和释放对象，实现全自动化管理。</p>
-<h2 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h2><p>每一个虚拟机线程都有一个私有的栈，栈在线程创建的时候被创建。栈保存着帧信息。</p>
-<p>栈中保存方法中的局部变量，方法参数，和程序的调用，返回相关。</p>
-<h2 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h2><p>本地方法栈和虚拟机栈类似，虚拟机栈用于方法的调用。本地方法栈则用于本地方法（Native API）的调用。</p>
-<p>Java虚拟机的重要拓展之一，不同的操作系统本地方法的API也不一样。</p>
-<h2 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h2><p>线程私有，字节码解释器工作时通过改变这个计数器的值来选取下一条需要执行的字节码指令，<br>分支、循环、跳转、异常处理、线程恢复等功能都需要依赖这个计数器来完。</p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2018/09/12/JVM课程一/">JVM课程一</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://wxzhongwang.github.io/page/4/index.html">
-    
-    <i class="icon-calendar"></i>
-    
-    <time datetime="2018-09-12T14:55:00.000Z" itemprop="datePublished">2018-09-12</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/JVM/">JVM</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>JDK 编译Java文件为Class文件<br>Class文件由JVM解释为Native Code</p>
-<p>Java HotSpot:<br>热点代码，（类似于缓存）避免jvm频繁将class文件转换为cpu可以直接理解的代码（native code 本地代码）。</p>
-<p>Client VM 是默认启用的版本，更适合C/S 在为客户端环境中启动减少启动时间而优化<br>Server VM 在内存分配上更大，更适合于B/S 在为服务端环境中最大化程序执行速度而优化</p>
-<p>-client KNOWN<br>-server KNOWN</p>
+<blockquote>
+<p>改进策略：对于那些有低延时要求的应用程序，HBase是一个更好的选择。通过上层数据管理项目来尽可能地弥补这个不足。在性能上有了很大的提升，它的口号就是goes real time。使用缓存或多master设计可以降低client的数据请求压力，以减少延时。还有就是对HDFS系统内部的修改，这就得权衡大吞吐量与低延时了，HDFS不是万能的银弹。</p>
+</blockquote>
+<p>==无法高效存储大量小文件==</p>
+<blockquote>
+<p>因为Namenode把文件系统的元数据放置在内存中，所以文件系统所能容纳的文件数目是由Namenode的内存大小来决定。一般来说，每一个文件、文件夹和Block需要占据150字节左右的空间，所以，如果你有100万个文件，每一个占据一个Block，你就至少需要300MB内存。当前来说，数百万的文件还是可行的，当扩展到数十亿时，对于当前的硬件水平来说就没法实现了。还有一个问题就是，因为Maptask的数量是由splits来决定的，所以用MR处理大量的小文件时，就会产生过多的Maptask，线程管理开销将会增加作业时间。举个例子，处理10000M的文件，若每个split为1M，那就会有10000个Maptasks，会有很大的线程开销；若每个split为100M，则只有100个Maptasks，每个Maptask将会有更多的事情做，而线程的管理开销将减小很多。</p>
+</blockquote>
+<p>==不支持多用户写入及任意修改文件==  </p>
+<blockquote>
+<p>在HDFS的一个文件中只有一个写入者，而且写操作只能在文件末尾完成，即只能执行追加操作。目前HDFS还不支持多个用户对同一文件的写操作，以及在文件任意位置进行修改。</p>
+</blockquote>
 
         
     </section>
@@ -659,7 +696,7 @@ S0C S1C S0U S1U EC EU OC OU PC PU YGC YGCT FGC FGCT GCT
 
 
 <nav class="page-nav">
-    <a class="extend prev" rel="prev" href="/page/3/">&laquo; 上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/5/">下一页 &raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/3/">&laquo; 上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/">23</a><a class="extend next" rel="next" href="/page/5/">下一页 &raquo;</a>
 </nav>
 
 

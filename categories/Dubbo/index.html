@@ -131,6 +131,112 @@
     <header class="article-header">
         
         <h1 itemprop="name">
+            <a href="/2018/12/02/Dubbo内置负载均衡策略/">Dubbo内置负载均衡策略</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Dubbo/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-02T04:30:00.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Dubbo/">Dubbo</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="Dubbo内置负载均衡策略"><a href="#Dubbo内置负载均衡策略" class="headerlink" title="Dubbo内置负载均衡策略"></a>Dubbo内置负载均衡策略</h1><p>Dubbo内置了4种负载均衡策略:</p>
+<ul>
+<li>RandomLoadBalance:</li>
+</ul>
+<p>随机负载均衡。随机的选择一个。是Dubbo的默认负载均衡策略。</p>
+<ul>
+<li>RoundRobinLoadBalance:</li>
+</ul>
+<p>轮询负载均衡。轮询选择一个。</p>
+<ul>
+<li>LeastActiveLoadBalance:</li>
+</ul>
+<p>最少活跃调用数，相同活跃数的随机。活跃数指调用前后计数差。使慢的 Provider 收到更少请求，因为越慢的 Provider 的调用前后计数差会越大。</p>
+<ul>
+<li>ConsistentHashLoadBalance: </li>
+</ul>
+<p>一致性哈希负载均衡。相同参数的请求总是落在同一台机器上。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/12/01/Dubbo 负载均衡 集群容错 服务路由/">Dubbo 负载均衡 集群容错 服务路由</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://wxzhongwang.github.io/categories/Dubbo/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-12-01T04:30:00.000Z" itemprop="datePublished">2018-12-01</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Dubbo/">Dubbo</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>在讨论负载均衡之前，我想先解释一下这3个概念。</p>
+<p>负载均衡<br>集群容错<br>服务路由<br>这3个概念容易混淆。他们都描述了怎么从多个 Provider 中选择一个来进行调用。那他们到底有什么区别呢?下面我来举一个简单的例子，把这几个概念阐述清楚吧。</p>
+<p>有一个Dubbo的用户服务，在北京部署了10个，在上海部署了20个。一个杭州的服务消费方发起了一次调用，然后发生了以下的事情:</p>
+<ol>
+<li>根据配置的路由规则，如果杭州发起的调用，会路由到比较近的上海的20个 Provider。</li>
+<li>根据配置的随机负载均衡策略，在20个Provider中随机选择了一个来调用，假设随机到了第7个 Provider。</li>
+<li>结果调用第7个 Provider 失败了。</li>
+<li>根据配置的Failover集群容错模式，重试其他服务器。重试了第13个Provider，调用成功。</li>
+</ol>
+<ul>
+<li>上面的第1，2，4步骤就分别对应了路由，负载均衡和集群容错。 - Dubbo中，先通过路由，从多个 Provider 中按照路由规则，选出一个子集。再根据负载均衡从子集中选出一个 Provider 进行本次调用。</li>
+<li>如果调用失败了，根据集群容错策略，进行重试或定时重发或快速失败等。 </li>
+</ul>
+<blockquote>
+<p>可以看到Dubbo中的路由，负载均衡和集群容错发生在一次RPC调用的不同阶段。最先是路由，然后是负载均衡，最后是集群容错。 本文档只讨论负载均衡，路由和集群容错在其他的文档中进行说明。<br>顺序上：</p>
+<ul>
+<li>服务路由</li>
+<li>负载均衡</li>
+<li>集群容错</li>
+</ul>
+</blockquote>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
             <a href="/2018/04/07/Dubbo/">Dubbo</a>
         </h1>
         
